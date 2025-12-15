@@ -1,0 +1,153 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Payment Details - #{{ payment.id }}{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="py-3 mb-0">
+            <span class="text-muted fw-light">Payment Management /</span> #{{ payment.id }}
+        </h4>
+        <div>
+            <a href="{% url 'payment_status_update' payment.pk %}" class="btn btn-warning">
+                <i class="icon-base ti tabler-refresh me-1"></i> Update Status
+            </a>
+            <a href="{% url 'payment_list' %}" class="btn btn-secondary">
+                <i class="icon-base ti tabler-arrow-left me-1"></i> Back to List
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left Column -->
+        <div class="col-xl-8 col-lg-7">
+            <!-- Payment Info -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Payment Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="rounded me-3 bg-lighter d-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                            <i class="icon-base ti tabler-credit-card icon-32px text-muted"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-1">{{ payment.amount }} {{ payment.currency }}</h5>
+                            <p class="mb-0 text-muted">Transaction ID: {{ payment.transaction_id|default:"N/A" }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <p class="mb-1"><span class="fw-medium">Payment Method:</span> {{ payment.get_payment_method_display }}</p>
+                            <p class="mb-1"><span class="fw-medium">Gateway:</span> {{ payment.payment_gateway|default:"-" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-1"><span class="fw-medium">Status:</span> 
+                                <span class="badge bg-label-{% if payment.status == 'completed' %}success{% elif payment.status == 'pending' %}warning{% elif payment.status == 'failed' %}danger{% elif payment.status == 'refunded' %}info{% else %}secondary{% endif %}">
+                                    {{ payment.get_status_display }}
+                                </span>
+                            </p>
+                            <p class="mb-1"><span class="fw-medium">Paid At:</span> {{ payment.paid_at|date:"M d, Y H:i"|default:"-" }}</p>
+                            <p class="mb-1"><span class="fw-medium">Created:</span> {{ payment.created_at|date:"M d, Y H:i" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Booking -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Related Booking</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="avatar avatar-md me-2">
+                            <span class="avatar-initial rounded-circle bg-label-primary">
+                                <i class="icon-base ti tabler-calendar-event"></i>
+                            </span>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">
+                                <a href="{% url 'booking_detail' payment.booking.pk %}" class="text-body">Booking #{{ payment.booking.booking_number }}</a>
+                            </h6>
+                            <small class="text-muted">{{ payment.booking.tour.title }}</small>
+                        </div>
+                    </div>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="icon-base ti tabler-user me-2 text-muted"></i>
+                            {{ payment.booking.customer.user.get_full_name|default:payment.booking.customer.user.username }}
+                        </li>
+                        <li>
+                            <i class="icon-base ti tabler-calendar me-2 text-muted"></i>
+                            {{ payment.booking.tour_date|date:"M d, Y" }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Gateway Response -->
+            {% if payment.gateway_response %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Gateway Response</h5>
+                </div>
+                <div class="card-body">
+                    <pre class="bg-lighter p-3 rounded mb-0" style="max-height: 300px; overflow-y: auto;">{{ payment.gateway_response|safe }}</pre>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-xl-4 col-lg-5">
+            <!-- Card Info -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Card Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label d-block">Card Brand</label>
+                        <span class="text-muted"><i class="icon-base ti tabler-credit-card me-1"></i> {{ payment.card_brand|default:"-" }}</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label d-block">Last 4 Digits</label>
+                        <span class="text-muted">**** **** **** {{ payment.card_last_four|default:"-" }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Refund Info -->
+            {% if payment.refund_amount or payment.refunded_at %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Refund Information</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <span class="fw-medium">Refund Amount:</span>
+                            <br>
+                            <span class="text-danger">{{ payment.refund_amount|default:"-" }} {{ payment.currency }}</span>
+                        </li>
+                        <li class="mb-2">
+                            <span class="fw-medium">Reason:</span>
+                            <br>
+                            <span class="text-muted">{{ payment.refund_reason|default:"-" }}</span>
+                        </li>
+                        <li>
+                            <span class="fw-medium">Refunded At:</span>
+                            <br>
+                            <span class="text-muted">{{ payment.refunded_at|date:"M d, Y H:i"|default:"-" }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

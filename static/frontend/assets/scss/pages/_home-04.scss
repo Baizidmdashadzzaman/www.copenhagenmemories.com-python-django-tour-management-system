@@ -1,0 +1,515 @@
+@use "../utils/mixins";
+@use "../utils/variables";
+
+/*============================
+  36.home-04
+============================*/
+
+.hero-section-four {
+    background-image: url('../img/banner/flight-banner.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
+    position: relative;
+    .hero-content {
+        padding: 120px 0;
+        z-index: 1;
+        position: relative;
+        @include mixins.respond-below(md) {
+            padding: 60px 0;
+        }
+        h1 {
+            .flight-icon {
+                position: relative;
+                display: inline-block;
+                img {
+                    animation: flight-motion 4s linear infinite;
+                }
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    @include mixins.transform(translate(-50%, -50%));
+                    width: 158px;
+                    height: 45px;
+                    @include mixins.rounded(40px);
+                    background: variables.$primary;
+                    z-index: -1;
+                }
+            }
+        }
+        .video-btn {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: variables.$white;
+            color: variables.$gray-600;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            justify-content: center;
+            -webkit-justify-content: center;
+            -ms-flex-pack: center;
+            z-index: 2;
+            margin: 110px auto 20px;
+            @include mixins.respond-below(md) {
+                margin-top: 40px;
+            }
+        }
+        .video-effect {
+            position: relative;
+            color: variables.$gray-600;
+            &::before,
+            &::after {
+                content: "";
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                width: 52px;
+                height: 52px;
+                transform: translate(-50%, -50%);
+                border-radius: 50%;
+                box-shadow: 0 0 0 0 rgba(variables.$white, 0.4);
+                animation: ripple 3s infinite;
+            }
+            &::before {
+                animation-delay: 0.9s;
+            }
+            &::after {
+                animation-delay: 0.6s;
+            }
+        }
+    }
+    &::before {
+        content: "";
+        background: linear-gradient(180deg, #000000 0%, rgba(0, 0, 0, 0) 100%);
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+}
+@keyframes flight-motion {
+    0% {
+        transform: translateX(0) translateY(-5px);
+        opacity: 1;
+    }
+    50% {
+        transform: translateX(10px) translateY(10px);
+        opacity: 1;
+    }
+    75% {
+        transform: translateX(5px) translateY(5px);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(0) translateY(-5px);
+        opacity: 1;
+    }
+}
+.banner-search-four {
+    position: relative;
+    margin-top: -100px;
+    z-index: 2;
+    @include mixins.respond-below(md) {
+        margin-top: -60px;
+    }
+}
+.section-header {
+    &.section-header-four {
+        h2 {
+            span {
+                position: relative;
+
+                &::before {
+                    width: 100%;
+                    height: 10px;
+                    content: "";
+                    background: variables.$primary;
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    clip-path: polygon(0 0, 100% 50%, 100% 100%, 0% 100%);
+                }
+            }
+        }
+    }
+}
+.faq-four {
+    .accordion-item {
+        &.show {
+            background: variables.$white;
+            box-shadow: variables.$box-shadow;
+            @include mixins.rounded(10px);
+            border: 0;
+            .accordion-button {
+                padding-bottom: 8px;
+                color: variables.$primary;
+
+                &::after {
+                    color: variables.$primary;
+                }
+            }
+        }
+        .accordion-button {
+            color: variables.$gray-900;
+            font-size: variables.$font-size-16;
+            padding: 20px;
+            &::after {
+                font-size: variables.$font-size-16;
+            }
+        }
+        .accordion-body {
+            padding: 0 20px 20px;
+        }
+    }
+}
+.client-section-four {
+    position: relative;
+    padding: 0;
+    &::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        background: variables.$light-200;
+        height: 50%;
+        width: 100%;
+    }
+}
+.business-wrap {
+    position: relative;
+    overflow: hidden;
+    @include mixins.rounded(20px);
+    z-index: 1;
+    margin-top: 60px;
+    @include mixins.respond-below(lg) {
+        margin-top: 50px;
+    }
+    .business-info {
+        padding: 43px 0 43px 100px;
+        @include mixins.respond-below(xxl) {
+            padding-left: 80px;
+        }
+        @include mixins.respond-below(xl) {
+            padding-left: 43px;
+        }
+        @include mixins.respond-below(lg) {
+            padding: 40px;
+        }
+    }
+    &::before {
+        position: absolute;
+        content: "";
+        top: -90px;
+        right: 100px;
+        width: 300px;
+        height: 600px;
+        background: variables.$primary;
+        @include mixins.transform(rotate(-24deg));
+        z-index: -1;
+    }
+    .business-img {
+        @include mixins.respond-below(lg) {
+            display: none;
+        }
+    }
+}
+.about-section-four {
+    position: relative;
+    overflow: hidden;
+}
+.flight-about {
+    position: relative;
+    z-index: 1;
+    @include mixins.transition(all 0.9s);
+    .flight-bg {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 90%;
+        height: 100%;
+        z-index: -1;
+        text-align: end;
+    }
+    &:hover {
+        @include mixins.transition(all 0.9s);
+
+        &>img {
+            animation: flight-motion 4s linear infinite;
+            @include mixins.transition(all 0.9s);
+        }
+    }
+    @include mixins.respond-below(md) {
+        display: none;
+    }
+}
+.flight-bg-01 {
+    position: absolute;
+    top: 5%;
+    left: 0;
+    width: 171px;
+    z-index: -1;
+}
+.flight-bg-02 {
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    @include mixins.transform(translateY(-50%));
+    width: 171px;
+    z-index: -1;
+}
+.blog-section-four {
+    .blog-item {
+        .blog-img {
+            &::before {
+                background: linear-gradient(180.13deg, rgba(0, 0, 0, 0) 36.74%, #000000 99.89%);
+            }
+        }
+        .blog-date {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: variables.$white;
+            @include mixins.rounded(5px);
+            padding: 4px;
+            z-index: 1;
+            width: 60px;
+            height: 60px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            justify-content: center;
+        }
+        .blog-info {
+            .badge {
+                position: unset;
+                @include mixins.rounded(34px);
+                font-weight: variables.$font-weight-normal;
+            }
+        }
+    }
+}
+.location-wrap {
+    position: relative;
+    @include mixins.rounded(20px);
+    @include mixins.transition(all 0.9s);
+    overflow: hidden;
+    &::before {
+        content: "";
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
+        left: 0;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        @include mixins.rounded(20px);
+        z-index: 1;
+    }
+    img {
+        @include mixins.rounded(20px);
+        transform: scale(1);
+        @include mixins.transition(all 0.9s);
+    }
+    .loc-name {
+        display: inline-block;
+        @include mixins.rounded(10px);
+        font-weight: variables.$font-weight-medium;
+        padding: 4px 8px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        @include mixins.transform(translate(-50%, -50%));
+        @include mixins.transition(all 0.9s);
+        z-index: 2;
+    }
+    .loc-view {
+        width: 44px;
+        height: 44px;
+        @include mixins.rounded(50%);
+        font-size: variables.$font-size-24;
+        background: variables.$white;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        @include mixins.transform(translate(-50%, -50%));
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        justify-content: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        @include mixins.transition(all 0.9s);
+        opacity: 0;
+        z-index: 2;
+        &:hover {
+            background: variables.$primary;
+            color: variables.$white;
+        }
+    }
+    &:hover {
+        @include mixins.transition(all 0.9s);
+        .loc-name {
+            opacity: 0;
+            top: 70%;
+        }
+        .loc-view {
+            opacity: 1;
+            top: 50%;
+        }
+        img {
+            transform: scale(1.2);
+        }
+        .loc-view-bottom {
+            background: variables.$primary;
+            color: variables.$white;
+        }
+    }
+}
+.success-icon {
+    position: absolute;
+    top: -90px;
+    right: 50px;
+
+    @include mixins.respond-below(lg) {
+        display: none;
+    }
+}
+.success-wrap {
+    max-width: 415px;
+}
+.testimonial-success {
+    position: relative;
+    .testimonial-bg-03 {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        @include mixins.transform(translate(-50%, -50%));
+        width: 250px;
+        z-index: -1;
+    }
+}
+.testimonial-bg-01 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 500px;
+    height: 500px;
+    z-index: -1;
+}
+.testimonial-bg-02 {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 500px;
+    height: 500px;
+    z-index: -1;
+}
+.package-sec {
+    padding-top: 36px;
+
+    @include mixins.respond-below(lg) {
+        padding-top: 26px;
+    }
+}
+.client-sec {
+    overflow: hidden;
+    position: relative;
+    z-index: 0;
+    @include mixins.rounded(20px);
+    padding: 60px;
+    &::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        inset: 0px 0 0 0;
+        transform-origin: left;
+        transform: skewY(1.5deg);
+        background: variables.$primary;
+        @include mixins.rounded(20px);
+    }
+    @include mixins.respond-below(lg) {
+        padding: 40px;
+    }
+
+    @include mixins.respond-below(md) {
+        padding: 30px;
+    }
+}
+.flight-expert {
+    border: 1px solid variables.$border-color;
+    @include mixins.rounded(10px);
+    position: relative;
+    padding: 20px;
+    &:hover {
+        box-shadow: variables.$box-shadow;
+    }
+    &::before {
+        content: "";
+        background: variables.$light-200;
+        height: 92px;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        @include mixins.rounded(10px 10px 0 0);
+    }
+    .expert-img {
+        width: 120px;
+        height: 120px;
+        @include mixins.rounded(50%);
+        background: variables.$white;
+        border: 1px solid variables.$border-color;
+        justify-content: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        margin: 0 auto 16px;
+        img {
+            width: auto;
+            height: auto;
+        }
+    }
+    .fav-icon {
+        width: 24px;
+        height: 24px;
+        font-size: variables.$font-size-14;
+        color: variables.$light;
+        background: variables.$white;
+        @include mixins.rounded(50%);
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        align-items: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        justify-content: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        &:hover,
+        &.selected {
+            color: variables.$primary;
+        }
+    }
+}

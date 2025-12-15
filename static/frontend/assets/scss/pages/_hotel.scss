@@ -1,0 +1,347 @@
+@use "../utils/mixins";
+@use "../utils/variables";
+
+/*============================
+  40.hotel
+============================*/
+
+.form-checkbox {
+    background: variables.$light-500;
+    @include mixins.rounded(10px);
+    padding: 8px;
+}
+.more-content {
+    height: 148px;
+    overflow: hidden;
+    transition: height 0.5s ease;
+}
+.more-view {
+    text-decoration: underline;
+}
+.recommend-wrap {
+    @include mixins.rounded(10px);
+    .dropdown {
+        margin-right: 14px;
+        &:last-child {
+            margin-right: 0;
+        }
+        .dropdown-menu {
+            z-index: 999;
+        }
+    }
+}
+.list-item {
+    .list-icon {
+        width: 28px;
+        height: 28px;
+        @include mixins.rounded(4px);
+        background: variables.$white;
+        color: variables.$gray-600;
+        font-size: variables.$font-size-20;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        justify-content: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        &:hover,
+        &.active {
+            background: variables.$primary;
+            color: variables.$white;
+        }
+    }
+}
+.hotel-type-item {
+    padding: 8px 5px 8px 8px;
+    box-shadow: variables.$box-shadow;
+    @include mixins.rounded(10px);
+    background: variables.$white;
+    border: 1px solid variables.$light;
+    @include mixins.transition(all 0.5s ease);
+    .avatar {
+        overflow: hidden;
+        @include mixins.rounded(50%);
+        img {
+            @include mixins.transition(all 0.3s ease-out 0s);
+        }
+    }
+    &:hover {
+        @include mixins.transition(all 0.5s ease);
+        @include mixins.transform(translateY(-2px));
+        img {
+            @include mixins.transition(all 0.3s ease-out 0s);
+            @include mixins.transform(scale(1.1));
+        }
+    }
+}
+.badge-amenity {
+    border: 1px solid variables.$border-color;
+    @include mixins.rounded(100px);
+    padding: 8px 16px;
+    color: variables.$gray-900;
+    font-weight: variables.$font-weight-normal;
+    font-size: variables.$font-size-14;
+    &:hover {
+        background: variables.$light;
+    }
+    .btn-close {
+        padding: 0;
+        top: 50%;
+        @include mixins.transform(translateY(-50%));
+    }
+}
+.alert.badge-amenity {
+    border: 1px solid variables.$border-color;
+    @include mixins.rounded(100px);
+    padding: 8px 34px 8px 16px;
+    color: variables.$gray-900;
+    font-weight: variables.$font-weight-normal;
+    font-size: variables.$font-size-14;
+    &:hover {
+        background: variables.$light;
+    }
+    .btn-close {
+        padding: 0;
+        top: 50%;
+        @include mixins.transform(translateY(-50%));
+        right: 16px;
+        opacity: 1;
+        cursor: pointer;
+        i {
+            color: variables.$gray-900;
+            font-size: variables.$font-size-14;
+        }
+    }
+}
+.irs--flat .irs-handle>i:first-child {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 50%;
+    width: 18px;
+    height: 18px;
+    margin-left: -1px;
+    background-color: variables.$primary;
+    border-radius: 50px;
+    border: 0;
+}
+.irs--flat .irs-line {
+    top: 28px;
+    height: 2px;
+    background-color: variables.$light;
+    border-radius: 4px;
+}
+.irs--flat .irs-bar {
+    top: 28px;
+    height: 2px;
+    background-color: variables.$primary;
+}
+
+.irs-with-grid .irs-grid {
+    display: none;
+}
+.irs--flat .irs-from,
+.irs--flat .irs-to,
+.irs--flat .irs-single {
+    color: white;
+    font-size: 14px;
+    line-height: 1.333;
+    text-shadow: none;
+    padding: 4px 12px;
+    background-color: variables.$primary;
+    border-radius: 4px;
+    top: -10px;
+}
+.irs--flat .irs-from:before,
+.irs--flat .irs-to:before,
+.irs--flat .irs-single:before {
+    border-top-color: variables.$primary;
+    left: 60%;
+}
+.pagination-nav {
+    .pagination {
+        .page-item {
+            margin-right: 8px;
+            &:first-child {
+                margin-right: 13px;
+                .page-link {
+                    background: transparent;
+                }
+            }
+            &:last-child {
+                margin-right: 0;
+                margin-left: 5px;
+                .page-link {
+                    background: transparent;
+                }
+            }
+            .page-link {
+                border: 0;
+                background: variables.$light;
+                color: variables.$text-color;
+                font-size: variables.$font-size-14;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                align-items: center;
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+                justify-content: center;
+                -webkit-justify-content: center;
+                -ms-flex-pack: center;
+                @include mixins.rounded(50%);
+            }
+            &.active,
+            &:hover {
+                .page-link {
+                    background: variables.$primary;
+                    color: variables.$white;
+                }
+            }
+        }
+    }
+}
+.hotel-list {
+    .place-item {
+        display: flex;
+        .place-img {
+            width: 310px;
+            flex-shrink: 0;
+            height: inherit;
+            @include mixins.rounded(10px 0 0 10px);
+            @include mixins.respond-below(xl) {
+                width: 280px;
+            }
+            .img-slider,  .image-slide {
+                height: 100%;
+                .owl-stage-outer {
+                    height: 100%;
+                    .owl-stage {
+                        height: 100%;
+                        .owl-item {
+                            height: 100%;
+                            .slide-images {
+                                height: 100%;
+                                a {
+                                    height: inherit;
+                                    display: block;
+                                    img {
+                                        height: 100%;
+                                        object-fit: cover;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            a {
+                height: 100%;
+                display: block;
+                img {
+                    height: 100%;
+                    object-fit: cover;
+                    @include mixins.rounded(10px 0 0 10px);
+
+                    @include mixins.respond-below(md) {
+                        @include mixins.rounded(10px 10px 0 0);
+                    }
+                }
+            }
+            @include mixins.respond-below(md) {
+                width: 100%;
+                height: auto;
+                @include mixins.rounded(10px 10px 0 0);
+            }
+        }
+        .place-content {
+            flex: 1;
+        }
+        @include mixins.respond-below(md) {
+            display: block;
+        }
+    }
+}
+.line-ellipsis {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.filter-sidebar {
+    .accordion-item {
+        border-radius: 0;
+    }
+}
+.review-img {
+    img {
+        @include mixins.rounded(10px);
+        height: 130px;
+        object-fit: cover;
+        width: 100%;
+    }
+}
+.stripe-details, .paypal-details {
+    display: none;
+}
+.room-slider {
+    img {
+        @include mixins.rounded(10px);
+    }
+    &.nav-center {
+        .owl-nav button.owl-next,
+        .owl-nav button.owl-prev {
+            width: 34px;
+            height: 34px;
+            font-size: variables.$font-size-14;
+            @include mixins.respond-below(lg) {
+                width: 32px;
+                height: 32px;
+            }
+        }
+        .owl-nav button.owl-next {
+            right: 20px;
+        }
+        .owl-nav button.owl-prev {
+            left: 20px;
+        }
+    }
+}
+.border-icon {
+    position: relative;
+    padding-left: 12px;
+    &::before {
+        content: "";
+        background: variables.$teal;
+        width: 4px;
+        height: 8px;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        @include mixins.rounded(4px);
+    }
+    &.secondary {
+        &::before {
+            background: variables.$secondary;
+        }
+    }
+    &.primary {
+        &::before {
+            background: variables.$primary;
+        }
+    }
+    &.purple {
+        &::before {
+            background: variables.$purple;
+        }
+    }
+    &.dark {
+        &::before {
+            background: variables.$dark;
+        }
+    }
+}

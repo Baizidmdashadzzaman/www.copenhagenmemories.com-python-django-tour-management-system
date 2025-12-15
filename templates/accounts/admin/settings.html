@@ -1,0 +1,212 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Site Settings{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Settings /</span> Site Configuration
+    </h4>
+
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card mb-6">
+                <h5 class="card-header">General Settings</h5>
+                <form class="card-body" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+                    {% if form.errors %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <h6 class="alert-heading mb-1">Please correct the errors below</h6>
+                        <ul class="mb-0">
+                            {% for field in form %}
+                            {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                            {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+
+                    <h6>1. General Information</h6>
+                    <div class="row g-6">
+                        <div class="col-md-4">
+                            <label class="form-label" for="id_site_name">Site Name <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" id="id_site_name" name="site_name" class="form-control"
+                                placeholder="Enter site name" value="{{ form.site_name.value|default:'' }}" required>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label" for="id_site_email">Site Email</label>
+                            <input type="email" id="id_site_email" name="site_email" class="form-control"
+                                placeholder="contact@example.com" value="{{ form.site_email.value|default:'' }}">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label" for="id_site_phone">Site Phone</label>
+                            <input type="text" id="id_site_phone" name="site_phone" class="form-control"
+                                placeholder="8801862420119" value="{{ form.site_phone.value|default:'' }}">
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label" for="id_site_address">Site Address</label>
+                            <input type="text" id="id_site_address" name="site_address" class="form-control"
+                                placeholder="123 Main St, City, Country"
+                                value="{{ form.site_address.value|default:'' }}">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label" for="id_site_description">Site Description</label>
+                            <textarea id="id_site_description" name="site_description" class="form-control" rows="3"
+                                placeholder="Brief description of your site">{{ form.site_description.value|default:'' }}</textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="id_site_map">Site Map</label>
+                            <textarea id="id_site_map" name="site_map" class="form-control" rows="3"
+                                placeholder="Your site map embaded link">{{ form.site_map.value|default:'' }}</textarea>
+                        </div>
+                    </div>
+
+                    <hr class="my-6 mx-n6">
+
+                    <h6>2. Branding</h6>
+                    <div class="row g-6">
+                        <div class="col-md-4">
+                            <label class="form-label" for="id_site_logo">Site Logo</label>
+                            <input type="file" id="id_site_logo" name="site_logo" class="form-control">
+                            {% if settings.site_logo %}
+                            <div class="mt-2">
+                                <img src="{{ settings.site_logo.url }}" alt="Current Logo"
+                                    class="d-block rounded border p-1" style="max-height: 80px;">
+                                <div class="form-text">Current logo</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="id_site_logo">Site Logo Dark</label>
+                            <input type="file" id="id_site_logo_dark" name="site_logo_dark" class="form-control">
+                            {% if settings.site_logo_dark %}
+                            <div class="mt-2">
+                                <img src="{{ settings.site_logo_dark.url }}" alt="Current Logo"
+                                    class="d-block rounded border p-1" style="max-height: 80px;">
+                                <div class="form-text">Current logo dark</div>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label" for="id_site_favicon">Site Favicon</label>
+                            <input type="file" id="id_site_favicon" name="site_favicon" class="form-control">
+                            {% if settings.site_favicon %}
+                            <div class="mt-2">
+                                <img src="{{ settings.site_favicon.url }}" alt="Current Favicon"
+                                    class="d-block rounded border p-1" style="max-height: 32px;">
+                                <div class="form-text">Current favicon</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <hr class="my-6 mx-n6">
+
+                    <h6>3. SEO Settings</h6>
+                    <div class="row g-6">
+                        <div class="col-md-12">
+                            <label class="form-label" for="id_site_metakey">Meta Keywords</label>
+                            <input type="text" id="id_site_metakey" name="site_metakey" class="form-control"
+                                placeholder="keyword1, keyword2, keyword3"
+                                value="{{ form.site_metakey.value|default:'' }}">
+                            <div class="form-text">Comma-separated keywords for search engines</div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label" for="id_site_metadescription">Meta Description</label>
+                            <textarea id="id_site_metadescription" name="site_metadescription" class="form-control"
+                                rows="2"
+                                placeholder="SEO description">{{ form.site_metadescription.value|default:'' }}</textarea>
+                            <div class="form-text">Brief description for search engines (150-160 characters recommended)
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-6 mx-n6">
+                    <h6>4. Usefull link</h6>
+                    <div class="row g-6">
+                        <div class="col-md-4">
+                            <label class="form-label" for="id_app_google">Android app link</label>
+                            <input type="text" id="id_app_google" name="app_google" class="form-control"
+                                placeholder="Enter data here"
+                                value="{{ form.app_google.value|default:'' }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="id_ios_app">Ios app link</label>
+                            <input type="text" id="id_ios_app" name="ios_app" class="form-control"
+                                placeholder="Enter data here"
+                                value="{{ form.ios_app.value|default:'' }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="id_fb_link">Fb link</label>
+                            <input type="text" id="id_fb_link" name="fb_link" class="form-control"
+                                placeholder="Enter data here"
+                                value="{{ form.fb_link.value|default:'' }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="id_x_link">X/Twitter link</label>
+                            <input type="text" id="id_x_link" name="x_link" class="form-control"
+                                placeholder="Enter data here"
+                                value="{{ form.x_link.value|default:'' }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="id_insta_link">Instagram link</label>
+                            <input type="text" id="id_insta_link" name="insta_link" class="form-control"
+                                placeholder="Enter data here"
+                                value="{{ form.insta_link.value|default:'' }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="id_linkdin_link">Linkdin link</label>
+                            <input type="text" id="id_linkdin_link" name="linkdin_link" class="form-control"
+                                placeholder="Enter data here"
+                                value="{{ form.linkdin_link.value|default:'' }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="id_pintrest_link">Pintrest link</label>
+                            <input type="text" id="id_pintrest_link" name="pintrest_link" class="form-control"
+                                placeholder="Enter data here"
+                                value="{{ form.pintrest_link.value|default:'' }}">
+                        </div>
+                    </div>
+
+                    {% if settings.updated_at %}
+                    <div class="alert alert-secondary mt-4 mb-0" role="alert">
+                        <small>
+                            <i class="ti tabler-refresh me-1"></i> Last Updated: {{ settings.updated_at|date:"M d, Y H:i" }}
+                        </small>
+                    </div>
+                    {% endif %}
+
+                    <div class="pt-6">
+                        <button type="submit" class="btn btn-primary me-4 waves-effect waves-light">
+                            <i class="icon-base ti tabler-check icon-22px"></i> Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

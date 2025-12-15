@@ -1,0 +1,206 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Blog /</span> {{ title }}
+    </h4>
+
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card mb-6">
+                <h5 class="card-header">Blog Post Information</h5>
+                <form class="card-body" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <h6 class="alert-heading mb-1">Please correct the errors below</h6>
+                        <ul class="mb-0">
+                            {% for field in form %}
+                            {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                            {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+
+                    <h6>1. Basic Details</h6>
+                    <div class="row g-6">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.title.id_for_label }}">Title <span
+                                    class="text-danger">*</span></label>
+                            {{ form.title }}
+                            {% if form.title.errors %}<div class="text-danger">{{ form.title.errors }}</div>{% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.title_dk.id_for_label }}">Danish Title</label>
+                            {{ form.title_dk }}
+                            {% if form.title_dk.errors %}
+                            <div class="text-danger">{{ form.title_dk.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.category.id_for_label }}">Category</label>
+                            {{ form.category }}
+                            {% if form.category.errors %}
+                            <div class="text-danger">{{ form.category.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.featured_image.id_for_label }}">Featured
+                                Image</label>
+                            {{ form.featured_image }}
+                            {% if form.featured_image.errors %}
+                            <div class="text-danger">{{ form.featured_image.errors }}
+                            </div>{% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.excerpt.id_for_label }}">Excerpt</label>
+                            {{ form.excerpt }}
+                            {% if form.excerpt.errors %}
+                            <div class="text-danger">{{ form.excerpt.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.excerpt_dk.id_for_label }}">Danish Excerpt</label>
+                            {{ form.excerpt_dk }}
+                            {% if form.excerpt_dk.errors %}
+                            <div class="text-danger">{{ form.excerpt_dk.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label" for="{{ form.content.id_for_label }}">Content <span
+                                    class="text-danger">*</span></label>
+                            {{ form.content }}
+                            {% if form.content.errors %}
+                            <div class="text-danger">{{ form.content.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label" for="{{ form.content_dk.id_for_label }}">Danish Content</label>
+                            {{ form.content_dk }}
+                            {% if form.content_dk.errors %}
+                            <div class="text-danger">{{ form.content_dk.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <hr class="my-6 mx-n6">
+
+                    <h6>2. SEO Settings</h6>
+                    <div class="row g-6">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.meta_title.id_for_label }}">Meta Title</label>
+                            {{ form.meta_title }}
+                            {% if form.meta_title.errors %}
+                            <div class="text-danger">{{ form.meta_title.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.meta_keywords.id_for_label }}">Meta Keywords</label>
+                            {{ form.meta_keywords }}
+                            {% if form.meta_keywords.errors %}<div class="text-danger">{{ form.meta_keywords.errors }}
+                            </div>{% endif %}
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label" for="{{ form.meta_description.id_for_label }}">Meta
+                                Description</label>
+                            {{ form.meta_description }}
+                            {% if form.meta_description.errors %}
+                            <div class="text-danger">{{ form.meta_description.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <hr class="my-6 mx-n6">
+
+                    <h6>3. Status & Visibility</h6>
+                    <div class="row g-6">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="{{ form.status.id_for_label }}">Status</label>
+                            {{ form.status }}
+                            {% if form.status.errors %}
+                            <div class="text-danger">{{ form.status.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="{{ form.published_at.id_for_label }}">Published At</label>
+                            {{ form.published_at }}
+                            {% if form.published_at.errors %}
+                            <div class="text-danger">{{ form.published_at.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <div class="form-check mt-4">
+                                {{ form.is_featured }}
+                                <label class="form-check-label" for="{{ form.is_featured.id_for_label }}">
+                                    Is Featured?
+                                </label>
+                            </div>
+                            {% if form.is_featured.errors %}
+                            <div class="text-danger">{{ form.is_featured.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="pt-6 mt-3">
+                        <button type="submit" class="btn btn-primary me-4 waves-effect waves-light">
+                            <i class="icon-base ti tabler-check icon-22px"></i> Save
+                        </button>
+                        <a href="{% url 'blog_list' %}" class="btn btn-label-secondary waves-effect">
+                            <i class="icon-base ti tabler-ban icon-22px"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card .card-body input[type="text"],
+    .card .card-body input[type="email"],
+    .card .card-body input[type="password"],
+    .card .card-body input[type="number"],
+    .card .card-body input[type="url"],
+    .card .card-body input[type="date"],
+    .card .card-body input[type="datetime-local"],
+    .card .card-body select,
+    .card .card-body textarea,
+    .card .card-body .form-control,
+    .card .card-body .form-select {
+        padding: 0.6rem 0.9rem;
+        border-radius: 0.5rem;
+    }
+
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    textarea.form-control {
+        min-height: 100px;
+    }
+</style>
+{% endblock %}

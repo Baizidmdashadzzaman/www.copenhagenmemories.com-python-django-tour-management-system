@@ -1,0 +1,47 @@
+@use "../utils/mixins";
+@use "../utils/variables";
+
+/*============================
+ 46.service
+============================*/
+
+.main-logo {
+    margin-bottom: 60px;
+}
+.maintenance-img {
+    margin-bottom: 60px;
+}
+.maintenance-update {
+    .input-group {
+        max-width: 500px;
+        width: 100%;
+        border-radius: 54px;
+        height: 62px;
+        border: 1px solid variables.$dark;
+        outline-offset: 4px;
+        background: variables.$primary-transparent;
+        padding: 10px;
+    }
+    .form-control {
+        background: transparent;
+        border: none;
+        padding: 0 10px 0 0;
+    }
+}
+.map-grid {
+    width: 100%;
+    margin-top: 60px;
+    iframe {
+        @include mixins.rounded(10px);
+    }
+    @include mixins.respond-below(lg) {
+        margin-top: 40px;
+    }
+}
+.error-img {
+    max-width: 400px;
+    margin: 0 auto 20px;
+}
+.error-main-logo {
+    margin-bottom: 10px;
+}

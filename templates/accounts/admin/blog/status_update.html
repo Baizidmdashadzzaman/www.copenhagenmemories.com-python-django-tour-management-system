@@ -1,0 +1,57 @@
+{% extends "accounts/admin/layout.html" %}
+{% load static %}
+
+{% block title %}Update Blog Status{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h2>Update Blog Post Status</h2>
+            <p class="text-muted">{{ post.title }}</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="statusSelect"><strong>New Status:</strong></label>
+                    <select id="statusSelect" name="status" class="form-control" required>
+                        <option value="">Select a status</option>
+                        {% for value, label in status_choices %}
+                        <option value="{{ value }}" {% if post.status == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                    <small class="form-text text-muted">Current status: <strong>{{ post.get_status_display }}</strong></small>
+                </div>
+
+                <div class="form-group mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Update Status
+                    </button>
+                    <a href="{% url 'blog_detail' post.pk %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Post Preview -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5>Post Preview</h5>
+        </div>
+        <div class="card-body">
+            <h6>{{ post.title }}</h6>
+            <p class="text-muted">
+                by {{ post.author.get_full_name|default:post.author.username }} | 
+                Category: {{ post.category.name|default:"—" }}
+            </p>
+            {% if post.excerpt %}
+            <p>{{ post.excerpt|truncatewords:30 }}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

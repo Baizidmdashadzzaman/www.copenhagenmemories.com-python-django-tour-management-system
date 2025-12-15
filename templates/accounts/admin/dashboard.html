@@ -1,0 +1,462 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block admin_content %}
+
+<!-- Messages -->
+{% if messages %}
+<div class="alert alert-primary alert-dismissible d-flex" role="alert">
+    <span class="alert-icon rounded">
+        <i class="icon-base ti tabler-ban icon-md w-px-30"></i>
+    </span>
+    <div class="d-flex flex-column ps-1">
+        {% for message in messages %}
+        <h5 class="alert-heading mb-2 alert-{{ message.tags }}">{{ message }}</h5>
+        {% endfor %}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</div>
+{% endif %}
+
+<div class="row g-6 mb-6">
+    <!-- Welcome Card -->
+    <div class="col-xl-4 col-lg-6">
+        <div class="card h-100">
+            <div class="d-flex align-items-end row">
+                <div class="col-7">
+                    <div class="card-body text-nowrap">
+                        <h5 class="card-title mb-0">Welcome 🎉</h5>
+                        <p class="mb-2">{{ user.username }}</p>
+                        <h4 class="text-primary mb-1">{{ total_bookings }}</h4>
+                        <p class="mb-2 pb-1">Total Bookings</p>
+                        <a href="{% url 'booking_list' %}" class="btn btn-primary btn-sm">View Bookings</a>
+                    </div>
+                </div>
+                <div class="col-5 text-center text-sm-left">
+                    <div class="card-body pb-0 px-0 px-md-4">
+                        <img src="{% static 'admin/assets/img/illustrations/card-advance-sale.png' %}" height="140" alt="view sales">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue Card -->
+    <div class="col-xl-4 col-lg-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-3">
+                    <div class="card-info">
+                        <p class="card-text mb-1">Total Revenue</p>
+                        <div class="d-flex align-items-center mb-1">
+                            <h4 class="mb-0 me-2">{{ total_revenue|floatformat:2 }} DKK</h4>
+                        </div>
+                        <small class="text-success">
+                            <i class="ti tabler-trending-up"></i> +{{ revenue_this_month|floatformat:2 }} DKK this month
+                        </small>
+                    </div>
+                    <div class="card-icon">
+                        <span class="badge bg-label-success rounded-circle p-2">
+                            <i class="ti tabler-currency-dollar ti-26px"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <small class="text-muted">Pending: {{ pending_payments|floatformat:2 }} DKK</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customers Card -->
+    <div class="col-xl-4 col-lg-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div class="card-info">
+                        <p class="card-text mb-1">Total Customers</p>
+                        <div class="d-flex align-items-center mb-1">
+                            <h4 class="mb-0 me-2">{{ total_customers }}</h4>
+                        </div>
+                        <small class="text-success">
+                            <i class="ti tabler-trending-up"></i> +{{ new_customers_this_month }} this month
+                        </small>
+                    </div>
+                    <div class="card-icon">
+                        <span class="badge bg-label-info rounded-circle p-2">
+                            <i class="ti tabler-users ti-26px"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Cards Row -->
+<div class="row g-6 mb-6">
+    <!-- Bookings Stats -->
+    <div class="col-xl-3 col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="mb-1">Pending Bookings</p>
+                        <h4 class="mb-0">{{ pending_bookings }}</h4>
+                    </div>
+                    <div class="avatar">
+                        <div class="avatar-initial bg-label-warning rounded">
+                            <i class="ti tabler-clock ti-28px"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="mb-1">Confirmed Bookings</p>
+                        <h4 class="mb-0">{{ confirmed_bookings }}</h4>
+                    </div>
+                    <div class="avatar">
+                        <div class="avatar-initial bg-label-success rounded">
+                            <i class="ti tabler-check ti-28px"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="mb-1">Active Tours</p>
+                        <h4 class="mb-0">{{ active_tours }}</h4>
+                        <!-- <small class="text-muted">of {{ total_tours }} total</small> -->
+                    </div>
+                    <div class="avatar">
+                        <div class="avatar-initial bg-label-primary rounded">
+                            <i class="ti tabler-map ti-28px"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-sm-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="mb-1">Average Rating</p>
+                        <h4 class="mb-0">{{ average_rating }}/5</h4>
+                        <!-- <small class="text-muted">{{ approved_reviews }} reviews</small> -->
+                    </div>
+                    <div class="avatar">
+                        <div class="avatar-initial bg-label-warning rounded">
+                            <i class="ti tabler-star ti-28px"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row g-6 mb-6">
+    <!-- Bookings Chart -->
+    <div class="col-xl-8">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between">
+                <div>
+                    <h5 class="card-title mb-1">Bookings & Revenue Overview</h5>
+                    <p class="card-subtitle mb-0">Last 6 Months</p>
+                </div>
+            </div>
+            <div class="card-body">
+                <canvas id="bookingsRevenueChart" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Status Distribution -->
+    <div class="col-xl-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Booking Status</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="bookingStatusChart"></canvas>
+                <div class="mt-4">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="d-flex align-items-center">
+                            <span class="badge badge-dot bg-warning me-2"></span>
+                            <span>Pending</span>
+                        </span>
+                        <span class="fw-medium">{{ pending_bookings }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="d-flex align-items-center">
+                            <span class="badge badge-dot bg-success me-2"></span>
+                            <span>Confirmed</span>
+                        </span>
+                        <span class="fw-medium">{{ confirmed_bookings }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="d-flex align-items-center">
+                            <span class="badge badge-dot bg-danger me-2"></span>
+                            <span>Cancelled</span>
+                        </span>
+                        <span class="fw-medium">{{ cancelled_bookings }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity & Top Tours -->
+<div class="row g-6 mb-6">
+    <!-- Recent Bookings -->
+    <div class="col-xl-6">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Recent Bookings</h5>
+                <a href="{% url 'booking_list' %}" class="btn btn-sm btn-label-primary">View All</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Booking #</th>
+                            <th>Customer</th>
+                            <th>Tour</th>
+                            <th>Status</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in recent_bookings %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'booking_detail' booking.pk %}" class="fw-medium">
+                                    {{ booking.booking_number }}
+                                </a>
+                            </td>
+                            <td>{{ booking.customer.user.username }}</td>
+                            <td>{{ booking.tour.title|truncatewords:5 }}</td>
+                            <td>
+                                <span class="badge bg-label-{% if booking.status == 'confirmed' %}success{% elif booking.status == 'pending' %}warning{% else %}danger{% endif %}">
+                                    {{ booking.get_status_display }}
+                                </span>
+                            </td>
+                            <td>{{ booking.total_amount }} {{ booking.currency }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center py-4">No bookings yet</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Tours -->
+    <div class="col-xl-6">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Top Tours by Bookings</h5>
+                <a href="{% url 'tour_list' %}" class="btn btn-sm btn-label-primary">View All</a>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    {% for tour in top_tours %}
+                    <li class="mb-4">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0 me-3">
+                                <span class="badge bg-label-primary rounded-circle p-2">
+                                    <i class="ti tabler-calendar ti-lg"></i>
+                                </span>
+                            </div>
+                            <div class="flex-grow-1">
+                                <a href="{% url 'tour_view' tour.pk %}" class="text-body">
+                                    <h6 class="mb-0">{{ tour.title }}</h6>
+                                </a>
+                                <small class="text-muted">{{ tour.booking_count }} booking{{ tour.booking_count|pluralize }}</small>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <span class="badge bg-label-success">{{ tour.base_price }} {{ tour.currency }}</span>
+                            </div>
+                        </div>
+                    </li>
+                    {% empty %}
+                    <li class="text-center py-4 text-muted">No tours available</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Reviews -->
+<div class="row g-6">
+    <div class="col-12 ">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Recent Reviews</h5>
+                <a href="{% url 'tour_review_list' %}" class="btn btn-sm btn-label-primary">View All</a>
+            </div>
+            <div class="card-body">
+                {% for review in recent_reviews %}
+                <div class="d-flex mb-4 {% if not forloop.last %}pb-4 border-bottom{% endif %}">
+                    <div class="flex-shrink-0 me-3">
+                        <div class="avatar">
+                            <span class="avatar-initial rounded-circle bg-label-primary">
+                                {{ review.customer.user.username|make_list|first|upper }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <h6 class="mb-0">{{ review.customer.user.get_full_name|default:review.customer.user.username }}</h6>
+                            <div>
+                                {% for i in "12345" %}
+                                <i class="ti tabler-star {% if forloop.counter <= review.overall_rating %}-filled text-warning{% endif %} ti-sm"></i>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <p class="mb-1">
+                            <a href="{% url 'tour_view' review.tour.pk %}" class="text-muted">{{ review.tour.title }}</a>
+                        </p>
+                        <p class="mb-1">{{ review.review|truncatewords:20 }}</p>
+                        <small class="text-muted">{{ review.created_at|timesince }} ago</small>
+                        <span class="badge bg-label-{% if review.status == 'approved' %}success{% elif review.status == 'pending' %}warning{% else %}danger{% endif %} ms-2">
+                            {{ review.get_status_display }}
+                        </span>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-center text-muted py-4">No reviews yet</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+{{ monthly_bookings|json_script:"monthly-bookings-data" }}
+{{ monthly_revenue|json_script:"monthly-revenue-data" }}
+{{ booking_status_data|json_script:"booking-status-data" }}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Parse JSON data from Django
+    const monthlyBookingsData = JSON.parse(document.getElementById('monthly-bookings-data').textContent);
+    const monthlyRevenueData = JSON.parse(document.getElementById('monthly-revenue-data').textContent);
+    const bookingStatusData = JSON.parse(document.getElementById('booking-status-data').textContent);
+
+    // Bookings & Revenue Chart
+    const bookingsRevenueCtx = document.getElementById('bookingsRevenueChart');
+    if (bookingsRevenueCtx) {
+        new Chart(bookingsRevenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['6 months ago', '5 months ago', '4 months ago', '3 months ago', '2 months ago', 'Last month'],
+                datasets: [{
+                    label: 'Bookings',
+                    data: monthlyBookingsData,
+                    borderColor: 'rgb(105, 108, 255)',
+                    backgroundColor: 'rgba(105, 108, 255, 0.1)',
+                    tension: 0.4,
+                    yAxisID: 'y',
+                }, {
+                    label: 'Revenue (DKK)',
+                    data: monthlyRevenueData,
+                    borderColor: 'rgb(3, 195, 236)',
+                    backgroundColor: 'rgba(3, 195, 236, 0.1)',
+                    tension: 0.4,
+                    yAxisID: 'y1',
+                }]
+            },
+            options: {
+                responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Bookings'
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Revenue (DKK)'
+                        },
+                        grid: {
+                            drawOnChartArea: false,
+                        },
+                    },
+                }
+            }
+        });
+    }
+
+    // Booking Status Pie Chart
+    const bookingStatusCtx = document.getElementById('bookingStatusChart');
+    if (bookingStatusCtx) {
+        new Chart(bookingStatusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Pending', 'Confirmed', 'Cancelled'],
+                datasets: [{
+                    data: [
+                        bookingStatusData.pending,
+                        bookingStatusData.confirmed,
+                        bookingStatusData.cancelled
+                    ],
+                    backgroundColor: [
+                        'rgb(255, 171, 0)',
+                        'rgb(113, 221, 55)',
+                        'rgb(255, 62, 29)'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

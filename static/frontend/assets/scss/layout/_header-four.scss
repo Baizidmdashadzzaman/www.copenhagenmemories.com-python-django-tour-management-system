@@ -1,0 +1,69 @@
+@use "../utils/mixins";
+@use "../utils/variables";
+
+/*============================
+  26.header-four
+============================*/
+
+.main-header {
+    &.main-header-four {
+        position: relative;
+        .header__hamburger {
+            .sidebar-menu {
+                color: variables.$gray-900;
+            }
+        }
+        .header-nav{
+            .main-menu-wrapper{
+                padding: 10px 0;
+                .main-nav{
+                    > li{
+                        &.active, &:hover  {
+                            > a {
+                                color: variables.$primary;
+                                i {
+                                    color: variables.$primary;
+                                }
+                            }  
+                        }
+                       > a{
+                            color: variables.$gray-900;
+                            i{
+                                color: variables.$gray-500;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.header-topbar {
+    &.topbar-four {
+        background: variables.$white;
+        border-bottom: 1px solid variables.$light;
+        p {
+            color: variables.$gray-600;
+        }
+        .dropdown {
+            & > a {
+                color: variables.$gray-900;
+            }
+        }
+        @include mixins.respond-below(lg) {
+            display: none;
+        }
+    }
+}
+.header-four {
+    .header-btn {
+        .theme-toggle {
+            color: variables.$gray-900;
+        }
+        .dropdown {
+            @include mixins.respond-below(md) {
+                display: none;
+            }
+        }
+    }  
+}

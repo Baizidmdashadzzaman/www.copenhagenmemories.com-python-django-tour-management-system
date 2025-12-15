@@ -1,0 +1,120 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}{{ action }} FAQ{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Management / FAQs /</span> {{ action }} FAQ
+    </h4>
+
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">{{ action }} FAQ</h5>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+
+                {% if form.errors %}
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <h6 class="alert-heading mb-1">Please correct the errors below</h6>
+                    <ul class="mb-0">
+                        {% for field in form %}
+                        {% for error in field.errors %}
+                        <li>{{ field.label }}: {{ error }}</li>
+                        {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+
+                <h6>1. Question Details</h6>
+                <div class="row g-6 mb-6">
+                    <div class="col-md-6">
+                        <label class="form-label" for="id_qus_en">Question (English) <span
+                                class="text-danger">*</span></label>
+                        {{ form.qus_en }}
+                        {% if form.qus_en.errors %}
+                        <div class="text-danger">{{ form.qus_en.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="id_qus_dk">Question (Danish)</label>
+                        {{ form.qus_dk }}
+                        {% if form.qus_dk.errors %}
+                        <div class="text-danger">{{ form.qus_dk.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <hr class="my-6 mx-n6">
+
+                <h6>2. Answer Details</h6>
+                <div class="row g-6 mb-6">
+                    <div class="col-md-6">
+                        <label class="form-label" for="id_ans_en">Answer (English) <span
+                                class="text-danger">*</span></label>
+                        {{ form.ans_en }}
+                        {% if form.ans_en.errors %}
+                        <div class="text-danger">{{ form.ans_en.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="id_ans_dk">Answer (Danish)</label>
+                        {{ form.ans_dk }}
+                        {% if form.ans_dk.errors %}
+                        <div class="text-danger">{{ form.ans_dk.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <hr class="my-6 mx-n6">
+
+                <h6>3. Settings</h6>
+                <div class="row g-6 mb-6">
+                    <div class="col-md-4">
+                        <label class="form-label" for="id_status">Status <span class="text-danger">*</span></label>
+                        {{ form.status }}
+                        {% if form.status.errors %}
+                        <div class="text-danger">{{ form.status.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="id_display_order">Display Order</label>
+                        {{ form.display_order }}
+                        {% if form.display_order.errors %}
+                        <div class="text-danger">{{ form.display_order.errors }}</div>
+                        {% endif %}
+                        <div class="form-text">Lower numbers appear first</div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label d-block mb-3">Featured</label>
+                        <div class="form-check form-switch">
+                            {{ form.is_featured }}
+                            <label class="form-check-label" for="id_is_featured">Mark as Featured</label>
+                        </div>
+                        {% if form.is_featured.errors %}
+                        <div class="text-danger">{{ form.is_featured.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="pt-6">
+                    <button type="submit" class="btn btn-primary me-4 waves-effect waves-light">
+                        <i class="icon-base ti tabler-check icon-22px"></i> Save FAQ
+                    </button>
+                    <a href="{% url 'faq_list' %}" class="btn btn-secondary waves-effect waves-light">
+                        <i class="icon-base ti tabler-x icon-22px"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

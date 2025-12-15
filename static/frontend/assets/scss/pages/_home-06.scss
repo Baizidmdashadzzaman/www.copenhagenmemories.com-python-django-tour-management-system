@@ -1,0 +1,381 @@
+@use "../utils/mixins";
+@use "../utils/variables";
+
+/*============================
+  57.home-06
+============================*/
+
+.header-top-six {
+    p {
+        color: variables.$gray-600;
+    }
+    .dropdown {
+        >a {
+            color: variables.$gray-900;
+        }
+    }
+    .cart-dropdown {
+        a {
+            color: variables.$gray-900;
+        }
+    }
+    .fav-dropdown {
+        a {
+            color: variables.$gray-900;
+        }
+    }
+    @include mixins.respond-below(lg) {
+        display: none;
+    }
+}
+.header-six {
+    background: variables.$primary;
+    .main-menu-wrapper {
+        justify-content: center !important;
+        .header-logo {
+            display: none;
+            @include mixins.respond-below(lg) {
+                display: block;
+            }
+        }
+    }
+    .header-btn {
+        display: none;
+
+        @include mixins.respond-below(lg) {
+            display: flex;
+        }
+    }
+    .header-nav {
+        .main-menu-wrapper {
+            padding: 10px 0;
+            .main-nav {
+                >li {
+                    &.active,
+                    &:hover {
+                        >a {
+                            color: variables.$primary;
+                            i {
+                                color: variables.$primary;
+                            }
+                        }
+                    }
+                    >a {
+                        color: variables.$white !important;
+                        i {
+                            color: variables.$white !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &.fixed {
+        background: variables.$primary;
+        .main-menu-wrapper {
+            justify-content: space-between !important;
+            .header-logo {
+                display: block;
+            }
+        }
+        .header-btn {
+            display: flex;
+            .dropdown {
+                >a {
+                    color: variables.$white;
+                }
+            }
+            .cart-dropdown {
+                a {
+                    color: variables.$white;
+                }
+            }
+            .fav-dropdown {
+                a {
+                    color: variables.$white;
+                }
+            }
+            >div {
+                >a {
+                    color: variables.$white;
+                }
+            }
+        }
+    }
+}
+.sec-head-btn {
+    margin-bottom: 40px;
+}
+.hero-sec-six {
+    background: url(../img/tours/home-banner-6.jpg);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    padding: 100px 0;
+    position: relative;
+    z-index: 1;
+    &::after {
+        content: "";
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+    }
+}
+.banner-form-tab-six {
+    margin-bottom: 15px;
+    .nav {
+        li {
+            margin-right: 8px;
+            &:last-child {
+                margin-right: 0;
+            }
+            .nav-link {
+                font-size: variables.$font-size-14;
+                font-weight: variables.$font-weight-medium;
+                color: variables.$gray-900;
+                background: variables.$white;
+                @include mixins.rounded(74px);
+                padding: 8px 16px;
+                &.active,
+                &:hover {
+                    color: variables.$white;
+                    background: variables.$primary;
+                }
+            }
+        }
+    }
+}
+.section-header-six {
+    margin-bottom: 40px;
+    .badge {
+        position: relative;
+        padding-left: 25px;
+        &::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            background: variables.$primary;
+            transform: translateY(-50%);
+        }
+    }
+}
+.categories-card {
+    position: relative;
+    border-radius: 10px;
+    transition: 0.5s all;
+    overflow: hidden;
+    margin-bottom: 30px;
+    &::after {
+        content: "";
+        background: linear-gradient(360deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        border-radius: 10px;
+    }
+    img {
+        border-radius: 10px;
+        width: 100%;
+        transition: 0.5s all;
+    }
+    &:hover {
+        img {
+            transform: scale(1.14);
+            transition: 0.5s all;
+        }
+    }
+    .cat-content {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 15px;
+        z-index: 1;
+    }
+}
+.categories-slider-six {
+    .owl-dots {
+        text-align: center;
+        .owl-dot {
+            width: 8px;
+            height: 8px;
+            background: variables.$light;
+            margin-right: 8px;
+            border-radius: 30px;
+            &.active {
+                width: 22px;
+                background: variables.$primary;
+
+            }
+        }
+    }
+}
+.work-section-six {
+    background: variables.$primary-transparent;
+    position: relative;
+    .work-avatar {
+        font-size: 50px;
+        font-weight: bold;
+        color: transparent;
+        -webkit-text-stroke: 1px variables.$teal;
+        position: relative;
+        background: transparent;
+    }
+    &::before {
+        content: "";
+        background-image: url(../img/bg/section-top-bg.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: top;
+        position: absolute;
+        width: 100%;
+        height: 60px;
+        top: -50px;
+    }
+}
+.bg-teal-trans {
+    background: linear-gradient(180deg, #0E9384 0%, #F8FAFB 100%);
+    padding: 1px;
+    border-radius: 10px;
+}
+.bg-prime-trans {
+    background: linear-gradient(180deg, #E04F16 0%, #FAFBFC 100%);
+    padding: 1px;
+    border-radius: 10px;
+    .work-avatar {
+        -webkit-text-stroke: 1px variables.$primary;
+    }
+}
+.bg-purple-trans {
+    background: linear-gradient(180deg, #6938EF 0%, #F8FAFB 100%);
+    padding: 1px;
+    border-radius: 10px;
+    .work-avatar {
+        -webkit-text-stroke: 1px variables.$purple;
+    }
+}
+.tours-grid-slide {
+    .owl-nav {
+        display: none;
+    }
+    .owl-dots {
+        display: block;
+    }
+}
+.support-section.section-skew {
+    transform: skewY(-0.6deg);
+    transform-origin: left;
+}
+.section-right-img-two {
+    position: relative;
+    display: inline-block;
+    margin-right: 30px;
+    .review-rate-top {
+        position: absolute;
+        right: -30px;
+        top: 30px;
+        left: unset;
+    }
+}
+.blog-sec-six {
+    padding-bottom: 36px;
+}
+.testi-sec-six {
+    background: variables.$primary-transparent;
+    position: relative;
+    padding-top: 40px;
+    .testi-info-six {
+        @include mixins.respond-below(lg) {
+            margin-bottom: 24px;
+        }
+        .testi-para {
+            max-width: 500px;
+            font-size: variables.$font-size-18;
+            font-weight: variables.$font-weight-semibold;
+        }
+    }
+    &::before {
+        content: "";
+        background-image: url(../img/bg/section-top-bg.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: top;
+        position: absolute;
+        width: 100%;
+        height: 60px;
+        top: -50px;
+    }
+}
+.client-logos-sec {
+    background: variables.$primary;
+    padding: 40px 0;
+}
+.tourism-text-info {
+    padding-right: 50px;
+    @include mixins.respond-below(xl) {
+        padding-right: 30px;
+    }
+    @include mixins.respond-below(lg) {
+        padding-right: 0;
+    }
+    .text-header {
+        margin-bottom: 40px;
+        img {
+            border-radius: 80px;
+        }
+    }
+}
+.blog-grid-six {
+    .card-img {
+        position: relative;
+        .badge {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+        }
+        img {
+            object-fit: cover;
+        }
+    }
+}
+.footer-six {
+    .footer-widget {
+        h5 {
+            &::before {
+                display: none;
+            }
+        }
+    }
+    .footer-input {
+        @include mixins.respond-below(lg) {
+            margin-bottom: 24px;
+        }
+    }
+}
+.section.faq-sec {
+    padding: 60px 0;
+}
+.faq-cards-six {
+    .accordion-item {
+        padding: 20px;
+        margin-bottom: 8px;
+        &.show {
+            background: variables.$white;
+            border: 0;
+
+            .accordion-button {
+                color: variables.$primary;
+            }
+        }
+    }
+}

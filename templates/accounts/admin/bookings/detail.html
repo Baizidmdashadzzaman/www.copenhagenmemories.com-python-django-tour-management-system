@@ -1,0 +1,261 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Booking Details - #{{ booking.booking_number }}{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="py-3 mb-0">
+            <span class="text-muted fw-light">Booking Management /</span> #{{ booking.booking_number }}
+        </h4>
+        <div>
+            <a href="{% url 'booking_status_update' booking.pk %}" class="btn btn-warning">
+                <i class="icon-base ti tabler-refresh me-1"></i> Update Status
+            </a>
+            <a href="{% url 'booking_list' %}" class="btn btn-secondary">
+                <i class="icon-base ti tabler-arrow-left me-1"></i> Back to List
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left Column -->
+        <div class="col-xl-8 col-lg-7">
+            <!-- Booking Info -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Booking Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="rounded me-3 bg-lighter d-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                            <i class="icon-base ti tabler-calendar-event icon-32px text-muted"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-1">Booking #{{ booking.booking_number }}</h5>
+                            <p class="mb-0 text-muted">
+                                <a href="{% url 'tour_view' booking.tour.pk %}" class="text-body">{{ booking.tour.title }}</a>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <p class="mb-1"><span class="fw-medium">Tour Date:</span> {{ booking.tour_date|date:"M d, Y" }}</p>
+                            <p class="mb-1"><span class="fw-medium">Tour Time:</span> {{ booking.tour_time|default:"-" }}</p>
+                            <p class="mb-1"><span class="fw-medium">Participants:</span> {{ booking.total_participants }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-1"><span class="fw-medium">Status:</span> 
+                                <span class="badge bg-label-{% if booking.status == 'confirmed' %}success{% elif booking.status == 'pending' %}warning{% elif booking.status == 'cancelled' %}danger{% else %}info{% endif %}">
+                                    {{ booking.get_status_display }}
+                                </span>
+                            </p>
+                            <p class="mb-1"><span class="fw-medium">Booked On:</span> {{ booking.booking_date|date:"M d, Y H:i" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Participants -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Participants ({{ participants.count }})</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Type</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for participant in participants %}
+                            <tr>
+                                <td><span class="badge bg-label-info">{{ participant.participant_type }}</span></td>
+                                <td>{{ participant.first_name }} {{ participant.last_name }}</td>
+                                <td>{{ participant.email|default:"-" }}</td>
+                                <td>{{ participant.phone|default:"-" }}</td>
+                                <td>{{ participant.price }} {{ booking.currency }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center py-4">
+                                    <div class="text-muted mb-2">No participants found.</div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Payments -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Payments ({{ payments.count }})</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Method</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Paid At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in payments %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'payment_detail' payment.pk %}" class="fw-medium">{{ payment.transaction_id|default:"-" }}</a>
+                                </td>
+                                <td>{{ payment.get_payment_method_display }}</td>
+                                <td>{{ payment.amount }} {{ payment.currency }}</td>
+                                <td>
+                                    <span class="badge bg-label-{% if payment.status == 'completed' %}success{% elif payment.status == 'pending' %}warning{% else %}danger{% endif %}">
+                                        {{ payment.get_status_display }}
+                                    </span>
+                                </td>
+                                <td>{{ payment.paid_at|default:"-" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center py-4">
+                                    <div class="text-muted mb-2">No payments found.</div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-xl-4 col-lg-5">
+            <!-- Customer Info -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Customer Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="avatar avatar-md me-2">
+                            <span class="avatar-initial rounded-circle bg-label-primary">
+                                {{ booking.customer.user.username|make_list|first|upper }}
+                            </span>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">{{ booking.customer.user.get_full_name|default:booking.customer.user.username }}</h6>
+                            <small class="text-muted">Customer ID: {{ booking.customer.pk }}</small>
+                        </div>
+                    </div>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="icon-base ti tabler-mail me-2 text-muted"></i>
+                            {{ booking.contact_email }}
+                        </li>
+                        <li class="mb-2">
+                            <i class="icon-base ti tabler-phone me-2 text-muted"></i>
+                            {{ booking.contact_phone }}
+                        </li>
+                        <li>
+                            <i class="icon-base ti tabler-user me-2 text-muted"></i>
+                            {{ booking.contact_name }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Pricing -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Pricing</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <span class="fw-medium">{{ booking.subtotal }} {{ booking.currency }}</span>
+                        </li>
+                        <li class="d-flex justify-content-between mb-2">
+                            <span>Discount:</span>
+                            <span class="text-danger">-{{ booking.discount_amount }} {{ booking.currency }}</span>
+                        </li>
+                        <li class="d-flex justify-content-between mb-2">
+                            <span>Tax:</span>
+                            <span class="fw-medium">{{ booking.tax_amount }} {{ booking.currency }}</span>
+                        </li>
+                        <hr class="my-2">
+                        <li class="d-flex justify-content-between mb-3">
+                            <span class="fw-bold">Total:</span>
+                            <span class="fw-bold text-primary">{{ booking.total_amount }} {{ booking.currency }}</span>
+                        </li>
+                        <li class="d-flex justify-content-between align-items-center">
+                            <span>Payment Status:</span>
+                            <span class="badge bg-label-{% if booking.payment_status == 'paid' %}success{% elif booking.payment_status == 'pending' %}warning{% else %}danger{% endif %}">
+                                {{ booking.get_payment_status_display }}
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Special Requests -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Special Requests</h5>
+                </div>
+                <div class="card-body">
+                    {% if booking.special_requirements %}
+                    <div class="alert alert-warning mb-3" role="alert">
+                        <i class="icon-base ti tabler-alert-circle me-1"></i> {{ booking.special_requirements }}
+                    </div>
+                    {% else %}
+                    <p class="text-muted mb-3">No special requests</p>
+                    {% endif %}
+
+                    {% if booking.pickup_location %}
+                    <h6>Pickup Location:</h6>
+                    <p class="mb-0"><i class="icon-base ti tabler-map-pin me-1 text-muted"></i> {{ booking.pickup_location }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Notes</h5>
+                </div>
+                <div class="card-body">
+                    {% if booking.customer_notes %}
+                    <div class="mb-3">
+                        <h6 class="mb-1">Customer Notes:</h6>
+                        <p class="text-muted mb-0">{{ booking.customer_notes }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    {% if booking.admin_notes %}
+                    <div>
+                        <h6 class="mb-1">Admin Notes:</h6>
+                        <p class="text-muted mb-0">{{ booking.admin_notes }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    {% if not booking.customer_notes and not booking.admin_notes %}
+                    <p class="text-muted mb-0">No notes available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Set Primary Image - {{ tour.title }}{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Tour Management / Tours /</span> {{ tour.title }} - Set Primary Image
+    </h4>
+
+    <!-- Confirmation Card -->
+    <div class="card">
+        <div class="card-header border-bottom">
+            <h5 class="card-title mb-0">
+                <i class="ti tabler-star icon-16px"></i> Set as Primary Image
+            </h5>
+        </div>
+
+        <div class="card-body">
+            <p>Are you sure you want to set this image as the primary image for this tour?</p>
+            
+            {% if image.image %}
+            <div class="mb-3">
+                <img src="{{ image.image.url }}" alt="{{ image.caption }}" style="max-width: 250px; max-height: 250px; border-radius: 4px;">
+            </div>
+            {% endif %}
+            
+            <p class="text-muted">
+                <strong>Caption:</strong> {{ image.caption|default:"No caption" }}
+            </p>
+            
+            <div class="alert alert-info">
+                <strong>Note:</strong> The current primary image (if any) will no longer be marked as primary.
+            </div>
+        </div>
+
+        <div class="card-footer border-top">
+            <form method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">
+                    <i class="ti tabler-star icon-16px"></i> Set as Primary
+                </button>
+                <a href="{% url 'tour_image_list' tour_id=tour.id %}" class="btn btn-secondary">
+                    <i class="ti tabler-x icon-16px"></i> Cancel
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,147 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Booking Participants - {{ booking.booking_number }}{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Bookings / {{ booking.booking_number }} /</span> Participants
+    </h4>
+
+    <!-- Header Card -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h5 class="card-title mb-3">Booking Information</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-2"><strong>Booking #:</strong> {{ booking.booking_number }}</p>
+                            <p class="mb-2"><strong>Customer:</strong> {{ booking.customer.user.get_full_name|default:booking.customer.user.username }}</p>
+                            <p class="mb-2"><strong>Tour:</strong> {{ booking.tour.title }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-2"><strong>Tour Date:</strong> {{ booking.tour_date|date:"M d, Y" }}</p>
+                            <p class="mb-2"><strong>Total Participants:</strong> {{ booking.total_participants }}</p>
+                            <p class="mb-2"><strong>Status:</strong> 
+                                <span class="badge bg-label-{{ booking.status|yesno:'success,warning,danger' }}">
+                                    {{ booking.get_status_display }}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a href="{% url 'booking_detail' booking.pk %}" class="btn btn-secondary">
+                        <i class="icon-base ti tabler-arrow-left icon-16px me-1"></i>
+                        Back to Booking
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Participants List -->
+    <div class="card">
+        <div class="card-header border-bottom">
+            <h5 class="card-title mb-0">Participants List ({{ participants.count }})</h5>
+        </div>
+
+        <div class="card-datatable table-responsive">
+            <table class="table">
+                <thead class="border-top">
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Age</th>
+                        <th>Contact</th>
+                        <th>Price</th>
+                        <th>Special Requirements</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for participant in participants %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-wrapper me-3">
+                                    <div class="avatar avatar-sm">
+                                        <span class="avatar-initial rounded-circle bg-label-primary">
+                                            {{ participant.first_name|slice:":1"|upper }}{{ participant.last_name|slice:":1"|upper }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">{{ participant.first_name }} {{ participant.last_name }}</h6>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-label-info">{{ participant.participant_type|title }}</span>
+                        </td>
+                        <td>
+                            {% if participant.age %}
+                                {{ participant.age }} years
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if participant.email or participant.phone %}
+                                <div class="d-flex flex-column">
+                                    {% if participant.email %}
+                                    <small class="text-truncate">
+                                        <i class="icon-base ti tabler-mail icon-16px me-1"></i>
+                                        {{ participant.email }}
+                                    </small>
+                                    {% endif %}
+                                    {% if participant.phone %}
+                                    <small class="text-truncate">
+                                        <i class="icon-base ti tabler-phone icon-16px me-1"></i>
+                                        {{ participant.phone }}
+                                    </small>
+                                    {% endif %}
+                                </div>
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <strong>{{ booking.currency }} {{ participant.price|floatformat:2 }}</strong>
+                        </td>
+                        <td>
+                            {% if participant.special_requirements %}
+                                <div class="text-truncate" style="max-width: 200px;" title="{{ participant.special_requirements }}">
+                                    {{ participant.special_requirements }}
+                                </div>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-5">
+                            <div class="fs-4 text-muted">No participants found for this booking</div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                {% if participants %}
+                <tfoot class="border-top">
+                    <tr>
+                        <td colspan="5" class="text-end"><strong>Total:</strong></td>
+                        <td colspan="2">
+                            <strong>{{ booking.currency }} {{ booking.subtotal|floatformat:2 }}</strong>
+                        </td>
+                    </tr>
+                </tfoot>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

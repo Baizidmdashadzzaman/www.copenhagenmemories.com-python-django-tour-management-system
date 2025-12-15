@@ -1,0 +1,65 @@
+{% extends 'accounts/admin/layout.html' %}
+
+{% block admin_content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold py-3 mb-0">
+            <span class="text-muted fw-light">Tours /</span> {{ tour.title }} / FAQs
+        </h4>
+        <a href="{% url 'tour_faq_create' tour.id %}" class="btn btn-primary">
+            <i class="ti tabler-plus me-1"></i> Add FAQ
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Order</th>
+                        <th>Question</th>
+                        <th>Answer</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    {% for faq in faqs %}
+                    <tr>
+                        <td>{{ faq.display_order }}</td>
+                        <td>{{ faq.question|truncatechars:50 }}</td>
+                        <td>{{ faq.answer|truncatechars:50 }}</td>
+                        <td>
+                            <div class="dropdown">
+                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                    data-bs-toggle="dropdown">
+                                    <i class="ti tabler-dots-vertical"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="{% url 'tour_faq_edit' tour.id faq.id %}">
+                                        <i class="ti tabler-pencil me-1"></i> Edit
+                                    </a>
+                                    <a class="dropdown-item text-danger"
+                                        href="{% url 'tour_faq_delete' tour.id faq.id %}">
+                                        <i class="ti tabler-trash me-1"></i> Delete
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center py-4">
+                            <div class="text-muted">No FAQs found.</div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a href="{% url 'tour_list' %}" class="btn btn-secondary">Back to Tours</a>
+    </div>
+</div>
+{% endblock %}

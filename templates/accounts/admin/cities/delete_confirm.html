@@ -1,0 +1,50 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Delete City{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Locations /</span> Delete City
+    </h4>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-heading"><i class="ti tabler-alert-triangle"></i> Confirm Deletion</h4>
+                        <p>Are you sure you want to delete this city? This action cannot be undone.</p>
+                    </div>
+
+                    <div class="card mb-4 bg-light">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ city.name }}</h5>
+                            <p class="card-text text-muted">{{ city.description|truncatewords:20 }}</p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Country:</strong> {{ city.country.name }}</p>
+                                    <p><strong>Region:</strong> {{ city.region.name }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Status:</strong> <span class="badge bg-label-{% if city.is_active %}success{% else %}danger{% endif %}">{% if city.is_active %}Active{% else %}Inactive{% endif %}</span></p>
+                                    <p><strong>Popular:</strong> {% if city.is_popular %}<span class="badge bg-label-warning">Yes</span>{% else %}<span class="badge bg-label-secondary">No</span>{% endif %}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger me-2">
+                            <i class="ti tabler-trash me-2"></i>Delete City
+                        </button>
+                        <a href="{% url 'city_list' %}" class="btn btn-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

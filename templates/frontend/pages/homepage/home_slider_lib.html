@@ -1,0 +1,22 @@
+{% load translate_tags %}
+{% load static %}
+<div class="banner-sliders">
+    <div class="slider-wrap home-vertical-slider">
+        <div class="slider-fors nav-center" id="large-img">
+            {% for slider in sliders %}
+            <div class="service-img">
+                <img src="{{ slider.image.url }}" class="img-fluid"
+                    alt="Slider Img">
+            </div>
+            {% endfor %}
+        </div>
+        <div class="">
+            <div class="slider-nav nav-center" id="small-img">
+                {% for slider in sliders %}
+                <div><img src="{{ slider.image.url }}"
+                        class="img-fluid" alt="Slider Img"></div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

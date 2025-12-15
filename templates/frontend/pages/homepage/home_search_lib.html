@@ -1,0 +1,61 @@
+{% load static %}
+
+<div class="container">
+        <div class="hero-content py-0 text-start">
+            <div class="row align-items-center">
+                <div class="col-md-12 mx-auto wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="banner-content text-start">
+                        <h1 class="text-white display-5 mb-2">Experience the Magic: Exclusive Offers from {{ site_settings.site_name }}
+                        </h1>
+                        <p class="text-white">Your ultimate destination for all things help you celebrate & remember
+                            tour experience.</p>
+                        <a href="{% url 'tour_list_fronted' %}" class="btn btn-primary">Explore All Tours</a>
+                    </div>
+                    <div class="banner-form-tab">
+                        <ul class="nav">
+                            <li>
+                                <a href="#" class="nav-link active" data-bs-toggle="tab" data-bs-target="#Tour">
+                                    <i class="fa-solid fa-camera me-2"></i>Find the best Tour
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="banner-form card mb-0">
+                        <div class="card-body">
+                            <div>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade active show" id="Tour">
+                                        <form action="{% url 'find_tour' %}" method="GET">
+                                            <div class="d-flex align-items-center justify-content-between flex-wrap mb-2">
+                                                <h6 class="fw-medium fs-16 mb-2">Search holiday packages & trips</h6>
+                                            </div>
+                                            <div class="d-lg-flex">
+                                                <div class="d-flex form-info flex-wrap">
+                                                    <div class="form-item">
+                                                        <label class="form-label fs-14 text-default mb-1" for="search_query">Where would you like to go?</label>
+                                                                <div class="input-group">
+                                                            <span class="input-group-text bg-white border-end-0 ps-3"><i class="isax isax-location"></i></span>
+                                                            <input id="search_query" name="search" type="text" class="form-control border-start-0" placeholder="Search by city, region or tour" value="{{ request.GET.search|default_if_none:'' }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-item">
+                                                        <label class="form-label fs-14 text-default mb-1" for="start_date">Date</label>
+                                                        <input id="start_date" name="start_date" type="date" class="form-control" value="{{ request.GET.start_date|default_if_none:'' }}">
+                                                    </div>
+                                                    <div class="form-item">
+                                                        <label class="form-label fs-14 text-default mb-1" for="guests">Guests</label>
+                                                        <input id="guests" name="guests" type="number" class="form-control" min="1" placeholder="1" value="{{ request.GET.guests|default_if_none:'' }}">
+                                                    </div>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary search-btn rounded">Search</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,296 @@
+@use "../utils/mixins";
+@use "../utils/variables";
+
+/*============================
+  50.hotel-map
+============================*/
+
+.map-content {
+	padding: 0 30px;
+	@include mixins.respond-below(md) {
+		padding: 0 15px;
+	}
+}
+.map-lists-widget {
+	padding: 30px 30px;
+	@include mixins.respond-below(md) {
+		padding: 15px;
+	}
+}
+.filter-range {
+	.irs--round {
+		height: 20px;
+	}
+	.irs--round .irs-handle {
+		width: 10px;
+		height: 10px;
+		background-color: variables.$primary;
+		border: 0;
+		top: -4px;
+	}
+	.irs--round .irs-line {
+		top: 0;
+		background: variables.$light;
+	}
+	.irs--round .irs-bar {
+		background-color: variables.$primary;
+		top: 0;
+	}
+	.irs--round .irs-min,
+	.irs--round .irs-max,
+	.irs--round .irs-single {
+		display: none;
+	}
+}
+.map-right {
+	top: 0;
+	height: 100%;
+	min-height: 100%;
+	position: sticky;
+	right: 0;
+	z-index: 1029;
+	padding-left: 0;
+	padding-right: 0;
+	@include mixins.respond-below(xl) {}
+	&.map-top {
+		@include mixins.respond-below(xl) {
+			top: 0;
+		}
+		.map-listing {
+			height: 100vh;
+		}
+	}
+	@include mixins.respond-below(xl) {
+		position: relative;
+		top: 0;
+		padding-right: 15px;
+	}
+	.map-listing {
+		height: 100vh;
+		width: 100%;
+		.profile-widget {
+			padding: 0;
+			border: 0;
+			margin-bottom: 0;
+
+			@include mixins.respond-below(sm) {
+				flex-direction: column;
+			}
+		}
+	}
+	.list-map-img {
+		position: relative;
+		overflow: hidden;
+		z-index: 1;
+		border-radius: 10px;
+		img {
+			border-radius: 4px;
+			transform: translateZ(0);
+			transition: all 2000ms cubic-bezier(.19, 1, .22, 1) 0ms;
+		}
+		&:hover {
+			img {
+				transform: scale(1.15);
+			}
+		}
+	}
+	.profile-widget {
+		&.rent-list-view {
+			.pro-content {
+				position: relative;
+				.list-head p {
+					margin: 0 0 14px;
+					font-weight: 400;
+					i {
+						margin-right: 0;
+					}
+				}
+				.date {
+					font-size: 12px;
+				}
+				.list {
+					font-size: 12px;
+				}
+				p {
+					font-size: 12px;
+					margin-bottom: 10px;
+				}
+				.product-amount span {
+					font-size: 20px;
+				}
+				.details {}
+				.title {
+					font-size: 16px;
+					color: #0168b3;
+
+					a {
+						display: inline-block;
+					}
+				}
+			}
+		}
+		.verified {
+			margin-left: 3px;
+		}
+	}
+	.profile-widget p.speciality {
+		font-size: 14px;
+		color: #4f4f4f;
+		margin-bottom: 5px;
+		min-height: 40px;
+	}
+	.rating {
+		list-style: none;
+		width: 100%;
+		font-weight: 400;
+		margin-bottom: 15px;
+		i {
+			color: #dedfe0;
+		}
+		span {
+			margin-left: 5px;
+		}
+	}
+	.available-info {
+		font-size: 13px;
+		color: #757575;
+		font-weight: 400;
+		li {
+			&+li {
+				margin-top: 5px;
+			}
+
+			i {
+				width: 22px;
+			}
+		}
+	}
+}
+.add-tab-list {
+	li {
+		a {
+			padding: 8px 16px;
+			border-radius: 5px;
+			display: flex;
+			&.active {
+				background: variables.$primary;
+				color: variables.$white;
+			}
+			&:hover {
+				background: variables.$primary;
+				color: variables.$white;
+			}
+		}
+	}
+}
+.rounded-edit {
+	width: 30px;
+	height: 30px;
+	background: variables.$light;
+	border-radius: 50%;
+
+}
+.trash-icon {
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	background: variables.$danger-transparent;
+	flex-shrink: 0;
+}
+.file-upload {
+	border: 1px dashed variables.$light-900;
+	border-radius: 5px;
+	text-align: center;
+	position: relative;
+	padding: 40px 20px;
+	input {
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		opacity: 0;
+		cursor: pointer;
+	}
+}
+.gallery-upload-img {
+	width: 60px;
+	height: 60px;
+	border-radius: 10px;
+	position: relative;
+	transition: 0.5s all;
+	img {
+		width: 100%;
+		height: 100%;
+		border-radius: 10px;
+	}
+	.gallery-trash {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		transform: translatex(-50%);
+		opacity: 0;
+		transition: 0.5s all;
+	}
+	&:hover {
+		.gallery-trash {
+			opacity: 1;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			transition: 0.5s all;
+		}
+	}
+}
+.text-editor {
+	.note-editor.note-frame {
+		border-color: variables.$light;
+	}
+	.note-toolbar {
+		background: variables.$white;
+		border-color: variables.$light;
+	}
+	.note-statusbar {
+		display: none;
+	}
+}
+.modal {
+	.modal-body {
+		h6 {
+			font-weight: 500;
+		}
+	}
+}
+.curise-details {
+	p {
+		font-size: 14px;
+	}
+}
+.cruise-build {
+	p {
+		font-size: 14px;
+	}
+}
+.cruise-list-item {
+	p {
+		padding-right: 8px;
+
+		&:last-child {
+			border-right: none;
+			padding-right: 0;
+		}
+
+		@include mixins.respond-below(xl) {
+			border-right: 0;
+			padding-right: 4px;
+		}
+
+	}
+}
+.fancybox-image {
+	border-radius: 10px;
+	border: 1px solid variables.$light;
+}
+.invoice-logo-white {
+	display: none;
+}

@@ -1,0 +1,1018 @@
+{% extends 'frontend/layout/base.html' %}
+
+{% block title %}{{ tour.title }} - Tour Detail{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<div class="breadcrumb-bar breadcrumb-bg-02 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-12">
+                <h2 class="breadcrumb-title mb-2">Tour Details</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="isax isax-home5"></i></a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'tour_list' %}">Tours</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ tour.title }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <div class="content">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-xl-8">
+
+                    <!-- Slider -->
+                    <div>
+                        <div class="service-wrap mb-4">
+                            <div class="slider-wrap vertical-slider tour-vertical-slide d-flex align-items-center">
+                                <div class="slider-for nav-center" id="large-img">
+                                    {% if tour.main_image %}
+                                    <div class="service-img">
+                                        <img src="{{ tour.main_image.url }}" class="img-fluid" alt="{{ tour.title }}">
+                                    </div>
+                                    {% endif %}
+                                    {% for image in images %}
+                                    <div class="service-img">
+                                        <img src="{{ image.image.url }}" class="img-fluid" alt="{{ image.caption|default:tour.title }}">
+                                    </div>
+                                    {% endfor %}
+                                    {% if not tour.main_image and not images %}
+                                    <div class="service-img">
+                                        <img src="{% static 'frontend/assets/img/tours/default-tour.jpg' %}" class="img-fluid" alt="{{ tour.title }}">
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <a href="{% if tour.main_image %}{{ tour.main_image.url }}{% elif images %}{{ images.0.image.url }}{% endif %}" data-fancybox="gallery" class="btn btn-white btn-xs view-btn"><i class="isax isax-image me-1"></i>See All</a>
+                                <div class="slider-nav nav-center" id="small-img">
+                                    {% if tour.main_image %}
+                                    <div><img src="{{ tour.main_image.url }}" class="img-fluid" alt="{{ tour.title }}"></div>
+                                    {% endif %}
+                                    {% for image in images|slice:":5" %}
+                                    <div><img src="{{ image.image.url }}" class="img-fluid" alt="{{ image.caption|default:tour.title }}"></div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <div class="mb-2">
+                                <h4 class="mb-1 d-flex align-items-center flex-wrap mb-2">
+                                    {{ tour.title }}
+                                    {% if tour.is_featured %}
+                                    <span class="badge badge-xs bg-success rounded-pill ms-2"><i class="isax isax-ticket-star me-1"></i>Featured</span>
+                                    {% endif %}
+                                    {% if tour.is_bestseller %}
+                                    <span class="badge badge-xs bg-primary rounded-pill ms-2"><i class="isax isax-ranking me-1"></i>Bestseller</span>
+                                    {% endif %}
+                                </h4>
+                                <div class="d-flex align-items-center flex-wrap">
+                                    {% if tour.category %}
+                                    <p class="fs-14 mb-2 me-3 pe-3 border-end"><i class="isax isax-receipt text-primary me-2"></i>{{ tour.category.name }}</p>
+                                    {% endif %}
+                                    {% if tour.city %}
+                                    <p class="fs-14 mb-2 me-3 pe-3 border-end"><i class="isax isax-location5 me-2"></i>{{ tour.city.name }}
+                                        <a href="#location" class="link-primary text-decoration-underline fw-medium ms-2">View Location</a>
+                                    </p>
+                                    {% elif tour.destination_region %}
+                                    <p class="fs-14 mb-2 me-3 pe-3 border-end"><i class="isax isax-location5 me-2"></i>{{ tour.destination_region.name }}
+                                        <a href="#location" class="link-primary text-decoration-underline fw-medium ms-2">View Location</a>
+                                    </p>
+                                    {% endif %}
+                                    {% if tour.average_rating > 0 %}
+                                    <div class="d-flex align-items-center mb-2">
+                                        <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">{{ tour.average_rating|floatformat:1 }}</span>
+                                        <p class="fs-14"><a href="#reviews">({{ tour.total_reviews }} Reviews)</a></p>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <a href="#" class="btn btn-outline-light btn-icon btn-sm d-flex align-items-center justify-content-center me-2"><i class="isax isax-share"></i></a>
+                                <a href="#" class="btn btn-outline-light btn-sm d-inline-flex align-items-center"><i class="isax isax-heart5 text-danger me-1"></i>Save</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Slider -->
+
+                    <!-- Description -->
+                    <div class="bg-light-200 card-bg-light mb-4">
+                        <h5 class="fs-18 mb-3">Description</h5>
+                        <div class="mb-2">
+                            <p>{{ tour.description|truncatewords:50 }}</p>
+                        </div>
+                        {% if tour.description|wordcount > 50 %}
+                        <div class="read-more">
+                            <div class="more-text">
+                                <p>{{ tour.description }}</p>
+                            </div>
+                            <a href="#" class="fs-14 fw-medium more-link text-decoration-underline mb-2">Show More</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <!-- /Description -->
+
+                    <!-- Highlights -->
+                    {% if highlights %}
+                    <div class="bg-light-200 card-bg-light mb-4">
+                        <h5 class="fs-18 mb-3">Highlights</h5>
+                        <div>
+                            {% for highlight in highlights %}
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="avatar avatar-md bg-primary-transparent rounded-circle me-2">
+									<i class="isax isax-send-sqaure-2 fs-16"></i>
+								</span>
+                                <p>{{ highlight.highlight }}</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    <!-- /Highlights -->
+
+                    <!-- Itinerary -->
+                    {% if itinerary_steps %}
+                    <div class="bg-light-200 card-bg-light mb-4">
+                        <h5 class="fs-18 mb-3">Itinerary</h5>
+                        <div class="card shadow-none mb-0">
+                            <div class="card-body p-3">
+                                <div class="stage-flow">
+                                    {% for step in itinerary_steps %}
+                                    <div class="d-flex align-items-center flows-step">
+                                        <span class="flow-step">{{ step.step_number|stringformat:"02d" }}</span>
+                                        <div class="flow-content">
+                                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                                <div>
+                                                    <h6 class="fw-medium mb-1">{{ step.title }}</h6>
+                                                    {% if step.duration_minutes %}
+                                                    <p>Duration: {{ step.duration_minutes }} minutes</p>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            {% if step.description %}
+                                            <p>{{ step.description }}</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <!-- /Itinerary -->
+
+                    <!-- Includes & Excludes -->
+                    {% if included_items or excluded_items %}
+                    <div class="bg-light-200 card-bg-light mb-4">
+                        <h5 class="fs-18 mb-3">Includes & Excludes</h5>
+                        <div class="row gy-2">
+                            <div class="col-md-6">
+                                {% for item in included_items %}
+                                <p class="d-flex align-items-center mb-2">
+                                    <i class="isax isax-tick-square5 text-success me-2"></i> {{ item.item }}
+                                </p>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                {% for item in excluded_items %}
+                                <p class="d-flex align-items-center mb-2">
+                                    <i class="isax isax-close-square5 text-danger me-2"></i> {{ item.item }}
+                                </p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <!-- /Includes & Excludes -->
+
+                    <!-- Gallery -->
+                    {% if images %}
+                    <div class="bg-light-200 card-bg-light mb-4">
+                        <h5 class="fs-18 mb-3">Gallery</h5>
+                        <div class="tour-gallery-slider owl-carousel">
+                            {% for image in images %}
+                            <a class="galley-wrap" data-fancybox="gallery" href="{{ image.image.url }}">
+                                <img src="{{ image.image.url }}" alt="{{ image.caption|default:tour.title }}">
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    <!-- /Gallery -->
+
+                    <!-- Location -->
+                    <div class="bg-light-200 card-bg-light mb-4" id="location">
+                        <h5 class="fs-18 mb-3">Location</h5>
+                        <!-- Map -->
+                        <div>
+                            {% if tour.map_location %}
+                            <iframe src="{{ tour.map_location }}"
+                            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="tour-detail-map w-100"></iframe>
+                            {% elif tour.meeting_point_latitude and tour.meeting_point_longitude %}
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3!2d{{ tour.meeting_point_longitude }}!3d{{ tour.meeting_point_latitude }}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM!5e0!3m2!1sen!2s!4v1"
+                            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="tour-detail-map w-100"></iframe>
+                            {% else %}
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6509170.989457427!2d-123.80081967108484!3d37.192957227641294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb9fe5f285e3d%3A0x8b5109a227086f55!2sCalifornia%2C%20USA!5e0!3m2!1sen!2sin!4v1669181581381!5m2!1sen!2sin"
+                            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="tour-detail-map w-100"></iframe>
+                            {% endif %}
+                            {% if tour.meeting_point %}
+                            <div class="mt-3">
+                                <h6 class="fw-medium">Meeting Point:</h6>
+                                <p>{{ tour.meeting_point }}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <!-- /Map -->
+                    </div>
+
+                    <!-- FAQ -->
+                    {% if faqs %}
+                    <div class="bg-light-200 card-bg-light mb-4">
+                        <h5 class="fs-18 mb-3">Frequently Asked Questions</h5>
+                        <div class="accordion faq-accordion" id="accordionFaq">
+                            {% for faq in faqs %}
+                            <div class="accordion-item {% if forloop.first %}show{% endif %} mb-2">
+                                <div class="accordion-header">
+                                    <button class="accordion-button fw-medium {% if not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapse-{{ forloop.counter }}" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}" aria-controls="faq-collapse-{{ forloop.counter }}">
+                                        {{ faq.question }}
+                                    </button>
+                                </div>
+                                <div id="faq-collapse-{{ forloop.counter }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" data-bs-parent="#accordionFaq">
+                                    <div class="accordion-body">
+                                        <p class="mb-0">{{ faq.answer }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    <!-- /FAQ -->
+
+                    <!-- Reviews -->
+                    <div class="d-flex align-items-center justify-content-between flex-wrap mb-2" id="reviews">
+                        <h6 class="mb-3">Reviews ({{ tour.total_reviews }})</h6>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#add_review" class="btn btn-primary btn-md mb-3"><i class="isax isax-edit-2 me-1"></i>Write a Review</a>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 d-flex">
+                            <div class="rating-item bg-light-200 text-center flex-fill mb-3">
+                                <h6 class="fw-medium mb-3">Customer Reviews & Ratings</h6>
+                                <h5 class="display-6">{{ avg_rating|floatformat:1 }} / 5.0</h5>
+                                <div class="d-inline-flex align-items-center justify-content-center mb-3">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= avg_rating %}
+                                        <i class="ti ti-star-filled text-primary me-1"></i>
+                                        {% else %}
+                                        <i class="ti ti-star text-primary me-1"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <p>Based On {{ total_reviews }} Reviews</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 d-flex">
+                            <div class="card rating-progress shadow-none flex-fill mb-3">
+                                <div class="card-body">
+                                    {% for star, stat in rating_stats.items %}
+                                    <div class="d-flex align-items-center mb-2">
+                                        <p class="me-2 text-nowrap mb-0">{{ star }} Star Ratings</p>
+                                        <div class="progress w-100" role="progressbar" aria-valuenow="{{ stat.percentage|floatformat:0 }}" aria-valuemin="0" aria-valuemax="100">
+                                            <div class="progress-bar bg-primary" style="width: {{ stat.percentage|floatformat:0 }}%"></div>
+                                        </div>
+                                        <p class="progress-count ms-2">{{ stat.count }}</p>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        {% for review in reviews %}
+                        <div class="col-md-12 mb-4">
+                            <div class="d-flex align-items-start">
+                                <div class="avatar avatar-md rounded-circle flex-shrink-0 me-3">
+                                    {% if review.customer.user.customer_profile.profile_image %}
+                                    <img src="{{ review.customer.user.customer_profile.profile_image.url }}" alt="{{ review.customer.user.get_full_name }}" class="w-100 h-100 object-fit-cover rounded-circle">
+                                    {% else %}
+                                    <img src="{% static 'frontend/assets/img/users/user-01.jpg' %}" alt="{{ review.customer.user.get_full_name }}" class="w-100 h-100 object-fit-cover rounded-circle">
+                                    {% endif %}
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex align-items-center justify-content-between mb-1">
+                                        <h6 class="mb-0">{{ review.customer.user.get_full_name }}</h6>
+                                        <span class="text-muted fs-13">{{ review.created_at|date:"d M Y" }}</span>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-2">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= review.overall_rating %}
+                                            <i class="ti ti-star-filled text-warning fs-14 me-1"></i>
+                                            {% else %}
+                                            <i class="ti ti-star text-muted fs-14 me-1"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <h6 class="fs-15 mb-2">{{ review.title }}</h6>
+                                    <p class="text-muted mb-0">{{ review.review }}</p>
+                                    
+                                    {% if review.supplier_response %}
+                                    <div class="bg-light-200 rounded p-3 mt-3">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <h6 class="fs-14 fw-bold mb-0 text-primary">Response from {{ tour.supplier.company_name }}</h6>
+                                            <span class="text-muted fs-12 ms-2">{{ review.supplier_response_date|date:"d M Y" }}</span>
+                                        </div>
+                                        <p class="fs-13 text-muted mb-0">{{ review.supplier_response }}</p>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-12 text-center py-4">
+                            <div class="avatar avatar-xl bg-light rounded-circle mb-3 mx-auto d-flex align-items-center justify-content-center">
+                                <i class="isax isax-message-text5 fs-24 text-muted"></i>
+                            </div>
+                            <h6>No reviews yet</h6>
+                            <p class="text-muted">Be the first to review this tour!</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- /Reviews -->
+
+                <!-- Tour Sidebar -->
+                <div class="col-xl-4 theiaStickySidebar">
+                    <div class="card bg-light-200">
+                        <div class="card-body">
+                            <h5 class="d-flex align-items-center fs-18 mb-3">
+								<span class="avatar avatar-md rounded-circle bg-primary me-2"><i class="isax isax-signpost5"></i></span>
+								Tour Details
+							</h5>
+                            <div>
+                                {% if tour.start_date and tour.end_date %}
+                                <div class="d-flex align-items-center justify-content-between details-info">
+                                    <h6 class="fw-medium">Date</h6>
+                                    <p class="flex-fill">{{ tour.start_date|date:"d M Y" }} - {{ tour.end_date|date:"d M Y" }}</p>
+                                </div>
+                                {% endif %}
+                                {% if tour.destination_region %}
+                                <div class="d-flex align-items-center justify-content-between details-info">
+                                    <h6 class="fw-medium">Destination</h6>
+                                    <p class="flex-fill">{{ tour.destination_region.name }}</p>
+                                </div>
+                                {% endif %}
+                                {% if tour.duration_text %}
+                                <div class="d-flex align-items-center justify-content-between details-info">
+                                    <h6 class="fw-medium">Duration</h6>
+                                    <p class="flex-fill">{{ tour.duration_text }}</p>
+                                </div>
+                                {% elif tour.duration_hours %}
+                                <div class="d-flex align-items-center justify-content-between details-info">
+                                    <h6 class="fw-medium">Duration</h6>
+                                    <p class="flex-fill">{{ tour.duration_hours }} Hours</p>
+                                </div>
+                                {% endif %}
+                                {% if tour.difficulty_level %}
+                                <div class="d-flex align-items-center justify-content-between details-info">
+                                    <h6 class="fw-medium">Difficulty</h6>
+                                    <p class="flex-fill">{{ tour.get_difficulty_level_display }}</p>
+                                </div>
+                                {% endif %}
+                                {% if tour.max_participants %}
+                                <div class="d-flex align-items-center justify-content-between details-info">
+                                    <h6 class="fw-medium">Max Participants</h6>
+                                    <p class="flex-fill">{{ tour.max_participants }}</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card shadow-none">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <p class="fs-13 fw-medium mb-1">Starts From</p>
+                                <h5 class="text-primary mb-1">${{ tour.base_price|floatformat:0 }} <span class="fs-14 text-default fw-normal">/ Person</span></h5>
+                                {% if tour.discount_percentage > 0 %}
+                                <p class="text-muted text-decoration-line-through mb-0">${{ tour.original_price|floatformat:0 }}</p>
+                                <span class="badge bg-success">{{ tour.discount_percentage }}% OFF</span>
+                                {% endif %}
+                            </div>
+
+                            {% if not user.is_authenticated %}
+                            <div class="alert alert-warning mb-3">
+                                <i class="isax isax-info-circle me-2"></i>
+                                <strong>Please log in to book this tour.</strong>
+                                <br>
+                                <a href="{% url 'login' %}" class="alert-link">Login here</a> or <a href="{% url 'register_customer' %}" class="alert-link">create an account</a>.
+                            </div>
+                            {% else %}
+                            <!-- Booking Form -->
+                            <div class="banner-form">
+                                <form id="bookingForm" action="{% url 'tour_detail' tour.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="book_tour">
+                                    <input type="hidden" name="participants_data" id="participantsData" value="">
+                                    {{ booking_form.tour }}
+
+                                    {% if booking_error %}
+                                    <div class="alert alert-danger mb-3">
+                                        <i class="isax isax-info-circle me-2"></i>{{ booking_error }}
+                                    </div>
+                                    {% endif %}
+
+                                    {% if non_form_errors %}
+                                    <div class="alert alert-danger mb-3">
+                                        <i class="isax isax-info-circle me-2"></i>
+                                        {% for error in non_form_errors %}
+                                        <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+
+                                    <!-- Tour Date -->
+                                    <div class="form-item border rounded p-3 mb-3 w-100">
+                                        <label class="form-label fs-14 text-default mb-2 fw-medium">Select Tour Date</label>
+                                        {{ booking_form.tour_date }}
+                                        <p class="fs-12 text-muted mb-0">Choose your preferred tour date</p>
+                                        {% if booking_form.tour_date.errors %}
+                                        <div class="text-danger fs-12 mt-1">
+                                            {% for error in booking_form.tour_date.errors %}{{ error }}{% endfor %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- Tour Time (if applicable) -->
+                                    {% if schedules %}
+                                    <div class="form-item border rounded p-3 mb-3 w-100">
+                                        <label class="form-label fs-14 text-default mb-2 fw-medium">Select Time Slot (Optional)</label>
+                                        {{ booking_form.tour_time }}
+                                        <p class="fs-12 text-muted mb-0">Available time slots for selected date</p>
+                                    </div>
+                                    {% endif %}
+
+                                    <!-- Participants Management -->
+                                    <div class="card shadow-none mb-3">
+                                        <div class="card-body p-3 pb-0">
+                                            <div class="border-bottom pb-2 mb-3 d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h6 class="mb-0">Participants</h6>
+                                                    <small class="text-muted">Add participants and their details</small>
+                                                </div>
+                                                <button type="button" class="btn btn-primary btn-sm" id="addParticipant">
+                                                    <i class="isax isax-add me-1"></i>Add Participant
+                                                </button>
+                                            </div>
+
+                                            <!-- Participants List -->
+                                            <div id="participantsList" class="mb-3">
+                                                <!-- Dynamic participant forms will be added here -->
+                                            </div>
+
+                                            {% if not participantsList %}
+                                            <div class="text-center text-muted mb-3" id="noParticipantsMessage">
+                                                <i class="isax isax-user-add fs-24 mb-2"></i>
+                                                <p>No participants added yet. Click "Add Participant" to get started.</p>
+                                            </div>
+                                            {% endif %}
+
+                                            <!-- Coupon Code -->
+                                            <div class="border-top pt-3">
+                                                <label class="form-label fs-14 text-default mb-2 fw-medium">Coupon Code (Optional)</label>
+                                                {{ booking_form.coupon_code }}
+                                                <p class="fs-12 text-muted mb-0">Enter coupon code to get discount</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Contact Information -->
+                                    <div class="card shadow-none mb-3">
+                                        <div class="card-body p-3 pb-0">
+                                            <div class="border-bottom pb-2 mb-3">
+                                                <h6 class="mb-0">Contact Information</h6>
+                                            </div>
+
+                                                    <div class="mb-3">
+                                                <label class="form-label fs-14 text-default mb-2 fw-medium">Full Name</label>
+                                                {{ booking_form.contact_name }}
+                                                {% if booking_form.contact_name.errors %}
+                                                <div class="text-danger fs-12 mt-1">
+                                                    {% for error in booking_form.contact_name.errors %}{{ error }}{% endfor %}
+                                                </div>
+                                                {% endif %}
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label fs-14 text-default mb-2 fw-medium">Email Address</label>
+                                                {{ booking_form.contact_email }}
+                                                {% if booking_form.contact_email.errors %}
+                                                <div class="text-danger fs-12 mt-1">
+                                                    {% for error in booking_form.contact_email.errors %}{{ error }}{% endfor %}
+                                                </div>
+                                                {% endif %}
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label fs-14 text-default mb-2 fw-medium">Phone Number</label>
+                                                {{ booking_form.contact_phone }}
+                                                {% if booking_form.contact_phone.errors %}
+                                                <div class="text-danger fs-12 mt-1">
+                                                    {% for error in booking_form.contact_phone.errors %}{{ error }}{% endfor %}
+                                                </div>
+                                                {% endif %}
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label fs-14 text-default mb-2 fw-medium">Special Requirements (Optional)</label>
+                                                {{ booking_form.special_requirements }}
+                                                {% if booking_form.special_requirements.errors %}
+                                                <div class="text-danger fs-12 mt-1">
+                                                    {% for error in booking_form.special_requirements.errors %}{{ error }}{% endfor %}
+                                                </div>
+                                                {% endif %}
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label fs-14 text-default mb-2 fw-medium">Pickup Location (Optional)</label>
+                                                {{ booking_form.pickup_location }}
+                                                {% if booking_form.pickup_location.errors %}
+                                                <div class="text-danger fs-12 mt-1">
+                                                    {% for error in booking_form.pickup_location.errors %}{{ error }}{% endfor %}
+                                                </div>
+                                                {% endif %}
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label fs-14 text-default mb-2 fw-medium">Special Requirements (Optional)</label>
+                                                {{ booking_form.special_requirements }}
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label fs-14 text-default mb-2 fw-medium">Pickup Location (Optional)</label>
+                                                {{ booking_form.pickup_location }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Price Summary -->
+                                    <div class="card shadow-none mb-3" id="priceSummary" style="display: none;">
+                                        <div class="card-body p-3">
+                                            <h6 class="mb-3">Price Summary</h6>
+                                            <div id="priceBreakdown">
+                                                <!-- Dynamic pricing will be shown here -->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary btn-lg w-100 fs-14" id="bookNowBtn">
+                                        <i class="isax isax-calendar-add me-2"></i>Book Now
+                                    </button>
+                                </form>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card shadow-none">
+                        <div class="card-body">
+                            <h5 class="fs-18 mb-3">Why Book With Us</h5>
+                            <div>
+                                {% if tour.instant_confirmation %}
+                                <p class="d-flex align-items-center mb-3"><i class="isax isax-tick-circle text-primary me-2"></i>Instant Confirmation</p>
+                                {% endif %}
+                                {% if tour.free_cancellation %}
+                                <p class="d-flex align-items-center mb-3"><i class="isax isax-close-circle text-primary me-2"></i>Free Cancellation ({{ tour.cancellation_hours }}h)</p>
+                                {% endif %}
+                                {% if tour.skip_the_line %}
+                                <p class="d-flex align-items-center mb-3"><i class="isax isax-flash text-primary me-2"></i>Skip the Line</p>
+                                {% endif %}
+                                {% if tour.live_guide %}
+                                <p class="d-flex align-items-center mb-3"><i class="isax isax-user-add text-primary me-2"></i>Live Tour Guide</p>
+                                {% endif %}
+                                <p class="d-flex align-items-center"><i class="isax isax-grammerly text-primary me-2"></i>24/7 Support</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card shadow-none">
+                        <div class="card-body">
+                            <h5 class="fs-18 mb-3">Enquire Us</h5>
+                            <div class="banner-form">
+                                <form action="#" method="POST">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <label class="form-label">Name</label>
+                                        <input type="text" class="form-control" name="name" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" name="email" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Phone</label>
+                                        <input type="text" class="form-control" name="phone">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Message</label>
+                                        <textarea class="form-control" rows="3" name="message" required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-lg search-btn ms-0 w-100 fs-14">Submit Enquiry</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card shadow-none mb-0">
+                        <div class="card-body">
+                            <h5 class="fs-18 mb-3">Provider Details</h5>
+                            <div class="py-1">
+                                <div class="bg-light-500 br-10 mb-3 d-flex align-items-center p-3">
+                                    {% if tour.supplier.logo %}
+                                    <a href="#" class="avatar avatar-lg flex-shrink-0">
+                                        <img src="{{ tour.supplier.logo.url }}" alt="{{ tour.supplier.company_name }}" class="rounded-circle">
+                                    </a>
+                                    {% else %}
+                                    <a href="#" class="avatar avatar-lg flex-shrink-0">
+                                        <img src="{% static 'frontend/assets/img/users/user-05.jpg' %}" alt="{{ tour.supplier.company_name }}" class="rounded-circle">
+                                    </a>
+                                    {% endif %}
+                                    <div class="ms-2 overflow-hidden">
+                                        <h6 class="fw-medium text-truncate"><a href="#">{{ tour.supplier.company_name }}</a></h6>
+                                        <p class="fs-14">Member Since : {{ tour.supplier.created_at|date:"d M Y" }}</p>
+                                    </div>
+                                </div>
+                                <div class="border br-10 mb-3 p-3">
+                                    {% if tour.supplier.phone %}
+                                    <div class="d-flex align-items-center border-bottom pb-3 mb-3">
+                                        <span class="avatar avatar-sm me-2 rounded-circle flex-shrink-0 bg-primary"><i class="isax isax-call-outgoing5"></i></span>
+                                        <p>Call Us : {{ tour.supplier.phone }}</p>
+                                    </div>
+                                    {% endif %}
+                                    {% if tour.supplier.email %}
+                                    <div class="d-flex align-items-center">
+                                        <span class="avatar avatar-sm me-2 rounded-circle flex-shrink-0 bg-primary"><i class="isax isax-message-search5"></i></span>
+                                        <p>Email : {{ tour.supplier.email }}</p>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row g-2">
+                                <div class="col-sm-6">
+                                    <a href="#" class="btn btn-light d-flex align-items-center justify-content-center"><i class="isax isax-messages5 me-2"></i>Whatsapp</a>                      
+                                </div>
+                                <div class="col-sm-6">
+                                    <a href="#" class="btn btn-primary d-flex align-items-center justify-content-center"><i class="isax isax-message-notif5 me-2"></i>Chat Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Tour Sidebar -->
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Review Modal -->
+    <div class="modal fade" id="add_review">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-flex align-items-center justify-content-between">
+                    <h5>Write a Review</h5>
+                    <a href="#" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ti ti-x fs-16"></i>
+                    </a>
+                </div>
+                <form action="{% url 'tour_detail' tour.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="submit_review">
+                    <div class="modal-body pb-0">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Your Rating <span class="text-danger">*</span></label>
+                                    <div class="selection-wrap">
+                                        <div class="d-inline-block">
+                                                <div class="rating-selction">
+                                                    {% for i in "54321" %}
+                                                    <input type="radio" name="overall_rating" value="{{ i }}" id="rating{{ i }}">
+                                                    <label for="rating{{ i }}"><i class="fa-solid fa-star"></i></label>
+                                                    {% endfor %}
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Review Title <span class="text-danger">*</span></label>
+                                    {{ review_form.title }}
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Write Your Review <span class="text-danger">*</span></label>
+                                    {{ review_form.review }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="d-flex align-items-center justify-content-end m-0">
+                            {% if user.is_authenticated %}
+                            <button type="submit" class="btn btn-primary btn-md"><i class="isax isax-edit-2 me-1"></i>Submit Review</button>
+                            {% else %}
+                            <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-primary btn-md">Login to Review</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- /Review Modal -->
+
+<script>
+// Initialize global variables for JavaScript
+window.tourPricingData = {{ pricing_options_json|default:"[]"|safe }};
+window.tourBasePrice = {{ tour.base_price|default:0 }};
+window.tourCurrency = "{{ tour.currency|default:'DKK' }}";
+</script>
+
+<script>
+// Pricing data from Django context
+const pricingData = window.tourPricingData;
+const basePrice = window.tourBasePrice;
+const currency = window.tourCurrency;
+
+let participantCount = 0;
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Add participant button
+    document.getElementById('addParticipant').addEventListener('click', function() {
+        addParticipantForm();
+        hideNoParticipantsMessage();
+    });
+
+    // Form validation and submission
+    document.getElementById('bookingForm').addEventListener('submit', function(e) {
+        const participants = collectParticipantsData();
+
+        if (participants.length === 0) {
+            e.preventDefault();
+            alert('Please add at least one participant.');
+            return;
+        }
+
+        // Check required fields
+        let hasErrors = false;
+        participants.forEach((participant, index) => {
+            if (!participant.first_name || !participant.last_name) {
+                hasErrors = true;
+                alert(`Please fill in the name for Participant ${index + 1}`);
+            }
+        });
+
+        if (hasErrors) {
+            e.preventDefault();
+            return;
+        }
+
+        // Update the hidden field with participant data
+        document.getElementById('participantsData').value = JSON.stringify(participants);
+    });
+
+    // Initialize with one participant
+    addParticipantForm();
+});
+
+function addParticipantForm(data = {}) {
+    participantCount++;
+    const participantId = `participant-${participantCount}`;
+
+    const participantHtml = `
+        <div class="participant-item card border mb-3" id="${participantId}">
+            <div class="card-header d-flex justify-content-between align-items-center bg-light">
+                <h6 class="mb-0">Participant #${participantCount}</h6>
+                <button type="button" class="btn btn-sm btn-danger remove-participant" data-id="${participantId}">
+                    <i class="isax isax-close"></i>
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Participant Type *</label>
+                        <select class="form-select participant-type" name="type_${participantCount}" required>
+                            <option value="adult" ${data.participant_type === 'adult' ? 'selected' : ''}>Adult</option>
+                            <option value="child" ${data.participant_type === 'child' ? 'selected' : ''}>Child (2-12 years)</option>
+                            <option value="infant" ${data.participant_type === 'infant' ? 'selected' : ''}>Infant (0-2 years)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Price</label>
+                        <input type="number" class="form-control participant-price" name="price_${participantCount}"
+                               value="${data.price || calculateParticipantPrice(data.participant_type || 'adult', data.age)}" step="0.01" readonly>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">First Name *</label>
+                        <input type="text" class="form-control" name="first_name_${participantCount}"
+                               value="${data.first_name || ''}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Last Name *</label>
+                        <input type="text" class="form-control" name="last_name_${participantCount}"
+                               value="${data.last_name || ''}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Age</label>
+                        <input type="number" class="form-control" name="age_${participantCount}"
+                               value="${data.age || ''}" min="0" max="100">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email_${participantCount}"
+                               value="${data.email || ''}" placeholder="Optional">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Phone</label>
+                        <input type="text" class="form-control" name="phone_${participantCount}"
+                               value="${data.phone || ''}" placeholder="Optional">
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Special Requirements</label>
+                        <textarea class="form-control" name="special_requirements_${participantCount}" rows="2"
+                                  placeholder="Any dietary requirements, accessibility needs, etc.">${data.special_requirements || ''}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('participantsList').insertAdjacentHTML('beforeend', participantHtml);
+
+    // Add event listeners
+    const typeSelect = document.querySelector(`#${participantId} .participant-type`);
+    typeSelect.addEventListener('change', function() {
+        updateParticipantPrice(participantId);
+    });
+
+    const removeBtn = document.querySelector(`#${participantId} .remove-participant`);
+    removeBtn.addEventListener('click', function() {
+        document.getElementById(participantId).remove();
+        updatePricing();
+        checkParticipantsCount();
+    });
+
+    // Add input listeners for real-time updates
+    const inputs = document.querySelectorAll(`#${participantId} input, #${participantId} select, #${participantId} textarea`);
+    inputs.forEach(input => {
+        input.addEventListener('input', updatePricing);
+    });
+
+    updateParticipantPrice(participantId);
+    updatePricing();
+}
+
+function updateParticipantPrice(participantId) {
+    const participantDiv = document.getElementById(participantId);
+    const type = participantDiv.querySelector('.participant-type').value;
+    const age = parseInt(participantDiv.querySelector('[name*="age_"]').value) || null;
+    const priceInput = participantDiv.querySelector('.participant-price');
+
+    const price = calculateParticipantPrice(type, age);
+    priceInput.value = price.toFixed(2);
+}
+
+function calculateParticipantPrice(type, age) {
+    // Find appropriate pricing from Django context
+    if (pricingData && Array.isArray(pricingData) && pricingData.length > 0) {
+        // Try age-based pricing first
+        if (age !== null && age !== undefined && !isNaN(age)) {
+            const agePricing = pricingData.find(p =>
+                p.min_age !== null && p.max_age !== null &&
+                age >= p.min_age && age <= p.max_age
+            );
+            if (agePricing) return parseFloat(agePricing.price);
+        }
+
+        // Fallback to type-based pricing
+        const typePricing = pricingData.find(p => p.participant_type === type);
+        if (typePricing) return parseFloat(typePricing.price);
+    }
+
+    // Fallback to base price
+    return parseFloat(basePrice) || 0;
+}
+
+function collectParticipantsData() {
+    const participants = [];
+    const participantDivs = document.querySelectorAll('.participant-item');
+
+    participantDivs.forEach((div, index) => {
+        const participantNum = index + 1;
+        participants.push({
+            type: div.querySelector(`[name="type_${participantNum}"]`).value,
+            first_name: div.querySelector(`[name="first_name_${participantNum}"]`).value,
+            last_name: div.querySelector(`[name="last_name_${participantNum}"]`).value,
+            age: div.querySelector(`[name="age_${participantNum}"]`).value,
+            email: div.querySelector(`[name="email_${participantNum}"]`).value,
+            phone: div.querySelector(`[name="phone_${participantNum}"]`).value,
+            special_requirements: div.querySelector(`[name="special_requirements_${participantNum}"]`).value,
+            price: div.querySelector('.participant-price').value
+        });
+    });
+
+    return participants;
+}
+
+function updatePricing() {
+    const participants = collectParticipantsData();
+    if (!participants.length) {
+        hidePriceSummary();
+        return;
+    }
+
+    let subtotal = 0;
+    const breakdown = [];
+
+    participants.forEach((participant, index) => {
+        const price = parseFloat(participant.price) || 0;
+        subtotal += price;
+        breakdown.push({
+            type: participant.type,
+            name: `${participant.first_name || 'Participant'} ${participant.last_name || index + 1}`,
+            price: price
+        });
+    });
+
+    // Calculate tax (25% for Denmark)
+    const taxRate = 0.25;
+    const tax = subtotal * taxRate;
+    const total = subtotal + tax;
+
+    showPriceSummary(breakdown, subtotal, tax, total);
+}
+
+function showPriceSummary(breakdown, subtotal, tax, total) {
+    const container = document.getElementById('priceSummary');
+    const breakdownContainer = document.getElementById('priceBreakdown');
+
+    let html = '<div class="price-breakdown">';
+    breakdown.forEach(item => {
+        html += `<div class="d-flex justify-content-between mb-2">
+            <span>${item.name} (${item.type})</span>
+            <span>${currency} ${item.price.toFixed(2)}</span>
+        </div>`;
+    });
+
+    html += `<hr class="my-2">
+        <div class="d-flex justify-content-between mb-2">
+            <span>Subtotal</span>
+            <strong>${currency} ${subtotal.toFixed(2)}</strong>
+        </div>
+        <div class="d-flex justify-content-between mb-2">
+            <span>Tax (25%)</span>
+            <span>${currency} ${tax.toFixed(2)}</span>
+        </div>
+        <hr class="my-2">
+        <div class="d-flex justify-content-between">
+            <strong>Total</strong>
+            <strong class="text-primary">${currency} ${total.toFixed(2)}</strong>
+        </div>
+    </div>`;
+
+    breakdownContainer.innerHTML = html;
+    container.style.display = 'block';
+}
+
+function hidePriceSummary() {
+    document.getElementById('priceSummary').style.display = 'none';
+}
+
+function hideNoParticipantsMessage() {
+    const message = document.getElementById('noParticipantsMessage');
+    if (message) {
+        message.style.display = 'none';
+    }
+}
+
+function checkParticipantsCount() {
+    const participantDivs = document.querySelectorAll('.participant-item');
+    if (participantDivs.length === 0) {
+        const message = document.getElementById('noParticipantsMessage');
+        if (message) {
+            message.style.display = 'block';
+        }
+        hidePriceSummary();
+    }
+}
+</script>
+
+{% endblock %}

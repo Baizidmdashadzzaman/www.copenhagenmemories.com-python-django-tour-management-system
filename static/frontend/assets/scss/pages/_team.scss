@@ -1,0 +1,41 @@
+@use "../utils/variables";
+
+/*============================
+  45.team
+============================*/
+
+.team-member {
+    position: absolute;
+    width: 80%;
+    bottom: -32px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 15px;
+    background: variables.$white;
+    transition: all 0.5s;
+    p {
+        font-size: 16px;
+    }
+}
+.team {
+    position: relative;
+    .card-body {
+        padding: 15px !important;
+    }
+    &:hover {
+        .team-member {
+            background: variables.$primary;
+            color: variables.$white;
+            a {
+                color: variables.$white;
+            }
+        }
+    }
+}
+.invoice-table thead tr th {
+    font-weight: 600;
+    border-color: #E9EDF4;
+    background: #E5E7EB;
+    font-size: 14px;
+    color: #111827;
+}

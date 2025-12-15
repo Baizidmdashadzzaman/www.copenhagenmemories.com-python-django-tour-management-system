@@ -1,0 +1,112 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Create Slider{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Sliders /</span> Create New Slider
+    </h4>
+
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card mb-6">
+                <h5 class="card-header">Slider Information</h5>
+                <form class="card-body" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <h6 class="alert-heading mb-1">Please correct the errors below</h6>
+                        <ul class="mb-0">
+                            {% for field in form %}
+                            {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                            {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+
+                    <h6>1. Basic Details</h6>
+                    <div class="row g-6">
+                        <div class="col-md-6">
+                            <label class="form-label" for="id_title">Title</label>
+                            {{ form.title }}
+                            <div class="form-text">Main title of the slider</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label" for="id_title_dk">Danish Title</label>
+                            {{ form.title_dk }}
+                            <div class="form-text">Danish translation of the title</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label" for="id_subtitle">Subtitle</label>
+                            {{ form.subtitle }}
+                            <div class="form-text">Subtitle or description</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label" for="id_subtitle_dk">Danish Subtitle</label>
+                            {{ form.subtitle_dk }}
+                            <div class="form-text">Danish translation of the subtitle</div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label" for="id_image">Image</label>
+                            <input type="file" name="image" class="form-control" id="id_image">
+                            <div class="form-text">Slider image (recommended size: 1920x800px)</div>
+                        </div>
+                    </div>
+
+                    <hr class="my-6 mx-n6">
+
+                    <h6>2. Status</h6>
+                    <div class="row g-6">
+                        <div class="col-md-12">
+                            <div class="form-check form-switch">
+                                {% if form.status.value == 'active' or not form.status.value %}
+                                <input class="form-check-input" type="checkbox" id="status_toggle" checked>
+                                {% else %}
+                                <input class="form-check-input" type="checkbox" id="status_toggle">
+                                {% endif %}
+                                <label class="form-check-label" for="status_toggle">Active Status</label>
+                            </div>
+                            <input type="hidden" name="status" id="id_status"
+                                value="{% if form.status.value %}{{ form.status.value }}{% else %}active{% endif %}">
+                            <div class="form-text">Enable this slider to display on the website</div>
+                        </div>
+                    </div>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const statusToggle = document.getElementById('status_toggle');
+                            const statusInput = document.getElementById('id_status');
+
+                            statusToggle.addEventListener('change', function () {
+                                statusInput.value = this.checked ? 'active' : 'inactive';
+                            });
+                        });
+                    </script>
+
+                    <div class="pt-6">
+                        <button type="submit" class="btn btn-primary me-4 waves-effect waves-light">
+                            <i class="icon-base ti tabler-check icon-22px"></i> Create
+                        </button>
+                        <a href="{% url 'slider_list' %}" class="btn btn-label-secondary waves-effect">
+                            <i class="icon-base ti tabler-ban icon-22px"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

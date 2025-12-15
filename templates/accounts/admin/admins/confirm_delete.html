@@ -1,0 +1,32 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Delete Admin{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Users /</span> Delete Admin
+    </h4>
+
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card mb-4">
+                <h5 class="card-header">Delete Admin</h5>
+                <div class="card-body">
+                    <p>Are you sure you want to delete the admin user <strong>"{{ user.username }}"</strong>?</p>
+                    <p class="text-danger">This action cannot be undone.</p>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-danger me-2">Delete Admin</button>
+                            <a href="{% url 'admin_list' %}" class="btn btn-label-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,286 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Tours Management{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Tour Management /</span> Tours
+    </h4>
+
+    {% if messages %}
+    <div class="row">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Tours List Table -->
+    <div class="card">
+        <div class="card-header border-bottom">
+            <h5 class="card-title mb-3">Tours List</h5>
+        </div>
+
+        <div class="card-datatable table-responsive">
+            <div id="DataTables_Table_0_wrapper" class="dt-container dt-bootstrap5 dt-empty-footer">
+
+                <!-- Search and Add Button Toolbar -->
+                <div class="row m-3 my-0 justify-content-between">
+                    <div class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0"
+                        style="padding-top:15px">
+                        <form method="get" class="dt-search mb-0 mb-md-6 d-flex gap-2">
+                            <div class="input-group">
+                                <input type="search" class="form-control" name="search" id="dt-search-0"
+                                    placeholder="Search tours..." aria-controls="DataTables_Table_0"
+                                    value="{{ search_query|default:'' }}">
+                                {% if search_query %}
+                                <a href="{% url 'tour_list' %}" class="btn btn-outline-secondary" type="button">
+                                    <i class="icon-base ti tabler-x icon-22px"></i>
+                                </a>
+                                {% endif %}
+
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="icon-base ti tabler-search icon-22px"></i>
+                                </button>
+                            </div>
+
+                            <select name="status" class="form-select" style="width: 150px;">
+                                <option value="">All Status</option>
+                                <option value="active" {% if status == 'active' %}selected{% endif %}>Active</option>
+                                <option value="draft" {% if status == 'draft' %}selected{% endif %}>Draft</option>
+                                <option value="inactive" {% if status == 'inactive' %}selected{% endif %}>Inactive
+                                </option>
+                            </select>
+                        </form>
+                    </div>
+
+                    <div
+                        class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto gap-md-2 gap-0 mt-0">
+                        <div class="dt-buttons btn-group flex-wrap mb-md-0 mb-6">
+                            <a href="{% url 'tour_create' %}" class="btn add-new btn-primary" tabindex="0"
+                                aria-controls="DataTables_Table_0" type="button">
+                                <span>
+                                    <i class="icon-base ti tabler-plus me-0 me-sm-1 icon-16px"></i>
+                                    <span class="d-none d-sm-inline-block">Add Tour</span>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="justify-content-between dt-layout-table">
+                    <div class="d-md-flex justify-content-between align-items-center dt-layout-full table-responsive">
+                        <table class="datatables-products table dataTable dtr-column" id="DataTables_Table_0"
+                            aria-describedby="DataTables_Table_0_info">
+                            <thead class="border-top">
+                                <tr>
+                                    <th class="control dt-orderable-none" rowspan="1" colspan="1" style="width: 50px;">#
+                                    </th>
+                                    <th class="dt-orderable-asc dt-orderable-desc" rowspan="1" colspan="1">
+                                        <span class="dt-column-title" role="button">Title</span>
+                                        <span class="dt-column-order"></span>
+                                    </th>
+                                    <th class="dt-orderable-asc dt-orderable-desc" rowspan="1" colspan="1">
+                                        <span class="dt-column-title" role="button">Supplier</span>
+                                        <span class="dt-column-order"></span>
+                                    </th>
+                                    <th class="dt-orderable-asc dt-orderable-desc" rowspan="1" colspan="1">
+                                        <span class="dt-column-title" role="button">Category</span>
+                                        <span class="dt-column-order"></span>
+                                    </th>
+                                    <th class="dt-orderable-asc dt-orderable-desc" rowspan="1" colspan="1">
+                                        <span class="dt-column-title" role="button">Price</span>
+                                        <span class="dt-column-order"></span>
+                                    </th>
+                                    <th class="dt-orderable-asc dt-orderable-desc" rowspan="1" colspan="1">
+                                        <span class="dt-column-title" role="button">Rating</span>
+                                        <span class="dt-column-order"></span>
+                                    </th>
+                                    <th class="dt-orderable-asc dt-orderable-desc" rowspan="1" colspan="1">
+                                        <span class="dt-column-title" role="button">Status</span>
+                                        <span class="dt-column-order"></span>
+                                    </th>
+                                    <th class="dt-orderable-none" rowspan="1" colspan="1" aria-label="Actions">
+                                        <span class="dt-column-title">Module</span>
+                                        <span class="dt-column-order"></span>
+                                    </th>
+                                    <th class="dt-orderable-none" rowspan="1" colspan="1" aria-label="Actions">
+                                        <span class="dt-column-title">Actions</span>
+                                        <span class="dt-column-order"></span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for tour in page_obj %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>
+                                        <span class="fw-semibold">{{ tour.title|default:"No Title" }}</span>
+                                    </td>
+                                    <td>{{ tour.supplier.company_name|default:"—" }}</td>
+                                    <td>{{ tour.category.name|default:"—" }}</td>
+                                    <td>{{ tour.base_price }} {{ tour.currency }}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge bg-label-info me-2">
+                                                {{ tour.average_rating|default:"0" }}/5
+                                            </span>
+                                            <small class="text-muted">
+                                                ({{ tour.total_reviews|default:"0" }}reviews)
+                                            </small>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% if tour.status == 'active' %}
+                                        <span class="badge bg-label-success" text-capitalized="">Active</span>
+                                        {% elif tour.status == 'draft' %}
+                                        <span class="badge bg-label-warning" text-capitalized="">Draft</span>
+                                        {% else %}
+                                        <span class="badge bg-label-danger" text-capitalized="">Inactive</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                              <i class="icon-base ti tabler-dots-vertical"></i>
+                                            </button>
+                                            <div class="dropdown-menu" style="max-width: 200px;float: right;">
+                                              <a href="{% url 'tour_included_list' tour.pk %}"
+                                                  class="dropdown-item waves-effect"><i class="icon-base ti tabler-pencil me-1"></i> Included</a>
+                                              <a href="{% url 'tour_excluded_list' tour.pk %}"
+                                                  class="dropdown-item waves-effect"><i class="icon-base ti tabler-pencil me-1"></i> Excluded</a>
+                                              <a href="{% url 'tour_itinerary_list' tour.pk %}"
+                                                  class="dropdown-item waves-effect"><i class="icon-base ti tabler-pencil me-1"></i> Itinerary</a>
+                                              <a href="{% url 'tour_requirement_list' tour.pk %}"
+                                                  class="dropdown-item waves-effect"><i class="icon-base ti tabler-pencil me-1"></i> Requirements</a>
+                                              <a href="{% url 'tour_faq_list' tour.pk %}"
+                                                  class="dropdown-item waves-effect"><i class="icon-base ti tabler-pencil me-1"></i> FAQs</a>
+                                              <a href="{% url 'tour_pricing_list' tour.pk %}"
+                                                  class="dropdown-item waves-effect"><i class="icon-base ti tabler-pencil me-1"></i> Pricing</a>
+                                              <a href="{% url 'tour_schedule_list' tour.pk %}"
+                                                  class="dropdown-item waves-effect"><i class="icon-base ti tabler-pencil me-1"></i> Schedule</a>
+                                              <a href="{% url 'tour_blackout_list' tour.pk %}"
+                                                  class="dropdown-item waves-effect"><i class="icon-base ti tabler-pencil me-1"></i> Blackout Dates</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-inline-block text-nowrap">
+                                            <a href="{% url 'tour_view' tour.pk %}"
+                                                class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light me-1"
+                                                title="View">
+                                                <i class="icon-base ti tabler-eye icon-22px"></i>
+                                            </a>
+                                            <a href="{% url 'tour_edit' tour.pk %}"
+                                                class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light me-1"
+                                                title="Edit">
+                                                <i class="icon-base ti tabler-edit icon-22px"></i>
+                                            </a>
+                                            <a href="{% url 'tour_image_list' tour.pk %}"
+                                                class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light me-1"
+                                                title="Images">
+                                                <i class="icon-base ti tabler-photo icon-22px"></i>
+                                            </a>
+                                            <a href="{% url 'tour_delete' tour.pk %}"
+                                                class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light"
+                                                title="Delete">
+                                                <i class="icon-base ti tabler-trash icon-22px"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="8" class="dt-empty text-center py-5">
+                                        {% if search_query %}
+                                        <div class="fs-4 text-muted">No tours found matching "{{ search_query }}"</div>
+                                        {% else %}
+                                        <div class="fs-4 text-muted">No tours found</div>
+                                        <a href="{% url 'tour_create' %}" class="btn btn-primary mt-3">Create First
+                                            Tour</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="row mx-3 justify-content-between">
+                    <div
+                        class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
+                        <div class="dt-info" aria-live="polite" id="DataTables_Table_0_info" role="status">
+                            Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of 
+                            {{ page_obj.paginator.count }} entries
+                        </div>
+                    </div>
+                    <div
+                        class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto gap-md-2 gap-0 mt-0">
+                        <div class="dt-paging">
+                            <nav aria-label="pagination">
+                                {% if page_obj.has_other_pages %}
+                                <ul class="pagination">
+                                    {% if page_obj.has_previous %}
+                                    <li class="page-item prev">
+                                        <a class="page-link"
+                                            href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status %}&status={{ status }}{% endif %}">
+                                            <i class="icon-base ti tabler-caret-left icon-22px"></i>
+                                        </a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item prev disabled">
+                                        <a class="page-link" href="javascript:void(0);">
+                                            <i class="icon-base ti tabler-caret-left icon-22px"></i>
+                                        </a>
+                                    </li>
+                                    {% endif %}
+
+                                    {% for i in page_obj.paginator.page_range %}
+                                    {% if page_obj.number == i %}
+                                    <li class="page-item active">
+                                        <a class="page-link" href="javascript:void(0);">{{ i }}</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                            href="?page={{ i }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status %}&status={{ status }}{% endif %}">{{
+                                            i }}</a>
+                                    </li>
+                                    {% endif %}
+                                    {% endfor %}
+
+                                    {% if page_obj.has_next %}
+                                    <li class="page-item next">
+                                        <a class="page-link"
+                                            href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status %}&status={{ status }}{% endif %}">
+                                            <i class="icon-base ti tabler-caret-right icon-22px"></i>
+                                        </a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item next disabled">
+                                        <a class="page-link" href="javascript:void(0);">
+                                            <i class="icon-base ti tabler-caret-right icon-22px"></i>
+                                        </a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                                {% endif %}
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,72 @@
+@use "../utils/mixins";
+@use "../utils/variables";
+
+/*============================
+  49.flight
+============================*/
+
+.carts-img{
+    margin-left: 24px;
+    @include mixins.respond-below(lg){
+        margin-left: 16px;
+    }
+}
+.carts-contents{
+    margin-left: 24px;
+    @include mixins.respond-below(lg){
+        margin-left: 16px;
+    }
+}
+.notification-card {
+    .notification-delete-btn {
+        visibility: hidden;        
+    }
+    &:hover .notification-delete-btn{
+        visibility:visible;
+        transform: translateX(5px);
+        transition: all 0.5s ease-in-out;
+    }
+}
+.tours-item{
+    border: 1px solid variables.$white;
+    @include mixins.rounded(10px);
+    box-shadow: variables.$box-shadow;
+    overflow: hidden;
+    .tours-img {
+        text-align: center;
+        @include mixins.rounded(10px 10px 0 0);
+        height: 97px;
+        overflow: hidden;
+        @include mixins.transition(all 0.9s);
+        display: block;
+        img{
+            height: 97px;
+            @include mixins.rounded(10px 10px 0 0);
+            object-fit: cover;
+            @include mixins.transition(all 0.9s);
+            @include mixins.transform(scale(1.0));
+        }
+    }
+    .tours-content{
+        padding: 20px;
+    }
+    &:hover {
+        img {            
+            @include mixins.transform(scale(1.2));
+            @include mixins.transition(all 0.9s);
+        }
+    }
+}
+.rebook-btn{
+    background: variables.$light;
+    &:hover{
+        background: variables.$primary;
+        color: variables.$white;
+    }
+}
+.two-line-ellipsis {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+}

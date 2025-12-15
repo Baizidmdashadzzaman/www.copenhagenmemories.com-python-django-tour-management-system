@@ -1,0 +1,161 @@
+@use "../utils/mixins";
+@use "../utils/variables";
+
+/*============================
+  39.login
+============================*/
+
+.login-or {
+	text-align: center;
+	font-size: 14px;
+	color: variables.$title-color;
+	font-weight: variables.$font-weight-medium;
+	position: relative;
+	&::after {
+		width: 100%;
+		content: "";
+		border-top: 1px solid variables.$border-color;
+		position: absolute;
+		top: 50%;
+		right: 0;
+	}
+	&::before {
+		width: 100%;
+		content: "";
+		border-top: 1px solid variables.$border-color;
+		position: absolute;
+		top: 50%;
+		left: 0;
+	}
+	.span-or {
+		background-color: variables.$white;
+		padding: 0 16px;
+		z-index: 9;
+		position: relative;
+	}
+}
+.authentication-card {
+	.card-header {
+		padding: 15px 40px;
+	}
+	.card-body {
+		padding: 40px;
+	}
+}
+.authentication-wrapper {
+	position: relative;
+	&::before {
+		content: "";
+		background-image: url(../img/bg/authetication-bg.png);
+		position: absolute;
+		width: 100%;
+		height: 200px;
+		background-position: top center;
+		background-repeat: no-repeat;
+		background-size: contain;
+		top: 0;
+		z-index: -1;
+	}
+	&::after {
+		content: "";
+		background-image: url(../img/bg/authentication-footer-bg.png);
+		position: absolute;
+		width: 100%;
+		height: 150px;
+		background-repeat: no-repeat;
+		background-size: cover;
+		bottom: 32px;
+		z-index: -1;
+	}
+}
+.coprright-footer {
+	background: variables.$white;
+	box-shadow: 0px 4px 24px 0px #C2C2C240;
+	padding: 10px;
+	text-align: center;
+}
+.coming-soon-bg {
+	background: #E0EBF8;
+}
+.counting-box {
+	margin: 40px 0;
+	li {
+		position: relative;
+		padding: 2px;
+		z-index: 1;
+		border-radius: 5px 5px 0 0;
+		margin-right: 20px;
+		@include mixins.respond-below(sm) {
+			margin-right: 10px;
+		}
+		&:last-child {
+			margin-right: 0;
+		}
+		&::before {
+			content: "";
+			background: linear-gradient(0deg, rgba(207, 52, 37, 0) 19.94%, #CF3425 94.37%);
+			position: absolute;
+			width: 100%;
+			height: 30px;
+			border-radius: 5px 5px 0 0;
+			top: 0;
+			left: 0;
+			z-index: -1;
+		}
+	}
+	.counts-card {
+		width: 70px;
+		height: 70px;
+		position: relative;
+		background: #E0EBF8;
+		border-radius: 5px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		@include mixins.respond-below(sm) {
+			width: 60px;
+			height: 60px;
+		}
+		p {
+			color: variables.$gray-900;
+			font-size: variables.$font-size-14;
+		}
+		h3 {
+			font-size: variables.$font-size-24;
+
+			@include mixins.respond-below(sm) {
+				font-size: variables.$font-size-20;
+			}
+		}
+	}
+}
+.coming-soon-wrapper {
+	background-image: url(../img/bg/coming-soon-bg.svg);
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: bottom center;
+	h1 {
+		font-size: 90px;
+		color: variables.$primary;
+		@include mixins.respond-below(xxl) {
+			font-size: 70px;
+		}
+		@include mixins.respond-below(xl) {
+			font-size: 60px;
+		}
+		@include mixins.respond-below(lg) {
+			font-size: 40px;
+		}
+	}
+	.subscribe-form {
+		max-width: 500px;
+		margin: auto;
+		input {
+			color: variables.$light;
+			&::placeholder {
+				color: variables.$light;
+			}
+		}
+	}
+}

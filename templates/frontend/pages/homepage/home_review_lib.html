@@ -1,0 +1,61 @@
+{% load translate_tags %}
+{% load static %}
+<section class="section testimonial-section testi-sec-two bg-white" style="padding-top: 100px;">
+    <div class="testi-sec-bg">
+        <img src="{% static 'frontend/assets/img/bg/hotel-bg-03.svg' %}" class="bg-1" alt="Img">
+    </div>
+    <div class="container">
+        <div class="section-header d-flex align-items-center justify-content-between flex-wrap row-gap-3">
+            <div>
+                <p class="mb-2 fw-medium d-flex align-items-center"><span class="text-bar"></span>
+                    {% translate "What's Our User Says" %}
+                </p>
+                <h2>
+                    {% translate "Committed to Helping Our Clients Succeed" %}
+                    <span class="text-primary">.</span>
+                </h2>
+            </div>
+            <div>
+                <a href="{% url 'testimonial' %}" class="btn btn-primary">
+                    {% translate "View All" %}
+                    <i class="isax isax-arrow-right-3 ms-2"></i>
+                </a>
+            </div>
+        </div>
+        <div class="owl-carousel testimonial-slider">
+
+            {% for review in reviews %}
+            <div class="card border-white wow fadeInUp" data-wow-delay="0.2s">
+                <div class="card-body text-center">
+                    <div class="d-flex align-items-center justify-content-center fs-12 mb-3">
+                        <i class="ti ti-star-filled text-primary"></i>
+                        <i class="ti ti-star-filled text-primary"></i>
+                        <i class="ti ti-star-filled text-primary"></i>
+                        <i class="ti ti-star-filled text-primary"></i>
+                        <i class="ti ti-star-filled  text-primary me-1"></i>
+                        <p class="fs-14 text-gray-9">{{ review.rating }}</p>
+                    </div>
+                    <h6 class="mb-1"></h6>
+                    <p class="mb-3" style="min-height: 150px;">{{ review.review }}</p>
+                    <div class="d-flex align-items-center justify-content-center">
+                        <a href="#" class="avatar avatar-md  flex-shrink-0">
+                            {% if review.image %}
+                            <img src="{{ review.image.url }}" class="rounded-circle" alt="{{ review.name }}">
+                            {% else %}
+                            <img src="{% static 'frontend/assets/img/users/user-01.jpg' %}" class="rounded-circle" alt="{{ review.name }}">
+                            {% endif %}
+                        </a>
+                        <div class="d-flex align-items-center ms-2">
+                            <h6 class="fs-16 fw-medium"><a href="#">{{ review.name }}</a></h6>
+                            <p class="fs-14 testimonial-divide-dot">{{ review.address }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+
+
+        </div>
+    </div>
+</section>

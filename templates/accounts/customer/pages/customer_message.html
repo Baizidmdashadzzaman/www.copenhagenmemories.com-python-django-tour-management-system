@@ -1,0 +1,189 @@
+{% extends 'accounts/customer/layout.html' %}
+
+{% block customer_content %}
+{% load static %}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Messages & Support</h5>
+        <span class="badge bg-primary-subtle text-primary rounded-pill px-3" id="message-count">{{ customer_messages.count }} Messages</span>
+    </div>
+    
+    <div class="card-body p-0">
+        <!-- Message History -->
+        <div class="chat-history p-4 bg-light" id="dashboard-chat-box" style="height: 500px; overflow-y: auto;">
+            <!-- Messages will be loaded here via AJAX -->
+             <div class="text-center py-5 loading-placeholder">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Send Message Form -->
+        <div class="card-footer bg-white p-3 border-top">
+            <h6 class="fs-14 fw-bold mb-3">Send a Message</h6>
+            <form id="dashboard-chat-form">
+                {% csrf_token %}
+                <div class="mb-3">
+                     <!-- Hidden subject field, default value for quick chat -->
+                    <input type="hidden" name="subject" value="Support Chat">
+                </div>
+                <div class="mb-3">
+                    <textarea name="message" class="form-control" rows="3" placeholder="Type your message here..." required></textarea>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-muted fs-13">Expect a reply within 24 hours.</span>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">
+                        <i class="isax isax-send-2 me-1"></i> Send Message
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ', ' + date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+    }
+
+    function appendDashboardMessage(text, side, timeStr, isRead) {
+        let alignClass = side === 'right' ? 'align-items-end' : 'align-items-start';
+        let flexRowClass = side === 'right' ? 'flex-row-reverse' : '';
+        let bubbleClass = side === 'right' ? 'bg-primary text-white rounded-bottom-right-0' : 'bg-white text-dark border rounded-bottom-left-0';
+        let metaMargin = side === 'right' ? 'me-5' : 'ms-5';
+        
+        let avatarHtml = '';
+        if (side === 'right') {
+             // User avatar
+             avatarHtml = `
+                <div class="avatar avatar-sm flex-shrink-0">
+                    {% if user.customer_profile.profile_image %}
+                    <img src="{{ user.customer_profile.profile_image.url }}" alt="user" class="rounded-circle object-fit-cover w-100 h-100">
+                    {% else %}
+                    <img src="{% static 'frontend/assets/img/users/user-01.jpg' %}" alt="user" class="rounded-circle object-fit-cover w-100 h-100">
+                    {% endif %}
+                </div>
+             `;
+        } else {
+            // Admin avatar
+             avatarHtml = `
+                <div class="avatar avatar-sm flex-shrink-0">
+                    <img src="{% static 'admin/assets/img/users/admin-avatar.png' %}" onerror="this.src='{% static 'frontend/assets/img/users/user-01.jpg' %}'" alt="support" class="rounded-circle w-100 h-100">
+                </div>
+             `;
+        }
+        
+        let readIcon = '';
+        if (side === 'right') {
+            readIcon = isRead ? '<i class="isax isax-tick-circle ms-1 text-primary"></i>' : '<i class="isax isax-tick-circle ms-1"></i>';
+        }
+
+        const messageHtml = `
+            <div class="d-flex flex-column mb-4 ${alignClass}">
+                <div class="d-flex align-items-end gap-2 ${flexRowClass}" style="max-width: 80%;">
+                    ${avatarHtml}
+                    <div class="p-3 rounded-4 shadow-sm ${bubbleClass}">
+                        <p class="mb-0 fs-14" style="white-space: pre-wrap;">${text}</p>
+                    </div>
+                </div>
+                <div class="mt-1 small text-muted fs-12 ${metaMargin}">
+                    ${timeStr} ${readIcon}
+                </div>
+            </div>
+        `;
+        $('#dashboard-chat-box').append(messageHtml);
+    }
+
+    function loadDashboardMessages() {
+        $.ajax({
+            url: '{% url "customer_chat_messages" %}',
+            type: 'GET',
+            success: function(res) {
+                if(res.status === 'success') {
+                    const chatBox = $('#dashboard-chat-box');
+                    // Check if we need to clear (only if currently showing placeholder or if we want full refresh)
+                    // For logic simplicity, we'll clear and rebuild. In prod, efficient appending is better.
+                    chatBox.empty(); 
+                    
+                    if(res.messages.length === 0) {
+                        chatBox.html(`
+                            <div class="text-center py-5">
+                                <div class="avatar avatar-xl bg-white rounded-circle shadow-sm d-inline-flex align-items-center justify-content-center mb-3">
+                                    <i class="isax isax-message-text5 fs-24 text-primary"></i>
+                                </div>
+                                <h6>No messages yet</h6>
+                                <p class="text-muted fs-14">Start a conversation with our support team.</p>
+                            </div>
+                        `);
+                    } else {
+                        res.messages.forEach(msg => {
+                            const side = (msg.admin_id) ? 'left' : 'right'; // left=admin, right=customer
+                            const time = formatDate(msg.created_at);
+                            // Assuming msg.is_read could be added to API response, defaulting false for now if not present
+                            const isRead = msg.is_read || false; 
+                            appendDashboardMessage(msg.message, side, time, isRead);
+                        });
+                        // Scroll to bottom
+                        chatBox.scrollTop(chatBox[0].scrollHeight);
+                    }
+                    // Update count
+                    $('#message-count').text(res.messages.length + ' Messages');
+                }
+            },
+            error: function(err) {
+                console.error("Failed to load messages", err);
+            }
+        });
+    }
+
+    // Initial Load
+    loadDashboardMessages();
+    
+    // Poll every 5 seconds
+    setInterval(loadDashboardMessages, 5000);
+
+    // Send Message
+    $('#dashboard-chat-form').on('submit', function(e) {
+        e.preventDefault();
+        const form = $(this);
+        const submitBtn = form.find('button[type="submit"]');
+        const messageInput = form.find('textarea[name="message"]');
+        const message = messageInput.val().trim();
+        
+        if (message === '') return;
+        
+        // Disable button
+        submitBtn.prop('disabled', true);
+        
+        $.ajax({
+            url: '{% url "customer_chat_send" %}',
+            type: 'POST',
+            data: { 
+                message: message,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function(res) {
+                if(res.status === 'success') {
+                    // Clear input
+                    messageInput.val('');
+                    // Reload messages immediately
+                    loadDashboardMessages();
+                } else {
+                    alert("Error: " + (res.message || "Unknown error"));
+                }
+            },
+            error: function() {
+                alert('Failed to send message over the network.');
+            },
+            complete: function() {
+                submitBtn.prop('disabled', false);
+            }
+        });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,38 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-07 04:12:00+0600\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: dk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: templates/frontend/pages/homepage/home_review_lib.html
+msgid "What's Our User Says"
+msgstr "Hvad vores bruger siger"
+
+#: templates/frontend/pages/homepage/home_review_lib.html
+msgid "Committed to Helping Our Clients Succeed"
+msgstr "Forpligtet til at hjælpe vores kunder med at lykkes"
+
+#: templates/frontend/pages/homepage/home_review_lib.html
+msgid "View All"
+msgstr "Se alle"
+
+#: Yourtourguide/settings.py
+msgid "English"
+msgstr "Engelsk"
+
+#: Yourtourguide/settings.py
+msgid "Danish"
+msgstr "Dansk"

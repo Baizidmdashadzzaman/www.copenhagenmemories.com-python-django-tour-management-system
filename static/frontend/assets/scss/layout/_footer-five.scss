@@ -1,0 +1,105 @@
+@use "../utils/mixins";
+@use "../utils/variables";
+
+/*============================
+ 31.footer-five
+============================*/
+
+.footer-five{
+    .footer-top{
+        padding-bottom: 20px;
+    }
+    .footer-about{
+        padding-right: 20px;
+        margin-bottom: 20px;
+        .footer-input{
+            .input-group {
+                width: 100%;
+                @include mixins.rounded(54px);
+                background: variables.$white;
+                padding: 8px;
+                .input-group-text {
+                    background: variables.$white;
+                    border: 0 !important;
+                    @include mixins.rounded(54px 54px 54px 54px);
+                    color: variables.$gray-600;
+                }
+                .form-control {
+                    border: 0 !important;
+                    box-shadow: none;
+                    margin-right: 5px;
+                    height: 30px;
+                    padding: 0 10px;
+                }
+                .btn {
+                    border-radius: 50px !important;
+                    font-size: variables.$font-size-13;
+                    padding: 4px 12px;
+                    height: 40px;
+                }
+            }
+        }
+    }
+    .footer-top{
+        .footer-widget {
+            h5::before{
+                background: transparent;
+            }
+        }
+    }
+    .customer-info{
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        .customer-info-icon{
+            span{
+                width: 50px;
+                height: 50px;
+                border-radius: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: variables.$light;
+                font-size: 24px;
+                font-weight: 700;
+                color: variables.$gray-600;
+            }
+        }
+        .customer-info-content{
+            margin-left: 8px;
+            span{
+                color: variables.$gray-600;
+                font-size: 14px;
+            }
+            h6{
+                color: variables.$gray-600;
+                font-size: 14px;
+                font-weight: 500;
+            }
+        }
+    }
+    .footer-bottom{
+        background: transparent;
+        border-top: 1px solid variables.$light;
+        .social-icon{
+            li{
+                &:after{
+                    background: transparent;
+                }
+            }
+            a{
+                background: variables.$light;
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50px;
+                &:hover{
+                    background: variables.$primary;
+                    color: #fff;
+                }
+            }
+        }
+    }
+}

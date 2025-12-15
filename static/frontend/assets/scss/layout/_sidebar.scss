@@ -1,0 +1,157 @@
+@use "sass:color";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+/*============================
+ 33.sidebar
+============================*/
+
+.user-sidebar{
+    background: variables.$white;
+    box-shadow: none;
+    .submenu {
+      ul {
+        display: none;
+        margin-left: 22px;
+      }
+      .menu-arrow {
+        display: inline-block;
+        font-family: 'FontAwesome';
+        text-rendering: auto;
+        line-height: 40px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        line-height: 22px;
+        float: right;
+        &::before {
+          content: "\f105";
+        }
+      }
+      .subdrop {
+        .menu-arrow {
+          &::before {
+            content: "\f107";
+          }
+        }
+      }
+      .subdrop ~ ul {
+        display: block;
+      }
+    }
+    .user-sidebar-header{
+      padding: 20px;
+      .profile-content{
+        padding: 8px;
+        border: 1px solid variables.$light;
+      }
+    }
+    .user-sidebar-body{
+     ul{
+      li{
+        a {
+          color: variables.$gray-600;
+          padding: 8px;
+          font-size:  variables.$font-size-14;
+          font-weight: 500;
+          color: variables.$gray-600;
+          
+          &:hover,&.active{
+            color: variables.$primary;
+          }
+          i{
+            margin-right: 10px;
+            font-size:  variables.$font-size-14;
+          }
+        }
+        .message-content{
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          .msg-count{
+            width: 24px;
+            height: 24px;
+            background-color: variables.$teal;
+            padding: 4px;
+            font-size: variables.$font-size-12;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: variables.$white;
+          }
+        }
+      }
+     }          
+  }
+  &.agent-sidebar {
+    .agent-profile {
+      position: relative;
+      margin-bottom: 10px;
+      img {
+        width: 120px;
+        height: 120px;                           
+      }
+      a {
+        position: absolute;
+        right: 8px;
+        bottom: 8px;
+      }
+    }
+    .notify-item {
+      a {
+        width: 36px;
+        height: 36px;
+        color: variables.$gray-600;
+        span {
+          top: 6px;
+          right: 8px;
+        }
+        &:hover {
+          color: variables.$white;
+        }
+      }
+    }
+    .user-sidebar-body{
+      & > ul{
+       & > li{
+        margin-bottom: 4px;
+        &:last-child {
+          margin-bottom: 0
+        }
+          & > a {
+            @include mixins.rounded(4px);
+            &:hover, &.active {
+              background: variables.$primary;
+              color: variables.$white;
+            }
+          }
+          &.submenu {
+            a {              
+              &.subdrop, &.active {
+                background: variables.$primary;
+                color: variables.$white;
+              }
+            }
+            ul {
+              li {
+                a.active {
+                  color: variables.$primary;
+                  background: transparent;
+                }
+              }
+            }
+          }
+          &.logout-link {
+            border-top: 1px solid variables.$border-color;
+            a {
+              color: variables.$danger;
+              &:hover {
+                color: color.adjust(variables.$danger, $lightness: -5%);
+                background: transparent;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

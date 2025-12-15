@@ -1,0 +1,27 @@
+{% extends 'accounts/admin/layout.html' %}
+
+{% block admin_content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4">
+        <span class="text-muted fw-light">Tours / {{ tour.title }} / FAQs /</span> Delete FAQ
+    </h4>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <h5 class="card-header">Confirm Delete</h5>
+                <div class="card-body">
+                    <p>Are you sure you want to delete the FAQ "<strong>{{ faq.question }}</strong>"?</p>
+                    <p class="text-danger">This action cannot be undone.</p>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger me-2">Delete</button>
+                        <a href="{% url 'tour_faq_list' tour.id %}" class="btn btn-label-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

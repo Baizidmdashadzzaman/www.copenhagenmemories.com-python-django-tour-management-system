@@ -1,0 +1,27 @@
+{% load static %}
+<div class="dropdown flag-dropdown me-3">
+    <a href="#" class="d-inline-flex align-items-center" data-bs-toggle="dropdown"
+        aria-expanded="false">
+        {% if current_lang == 'dk' %}
+        <img src="{% static 'frontend/assets/img/flags/dk.png' %}" alt="flag">
+        {% else %}
+        <img src="{% static 'frontend/assets/img/flags/us.png' %}" alt="flag">
+        {% endif %}
+    </a>
+    <ul class="dropdown-menu p-2 mt-2">
+        <li>
+            <a class="dropdown-item rounded d-flex align-items-center {% if current_lang == 'en' %}active{% endif %}" 
+               href="{% url 'set_language' 'en' %}">
+                <img src="{% static 'frontend/assets/img/flags/us.png' %}" class="me-2"
+                    alt="flag">ENG
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item rounded d-flex align-items-center {% if current_lang == 'dk' %}active{% endif %}" 
+               href="{% url 'set_language' 'dk' %}">
+                <img src="{% static 'frontend/assets/img/flags/dk.png' %}"
+                    class="me-2" alt="flag">DKK
+            </a>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,133 @@
+{% extends 'frontend/layout/base.html' %}
+
+{% block title %}Register - {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<div class="breadcrumb-bar breadcrumb-bg-02 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-12">
+                <h2 class="breadcrumb-title mb-2">Register</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="isax isax-home5"></i></a></li>
+                        <li class="breadcrumb-item">Customer</li>
+                        <li class="breadcrumb-item active" aria-current="page">Register</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid" style="padding-top: 50px;">
+    <div class="w-100  position-relative flex-wrap d-block ">
+        <div class="row justify-content-center align-items-center flex-wrap ">
+            <div class="col-xxl-4 col-lg-6 col-md-6 col-11 mx-auto">
+                <div class="card authentication-card">
+                    <div class="card-header">
+                        <div class="text-center">
+                            <h5 class="mb-1">Sign Up</h5>
+                            <p>Create an account to manage your tours and bookings</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form action="{% url 'register_customer' %}" method="post">
+                            {% csrf_token %}
+                            {% if form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    {% for error in form.non_field_errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Username</label>
+                                <div class="input-icon">
+                                    <span class="input-icon-addon">
+                                        <i class="isax isax-user"></i>
+                                    </span>
+                                    {{ form.username }}
+                                </div>
+                                {% if form.username.errors %}
+                                    <div class="text-danger small mt-1">{{ form.username.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <div class="input-icon">
+                                    <span class="input-icon-addon">
+                                        <i class="isax isax-message"></i>
+                                    </span>
+                                    {{ form.email }}
+                                </div>
+                                {% if form.email.errors %}
+                                    <div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Password</label>
+                                <div class="input-icon">
+                                    <span class="input-icon-addon">
+                                        <i class="isax isax-lock"></i>
+                                    </span>
+                                    {{ form.password }}
+                                    <span class="input-icon-addon toggle-password" style="cursor: pointer;">
+                                        <i class="isax isax-eye-slash"></i>
+                                    </span>
+                                </div>
+                                {% if form.password.errors %}
+                                    <div class="text-danger small mt-1">{{ form.password.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Phone Number</label>
+                                <div class="input-icon">
+                                    <span class="input-icon-addon">
+                                        <i class="isax isax-call"></i>
+                                    </span>
+                                    {{ form.phone }}
+                                </div>
+                                {% if form.phone.errors %}
+                                    <div class="text-danger small mt-1">{{ form.phone.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Address</label>
+                                <div class="input-icon">
+                                    <span class="input-icon-addon">
+                                        <i class="isax isax-location"></i>
+                                    </span>
+                                    {{ form.address }}
+                                </div>
+                                {% if form.address.errors %}
+                                    <div class="text-danger small mt-1">{{ form.address.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-xl btn-primary d-flex align-items-center justify-content-center w-100">Register<i class="isax isax-arrow-right-3 ms-2"></i></button>
+                            </div>
+                            
+                            <div class="login-or mb-3">
+                                <span class="span-or">Or</span>
+                            </div>
+
+                            <div class="d-flex justify-content-center">
+                                <p class="fs-14">Already have an account? <a href="{% url 'login' %}" class="link-primary fw-medium">Sign In</a></p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

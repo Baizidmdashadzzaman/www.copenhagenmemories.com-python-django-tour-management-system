@@ -1,0 +1,303 @@
+<style>
+.float{
+	position:fixed;
+	width:50px;
+	height:50px;
+	bottom:60px;
+	right:40px;
+	background-color:#D4483B;
+	color:#FFF;
+	border-radius:50px;
+	text-align:center;
+    font-size:30px;
+	/* box-shadow: 2px 2px 3px #999; */
+    z-index:9999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.float:hover{
+    transform: scale(1.1);
+    transition: 0.2s ease;
+}
+
+.my-float{
+	margin-top:16px;
+}
+
+@media only screen and (max-width:960px){
+ .dek-menu{
+ display:block;
+}
+}
+/* Button used to open the chat form - fixed at the bottom of the page */
+.open-button {
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  position: fixed;
+  bottom: 23px;
+  right: 28px;
+  width: 280px;
+  z-index: 9999;
+  color:black;
+}
+
+/* The popup chat - hidden by default */
+.chat-popup {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  right: 15px;
+  border: 3px solid #f1f1f1;
+  z-index: 10000;
+}
+
+/* Add styles to the form container */
+.form-container {
+  width: 350px;
+  padding: 10px;
+  background-color: white;
+}
+
+/* Full-width textarea */
+.form-container textarea {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  border: none;
+  background: #f1f1f1;
+  resize: none;
+  min-height: 200px;
+}
+
+/* When the textarea gets focus, do something */
+.form-container textarea:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+/* Set a style for the submit/send button */
+.form-container .btn {
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom:10px;
+}
+
+/* Add a red background color to the cancel button */
+.form-container .cancel {
+
+}
+.dek-menu{
+    display: none;
+}
+.GheuR {
+  position: relative;
+  display: flex;
+  -moz-box-pack: center;
+  justify-content: center;
+  display: none;
+}
+.spinner {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgb(17, 152, 235);
+  border-top-color: rgb(9, 229, 171);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.chat-body {
+  background-color: #ffe8e8;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+/* Base chat message style */
+.answer {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0;
+  max-width: 100%;
+  word-wrap: break-word;
+}
+
+/* Left (bot/admin) messages */
+.answer.left {
+  align-self: flex-start;
+  background-color: #e4e6eb;
+  border-radius: 15px 15px 15px 0;
+  padding: 10px;
+  color: #000;
+}
+
+/* Right (user) messages */
+.answer.right {
+  align-self: flex-end;
+  background-color: #f5793d;
+  border-radius: 15px 15px 0 15px;
+  padding: 10px;
+  color: #000;
+}
+
+/* Message text */
+.answer .text {
+  font-size: 14px;
+}
+
+/* Timestamp */
+.answer .time {
+  text-align: right;
+  font-size: 10px;
+  margin-top: 5px;
+  color: #666;
+}
+</style>
+
+
+<!-- <button class="open-button btn btn-primary" onclick="openForm()">
+  Customer support
+</button> -->
+
+<a href="javascript:void(0);" class="float" onclick="openForm()">
+    <i class="isax isax-message" ></i>
+</a>
+
+<div class="chat-popup" id="myForm" style="border-radius: 10px;">
+  <div>
+   <form class="form-container" id="chatForm">
+   {% csrf_token %}
+   {# <h3>Chat with us</h3><hr> #}
+   <div class="chat-body" id="chatBox" style="height: 450px; overflow-y: scroll;">
+   </div>
+
+   {% if not user.is_authenticated or user.is_staff %}
+   <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-block btn-primary rounded text-white text-decoration-none d-block text-center" style="padding: 8px 8px;">
+      Please login to send
+   </a>
+   {% else %}
+   <div style="position: relative;">
+     <input type="text" id="messageInput" placeholder="Enter your message ..." required class="form-control my-1">
+   </div>
+   <button type="submit" class="btn btn-block btn-primary rounded" style="padding: 8px 8px;">
+      Send message
+   </button>
+   {% endif %}
+
+   </form>
+
+<script>
+  let chatPollInterval;
+
+  function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function appendMessage(text, side = 'left', timeStr = '') {
+        const messageHtml = `
+            <div class="answer ${side}">
+                <div class="text"><span style="font-size:14px">${text}</span></div>
+                <div class="time"><span style="font-size:10px">${timeStr}</span></div>
+            </div>
+        `;
+        $('#chatBox').append(messageHtml);
+        $('#chatBox').scrollTop($('#chatBox')[0].scrollHeight);
+    }
+
+  function loadChatMessages() {
+      $.ajax({
+          url: '{% url "customer_chat_messages" %}',
+          type: 'GET',
+          success: function(res) {
+              if(res.status === 'success') {
+                  $('#chatBox').html(''); 
+                  
+                  if(res.messages.length === 0) {
+                      $('#chatBox').append('<div class="text-center p-3 text-muted">No messages yet. Start a conversation!</div>');
+                  }
+
+                  res.messages.forEach(msg => {
+                      // If admin_id is present, it's from admin (left). Else from customer (right).
+                      const side = (msg.admin_id) ? 'left' : 'right';
+                      let content = msg.message;
+                      // File handling removed as it's not yet implemented in backend
+                      // if(msg.file) content += `<br><a href="..." target="_blank">View</a>`;
+                      
+                      const time = formatDate(msg.created_at);
+                      appendMessage(content, side, time);
+                  });
+              }
+          },
+          error: function(err) {
+              console.error("Failed to load messages", err);
+          }
+      });
+  }
+
+  $('#chatForm').on('submit', function(e) {
+      e.preventDefault();
+      const message = $('#messageInput').val().trim();
+      if (message === '') return;
+      
+      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      
+      // Clear input
+      $('#messageInput').val('');
+      
+      $.ajax({
+          url: '{% url "customer_chat_send" %}',
+          type: 'POST',
+          data: { 
+              message: message,
+              csrfmiddlewaretoken: csrfToken
+          },
+          success: function(res) {
+              if(res.status === 'success') {
+                  loadChatMessages(); 
+              } else {
+                  alert("Error: " + (res.message || "Unknown error"));
+              }
+          },
+          error: function() {
+              alert('Failed to send message over the network.');
+          }
+      });
+  });
+
+    const isLoggedIn = JSON.parse("{{ user.is_authenticated|yesno:'true,false' }}");
+
+    function openForm() {
+      document.getElementById("myForm").style.display = "block";
+      
+      if(isLoggedIn) {
+          loadChatMessages();
+          // Clear any existing interval to prevent duplicates
+          if(chatPollInterval) clearInterval(chatPollInterval);
+          chatPollInterval = setInterval(loadChatMessages, 5000);
+      }
+    }
+
+    function closeForm() {
+      document.getElementById("myForm").style.display = "none";
+      if(chatPollInterval) clearInterval(chatPollInterval);
+    }
+  
+</script>
+
+    <div class="text-center" style="background-color: white">
+    <button type="button" class="btn cancel book-btn w-100" onclick="closeForm()" style="position: relative; width: 95%;padding: 0px;">
+        <span style="font-size: 16px; font-weight: bold;">Close</span>
+    </button>
+    </div>
+    </div>
+</div>

@@ -1,0 +1,54 @@
+{% load static %}
+<section class="section faq-sec-two pt-0">
+    <div class="faq-sec-bg">
+        <img src="{% static 'frontend/assets/img/bg/hotel-bg-05.svg' %}" class="bg-1" alt="Img">
+    </div>
+    <div class="container">
+        <div class="faq-secpath-two">
+            <div class="">
+                <img src="{% static 'frontend/assets/img/bg/bg-03.png' %}" class="bg-3" alt="img">
+            </div>
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="faq-five  wow zoomIn">
+                        <img src="{% static 'frontend/assets/img/faq/faq-02.png' %}" alt="img">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="section-header">
+                        <div>
+                            <p class="mb-2 fw-medium d-flex align-items-center"><span class="text-bar"></span>Frequently
+                                Asked Questions</p>
+                            <h2>Specializing in dream destinations<span class="text-primary">.</span></h2>
+                        </div>
+                    </div>
+                    <div class="accordion accordion-flush faq-accordion-five" id="accordionFaq">
+                        {% for faq in faqs %}
+                        <div class="accordion-item {% if forloop.first %}show{% endif %} {% if not forloop.last %}mb-3{% endif %} wow fadeInUp" data-wow-delay="{{ forloop.counter0|add:2 }}00ms" style="visibility: visible; animation-delay: {{ forloop.counter0|add:2 }}00ms; animation-name: fadeInUp;">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq-collapse{{ forloop.counter }}" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+                                    aria-controls="faq-collapse{{ forloop.counter }}">
+                                    {{ faq.qus_en }}
+                                </button>
+                            </h2>
+                            <div id="faq-collapse{{ forloop.counter }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}"
+                                data-bs-parent="#accordionFaq">
+                                <div class="accordion-body">
+                                    {{ faq.ans_en|safe }}
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="accordion-item">
+                            <div class="accordion-body text-center">
+                                <p class="text-muted mb-0">No FAQs available at the moment.</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

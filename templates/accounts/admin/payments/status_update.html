@@ -1,0 +1,175 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Update Payment Status - #{{ payment.id }}{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="py-3 mb-0">
+            <span class="text-muted fw-light">Payment Management /</span> Update Status
+        </h4>
+        <div>
+            <a href="{% url 'payment_detail' payment.pk %}" class="btn btn-secondary">
+                <i class="icon-base ti tabler-arrow-left me-1"></i> Back to Details
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left Column -->
+        <div class="col-xl-8 col-lg-7">
+            <!-- Update Status Form -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Update Payment Status</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label for="statusSelect" class="form-label fw-medium">Select New Status</label>
+                            <select id="statusSelect" name="status" class="form-select" required>
+                                <option value="">Choose a status...</option>
+                                {% for value, label in status_choices %}
+                                <option value="{{ value }}" {% if payment.status == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-text">
+                                Current status: 
+                                <span class="badge bg-label-{% if payment.status == 'completed' %}success{% elif payment.status == 'pending' %}warning{% elif payment.status == 'failed' %}danger{% else %}info{% endif %}">
+                                    {{ payment.get_status_display }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="icon-base ti tabler-check me-1"></i> Update Status
+                            </button>
+                            <a href="{% url 'payment_detail' payment.pk %}" class="btn btn-label-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Payment Preview -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Payment Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="rounded me-3 bg-lighter d-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                            <i class="icon-base ti tabler-credit-card icon-32px text-muted"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-1">{{ payment.amount }} {{ payment.currency }}</h5>
+                            <p class="mb-0 text-muted">Transaction ID: {{ payment.transaction_id|default:"N/A" }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-2"><span class="fw-medium">Payment Method:</span> {{ payment.get_payment_method_display }}</p>
+                            <p class="mb-2"><span class="fw-medium">Customer:</span> {{ payment.booking.customer.user.get_full_name|default:payment.booking.customer.user.username }}</p>
+                            <p class="mb-2"><span class="fw-medium">Booking:</span> 
+                                <a href="{% url 'booking_detail' payment.booking.pk %}" class="text-body">
+                                    {{ payment.booking.booking_number }}
+                                </a>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-2"><span class="fw-medium">Tour:</span> {{ payment.booking.tour.title }}</p>
+                            <p class="mb-2"><span class="fw-medium">Payment Date:</span> {{ payment.paid_at|date:"M d, Y H:i"|default:"-" }}</p>
+                            <p class="mb-2"><span class="fw-medium">Created:</span> {{ payment.created_at|date:"M d, Y H:i" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-xl-4 col-lg-5">
+            <!-- Status Information -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Status Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <small class="text-muted d-block mb-1">Current Payment Status</small>
+                        <span class="badge bg-label-{% if payment.status == 'completed' %}success{% elif payment.status == 'pending' %}warning{% elif payment.status == 'failed' %}danger{% else %}info{% endif %} fs-6">
+                            {{ payment.get_status_display }}
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted d-block mb-1">Amount</small>
+                        <h5 class="mb-0">{{ payment.amount }} {{ payment.currency }}</h5>
+                    </div>
+                    <hr class="my-3">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="icon-base ti tabler-calendar me-2 text-muted"></i>
+                            <small>Created: {{ payment.created_at|date:"M d, Y H:i" }}</small>
+                        </li>
+                        {% if payment.paid_at %}
+                        <li class="mb-2">
+                            <i class="icon-base ti tabler-check me-2 text-muted"></i>
+                            <small>Paid: {{ payment.paid_at|date:"M d, Y H:i" }}</small>
+                        </li>
+                        {% endif %}
+                        <li class="mb-2">
+                            <i class="icon-base ti tabler-clock me-2 text-muted"></i>
+                            <small>Updated: {{ payment.updated_at|date:"M d, Y H:i" }}</small>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'payment_detail' payment.pk %}" class="btn btn-label-primary">
+                            <i class="icon-base ti tabler-eye me-1"></i> View Full Details
+                        </a>
+                        <a href="{% url 'booking_detail' payment.booking.pk %}" class="btn btn-label-secondary">
+                            <i class="icon-base ti tabler-calendar-event me-1"></i> View Booking
+                        </a>
+                        <a href="{% url 'booking_invoice' payment.booking.pk %}" class="btn btn-label-info">
+                            <i class="icon-base ti tabler-file-dollar me-1"></i> View Invoice
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            {% if payment.card_last4 %}
+            <!-- Card Information -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Card Information</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="icon-base ti tabler-credit-card me-2 text-muted"></i>
+                            <small>Last 4 digits: {{ payment.card_last4 }}</small>
+                        </li>
+                        {% if payment.card_brand %}
+                        <li class="mb-2">
+                            <i class="icon-base ti tabler-brand-mastercard me-2 text-muted"></i>
+                            <small>Brand: {{ payment.card_brand }}</small>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

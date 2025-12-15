@@ -1,0 +1,65 @@
+@use "../utils/mixins";
+@use "../utils/variables";
+
+/*============================
+  25.header-three
+============================*/
+
+.header-three {
+    margin-top: 20px;
+    &.fixed {
+        margin: 0;
+    }
+    .header__hamburger {
+        .sidebar-menu {
+            color: variables.$gray-900;
+        }
+    }
+    .header-nav {
+        background: variables.$white;
+        padding: 20px;
+        border-radius: 10px;
+        .main-menu-wrapper {
+            padding: 0;
+            .main-nav {
+                > li{
+                    &.active, &:hover  {
+                        > a {
+                            color: variables.$primary;
+                            i {
+                                color: variables.$primary;
+                            }
+                        }  
+                    }
+                    &.active {
+                        & > a {
+                            &::after  {
+                                color: variables.$primary;
+                            }
+                        }
+                    }
+                    > a{
+                        color: variables.$gray-900;
+                        i {
+                            color: variables.$gray-500;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .header-btn{
+        a {
+            color: variables.$gray-900;
+            font-size: 20px;
+        }
+        .btn {
+            font-size: 13px;
+        }
+        .cart-dropdown, .fav-dropdown {
+            @include mixins.respond-below(md) {
+                display: none;
+            }
+        }
+    }
+}

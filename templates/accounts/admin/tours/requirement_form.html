@@ -1,0 +1,63 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block admin_content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4">
+        <span class="text-muted fw-light">Tours / {{ tour.title }} / Requirements /</span> {{ title }}
+    </h4>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Requirement (English)</label>
+                                {{ form.requirement }}
+                                {% if form.requirement.errors %}
+                                <div class="text-danger small">{{ form.requirement.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Requirement (Danish)</label>
+                                {{ form.requirement_dk }}
+                                {% if form.requirement_dk.errors %}
+                                <div class="text-danger small">{{ form.requirement_dk.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Display Order</label>
+                                {{ form.display_order }}
+                                {% if form.display_order.errors %}
+                                <div class="text-danger small">{{ form.display_order.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check mt-4">
+                                    {{ form.is_mandatory }}
+                                    <label class="form-check-label" for="{{ form.is_mandatory.id_for_label }}">
+                                        Is Mandatory?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-primary me-2">Save</button>
+                            <a href="{% url 'tour_requirement_list' tour.id %}"
+                                class="btn btn-label-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

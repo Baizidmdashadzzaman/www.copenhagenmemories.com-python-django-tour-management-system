@@ -1,0 +1,50 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Delete Coupon{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Tour Management /</span> Delete Coupon
+    </h4>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-heading"><i class="ti tabler-alert-triangle"></i> Confirm Deletion</h4>
+                        <p>Are you sure you want to delete this coupon? This action cannot be undone.</p>
+                    </div>
+
+                    <div class="card mb-4 bg-light">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ coupon.code }}</h5>
+                            <p class="card-text text-muted">{{ coupon.description|truncatewords:20 }}</p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Discount:</strong> {% if coupon.discount_type == 'percentage' %}{{ coupon.discount_value }}%{% else %}{{ coupon.discount_value }} {{ coupon.currency }}{% endif %}</p>
+                                    <p><strong>Status:</strong> <span class="badge bg-label-{% if coupon.is_active %}success{% else %}danger{% endif %}">{% if coupon.is_active %}Active{% else %}Inactive{% endif %}</span></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Valid From:</strong> {{ coupon.valid_from|date:"M d, Y" }}</p>
+                                    <p><strong>Valid Until:</strong> {{ coupon.valid_until|date:"M d, Y" }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger me-2">
+                            <i class="ti tabler-trash me-2"></i>Delete Coupon
+                        </button>
+                        <a href="{% url 'coupon_list' %}" class="btn btn-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

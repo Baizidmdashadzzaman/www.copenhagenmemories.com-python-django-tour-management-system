@@ -1,0 +1,33 @@
+{% extends 'frontend/layout/base.html' %}
+
+{% block title %}Travel and Tour Booking{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<section class="hero-section hero-sec-two">
+    {% include 'frontend/pages/homepage/home_slider_lib.html' %}
+    {% include 'frontend/pages/homepage/home_search_lib.html' %}
+</section>
+
+
+
+{% include 'frontend/pages/homepage/home_country_lib.html' %}
+
+{% include 'frontend/pages/homepage/home_region_lib.html' %}
+
+{% include 'frontend/pages/homepage/home_city_lib.html' %}
+
+{% include 'frontend/pages/homepage/home_tourprovider_lib.html' %}
+
+{% include 'frontend/pages/homepage/home_featuresection_lib.html' %}
+
+
+{% include 'frontend/pages/homepage/home_review_lib.html' %}
+
+{% include 'frontend/pages/homepage/home_faq_lib.html' %}
+
+{% include 'frontend/pages/homepage/home_blog_lib.html' %}
+
+
+{% endblock %}

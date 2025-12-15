@@ -1,0 +1,51 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Delete Image - {{ tour.title }}{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Tour Management / Tours /</span> {{ tour.title }} - Delete Image
+    </h4>
+
+    <!-- Delete Confirmation Card -->
+    <div class="card border-danger">
+        <div class="card-header border-danger bg-light">
+            <h5 class="card-title mb-0 text-danger">
+                <i class="ti tabler-alert-triangle icon-16px"></i> Delete Confirmation
+            </h5>
+        </div>
+
+        <div class="card-body">
+            <p>Are you sure you want to delete this image?</p>
+            
+            {% if image.image %}
+            <div class="mb-3">
+                <img src="{{ image.image.url }}" alt="{{ image.caption }}" style="max-width: 200px; max-height: 200px; border-radius: 4px;">
+            </div>
+            {% endif %}
+            
+            <p class="text-muted">
+                <strong>Caption:</strong> {{ image.caption|default:"No caption" }}
+            </p>
+            
+            <div class="alert alert-warning">
+                <strong>Warning:</strong> This action cannot be undone.
+            </div>
+        </div>
+
+        <div class="card-footer border-danger">
+            <form method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">
+                    <i class="ti tabler-trash icon-16px"></i> Delete Image
+                </button>
+                <a href="{% url 'tour_image_list' tour_id=tour.id %}" class="btn btn-secondary">
+                    <i class="ti tabler-x icon-16px"></i> Cancel
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

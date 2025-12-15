@@ -1,0 +1,217 @@
+@use "../utils/mixins";
+@use "../utils/variables";
+
+/*============================
+  67.Bus
+============================*/
+
+.bus-list {
+    .place-item {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        .place-img {
+            flex-shrink: 0;
+            height: inherit;
+            width: 140px;
+            overflow: hidden;
+            @include mixins.rounded(10px);
+            @include mixins.respond-below(md) {
+                border-radius: 10px;
+                margin-bottom: 20px
+            }
+            a {
+                height: 100%;
+                display: block;
+                img {
+                    height: 100%;
+                    object-fit: cover;
+                    @include mixins.rounded(10px);
+
+                    @include mixins.respond-below(md) {
+                        @include mixins.rounded(10px);
+                        width: 100%;
+                    }
+                }
+            }
+            @include mixins.respond-below(md) {
+                width: 100%;
+                height: auto;
+                @include mixins.rounded(10px);
+            }
+        }
+        .place-content {
+            padding: 0px;
+            flex: 1;
+            @include mixins.respond-below(sm) {
+                padding: 20px 0px 0px 0px;
+            }
+            .bus-content {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                row-gap: 10px;                
+                margin-bottom: 16px;
+                .bus-title{
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 10px;
+                    @include mixins.respond-below(md) {
+                        flex-direction: column;
+                        align-items: start;
+                        gap: 16px;
+                    }
+                    .dot-line {
+                        @include mixins.respond-below(md) {
+                            width: 100%;
+                        }
+                        span {
+                            padding: 0 25px;
+                            border-top: 1px dotted variables.$gray-300;
+                            position: relative;
+                            align-items: center;
+                            @include mixins.respond-below(md) {
+                                width: 100%;
+                                display: flex;
+                                justify-content: center;
+                            }
+                            &:after {
+                                width: 6px;
+                                height: 6px;
+                                border: 1px solid variables.$gray-300;
+                                position: absolute;
+                                content: "";
+                                border-radius: 50px;
+                                left: 0;
+                                top: -3px;
+                            }
+                            &:before {
+                                width: 6px;
+                                height: 6px;
+                                border: 1px solid variables.$gray-300;
+                                position: absolute;
+                                content: "";
+                                border-radius: 50px;
+                                right: 0;
+                                top: -3px;
+                            }
+                        }
+                    }
+                    @include mixins.respond-below(md) {
+                        width: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                    }
+                }
+                .bus-end {
+                    display: flex;
+                }
+                .bus-title-item{
+                    @include mixins.respond-below(md) {
+                        width: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                    }
+                    @include mixins.respond-below(sm) {
+                        width: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                    }
+                }
+                @include mixins.respond-below(lg) {
+                    flex-wrap: wrap;
+                    gap: 12px;
+                }
+                @include mixins.respond-below(md) {
+                    flex-direction: column;
+                    align-items: start;
+                    gap: 16px;
+                }               
+            }
+            .bus-footer{
+                display: flex;  
+                align-items: center;
+                justify-content: space-between;
+                border-top: 1px solid variables.$light;
+                padding-top: 16px;
+                @include mixins.respond-below(sm) {
+                    flex-direction: column;
+                    align-items: start;
+                    gap: 16px;
+                }
+                .bus-footer-dot{
+                    span {
+                        padding: 0 15px;
+                        position: relative;
+                        &:after {
+                            width: 6px;
+                            height: 6px;
+                            border: 1px solid variables.$primary;
+                            background-color: variables.$primary;
+                            position: absolute;
+                            content: "";
+                            border-radius: 50px;
+                            left: 6px;
+                            top: 6px;
+                        }
+                    }
+                }
+            }
+        }
+        @include mixins.respond-below(md) {
+            display: block;
+        }
+    }
+}
+
+
+// Bus Grid
+.bus-grid{
+    .bus-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        .dot-line span {
+            padding: 0 20px;
+            border-top: 1px dotted variables.$gray-300;
+            position: relative;
+            align-items: center;
+            @include mixins.respond-below(xl) {
+                padding: 0 4px;
+            }
+            &:after {
+                content: "";
+                width: 6px;
+                height: 6px;
+                border: 1px solid variables.$gray-300;
+                background-color: variables.$white;
+                position: absolute;
+                border-radius: 50px;
+                left: -2px;
+                top: -4px;
+            }
+            &:before {
+                content: "";
+                width: 6px;
+                height: 6px;
+                border: 1px solid variables.$gray-300;
+                background-color: variables.$white;
+                position: absolute;
+                border-radius: 50px;
+                right: -2px;
+                top: -4px;
+            }
+        }
+    }
+    .place-img {
+        img {
+            width: 100%;
+        }
+    }
+}

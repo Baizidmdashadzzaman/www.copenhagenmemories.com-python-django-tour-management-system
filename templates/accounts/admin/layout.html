@@ -1,0 +1,492 @@
+{% extends 'accounts/admin/layout_2.html' %}
+{% load static %}
+
+{% block title %}{% block page_title %}Admin Portal{% endblock %} - YourTourGuide{% endblock %}
+
+{% block content %}
+<div class="layout-wrapper layout-navbar-full layout-horizontal layout-without-menu">
+    <div class="layout-container">
+
+        <nav class="layout-navbar navbar navbar-expand-xl align-items-center" id="layout-navbar">
+            <div class="container-xxl">
+                <div class="navbar-brand app-brand demo d-none d-xl-flex py-0 me-4 ms-0">
+                    <a href="{% url 'admin_dashboard' %}" class="app-brand-link">
+                        <span class="app-brand-logo demo">
+                            <span class="text-primary">
+                                <svg width="32" height="22" viewBox="0 0 32 22" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M0.00172773 0V6.85398C0.00172773 6.85398 -0.133178 9.01207 1.98092 10.8388L13.6912 21.9964L19.7809 21.9181L18.8042 9.88248L16.4951 7.17289L9.23799 0H0.00172773Z"
+                                        fill="currentColor" />
+                                    <path opacity="0.06" fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M7.69824 16.4364L12.5199 3.23696L16.5541 7.25596L7.69824 16.4364Z"
+                                        fill="#161616" />
+                                    <path opacity="0.06" fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M8.07751 15.9175L13.9419 4.63989L16.5849 7.28475L8.07751 15.9175Z"
+                                        fill="#161616" />
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M7.77295 16.3566L23.6563 0H32V6.88383C32 6.88383 31.8262 9.17836 30.6591 10.4057L19.7824 22H13.6938L7.77295 16.3566Z"
+                                        fill="currentColor" />
+                                </svg>
+                            </span>
+                        </span>
+                        <span class="app-brand-text demo menu-text fw-bold text-heading">YourTourGuide</span>
+                    </a>
+
+                    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-xl-none">
+                        <i class="icon-base ti tabler-x icon-sm d-flex align-items-center justify-content-center"></i>
+                    </a>
+                </div>
+
+                <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0  d-xl-none  ">
+                    <a class="nav-item nav-link px-0 me-xl-6" href="javascript:void(0)">
+                        <i class="icon-base ti tabler-menu-2 icon-md"></i>
+                    </a>
+                </div>
+
+                <div class="navbar-nav-right d-flex align-items-center justify-content-end" id="navbar-collapse">
+                    <ul class="navbar-nav flex-row align-items-center ms-md-auto">
+
+                        <li class="nav-item navbar-search-wrapper btn btn-text-secondary btn-icon rounded-pill">
+                            <a class="nav-item nav-link search-toggler px-0" href="javascript:void(0);">
+                                <span class="d-inline-block text-body-secondary fw-normal" id="autocomplete"></span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item dropdown-language dropdown me-2 me-xl-0">
+                            <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
+                                data-bs-toggle="dropdown">
+                                <i class="icon-base ti tabler-language icon-22px text-heading"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="javascript:void(0);" data-language="en"
+                                        data-text-direction="ltr">
+                                        <span>English</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="javascript:void(0);" data-language="dk"
+                                        data-text-direction="ltr">
+                                        <span>Danish</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle hide-arrow btn btn-icon btn-text-secondary rounded-pill"
+                                id="nav-theme" href="javascript:void(0);" data-bs-toggle="dropdown">
+                                <i class="icon-base ti tabler-sun icon-22px theme-icon-active text-heading"></i>
+                                <span class="d-none ms-2" id="nav-theme-text">Toggle theme</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-theme-text">
+                                <li>
+                                    <button type="button" class="dropdown-item align-items-center active"
+                                        data-bs-theme-value="light" aria-pressed="false">
+                                        <span><i class="icon-base ti tabler-sun icon-22px me-3"
+                                                data-icon="sun"></i>Light</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button type="button" class="dropdown-item align-items-center"
+                                        data-bs-theme-value="dark" aria-pressed="true">
+                                        <span><i class="icon-base ti tabler-moon-stars icon-22px me-3"
+                                                data-icon="moon-stars"></i>Dark</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button type="button" class="dropdown-item align-items-center"
+                                        data-bs-theme-value="system" aria-pressed="false">
+                                        <span><i class="icon-base ti tabler-device-desktop-analytics icon-22px me-3"
+                                                data-icon="device-desktop-analytics"></i>System</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown-shortcuts navbar-dropdown dropdown">
+                            <a class="nav-link dropdown-toggle hide-arrow btn btn-icon btn-text-secondary rounded-pill"
+                                href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                aria-expanded="false">
+                                <i class="icon-base ti tabler-layout-grid-add icon-22px text-heading"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end p-0">
+                                <div class="dropdown-menu-header border-bottom">
+                                    <div class="dropdown-header d-flex align-items-center py-3">
+                                        <h6 class="mb-0 me-auto">Shortcuts</h6>
+                                        <a href="javascript:void(0)"
+                                            class="dropdown-shortcuts-add py-2 btn btn-text-secondary rounded-pill btn-icon"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Add shortcuts"><i
+                                                class="icon-base ti tabler-plus icon-20px text-heading"></i></a>
+                                    </div>
+                                </div>
+                                <div class="dropdown-shortcuts-list scrollable-container">
+
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-2">
+                            <a class="nav-link dropdown-toggle hide-arrow btn btn-icon btn-text-secondary rounded-pill"
+                                href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                aria-expanded="false">
+                                <span class="position-relative">
+                                    <i class="icon-base ti tabler-bell icon-22px text-heading"></i>
+                                    <span
+                                        class="badge rounded-pill bg-danger badge-dot badge-notifications border"></span>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end p-0">
+                                <li class="dropdown-menu-header border-bottom">
+                                    <div class="dropdown-header d-flex align-items-center py-3">
+                                        <h6 class="mb-0 me-auto">Notification</h6>
+                                        <div class="d-flex align-items-center h6 mb-0">
+                                            <span class="badge bg-label-primary me-2">0 New</span>
+                                            <a href="javascript:void(0)"
+                                                class="dropdown-notifications-all p-2 btn btn-icon"
+                                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                                title="Mark all as read"><i
+                                                    class="icon-base ti tabler-mail-opened text-heading"></i></a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="dropdown-notifications-list scrollable-container">
+                                    <ul class="list-group list-group-flush">
+
+                                    </ul>
+                                </li>
+                                <li class="border-top">
+                                    <div class="d-grid p-4">
+                                        <a class="btn btn-primary btn-sm d-flex" href="javascript:void(0);">
+                                            <small class="align-middle">View all notifications</small>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                            <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);"
+                                data-bs-toggle="dropdown">
+                                <div class="avatar avatar-online">
+                                    <span class="avatar-initial rounded-circle bg-label-primary">
+                                        {{ request.user.username|slice:":1"|upper }}
+                                    </span>
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item mt-0" href="#">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 me-2">
+                                                <div class="avatar avatar-online">
+                                                    <span class="avatar-initial rounded-circle bg-label-primary">
+                                                        {{ request.user.username|slice:":1"|upper }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-0">{{ request.user.username }}</h6>
+                                                <small class="text-body-secondary">Admin</small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <div class="dropdown-divider my-1 mx-n2"></div>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="icon-base ti tabler-user me-3 icon-md"></i><span
+                                            class="align-middle">My Profile</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'site_settings' %}">
+                                        <i class="icon-base ti tabler-settings me-3 icon-md"></i><span
+                                            class="align-middle">Settings</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <div class="dropdown-divider my-1 mx-n2"></div>
+                                </li>
+                                <li>
+                                    <div class="d-grid px-2 pt-2 pb-1">
+                                        <a class="btn btn-sm btn-danger d-flex" href="{% url 'logout' %}">
+                                            <small class="align-middle">Logout</small>
+                                            <i class="icon-base ti tabler-logout ms-2 icon-14px"></i>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="layout-page">
+            <div class="content-wrapper">
+
+                <aside id="layout-menu" class="layout-menu-horizontal menu-horizontal menu flex-grow-0">
+                    <div class="container-xxl d-flex h-100">
+                        <ul class="menu-inner">
+                            <li
+                                class="menu-item {% if request.resolver_match.url_name == 'admin_dashboard' or 'settings' in request.path %}active{% endif %}">
+                                <a href="{% url 'admin_dashboard' %}" class="menu-link menu-toggle">
+                                    <i class="menu-icon icon-base ti tabler-device-laptop"></i>
+                                    <div data-i18n="Dashboards">Dashboards</div>
+                                </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item {% if 'dashboard' in request.path %}active{% endif %}">
+                                        <a href="{% url 'admin_dashboard' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-dashboard"></i>
+                                            <div data-i18n="Dashboards">Dashboards</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item {% if 'settings' in request.path %}active{% endif %}">
+                                        <a href="{% url 'site_settings' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-settings"></i>
+                                            <div data-i18n="Setting">Setting</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li
+                                class="menu-item {% if 'groups' in request.path or 'admins' in request.path %}active open{% endif %}">
+                                <a href="javascript:void(0)" class="menu-link menu-toggle">
+                                    <i class="menu-icon icon-base ti tabler-lock"></i>
+                                    <div data-i18n="Access Control">Access Control</div>
+                                </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item {% if 'admins' in request.path %}active{% endif %}">
+                                        <a href="{% url 'admin_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-user-shield"></i>
+                                            <div data-i18n="Admins">Admins</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item {% if 'groups' in request.path %}active{% endif %}">
+                                        <a href="{% url 'group_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-users-group"></i>
+                                            <div data-i18n="Groups">Groups</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+
+                            <li
+                                class="menu-item {% if 'sliders' in request.path or 'contactus' in request.path or 'newsletter' in request.path or 'reviews' in request.path or 'pages' in request.path or 'blog' in request.path or 'feature-sections' in request.path or 'website-menus' in request.path %}active open{% endif %}">
+                                <a href="javascript:void(0)" class="menu-link menu-toggle">
+                                    <i class="menu-icon icon-base ti tabler-app-window"></i>
+                                    <div data-i18n="Websites">Websites</div>
+                                </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item {% if 'sliders' in request.path %}active{% endif %}">
+                                        <a href="{% url 'slider_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-slideshow"></i>
+                                            <div data-i18n="Sliders">Sliders</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item {% if 'newsletters' in request.path %}active{% endif %}">
+                                        <a href="{% url 'newsletter_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-mail"></i>
+                                            <div data-i18n="Newsletters">Newsletters</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item {% if 'contactus' in request.path %}active{% endif %}">
+                                        <a href="{% url 'contactus_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-phone"></i>
+                                            <div data-i18n="Contact Us">Contact Us</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item {% if 'reviews' in request.path %}active{% endif %}">
+                                        <a href="{% url 'review_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-star"></i>
+                                            <div data-i18n="Customer Reviews">Customer Reviews</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item {% if 'pages' in request.path %}active{% endif %}">
+                                        <a href="{% url 'page_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-file-text"></i>
+                                            <div data-i18n="Pages">Pages</div>
+                                        </a>
+                                    </li>
+                                    <li
+                                        class="menu-item {% if 'admin/blog' in request.path %}active{% endif %}">
+                                        <a href="{% url 'blog_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-news"></i>
+                                            <div data-i18n="Blog">Blog</div>
+                                        </a>
+                                    </li>
+                                    <li
+                                        class="menu-item {% if 'admin/feature-sections' in request.path %}active{% endif %}">
+                                        <a href="{% url 'feature_section_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-layout-list"></i>
+                                            <div data-i18n="Feature Sections">Feature Sections</div>
+                                        </a>
+                                    </li>
+                                    <li
+                                        class="menu-item {% if 'admin/website-menus' in request.path %}active{% endif %}">
+                                        <a href="{% url 'website_menu_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-menu"></i>
+                                            <div data-i18n="Website Menus">Website Menus</div>
+                                        </a>
+                                    </li>
+                                    <li
+                                        class="menu-item {% if 'admin/faq' in request.path %}active{% endif %}">
+                                        <a href="{% url 'faq_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-info-square-rounded"></i>
+                                            <div data-i18n="FAQs">FAQs</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li
+                                class="menu-item {% if 'tour-suppliers' in request.path or 'customer' in request.path %}active open{% endif %}">
+                                <a href="javascript:void(0)" class="menu-link menu-toggle">
+                                    <i class="menu-icon icon-base ti tabler-users"></i>
+                                    <div data-i18n="Users">Users</div>
+                                </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item {% if 'tour-suppliers' in request.path %}active{% endif %}">
+                                        <a href="{% url 'tour_supplier_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-user"></i>
+                                            <div data-i18n="Tour Guides">Tour Guides</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item {% if 'customer' in request.path %}active{% endif %}">
+                                        <a href="{% url 'customer_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-users"></i>
+                                            <div data-i18n="Customers">Customers</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item {% if 'message' in request.path %}active{% endif %}">
+                                        <a href="{% url 'message_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-message"></i>
+                                            <div data-i18n="Messages">Messages</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li
+                                class="menu-item {% if 'admin/tours' in request.path or 'admin/bookings' in request.path or 'admin/payments' in request.path or 'admin/tour-reviews' in request.path or 'admin/coupons' in request.path or 'admin/cities' in request.path or 'countries' in request.path or 'destination' in request.path or 'categories' in request.path %}active open{% endif %}">
+                                <a href="javascript:void(0)" class="menu-link menu-toggle">
+                                    <i class="menu-icon icon-base ti tabler-map"></i>
+                                    <div data-i18n="Tour Management">Tour Management</div>
+                                </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item {% if 'countries' in request.path %}active{% endif %}">
+                                        <a href="{% url 'country_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-flag"></i>
+                                            <div data-i18n="Countries">Countries</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item {% if 'destination' in request.path %}active{% endif %}">
+                                        <a href="{% url 'destination_region_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-map-pin"></i>
+                                            <div data-i18n="Destination Regions">Destination Regions</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item {% if 'admin/cities' in request.path %}active{% endif %}">
+                                        <a href="{% url 'city_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-building"></i>
+                                            <div data-i18n="Cities">Cities</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item {% if 'categories' in request.path %}active{% endif %}">
+                                        <a href="{% url 'category_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-tags"></i>
+                                            <div data-i18n="Categories">Categories</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item {% if 'admin/tours' in request.path %}active{% endif %}">
+                                        <a href="{% url 'tour_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-compass"></i>
+                                            <div data-i18n="Tours">Tours</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item {% if 'admin/coupons' in request.path %}active{% endif %}">
+                                        <a href="{% url 'coupon_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-ticket"></i>
+                                            <div data-i18n="Coupons">Coupons</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item {% if 'admin/bookings' in request.path %}active{% endif %}">
+                                        <a href="{% url 'booking_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-calendar"></i>
+                                            <div data-i18n="Bookings">Bookings</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item {% if 'admin/payments' in request.path %}active{% endif %}">
+                                        <a href="{% url 'payment_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-credit-card"></i>
+                                            <div data-i18n="Payments">Payments</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item {% if 'admin/tour-reviews' in request.path %}active{% endif %}">
+                                        <a href="{% url 'tour_review_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-star"></i>
+                                            <div data-i18n="Reviews">Reviews</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            
+
+                            <li class="menu-item">
+                                <a href="{% url 'logout' %}" class="menu-link">
+                                    <i class="menu-icon icon-base ti tabler-power"></i>
+                                    <div data-i18n="Logout">Logout</div>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </aside>
+                <!-- /Horizontal Menu -->
+
+                <!-- Content -->
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    {% block admin_content %}
+                    <!-- Page content goes here -->
+                    {% endblock %}
+                </div>
+                <!-- /Content -->
+
+                <!-- Footer -->
+                <footer class="content-footer footer bg-footer-theme">
+                    <div class="container-xxl">
+                        <div
+                            class="footer-container d-flex align-items-center justify-content-between py-4 flex-md-row flex-column">
+                            <div class="text-body mb-2 mb-md-0">
+                                ©
+                                <script>document.write(new Date().getFullYear())</script> YourTourGuide . Developed by <a  href="https://www.softscandic.com" target="_blank" style="color: rgb(255, 255, 255);"><img  src="{% static 'frontend/scandicsoft-logo-black.webp' %}" alt="Scandicsoft" style="width: 110px;"></a>
+                            </div>
+                            <div class="d-none d-lg-inline-block">
+                                <a href="{% url 'home' %}" class="footer-link me-4">Home</a>
+                                <a href="{% url 'admin_dashboard' %}" class="footer-link">Admin Dashboard</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+
+
+                <div class="content-backdrop fade"></div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="layout-overlay layout-menu-toggle"></div>
+    <div class="drag-target"></div>
+</div>
+ 
+    {% endblock %}

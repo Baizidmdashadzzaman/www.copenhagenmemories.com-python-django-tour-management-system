@@ -1,0 +1,116 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Edit Country{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Countries /</span> Edit Country
+    </h4>
+
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card mb-6">
+                <h5 class="card-header">Edit Country: {{ country.name }}</h5>
+                <form class="card-body" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <h6 class="alert-heading mb-1">Please correct the errors below</h6>
+                        <ul class="mb-0">
+                            {% for field in form %}
+                            {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                            {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+
+                    <h6>1. Basic Details</h6>
+                    <div class="row g-6">
+                        <div class="col-md-6">
+                            <label class="form-label" for="id_name">Country Name <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" id="id_name" name="name" class="form-control"
+                                placeholder="Enter country name" value="{{ form.name.value|default:'' }}" required>
+                            <div class="form-text">Official name of the country</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label" for="id_code">Country Code</label>
+                            <input type="text" id="id_code" name="code" class="form-control"
+                                placeholder="e.g., US, UK, DK" value="{{ form.code.value|default:'' }}" maxlength="3">
+                            <div class="form-text">ISO country code (2-3 characters)</div>
+                        </div>
+                    </div>
+
+                    <hr class="my-6 mx-n6">
+
+                    <h6>2. Images</h6>
+                    <div class="row g-6">
+                        <div class="col-md-6">
+                            <label class="form-label" for="id_flag_image">Flag Image</label>
+                            
+                            <input type="file" id="id_flag_image" name="flag_image" class="form-control" accept="image/*">
+                            <div class="form-text">Upload new flag image (leave empty to keep current)</div>
+
+                            {% if country.flag_image %}
+                            <div class="mb-2">
+                                <img src="{{ country.flag_image.url }}" alt="Current Flag" style="max-width: 150px; max-height: 100px;" class="img-thumbnail">
+                                <p class="text-muted small mb-0">Current flag image</p>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label" for="id_image">Destination Image</label>
+                            <input type="file" id="id_image" name="image" class="form-control" accept="image/*">
+                            <div class="form-text">Upload new destination image (leave empty to keep current)</div>
+                            {% if country.image %}
+                            <div class="mb-2">
+                                <img src="{{ country.image.url }}" alt="Current Destination" style="max-width: 150px; max-height: 100px;" class="img-thumbnail">
+                                <p class="text-muted small mb-0">Current destination image</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <hr class="my-6 mx-n6">
+
+                    <h6>3. Status</h6>
+                    <div class="row g-6">
+                        <div class="col-md-12">
+                            <div class="form-check form-switch">
+                                {% if form.is_active.value %}
+                                <input class="form-check-input" type="checkbox" id="id_is_active" name="is_active"
+                                    checked>
+                                {% else %}
+                                <input class="form-check-input" type="checkbox" id="id_is_active" name="is_active">
+                                {% endif %}
+                                <label class="form-check-label" for="id_is_active">Active Status</label>
+                            </div>
+                            <div class="form-text">Enable this country for destination regions</div>
+                        </div>
+                    </div>
+
+                    <div class="pt-6">
+                        <button type="submit" class="btn btn-primary me-4 waves-effect waves-light">
+                            <i class="icon-base ti tabler-check icon-22px"></i> Update
+                        </button>
+                        <a href="{% url 'country_list' %}" class="btn btn-label-secondary waves-effect">
+                            <i class="icon-base ti tabler-ban icon-22px"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

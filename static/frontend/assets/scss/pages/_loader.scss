@@ -1,0 +1,47 @@
+@use "../utils/variables";
+
+/*============================
+  59.loader
+============================*/
+
+#loader-wrapper {
+    background-color: variables.$white;
+    height: 100%;
+    width: 100%;
+    z-index: 9999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    #loader {
+        width: 100px;
+        height: 100px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        .loader-line {
+            display: inline-grid;
+            width: 40px;
+            aspect-ratio: 1;
+            margin: 30px;
+            &::before, &::after {
+                content:"";
+                grid-area: 1/1;
+                border-radius: 50%;
+                background: repeating-conic-gradient(variables.$primary 0 60deg,variables.$gray-900 0 120deg);
+            }
+            &::before {
+                transform: rotate(0turn) translate(100%) rotate(0turn);
+                animation: l5 4s linear infinite;
+            }
+            &::after {
+                padding: 20%;
+                mask:conic-gradient(#000 0 0) content-box exclude,conic-gradient(#000 0 0);
+                scale: -1 1;
+            }
+        }
+    }
+}
+@keyframes l5 {to{transform: rotate(1turn) translate(100%) rotate(1turn)}}

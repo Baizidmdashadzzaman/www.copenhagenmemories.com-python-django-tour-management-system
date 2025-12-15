@@ -1,0 +1,324 @@
+{% extends 'frontend/layout/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}
+    {% if LANGUAGE_CODE == 'dk' and feature_section.title_dk %}
+        {{ feature_section.title_dk }}
+    {% else %}
+        {{ feature_section.title }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="breadcrumb-bar breadcrumb-bg-02 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-12">
+                <h2 class="breadcrumb-title mb-2">
+                    {% if LANGUAGE_CODE == 'dk' and feature_section.title_dk %}
+                        {{ feature_section.title_dk }}
+                    {% else %}
+                        {{ feature_section.title }}
+                    {% endif %}
+                </h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a href="/"><i class="isax isax-home5"></i></a></li>
+                        <li class="breadcrumb-item">{% trans "Tours" %}</li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            {% if LANGUAGE_CODE == 'dk' and feature_section.title_dk %}
+                                {{ feature_section.title_dk }}
+                            {% else %}
+                                {{ feature_section.title }}
+                            {% endif %}
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="container">
+        
+        <!-- Feature Section Description -->
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                 {% if feature_section.description or feature_section.description_dk %}
+                    <p class="mt-2 text-muted">
+                        {% if LANGUAGE_CODE == 'dk' and feature_section.description_dk %}
+                            {{ feature_section.description_dk }}
+                        {% else %}
+                            {{ feature_section.description }}
+                        {% endif %}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-xl-12 col-lg-12">
+                <!-- Tours List -->
+                {% for tour in page_obj %}
+                <div class="col-xl-4 col-lg-4">
+                <div class="place-item mb-4">
+                    <div class="place-img">
+                        <div class="img-slider image-slide owl-carousel nav-center">
+                            {% if tour.main_image %}
+                            <div class="slide-images">
+                                <a href="{% url 'tour_detail' tour.id %}">
+                                    <img src="{{ tour.main_image.url }}" class="img-fluid" alt="{{ tour.title }}">
+                                </a>
+                            </div>
+                            {% endif %}
+                            
+                            {% for image in tour.images.all|slice:":3" %}
+                            <div class="slide-images">
+                                <a href="{% url 'tour_detail' tour.id %}">
+                                    <img src="{{ image.image.url }}" class="img-fluid" alt="{{ image.caption|default:tour.title }}">
+                                </a>
+                            </div>
+                            {% endfor %}
+
+                            {% if not tour.main_image and not tour.images.all %}
+                            <div class="slide-images">
+                                <a href="{% url 'tour_detail' tour.id %}">
+                                    <img src="{% static 'frontend/assets/img/tours/default-tour.jpg' %}" class="img-fluid" alt="{{ tour.title }}">
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="fav-item">
+                            <a href="javascript:void(0)" class="fav-icon{% if tour.id in wishlisted_tours %} selected{% endif %}" onclick="toggleWishlist(event, {{ tour.id }})">
+                                <i class="isax isax-heart5"></i>
+                            </a>
+                            {% if tour.is_featured %}
+                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>{% trans "Featured" %}</span>
+                            {% elif tour.is_bestseller %}
+                            <span class="badge bg-success d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>{% trans "Bestseller" %}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="place-content">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-2 mb-3">
+                            <div>
+                                <h5 class="mb-1 text-truncate">
+                                    <a href="{% url 'tour_detail' tour.id %}">
+                                        {% if LANGUAGE_CODE == 'dk' and tour.title_dk %}
+                                            {{ tour.title_dk }}
+                                        {% else %}
+                                            {{ tour.title }}
+                                        {% endif %}
+                                    </a>
+                                </h5>
+                                <p class="fs-14 d-flex align-items-center">
+                                    <i class="isax isax-location5 me-2"></i>
+                                    {% if tour.city %}
+                                        {% if LANGUAGE_CODE == 'dk' and tour.city.name_dk %}
+                                            {{ tour.city.name_dk }}
+                                        {% else %}
+                                            {{ tour.city.name }}
+                                        {% endif %}
+                                    {% elif tour.destination_region %}
+                                        {% if LANGUAGE_CODE == 'dk' and tour.destination_region.name_dk %}
+                                            {{ tour.destination_region.name_dk }}
+                                        {% else %}
+                                            {{ tour.destination_region.name }}
+                                        {% endif %}
+                                    {% else %}
+                                        {% trans "Location TBA" %}
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                {% if tour.category %}
+                                <p class="fs-14 text-gray-9 border-end pe-2 me-2 mb-0">
+                                    <span class="me-1"><i class="ti ti-receipt text-primary"></i></span> 
+                                    {% if LANGUAGE_CODE == 'dk' and tour.category.name_dk %}
+                                        {{ tour.category.name_dk }}
+                                    {% else %}
+                                        {{ tour.category.name }}
+                                    {% endif %}
+                                </p>
+                                {% endif %}
+                                {% if tour.average_rating > 0 %}
+                                <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">{{ tour.average_rating|floatformat:1 }}</span>
+                                <p class="fs-14">({{ tour.total_reviews }} {% trans "Reviews" %})</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <p class="fs-14 border-bottom pb-3 mb-3">
+                            {% if LANGUAGE_CODE == 'dk' and tour.short_description_dk %}
+                                {{ tour.short_description_dk|truncatechars:150 }}
+                            {% else %}
+                                {{ tour.short_description|truncatechars:150 }}
+                            {% endif %}
+                        </p>
+                        <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-2">
+                            <div class="d-flex align-items-center">
+                                {% if tour.duration_text %}
+                                <span class="me-2"><i class="isax isax-calendar-tick text-gray-6"></i></span>
+                                <p class="fs-14 text-gray-9 border-end pe-2 me-2 mb-0">{{ tour.duration_text }}</p>
+                                {% endif %}
+                                {% if tour.max_participants %}
+                                <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
+                                    <i class="isax isax-profile-2user me-1"></i>{{ tour.max_participants }} {% trans "Guests" %}
+                                </p>
+                                {% endif %}
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal border-end pe-2 me-2">
+                                    {% trans "Starts From" %} 
+                                    <span class="ms-1 fs-18 fw-semibold text-primary">{{ tour.base_price|floatformat:0 }} {{ tour.currency }}</span>
+                                    {% if tour.discount_percentage > 0 %}
+                                    <span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">
+                                        {{ tour.original_price|floatformat:0 }} {{ tour.currency }}
+                                    </span>
+                                    {% endif %}
+                                </h6>
+                                {% if tour.supplier.logo %}
+                                <a href="javascript:void(0);" class="avatar avatar-sm flex-shrink-0" title="{{ tour.supplier.company_name }}">
+                                    <img src="{{ tour.supplier.logo.url }}" class="rounded-circle" alt="{{ tour.supplier.company_name }}">
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-5">
+                    <h3>{% trans "No tours found in this section." %}</h3>
+                    <a href="{% url 'home' %}" class="btn btn-primary mt-3">{% trans "Go Home" %}</a>
+                </div>
+                {% endfor %}
+                <!-- /Tours List -->
+
+                <!-- Pagination -->
+                {% if page_obj.has_other_pages %}
+                <nav class="pagination-nav">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                                <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+                <!-- /Pagination -->
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Override Owl Carousel default display:none */
+.img-slider.owl-carousel,
+.image-slide.owl-carousel {
+    display: block !important;
+}
+</style>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function(){
+    // Initialize Owl Carousel for each tour image slider
+    $('.image-slide').each(function(){
+        var $this = $(this);
+        var slideCount = $this.find('.slide-images').length;
+        
+        $this.owlCarousel({
+            items: 1,
+            loop: slideCount > 1, // Only loop if more than 1 image
+            margin: 0,
+            nav: true,
+            dots: false,
+            autoplay: false,
+            navText: ['<i class="fa-solid fa-chevron-left"></i>', '<i class="fa-solid fa-chevron-right"></i>'],
+            responsive: {
+                0: {
+                    items: 1
+                },
+                768: {
+                    items: 1
+                },
+                1024: {
+                    items: 1
+                }
+            }
+        });
+    });
+});
+
+function toggleWishlist(event, tourId) {
+    event.preventDefault();
+    const btn = event.currentTarget;
+    
+    // Check if user is authenticated
+    var isAuthenticated = "{{ request.user.is_authenticated|yesno:'true,false' }}" === "true";
+    if (!isAuthenticated) {
+        window.location.href = "{% url 'login' %}?next=" + window.location.pathname;
+        return;
+    }
+    
+    fetch("{% url 'toggle_wishlist' %}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({ tour_id: tourId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data && data.status === 'added') {
+            $(btn).addClass('selected');
+        } else if (data && data.status === 'removed') {
+            $(btn).removeClass('selected');
+        } else if (data && data.message) {
+             console.error(data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+</script>
+{% endblock %}

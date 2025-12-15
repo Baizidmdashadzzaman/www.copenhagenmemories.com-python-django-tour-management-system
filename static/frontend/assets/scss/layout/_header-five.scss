@@ -1,0 +1,47 @@
+@use "../utils/variables";
+
+/*============================
+  27.header-five
+============================*/
+
+.header-five{
+    margin-top: 20px;
+    &.fixed{
+        margin: 0;
+    }
+    .header__hamburger {
+        .sidebar-menu {
+            color: variables.$gray-900;
+        }
+    }
+    .header-nav{
+        background: variables.$white;
+        padding: 20px;
+        border-radius: 10px;
+        .main-menu-wrapper{
+            padding: 0;
+            .main-nav{
+                > li{
+                   > a{
+                        color: variables.$gray-900;
+                        i{
+                            color: variables.$gray-500;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .header-btn{
+        a{
+            color: variables.$gray-900;
+            font-size: 13px;
+        }
+        .btn{
+            font-size: 13px;
+        }
+        .fav-dropdown,.cart-dropdown {
+            display: none;
+        }
+    }
+}

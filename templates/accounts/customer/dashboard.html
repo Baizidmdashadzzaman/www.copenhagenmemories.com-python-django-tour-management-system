@@ -1,0 +1,332 @@
+{% extends 'accounts/customer/layout.html' %}
+
+{% block customer_content %}
+{% load static %}
+
+
+<h1>Customer Dashboard</h1>
+<p>Welcome to your dashboard, {{ user.username }}!</p>
+<p>Here you can view your tours and manage your profile.</p>
+
+
+
+{% if upcoming_reminder %}
+<div class="alert alert-teal alert-dismissible d-flex align-items-center border-0 mb-4 fade show">
+    <i class="isax isax-info-circle5 me-2"></i> Reminder about your upcoming booking <strong>{{ upcoming_reminder.tour.title }}</strong> on {{ upcoming_reminder.tour_date|date:"d M Y" }} at {{ upcoming_reminder.tour_time|time:"h:i A" }} . We look forward to seeing you!
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"><i class="fas fa-xmark"></i></button>
+</div>
+{% endif %}
+                    <div class="row">
+                        <div class="col-xl-4">
+                            <div class="card shadow-none">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <span class="avatar avatar-xl rounded-circle bg-primary me-3">
+											<i class="isax isax-calendar-15 fs-36"></i>
+										</span>
+                                        <div>
+                                            <h3>{{ total_bookings_count }}</h3>
+                                            <p>Total Bookings</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4">
+                            <div class="card shadow-none">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <span class="avatar avatar-xl rounded-circle bg-secondary me-3">
+											<i class="isax isax-money-send5 fs-36"></i>
+										</span>
+                                        <div>
+                                            <h3>${{ total_transactions|floatformat:2 }}</h3>
+                                            <p>Total Transactions</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4">
+                            <div class="card shadow-none">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <span class="avatar avatar-xl rounded-circle bg-purple me-3">
+											<i class="isax isax-money-tick5 fs-36"></i>
+										</span>
+                                        <div>
+                                            <h3>${{ average_value|floatformat:2 }}</h3>
+                                            <p>Average Value</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-7 d-flex">
+                            <div class="card shadow-none flex-fill">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <h6>Recent Bookings</h6>
+                                        <div class="dropdown ">
+                                            <a href="#" class="dropdown-toggle btn bg-light-200 btn-sm text-gray-6 rounded-pill fw-normal fs-14 d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                                                <i class="isax isax-document-filter me-2 fs-14 text-gray-6"></i>Filter
+                                            </a>
+                                            <ul class="dropdown-menu  dropdown-menu-end p-3">
+                                                <li>
+                                                    <a href="#" class="dropdown-item rounded-1">
+                                                        <i class="ti ti-point-filled me-1"></i>Completed
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="dropdown-item rounded-1">
+                                                        <i class="ti ti-point-filled me-1"></i>Upcoming
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="dropdown-item rounded-1">
+                                                        <i class="ti ti-point-filled me-1"></i>Inprogress
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    {% for booking in recent_bookings %}
+                                    <div class="card shadow-none mb-2">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center flex-wrap row-gap-2">
+                                                <a href="{% url 'tour_detail' booking.tour.id %}" class="avatar avatar-xl flex-shrink-0 me-2">
+                                                    {% if booking.tour.main_image %}
+                                                    <img src="{{ booking.tour.main_image.url }}" class="img-fluid rounded-circle" alt="Img" style="width: 60px; height: 60px; object-fit: cover;">
+                                                    {% else %}
+                                                    <img src="{% static 'frontend/assets/img/tours/tours-24.jpg' %}" class="img-fluid rounded-circle" alt="Img">
+                                                    {% endif %}
+                                                </a>
+                                                <div class="flex-fill">
+                                                    <span class="badge badge-soft-pink badge-xs rounded-pill mb-1"><i class="isax isax-signpost me-1"></i>Tour</span>
+                                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                                        <h6 class="fs-16 text-truncate"><a href="{% url 'tour_detail' booking.tour.id %}">{{ booking.tour.title }} <span class="text-gray-5 fw-normal fs-14">({{ booking.total_participants }} Ppl)</span></a></h6>
+                                                        <span class="badge {% if booking.status == 'confirmed' %}badge-success{% elif booking.status == 'pending' %}badge-warning{% elif booking.status == 'completed' %}badge-info{% else %}badge-danger{% endif %} badge-sm rounded-pill"><i class="ti ti-point-filled me-1"></i>{{ booking.get_status_display }}</span>
+                                                    </div>
+                                                    <div class="d-flex align-items-center flex-wrap">
+                                                        <p class="fs-14 d-flex align-items-center border-end pe-2 me-2 mb-0"><i class="isax isax-calendar-25 me-2"></i>Date : {{ booking.tour_date|date:"d M Y" }}</p>
+                                                        <p class="fs-14 d-flex align-items-center"><i class="isax isax-timer5 me-2"></i>Time : {{ booking.tour_time|time:"h:i A" }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% empty %}
+                                    <div class="text-center py-4">
+                                        <p class="text-muted">No bookings found.</p>
+                                        <a href="{% url 'tour_list_fronted' %}" class="btn btn-primary btn-sm">Browse Tours</a>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-5 d-flex">
+                            <div class="card shadow-none flex-fill">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <h6>Bookings Statistics</h6>
+                                        <div class="dropdown ">
+                                            <a href="#" class="dropdown-toggle btn bg-light-200 btn-sm text-gray-6 rounded-pill fw-normal fs-14 d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                                                <i class="isax isax-calendar-2 me-2 fs-14 text-gray-6"></i>January
+                                            </a>
+                                            <ul class="dropdown-menu  dropdown-menu-end p-3">
+                                                <li>
+                                                    <a href="#" class="dropdown-item rounded-1">
+                                                        <i class="ti ti-point-filled me-1"></i>January
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="dropdown-item rounded-1">
+                                                        <i class="ti ti-point-filled me-1"></i>February
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="dropdown-item rounded-1">
+                                                        <i class="ti ti-point-filled me-1"></i>March
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="mb-0">
+                                            <p class="mb-0">Total Amount Spend</p>
+                                            <h3>${{ total_transactions|floatformat:2 }}</h3>
+                                        </div>
+                                        <div id="tours_chart"></div>
+                                        <p class="fs-14"><span class="text-success"></span> Lifetime Total</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Recent Booking -->
+                        <div class="col-xl-6 col-xxl-7 d-flex">
+                            <div class="card shadow-none flex-fill">
+                                <div class="card-body pb-0">
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <h6>Recent Bookings</h6>
+                                    </div>
+                                    <div class="row">
+                                        {% for booking in recent_bookings %}
+                                        <div class="card shadow-none mb-2">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center flex-wrap row-gap-2">
+                                                    <a href="{% url 'tour_detail' booking.tour.id %}" class="avatar avatar-xl flex-shrink-0 me-2">
+                                                        {% if booking.tour.main_image %}
+                                                        <img src="{{ booking.tour.main_image.url }}" class="img-fluid rounded-circle" alt="Img" style="width: 60px; height: 60px; object-fit: cover;">
+                                                        {% else %}
+                                                        <img src="{% static 'frontend/assets/img/tours/tours-24.jpg' %}" class="img-fluid rounded-circle" alt="Img">
+                                                        {% endif %}
+                                                    </a>
+                                                    <div class="flex-fill">
+                                                        <span class="badge badge-soft-pink badge-xs rounded-pill mb-1"><i class="isax isax-signpost me-1"></i>Tour</span>
+                                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                                            <h6 class="fs-16 text-truncate"><a href="{% url 'tour_detail' booking.tour.id %}">{{ booking.tour.title }} <span class="text-gray-5 fw-normal fs-14">({{ booking.total_participants }} Ppl)</span></a></h6>
+                                                            <span class="badge {% if booking.status == 'confirmed' %}badge-success{% elif booking.status == 'pending' %}badge-warning{% elif booking.status == 'completed' %}badge-info{% else %}badge-danger{% endif %} badge-sm rounded-pill"><i class="ti ti-point-filled me-1"></i>{{ booking.get_status_display }}</span>
+                                                        </div>
+                                                        <div class="d-flex align-items-center flex-wrap">
+                                                            <p class="fs-14 d-flex align-items-center border-end pe-2 me-2 mb-0"><i class="isax isax-calendar-25 me-2"></i>Date : {{ booking.tour_date|date:"d M Y" }}</p>
+                                                            <p class="fs-14 d-flex align-items-center"><i class="isax isax-timer5 me-2"></i>Time : {{ booking.tour_time|time:"h:i A" }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% empty %}
+                                        <div class="text-center py-4">
+                                            <p class="text-muted">No bookings found.</p>
+                                            <a href="{% url 'tour_list_fronted' %}" class="btn btn-primary btn-sm">Browse Tours</a>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Recent Booking -->
+
+                        <!-- Recommended Tours -->
+                        <div class="col-xl-6 col-xxl-5 d-flex">
+                            <div class="card shadow-none flex-fill">
+                                <div class="card-body">
+                                    <h6 class="mb-4">Recommended For You</h6>
+                                    {% for tour in popular_tours %}
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <div class="d-flex align-items-center">
+                                            <a href="{% url 'tour_detail' tour.id %}" class="avatar avatar-lg flex-shrink-0 me-2">
+                                                {% if tour.main_image %}
+                                                <img src="{{ tour.main_image.url }}" class="img-fluid rounded-circle" alt="Img" style="width: 48px; height: 48px; object-fit: cover;">
+                                                {% else %}
+                                                <img src="{% static 'frontend/assets/img/tours/tours-24.jpg' %}" class="img-fluid rounded-circle" alt="Img">
+                                                {% endif %}
+                                            </a>
+                                            <div class="overflow-hidden">
+                                                <h6 class="fs-16 text-truncate"><a href="{% url 'tour_detail' tour.id %}">{{ tour.title }}</a></h6>
+                                                <p class="fs-14 text-muted mb-0"><i class="ti ti-star-filled text-warning me-1"></i>{{ tour.average_rating|floatformat:1 }} / 5.0</p>
+                                            </div>
+                                        </div>
+                                        <a href="{% url 'tour_detail' tour.id %}" class="btn btn-primary btn-sm ms-2"><i class="isax isax-eye me-1"></i>View</a>
+                                    </div>
+                                    {% empty %}
+                                    <p class="text-muted text-center">No recommendations at the moment.</p>
+                                    {% endfor %}
+                                    {% if popular_tours %}
+                                    <div class="text-center mt-3">
+                                        <a href="{% url 'tour_list_fronted' %}" class="link-primary fw-medium">View All Tours <i class="ti ti-arrow-right ms-1"></i></a>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Recommended Tours -->
+                    </div>
+
+                    <div class="row">
+                        <!-- Recent Messages -->
+                        <div class="col-xl-5 d-flex">
+                            <div class="card shadow-none flex-fill">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <h6>Recent Messages</h6>
+                                        <a href="{% url 'customer_messages' %}" class="link-primary fs-14">View All</a>
+                                    </div>
+                                    {% for msg in recent_messages %}
+                                    <div class="d-flex align-items-center mb-3">
+                                        <span class="avatar avatar-lg bg-light-primary text-primary rounded-circle flex-shrink-0 me-2">
+                                            <i class="isax isax-message-text5 fs-20"></i>
+                                        </span>
+                                        <div class="flex-fill overflow-hidden">
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <h6 class="fs-16 text-truncate">{{ msg.subject }}</h6>
+                                                <p class="fs-14 text-muted text-nowrap mb-0">{{ msg.created_at|timesince }} ago</p>
+                                            </div>
+                                            <p class="fs-14 two-line-ellipsis text-muted mb-0">{{ msg.message|truncatewords:10 }}</p>
+                                        </div>
+                                    </div>
+                                    {% empty %}
+                                    <div class="text-center py-4">
+                                        <div class="mb-3">
+                                            <i class="isax isax-message-2 fs-36 text-muted"></i>
+                                        </div>
+                                        <p class="text-muted">No messages yet.</p>
+                                        <a href="{% url 'customer_messages' %}" class="btn btn-outline-primary btn-sm">Start Conversation</a>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Recent Messages -->
+
+                        <!-- Recent Invoices -->
+                        <div class="col-xl-7 d-flex">
+                            <div class="card shadow-none flex-fill">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <h6>Recent Invoices</h6>
+                                    </div>
+                                    {% for invoice in recent_invoices %}
+                                    <div class="card shadow-none mb-4">
+                                        <div class="card-body p-2">
+                                            <div class="d-flex align-items-center">
+                                                <a href="{% url 'tour_detail' invoice.tour.id %}" class="avatar avatar-lg rounded-circle flex-shrink-0 me-2">
+                                                    {% if invoice.tour.main_image %}
+                                                    <img src="{{ invoice.tour.main_image.url }}" class="img-fluid rounded-circle" alt="Img" style="width: 48px; height: 48px; object-fit: cover;">
+                                                    {% else %}
+                                                    <img src="{% static 'frontend/assets/img/tours/tours-24.jpg' %}" class="img-fluid rounded-circle" alt="Img">
+                                                    {% endif %}
+                                                </a>
+                                                <div class="d-flex justify-content-between align-items-center flex-fill">
+                                                    <div>
+                                                        <h6 class="fs-16 fw-medium mb-1"><a href="{% url 'tour_detail' invoice.tour.id %}">{{ invoice.tour.title }}</a></h6>
+                                                        <div class="d-flex align-items-center flex-wrap">
+                                                            <a href="#" class="fs-14 link-primary border-end pe-2 me-2 mb-0">#{{ invoice.booking_number }}</a>
+                                                            <p class="fs-14">Date: {{ invoice.booking_date|date:"d M Y" }}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-end">
+                                                        <h6 class="fw-medium mb-1">${{ invoice.total_amount|floatformat:2 }}</h6>
+                                                        <p class="fs-14 text-success">{{ invoice.get_payment_status_display }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% empty %}
+                                    <p class="text-muted text-center py-3">No paid invoices found.</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Recent Invoices -->
+                    </div>
+
+
+{% endblock %}

@@ -1,0 +1,360 @@
+@use "sass:color";
+@use "../utils/mixins";
+@use "../utils/variables";
+
+/*============================
+  48.cart
+============================*/
+
+.cart-table {
+  box-shadow: none;
+
+  .table {
+    thead {
+      tr {
+        th {
+          background-color: variables.$light-200;
+          border-bottom: none;
+          padding: 12px 20px;
+          white-space: nowrap;
+        }
+      }
+    }
+
+    tbody {
+      vertical-align: middle;
+
+      tr {
+        &:last-child {
+          td {
+            border-bottom: 0;
+          }
+        }
+        td {
+          padding: 16px 20px;
+
+          .cart-details {
+            .cart-items {
+              a {
+                width: 30px;
+                height: 30px;
+                background-color: variables.$light;
+                color: variables.$gray-600;
+                &.edit-icon{
+                  &:hover{
+                    background-color: color.adjust(variables.$light, $lightness: -7%);
+                    color: variables.$gray-600;
+                  }
+                }
+                &.delete-icon{
+                  background-color: variables.$danger-transparent;
+                  color: variables.$danger;
+                  &:hover{
+                    background-color: color.adjust(variables.$danger-transparent, $lightness: -7%);
+                    color: variables.$danger;
+                  }
+                }
+               
+                @include mixins.respond-below(md) {
+                  margin-bottom: 8px;
+                }
+
+                @include mixins.respond-below(lg) {
+                  margin-bottom: 10px;
+                }
+              }
+            }
+
+            .cart-image {
+              .cart-image-content {
+                white-space: nowrap;
+              }
+              img {
+                @include mixins.respond-below(md) {
+                  margin-bottom: 8px;
+                }
+                @include mixins.respond-below(lg) {
+                  margin-bottom: 10px;
+                }
+              }
+            }
+          }
+          .guests-details {
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+  }
+}
+.cart-payment {
+  box-shadow: none;
+}
+
+//Checkout
+.checkout-card {
+  box-shadow: none;
+}
+.coupoun {
+  box-shadow: none;
+  .coupoun-list {
+    padding: 8px;
+    background-color: variables.$success-100;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      width: 2px;
+      height: 40px;
+      border-radius: 10px;
+      background-color: variables.$success;
+      left: 0;
+      top: 0;
+      @include mixins.respond-below(md){
+        top: 13px;
+      }
+    }
+  }
+  .coupoun-list-two {
+    padding: 8px;
+    background-color: variables.$danger-100;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      width: 2px;
+      height: 40px;
+      border-radius: 10px;
+      background-color: variables.$danger;
+      left: 0;
+      top: 0;
+    }
+  }
+}
+.payment-details {
+  box-shadow: none;
+}
+
+.credit-card-details {
+  .card-detials {
+    .card-content {
+      padding: 20px;
+      border: 1px solid variables.$light;
+      border-radius: 10px;
+      .card-edit-icon {
+        a {
+          width: 22px;
+          height: 22px;
+          padding: 4px;
+          background-color: variables.$light;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+    .card-add {
+      padding: 20px;
+      border: 1px solid variables.$primary;
+      border-radius: 10px;
+      background-color: variables.$light-200;
+      width: 256px;
+      height: 149px;
+      .add-option {
+        a {
+          width: 22px;
+          height: 22px;
+          padding: 4px;
+          background-color: variables.$light;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .file-input {
+          display: none;
+        }
+      }
+    }
+  }
+  .card-form {
+    .user-icon {
+      display: flex;
+      align-items: center;
+      border: 1px solid variables.$light;
+      border-radius: 5px;
+      .input-icon {
+        padding-left: 10px;
+      }
+      .form-control {
+        border: none;
+      }
+    }
+  }
+  .datetimepicker {
+      padding: 8px 10px 8px 35px;
+  }
+}
+.paypal-details {
+  .card-detials {
+    .card-content {
+      padding: 20px;
+      border: 1px solid variables.$light;
+      border-radius: 10px;
+      .card-edit-icon {
+        a {
+          width: 22px;
+          height: 22px;
+          padding: 4px;
+          background-color: variables.$light;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+    .card-add {
+      padding: 20px;
+      border: 1px solid variables.$primary;
+      border-radius: 10px;
+      background-color: variables.$light-200;
+      width: 256px;
+      height: 149px;
+      .add-option {
+        a {
+          width: 22px;
+          height: 22px;
+          padding: 4px;
+          background-color: variables.$light;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .file-input {
+          display: none;
+        }
+      }
+    }
+  }
+  .card-form {
+    .user-icon {
+      display: flex;
+      align-items: center;
+      border: 1px solid variables.$light;
+      border-radius: 5px;
+      .input-icon {
+        padding-left: 10px;
+      }
+      .form-control {
+        border: none;
+      }
+    }
+  }
+}
+.stripe-details {
+  .card-detials {
+    .card-content {
+      padding: 20px;
+      border: 1px solid variables.$light;
+      border-radius: 10px;
+      .card-edit-icon {
+        a {
+          width: 22px;
+          height: 22px;
+          padding: 4px;
+          background-color: variables.$light;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+    .card-add {
+      padding: 20px;
+      border: 1px solid variables.$primary;
+      border-radius: 10px;
+      background-color: variables.$light-200;
+      width: 256px;
+      height: 149px;
+      .add-option {
+        a {
+          width: 22px;
+          height: 22px;
+          padding: 4px;
+          background-color: variables.$light;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .file-input {
+          display: none;
+        }
+      }
+    }
+  }
+}
+.user-icon {
+  display: flex;
+  align-items: center;
+  border: 1px solid variables.$light;
+  border-radius: 5px;
+  position: relative;
+  .input-icon {
+    padding-left: 10px;
+  }
+  .form-control {
+    border: none;
+  }
+}
+.order-details {
+  box-shadow: none;
+    .header-content {
+      a {
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  
+}
+.booking-success-modal{
+  .booking-icon{
+    span{
+      width: 48px;
+      height: 48px;
+      i{
+        background-color: variables.$success;
+        color: variables.$white;
+      }
+    }
+  }
+}
+.modal{
+  .modal-dialog{
+    &.modal-sm{
+      max-width: 400px;
+      .modal-body{
+        padding: 40px;
+      }
+    }
+    &.modal-md{
+      max-width: 600px;
+    }
+  }
+}
+.chat-cont-left{
+  display: flex;
+  &.hidden{
+    display: none;
+  }
+}
+.visible{
+  display: flex !important;
+}

@@ -1,0 +1,106 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Tour Images - {{ tour.title }}{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Tour Management / Tours /</span> {{ tour.title }} - Images
+    </h4>
+
+    {% if messages %}
+    <div class="row">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Back Button -->
+    <div class="mb-3">
+        <a href="{% url 'tour_list' %}" class="btn btn-secondary">
+            <i class="icon-base ti tabler-arrow-left icon-16px"></i> Back to Tours
+        </a>
+    </div>
+
+    <!-- Tour Images List -->
+    <div class="card">
+        <div class="card-header border-bottom">
+            <h5 class="card-title mb-3">Tour Images</h5>
+        </div>
+
+        <div class="card-body">
+            {% if images %}
+            <div class="row">
+                {% for image in images %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        {% if image.image %}
+                        <img src="{{ image.image.url }}" class="card-img-top" alt="{{ image.caption }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="ti tabler-photo-off icon-32px text-muted"></i>
+                        </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2">
+                                {% if image.is_primary %}
+                                <span class="badge bg-primary">Primary</span>
+                                {% endif %}
+                            </h6>
+                            <p class="card-text small">
+                                <strong>Caption:</strong> {{ image.caption|default:"No caption" }}
+                            </p>
+                            <p class="card-text small text-muted">
+                                <strong>Order:</strong> {{ image.display_order }}
+                            </p>
+                            <p class="card-text small text-muted">
+                                <strong>Added:</strong> {{ image.created_at|date:"M d, Y" }}
+                            </p>
+                            <div class="btn-group" role="group">
+                                {% if image.is_primary %}
+                                <button type="button" class="btn btn-sm btn-outline-secondary" disabled title="Primary">
+                                    <i class="ti tabler-star-filled icon-16px"></i>
+                                </button>
+                                {% else %}
+                                <form method="post" action="{% url 'tour_image_set_primary' tour_id=tour.id image_id=image.id %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary" title="Set as Primary">
+                                        <i class="ti tabler-star icon-16px"></i>
+                                    </button>
+                                </form>
+                                {% endif %}
+                                <a href="{% url 'tour_image_edit' tour_id=tour.id image_id=image.id %}" class="btn btn-sm btn-outline-primary" title="Edit">
+                                    <i class="ti tabler-edit icon-16px"></i>
+                                </a>
+                                <a href="{% url 'tour_image_delete' tour_id=tour.id image_id=image.id %}" class="btn btn-sm btn-outline-danger" title="Delete">
+                                    <i class="ti tabler-trash icon-16px"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <i class="ti tabler-info-circle icon-16px"></i> No images yet. Upload images for this tour.
+            </div>
+            {% endif %}
+
+            <!-- Add Image Button -->
+            <div class="mt-4 pt-3 border-top">
+                <a href="{% url 'tour_image_create' tour_id=tour.id %}" class="btn btn-primary">
+                    <i class="ti tabler-plus icon-16px"></i> Upload Image
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

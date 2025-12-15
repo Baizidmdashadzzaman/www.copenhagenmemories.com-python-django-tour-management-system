@@ -1,0 +1,104 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Tour Highlights - {{ tour.title }}{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Tour Management / Tours /</span> {{ tour.title }} - Highlights
+    </h4>
+
+    {% if messages %}
+    <div class="row">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Back Button -->
+    <div class="mb-3">
+        <a href="{% url 'tour_list' %}" class="btn btn-secondary">
+            <i class="icon-base ti tabler-arrow-left icon-16px"></i> Back to Tours
+        </a>
+    </div>
+
+    <!-- Tour Highlights List -->
+    <div class="card">
+        <div class="card-header border-bottom">
+            <h5 class="card-title mb-3">Tour Highlights</h5>
+        </div>
+
+        <div class="card-body">
+            {% if highlights %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th width="5%">#</th>
+                            <th width="40%">Highlight (English)</th>
+                            <th width="40%">Highlight (Danish)</th>
+                            <th width="10%">Icon</th>
+                            <th width="5%">Order</th>
+                            <th width="15%">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for highlight in highlights %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                <p class="mb-0">{{ highlight.highlight|truncatewords:15 }}</p>
+                            </td>
+                            <td>
+                                <p class="mb-0">{{ highlight.highlight_dk|truncatewords:15|default:"—" }}</p>
+                            </td>
+                            <td>
+                                {% if highlight.icon %}
+                                <span class="badge bg-light text-dark">
+                                    <i class="{{ highlight.icon }} icon-16px"></i> {{ highlight.icon|truncatechars:20 }}
+                                </span>
+                                {% else %}
+                                <span class="text-muted">—</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge bg-secondary">{{ highlight.display_order }}</span>
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a href="{% url 'tour_highlight_edit' tour_id=tour.id highlight_id=highlight.id %}" class="btn btn-outline-primary" title="Edit">
+                                        <i class="ti tabler-edit icon-16px"></i>
+                                    </a>
+                                    <a href="{% url 'tour_highlight_delete' tour_id=tour.id highlight_id=highlight.id %}" class="btn btn-outline-danger" title="Delete">
+                                        <i class="ti tabler-trash icon-16px"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <i class="ti tabler-info-circle icon-16px"></i> No highlights yet. Add highlights for this tour.
+            </div>
+            {% endif %}
+
+            <!-- Add Highlight Button -->
+            <div class="mt-4 pt-3 border-top">
+                <a href="{% url 'tour_highlight_create' tour_id=tour.id %}" class="btn btn-primary">
+                    <i class="ti tabler-plus icon-16px"></i> Add Highlight
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

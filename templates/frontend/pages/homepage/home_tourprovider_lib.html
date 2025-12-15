@@ -1,0 +1,67 @@
+{% load static %}
+
+<section class="section" style="padding-top: 200px;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 wow fadeInUp" data-wow-delay="0.2s">
+                <div class="section-header-six">
+                    <span class="badge badge-soft-primary rounded-pill mb-1">Most Popular Providers</span>
+                    <h2>Try Best Tour Provider<span class="text-primary">.</span></h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-end">
+                    <a href="{% url 'tour_providers_fronted' %}" class="btn btn-dark sec-head-btn">View All Providers<i class="isax isax-arrow-right-3 ms-2"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="providers-slider owl-carousel owl-dot-bottom">
+        
+            {% for supplier in tour_suppliers %}
+            <div class="card">
+                <div class="card-body text-center">
+                    <a href="{% url 'tour_list_type_filtered' %}?supplier={{ supplier.id }}" class="d-block mb-3">
+                        {% if supplier.logo %}
+                            <img src="{{ supplier.logo.url }}" class="rounded-circle w-auto m-auto" alt="{{ supplier.company_name }}">
+                        {% else %}
+                            <img src="{% static 'frontend/assets/img/icons/hotel-logo-02.svg' %}" class="rounded-circle w-auto m-auto" alt="{{ supplier.company_name }}">
+                        {% endif %}
+                    </a>
+                    <h5 class="mb-2" style="min-height:100px">
+                        <a href="{% url 'tour_list_type_filtered' %}?supplier={{ supplier.id }}">{{ supplier.company_name }}</a>
+                    </h5>
+                    <div class="d-flex align-items-center seperate-dot justify-content-center">
+                        <span>{% if supplier.specialization %}{{ supplier.specialization }}{% else %}Tour Provider{% endif %}</span>
+                        <span>
+                            {% if supplier.country %}
+                                {{ supplier.country.name }}
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between mt-3 pt-3 border-top">
+                        <div class="d-flex align-items-center">
+                            <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">
+                                {% if supplier.rating %}{{ supplier.rating }}{% else %}5.0{% endif %}
+                            </span>
+                            <p>(
+                                {% if supplier.review_count %}{{ supplier.review_count }}{% else %}0{% endif %} Reviews)
+                            </p>
+                        </div>
+                        <span class="badge bg-teal">
+                            {% if supplier.tour_count %}{{ supplier.tour_count }}{% else %}0{% endif %} Tours
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <p class="text-muted">No tour providers available at the moment.</p>
+                </div>
+            </div>
+            {% endfor %}
+
+
+        </div>
+    </div>
+</section>

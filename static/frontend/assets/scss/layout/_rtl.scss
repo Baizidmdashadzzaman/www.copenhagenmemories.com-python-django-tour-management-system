@@ -1,0 +1,267 @@
+@use "../utils/mixins";
+@use "../utils/variables";
+
+/*============================
+  34.rtl
+============================*/
+
+[dir="rtl"] {
+    header {
+        .main-menu-wrapper {
+            .main-nav {
+                & > li {
+                    @include mixins.respond-above(lg) {
+                        margin: 0 0 0 30px;
+                        &:last-child {
+                            margin: 0;
+                        }
+                    }
+                    @include mixins.respond-below(xxl) {
+                        margin: 0 0 0 18px !important;
+                        &:last-child {
+                            margin: 0;
+                        }
+                    }
+                    a {
+                        i {
+                            margin: 0 4px 0 0;
+                        }
+                    }
+                    &.active {
+                        &.has-submenu {
+                            & > a {
+                                &::after {
+                                    left: calc(50% - -6px);
+                                }
+                            }                        
+                        }
+                    }
+                    &.mega-innermenu {  
+                        & > ul {
+                            &.mega-submenu {
+                                .megamenu-wrapper {    
+                                    &::before {
+                                        left: 0;
+                                        right: auto;
+                                        background-position: bottom right;
+                                    }
+                                }  
+                                ul {
+                                    li {
+                                        a {
+                                            padding: 0 14px 0 0;
+                                            &::before {
+                                                right: 0;
+                                                left: auto;
+                                            }
+                                            &:hover {
+                                                padding: 0 15px 0 0;
+                                            }
+                                        }
+                                    }
+                                }  
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .menu-img {
+        margin-right: auto;
+        margin-left: 0;
+    }
+    .header-dropdown {
+        .dropdown {
+            .dropdown-toggle {
+                &::after {
+                    left: 12px;
+                    right: auto;
+                }
+            }
+        }
+    }
+    .offcanvas-info {
+        left: 0;
+        right: auto;
+        @include mixins.transform(translateX(calc(-100% - 80px)));
+        &.show {
+            @include mixins.transform(translateX(0));
+        }
+    }
+    .mean-container {
+        .mean-nav {
+            ul {
+                li {
+                    float: right;
+                    a {
+                        float: right;
+                        text-align: right;
+                        &.mean-expand {
+                            left: 0;
+                            right: auto;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .banner-form {
+        .nav {
+            li {
+                margin: 0 0 0 8px;    
+                &:last-child {
+                    margin: 0;
+                }
+            }
+        }
+        .form-info {
+            .form-item {
+                text-align: right;
+                border-right: 1px solid variables.$border-color;
+                border-left: 0;
+                &:first-child {
+                    border-left: 0;                
+                    border-right: 0;
+                }    
+                &:nth-child(odd) {
+                    @include mixins.respond-below(lg) {
+                        border-left: 0;
+                        border-right: 0;
+                    }
+                }
+                .way-icon {
+                    left: auto;
+                    right: 0;
+                }
+            }
+        }
+        .search-btn {
+            margin: 0 24px 0 0;
+            @include mixins.respond-below(lg) {
+                margin: 0;
+            }
+        }
+        .input-search {
+            .input-group {
+                .input-group-text {
+                    border-right: 0;
+                    border-radius: 4px !important;
+                    border-left: 1px solid variables.$border-color;
+                }
+                .form-control {
+                    padding: 0 16px 0 0;
+                    border-radius: 4px !important;
+                    border-right: 1px solid variables.$border-color;
+                    border-left: 0;
+                }
+            }
+        }
+    }
+    .about-section {
+        .about-btn .btn {
+            margin: 0 0 0 40px;
+        }
+    }
+    .about-image {
+        margin: 0 0 0 60px;    
+        @include mixins.respond-below(xxl) {
+            margin: 0 0 0 36px;
+        }    
+        @include mixins.respond-below(lg) {
+            margin: 0;
+        }
+    }
+    .about-listing {
+        left: 0;
+        right: auto;
+    }
+    .about-progress {
+        left: 50px;
+        right: auto;
+    }
+    .nav-center {    
+        .owl-nav button.owl-next {
+            left: -20px;    
+            right: auto;
+            @include mixins.respond-below(xl) {
+                left: -10px;
+            }    
+            @include mixins.respond-below(lg) {
+                left: 0;
+            }
+        }    
+        .owl-nav button.owl-prev {
+            right: -20px;    
+            left: auto;
+            @include mixins.respond-below(xl) {
+                right: -10px;
+            }    
+            @include mixins.respond-below(lg) {
+                right: 0;
+            }
+        }
+    }
+    .video-wrap {
+        .video-btn {
+            top: 50%;
+            left: -50%;
+            transform: translate(50%, -50%);
+        }
+    }
+    .testimonial-slider-rtl {
+        &.owl-carousel {
+            .owl-nav {
+                text-align: center;
+                margin-top: 16px;    
+                .owl-next {
+                    margin-right: 16px;
+                }
+            }
+        }
+    }
+    .social-icon {
+        li {
+            margin: 0 0 0 12px;
+            padding: 0 0 0 12px;
+            &::after {
+                right: auto;
+                left: 0;
+            }
+            &:last-child {
+                margin: 0;
+                padding: 0;
+            }
+        }
+    }
+    footer {
+        .footer-top {
+            .footer-widget {
+                h5 {
+                    &::before {
+                        right: 0;
+                    }
+                }
+            }
+        }
+        .footer-bottom {
+            .card-links {
+                li {
+                    a {
+                        margin: 0 0 0 8px;
+                    }
+                    &:last-child {
+                        a {
+                            margin: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .img-slider.nav-center .owl-nav button.owl-prev, .image-slide.nav-center .owl-nav button.owl-prev {
+        left: 16px;
+        right: unset !important;
+    }
+}

@@ -1,0 +1,255 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Review Details - {{ review.title|default:"Untitled" }}{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="py-3 mb-0">
+            <span class="text-muted fw-light">Review Management /</span> {{ review.title|default:"Untitled" }}
+        </h4>
+        <div>
+            <a href="{% url 'tour_review_status_update' review.pk %}" class="btn btn-warning">
+                <i class="icon-base ti tabler-refresh me-1"></i> Update Status
+            </a>
+            <a href="{% url 'tour_review_list' %}" class="btn btn-secondary">
+                <i class="icon-base ti tabler-arrow-left me-1"></i> Back to List
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left Column -->
+        <div class="col-xl-8 col-lg-7">
+            <!-- Review Details -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Review Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="avatar avatar-md me-3">
+                            <span class="avatar-initial rounded-circle bg-label-primary">
+                                {{ review.customer.user.username|make_list|first|upper }}
+                            </span>
+                        </div>
+                        <div>
+                            <h5 class="mb-1">{{ review.title|default:"No Title" }}</h5>
+                            <p class="mb-0 text-muted">
+                                for <a href="{% url 'tour_view' review.tour.pk %}" class="text-body fw-medium">{{ review.tour.title }}</a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h6 class="fw-medium mb-2">Review Content:</h6>
+                        <div class="p-3 bg-lighter rounded">
+                            <p class="mb-0 text-body">{{ review.review }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Ratings -->
+                    <div class="row mb-4">
+                        <div class="col-md-3 mb-3 mb-md-0">
+                            <div class="text-center p-3 border rounded">
+                                <h6 class="mb-1 text-muted">Overall</h6>
+                                <h3 class="mb-0 text-warning">
+                                    {{ review.overall_rating }}<small class="text-muted fs-6">/5</small>
+                                </h3>
+                                <div class="text-warning small">
+                                    {% for i in "12345"|make_list %}
+                                        {% if forloop.counter <= review.overall_rating %}
+                                        <i class="icon-base ti tabler-star-filled"></i>
+                                        {% else %}
+                                        <i class="icon-base ti tabler-star"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="row h-100">
+                                {% if review.value_rating %}
+                                <div class="col-sm-4 mb-2">
+                                    <div class="d-flex flex-column h-100 justify-content-center">
+                                        <span class="text-muted small mb-1">Value</span>
+                                        <div class="d-flex align-items-center">
+                                            <span class="fw-medium me-2">{{ review.value_rating }}</span>
+                                            <div class="progress w-100" style="height: 6px;">
+                                                <div class="progress-bar bg-warning" role="progressbar" style="width: {% widthratio review.value_rating 5 100 %}%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% if review.service_rating %}
+                                <div class="col-sm-4 mb-2">
+                                    <div class="d-flex flex-column h-100 justify-content-center">
+                                        <span class="text-muted small mb-1">Service</span>
+                                        <div class="d-flex align-items-center">
+                                            <span class="fw-medium me-2">{{ review.service_rating }}</span>
+                                            <div class="progress w-100" style="height: 6px;">
+                                                <div class="progress-bar bg-warning" role="progressbar" style="width: {% widthratio review.service_rating 5 100 %}%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% if review.organization_rating %}
+                                <div class="col-sm-4 mb-2">
+                                    <div class="d-flex flex-column h-100 justify-content-center">
+                                        <span class="text-muted small mb-1">Organization</span>
+                                        <div class="d-flex align-items-center">
+                                            <span class="fw-medium me-2">{{ review.organization_rating }}</span>
+                                            <div class="progress w-100" style="height: 6px;">
+                                                <div class="progress-bar bg-warning" role="progressbar" style="width: {% widthratio review.organization_rating 5 100 %}%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Images -->
+                    {% if review.images %}
+                    <div class="mb-0">
+                        <h6 class="fw-medium mb-3">Attached Images:</h6>
+                        <div class="d-flex gap-2 flex-wrap">
+                            {% for image in review.images %}
+                            <a href="{{ image }}" target="_blank" class="d-block border rounded overflow-hidden" style="width: 100px; height: 100px;">
+                                <img src="{{ image }}" class="w-100 h-100 object-fit-cover" alt="Review Image">
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Supplier Response -->
+            {% if review.supplier_response %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Supplier Response</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex">
+                        <div class="avatar avatar-sm me-3">
+                            <span class="avatar-initial rounded-circle bg-label-secondary">
+                                <i class="icon-base ti tabler-building-store"></i>
+                            </span>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="bg-lighter p-3 rounded">
+                                <p class="mb-2 text-body">{{ review.supplier_response }}</p>
+                                <small class="text-muted">Responded on {{ review.supplier_response_date|date:"M d, Y H:i" }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-xl-4 col-lg-5">
+            <!-- Status & Actions -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Status & Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label d-block">Current Status</label>
+                        <span class="badge bg-label-{% if review.status == 'approved' %}success{% elif review.status == 'pending' %}warning{% elif review.status == 'flagged' %}danger{% else %}secondary{% endif %}">
+                            {{ review.get_status_display }}
+                        </span>
+                    </div>
+                    
+                    <hr class="my-3">
+                    
+                    <div class="mb-3">
+                        <label class="form-label d-block">Visibility</label>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="text-muted">Featured Review</span>
+                            <a href="{% url 'tour_review_feature_toggle' review.pk %}" class="btn btn-sm {% if review.is_featured %}btn-label-primary{% else %}btn-outline-secondary{% endif %}">
+                                {% if review.is_featured %}
+                                <i class="icon-base ti tabler-star-filled me-1"></i> Featured
+                                {% else %}
+                                <i class="icon-base ti tabler-star me-1"></i> Feature
+                                {% endif %}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label d-block">Verification</label>
+                        <div class="d-flex align-items-center">
+                            {% if review.verified_booking %}
+                            <span class="badge bg-label-success"><i class="icon-base ti tabler-check me-1"></i> Verified Booking</span>
+                            {% else %}
+                            <span class="badge bg-label-secondary"><i class="icon-base ti tabler-x me-1"></i> Unverified</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="mb-0">
+                        <label class="form-label d-block">Posted Date</label>
+                        <span class="text-muted"><i class="icon-base ti tabler-calendar me-1"></i> {{ review.created_at|date:"M d, Y" }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Info -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Customer Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="avatar avatar-md me-2">
+                            <span class="avatar-initial rounded-circle bg-label-primary">
+                                {{ review.customer.user.username|make_list|first|upper }}
+                            </span>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">{{ review.customer.user.get_full_name|default:review.customer.user.username }}</h6>
+                            <small class="text-muted">{{ review.customer.user.email }}</small>
+                        </div>
+                    </div>
+                    {% if review.booking %}
+                    <div class="mt-3 pt-3 border-top">
+                        <small class="text-muted d-block mb-1">Related Booking</small>
+                        <a href="{% url 'booking_detail' review.booking.pk %}" class="text-body fw-medium">
+                            <i class="icon-base ti tabler-ticket me-1"></i> #{{ review.booking.booking_number }}
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Engagement -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Engagement</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6 border-end">
+                            <h4 class="mb-0 text-success">{{ review.helpful_count }}</h4>
+                            <small class="text-muted">Helpful</small>
+                        </div>
+                        <div class="col-6">
+                            <h4 class="mb-0 text-danger">{{ review.not_helpful_count }}</h4>
+                            <small class="text-muted">Not Helpful</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

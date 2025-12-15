@@ -1,0 +1,203 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Update Review Status - {{ review.tour.title }}{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="py-3 mb-0">
+            <span class="text-muted fw-light">Review Management /</span> Update Status
+        </h4>
+        <div>
+            <a href="{% url 'tour_review_detail' review.pk %}" class="btn btn-secondary">
+                <i class="icon-base ti tabler-arrow-left me-1"></i> Back to Details
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left Column -->
+        <div class="col-xl-8 col-lg-7">
+            <!-- Update Status Form -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Update Review Status</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label for="statusSelect" class="form-label fw-medium">Select New Status</label>
+                            <select id="statusSelect" name="status" class="form-select" required>
+                                <option value="">Choose a status...</option>
+                                {% for value, label in status_choices %}
+                                <option value="{{ value }}" {% if review.status == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-text">
+                                Current status: 
+                                <span class="badge bg-label-{% if review.status == 'approved' %}success{% elif review.status == 'pending' %}warning{% elif review.status == 'rejected' %}danger{% else %}info{% endif %}">
+                                    {{ review.get_status_display }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="icon-base ti tabler-check me-1"></i> Update Status
+                            </button>
+                            <a href="{% url 'tour_review_detail' review.pk %}" class="btn btn-label-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Review Preview -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Review Preview</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="rounded me-3 bg-lighter d-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                            <i class="icon-base ti tabler-star icon-32px text-warning"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-1">{{ review.title|default:"Untitled Review" }}</h5>
+                            <p class="mb-0 text-muted">
+                                <i class="icon-base ti tabler-star-filled text-warning"></i>
+                                {{ review.overall_rating }}/5
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6 class="mb-2">Review Content</h6>
+                        <p class="text-muted mb-0">{{ review.review|truncatewords:100 }}</p>
+                    </div>
+
+                    <hr class="my-3">
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-2"><span class="fw-medium">Tour:</span> 
+                                <a href="{% url 'tour_view' review.tour.pk %}" class="text-body">
+                                    {{ review.tour.title }}
+                                </a>
+                            </p>
+                            <p class="mb-2"><span class="fw-medium">Customer:</span> {{ review.customer.user.get_full_name|default:review.customer.user.username }}</p>
+                            <p class="mb-2"><span class="fw-medium">Verified Booking:</span> 
+                                {% if review.verified_booking %}
+                                <span class="badge bg-label-success">Yes</span>
+                                {% else %}
+                                <span class="badge bg-label-secondary">No</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-2"><span class="fw-medium">Value Rating:</span> {{ review.value_rating|default:"-" }}/5</p>
+                            <p class="mb-2"><span class="fw-medium">Service Rating:</span> {{ review.service_rating|default:"-" }}/5</p>
+                            <p class="mb-2"><span class="fw-medium">Organization Rating:</span> {{ review.organization_rating|default:"-" }}/5</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-xl-4 col-lg-5">
+            <!-- Status Information -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Status Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <small class="text-muted d-block mb-1">Current Review Status</small>
+                        <span class="badge bg-label-{% if review.status == 'approved' %}success{% elif review.status == 'pending' %}warning{% elif review.status == 'rejected' %}danger{% else %}info{% endif %} fs-6">
+                            {{ review.get_status_display }}
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted d-block mb-1">Overall Rating</small>
+                        <div class="d-flex align-items-center">
+                            <i class="icon-base ti tabler-star-filled text-warning me-1"></i>
+                            <h5 class="mb-0">{{ review.overall_rating }}/5</h5>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted d-block mb-1">Featured</small>
+                        {% if review.is_featured %}
+                        <span class="badge bg-label-success">Yes</span>
+                        {% else %}
+                        <span class="badge bg-label-secondary">No</span>
+                        {% endif %}
+                    </div>
+                    <hr class="my-3">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="icon-base ti tabler-calendar me-2 text-muted"></i>
+                            <small>Created: {{ review.created_at|date:"M d, Y H:i" }}</small>
+                        </li>
+                        <li class="mb-2">
+                            <i class="icon-base ti tabler-clock me-2 text-muted"></i>
+                            <small>Updated: {{ review.updated_at|date:"M d, Y H:i" }}</small>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Engagement Stats -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Engagement</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <div class="text-center flex-fill">
+                            <i class="icon-base ti tabler-thumb-up text-success mb-1"></i>
+                            <h5 class="mb-0">{{ review.helpful_count }}</h5>
+                            <small class="text-muted">Helpful</small>
+                        </div>
+                        <div class="text-center flex-fill">
+                            <i class="icon-base ti tabler-thumb-down text-danger mb-1"></i>
+                            <h5 class="mb-0">{{ review.not_helpful_count }}</h5>
+                            <small class="text-muted">Not Helpful</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'tour_review_detail' review.pk %}" class="btn btn-label-primary">
+                            <i class="icon-base ti tabler-eye me-1"></i> View Full Details
+                        </a>
+                        <a href="{% url 'tour_view' review.tour.pk %}" class="btn btn-label-secondary">
+                            <i class="icon-base ti tabler-map-pin me-1"></i> View Tour
+                        </a>
+                        {%if review.booking %}
+                        <a href="{% url 'booking_detail' review.booking.pk %}" class="btn btn-label-info">
+                            <i class="icon-base ti tabler-calendar-event me-1"></i> View Booking
+                        </a>
+                        {% endif %}
+                        <form method="post" action="{% url 'tour_review_feature_toggle' review.pk %}" class="mt-2">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-label-warning w-100">
+                                <i class="icon-base ti tabler-star me-1"></i> 
+                                {% if review.is_featured %}Unfeature{% else %}Feature{% endif %} Review
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

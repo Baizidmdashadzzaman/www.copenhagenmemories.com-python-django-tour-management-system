@@ -1,0 +1,215 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Coupon Details - {{ coupon.code }}{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="py-3 mb-0">
+            <span class="text-muted fw-light">Coupon Management /</span> {{ coupon.code }}
+        </h4>
+        <div>
+            <a href="{% url 'coupon_edit' coupon.pk %}" class="btn btn-primary">
+                <i class="icon-base ti tabler-edit me-1"></i> Edit Coupon
+            </a>
+            <a href="{% url 'coupon_list' %}" class="btn btn-secondary">
+                <i class="icon-base ti tabler-arrow-left me-1"></i> Back to List
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left Column -->
+        <div class="col-xl-8 col-lg-7">
+            <!-- About Coupon -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">About this Coupon</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="rounded me-3 bg-lighter d-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                            <i class="icon-base ti tabler-ticket icon-32px text-muted"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-1">{{ coupon.code }}</h5>
+                            <p class="mb-0 text-muted">{{ coupon.description|default:"No description" }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <p class="mb-1"><span class="fw-medium">Discount Type:</span> {{ coupon.get_discount_type_display }}</p>
+                            <p class="mb-1"><span class="fw-medium">Discount Value:</span> 
+                                {% if coupon.discount_type == 'percentage' %}
+                                {{ coupon.discount_value }}%
+                                {% else %}
+                                {{ coupon.discount_value }}
+                                {% endif %}
+                            </p>
+                            {% if coupon.max_discount_amount %}
+                            <p class="mb-1"><span class="fw-medium">Max Discount:</span> {{ coupon.max_discount_amount }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-1"><span class="fw-medium">Status:</span> 
+                                {% if coupon.is_active %}
+                                <span class="badge bg-label-success">Active</span>
+                                {% else %}
+                                <span class="badge bg-label-danger">Inactive</span>
+                                {% endif %}
+                            </p>
+                            <p class="mb-1"><span class="fw-medium">Used Count:</span> {{ coupon.used_count }}</p>
+                        </div>
+                    </div>
+
+                    {% if coupon.description_dk %}
+                    <hr class="my-4">
+                    <h6>Description (Danish)</h6>
+                    <div class="mb-4 text-muted">
+                        {{ coupon.description_dk|linebreaks }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Usage History -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Usage History ({{ usages.count }})</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Booking</th>
+                                <th>Customer</th>
+                                <th>Discount Amount</th>
+                                <th>Used At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for usage in usages %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'booking_detail' usage.booking.pk %}" class="fw-medium">
+                                        {{ usage.booking.booking_number }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar avatar-xs me-2">
+                                            <span class="avatar-initial rounded-circle bg-label-primary">
+                                                {{ usage.customer.user.username|make_list|first|upper }}
+                                            </span>
+                                        </div>
+                                        <span>{{ usage.customer.user.get_full_name|default:usage.customer.user.username }}</span>
+                                    </div>
+                                </td>
+                                <td>{{ usage.discount_amount }}</td>
+                                <td>{{ usage.used_at|date:"M d, Y H:i" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center py-4">
+                                    <div class="text-muted mb-2">No usage history found.</div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-xl-4 col-lg-5">
+            <!-- Status Card -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Status & Validity</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label d-block">Active Status</label>
+                        <div class="d-flex align-items-center">
+                            {% if coupon.is_active %}
+                            <span class="badge bg-label-success me-2">Active</span>
+                            <a href="{% url 'coupon_toggle_active' coupon.pk %}" class="btn btn-sm btn-outline-danger">Deactivate</a>
+                            {% else %}
+                            <span class="badge bg-label-danger me-2">Inactive</span>
+                            <a href="{% url 'coupon_toggle_active' coupon.pk %}" class="btn btn-sm btn-outline-success">Activate</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <hr class="my-3">
+                    
+                    <div class="mb-3">
+                        <label class="form-label d-block">Valid From</label>
+                        <span class="text-muted"><i class="icon-base ti tabler-calendar me-1"></i> {{ coupon.valid_from|date:"M d, Y H:i" }}</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label d-block">Valid Until</label>
+                        <span class="text-muted"><i class="icon-base ti tabler-calendar me-1"></i> {{ coupon.valid_until|date:"M d, Y H:i" }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Limits -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Limits & Restrictions</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <span class="fw-medium">Usage Limit:</span>
+                            <br>
+                            <span class="text-muted">{{ coupon.usage_limit|default:"Unlimited" }}</span>
+                        </li>
+                        <li class="mb-2">
+                            <span class="fw-medium">Per Customer Limit:</span>
+                            <br>
+                            <span class="text-muted">{{ coupon.usage_per_customer }}</span>
+                        </li>
+                        {% if coupon.min_purchase_amount %}
+                        <li class="mb-2">
+                            <span class="fw-medium">Min Purchase Amount:</span>
+                            <br>
+                            <span class="text-muted">{{ coupon.min_purchase_amount }}</span>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Metadata -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Metadata</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <span class="fw-medium">Created:</span>
+                            <br>
+                            <span class="text-muted">{{ coupon.created_at|date:"M d, Y H:i" }}</span>
+                        </li>
+                        <li class="mb-2">
+                            <span class="fw-medium">Last Updated:</span>
+                            <br>
+                            <span class="text-muted">{{ coupon.updated_at|date:"M d, Y H:i" }}</span>
+                        </li>
+                        <li>
+                            <span class="fw-medium">ID:</span>
+                            <span class="text-muted">{{ coupon.pk }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

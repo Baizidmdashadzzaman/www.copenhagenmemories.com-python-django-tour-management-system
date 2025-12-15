@@ -1,0 +1,144 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Update Booking Status - #{{ booking.booking_number }}{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="py-3 mb-0">
+            <span class="text-muted fw-light">Booking Management /</span> Update Status
+        </h4>
+        <div>
+            <a href="{% url 'booking_detail' booking.pk %}" class="btn btn-secondary">
+                <i class="icon-base ti tabler-arrow-left me-1"></i> Back to Details
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left Column -->
+        <div class="col-xl-8 col-lg-7">
+            <!-- Update Status Form -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Update Booking Status</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label for="statusSelect" class="form-label fw-medium">Select New Status</label>
+                            <select id="statusSelect" name="status" class="form-select" required>
+                                <option value="">Choose a status...</option>
+                                {% for value, label in status_choices %}
+                                <option value="{{ value }}" {% if booking.status == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-text">
+                                Current status: 
+                                <span class="badge bg-label-{% if booking.status == 'confirmed' %}success{% elif booking.status == 'pending' %}warning{% elif booking.status == 'cancelled' %}danger{% else %}info{% endif %}">
+                                    {{ booking.get_status_display }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="icon-base ti tabler-check me-1"></i> Update Status
+                            </button>
+                            <a href="{% url 'booking_detail' booking.pk %}" class="btn btn-label-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Booking Preview -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Booking Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="rounded me-3 bg-lighter d-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                            <i class="icon-base ti tabler-calendar-event icon-32px text-muted"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-1">{{ booking.tour.title }}</h5>
+                            <p class="mb-0 text-muted">Booking #{{ booking.booking_number }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-2"><span class="fw-medium">Customer:</span> {{ booking.customer.user.get_full_name|default:booking.customer.user.username }}</p>
+                            <p class="mb-2"><span class="fw-medium">Contact Email:</span> {{ booking.contact_email }}</p>
+                            <p class="mb-2"><span class="fw-medium">Contact Phone:</span> {{ booking.contact_phone|default:"-" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-2"><span class="fw-medium">Tour Date:</span> {{ booking.tour_date|date:"M d, Y" }}</p>
+                            <p class="mb-2"><span class="fw-medium">Participants:</span> {{ booking.total_participants }}</p>
+                            <p class="mb-2"><span class="fw-medium">Total Amount:</span> {{ booking.total_amount }} {{ booking.currency }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-xl-4 col-lg-5">
+            <!-- Status Information -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Status Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <small class="text-muted d-block mb-1">Current Booking Status</small>
+                        <span class="badge bg-label-{% if booking.status == 'confirmed' %}success{% elif booking.status == 'pending' %}warning{% elif booking.status == 'cancelled' %}danger{% else %}info{% endif %} fs-6">
+                            {{ booking.get_status_display }}
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted d-block mb-1">Payment Status</small>
+                        <span class="badge bg-label-{% if booking.payment_status == 'paid' %}success{% elif booking.payment_status == 'pending' %}warning{% else %}danger{% endif %} fs-6">
+                            {{ booking.get_payment_status_display }}
+                        </span>
+                    </div>
+                    <hr class="my-3">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="icon-base ti tabler-calendar me-2 text-muted"></i>
+                            <small>Booked: {{ booking.booking_date|date:"M d, Y H:i" }}</small>
+                        </li>
+                        <li class="mb-2">
+                            <i class="icon-base ti tabler-clock me-2 text-muted"></i>
+                            <small>Updated: {{ booking.updated_at|date:"M d, Y H:i" }}</small>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'booking_detail' booking.pk %}" class="btn btn-label-primary">
+                            <i class="icon-base ti tabler-eye me-1"></i> View Full Details
+                        </a>
+                        <a href="{% url 'booking_invoice' booking.pk %}" class="btn btn-label-secondary">
+                            <i class="icon-base ti tabler-file-dollar me-1"></i> View Invoice
+                        </a>
+                        <a href="{% url 'booking_participants_list' booking.pk %}" class="btn btn-label-info">
+                            <i class="icon-base ti tabler-users me-1"></i> View Participants
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

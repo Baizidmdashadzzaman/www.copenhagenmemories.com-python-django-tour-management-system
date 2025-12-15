@@ -1,0 +1,397 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Create Booking{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Bookings /</span> Create New Booking
+    </h4>
+
+    {% if messages %}
+    <div class="row">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <form method="post" id="bookingForm">
+        {% csrf_token %}
+        <input type="hidden" name="participants_data" id="participantsData">
+
+        <div class="row">
+            <!-- Left Column -->
+            <div class="col-md-8">
+                <!-- Customer & Tour Selection -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Customer & Tour Selection</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.customer.id_for_label }}" class="form-label">Customer *</label>
+                                {{ form.customer }}
+                                {% if form.customer.errors %}
+                                <div class="text-danger">{{ form.customer.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.tour.id_for_label }}" class="form-label">Tour *</label>
+                                {{ form.tour }}
+                                {% if form.tour.errors %}
+                                <div class="text-danger">{{ form.tour.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.schedule.id_for_label }}" class="form-label">Schedule (Optional)</label>
+                                {{ form.schedule }}
+                                {% if form.schedule.errors %}
+                                <div class="text-danger">{{ form.schedule.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Details -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Booking Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.tour_date.id_for_label }}" class="form-label">Tour Date *</label>
+                                {{ form.tour_date }}
+                                {% if form.tour_date.errors %}
+                                <div class="text-danger">{{ form.tour_date.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.tour_time.id_for_label }}" class="form-label">Tour Time</label>
+                                {{ form.tour_time }}
+                                {% if form.tour_time.errors %}
+                                <div class="text-danger">{{ form.tour_time.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.contact_name.id_for_label }}" class="form-label">Contact Name *</label>
+                                {{ form.contact_name }}
+                                {% if form.contact_name.errors %}
+                                <div class="text-danger">{{ form.contact_name.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.contact_email.id_for_label }}" class="form-label">Contact Email *</label>
+                                {{ form.contact_email }}
+                                {% if form.contact_email.errors %}
+                                <div class="text-danger">{{ form.contact_email.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.contact_phone.id_for_label }}" class="form-label">Contact Phone *</label>
+                                {{ form.contact_phone }}
+                                {% if form.contact_phone.errors %}
+                                <div class="text-danger">{{ form.contact_phone.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.pickup_location.id_for_label }}" class="form-label">Pickup Location</label>
+                                {{ form.pickup_location }}
+                                {% if form.pickup_location.errors %}
+                                <div class="text-danger">{{ form.pickup_location.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="{{ form.special_requirements.id_for_label }}" class="form-label">Special Requirements</label>
+                                {{ form.special_requirements }}
+                                {% if form.special_requirements.errors %}
+                                <div class="text-danger">{{ form.special_requirements.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Participants -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">Participants</h5>
+                        <button type="button" class="btn btn-sm btn-primary" id="addParticipant">
+                            <i class="ti tabler-plus me-1"></i> Add Participant
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="participantsList"></div>
+                    </div>
+                </div>
+
+                <!-- Notes -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Notes</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.customer_notes.id_for_label }}" class="form-label">Customer Notes</label>
+                                {{ form.customer_notes }}
+                                {% if form.customer_notes.errors %}
+                                <div class="text-danger">{{ form.customer_notes.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.admin_notes.id_for_label }}" class="form-label">Admin Notes</label>
+                                {{ form.admin_notes }}
+                                {% if form.admin_notes.errors %}
+                                <div class="text-danger">{{ form.admin_notes.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-md-4">
+                <!-- Pricing Summary -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Pricing Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="{{ form.total_participants.id_for_label }}" class="form-label">Total Participants</label>
+                            {{ form.total_participants }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.subtotal.id_for_label }}" class="form-label">Subtotal</label>
+                            {{ form.subtotal }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.discount_amount.id_for_label }}" class="form-label">Discount Amount</label>
+                            {{ form.discount_amount }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.tax_amount.id_for_label }}" class="form-label">Tax Amount</label>
+                            {{ form.tax_amount }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.total_amount.id_for_label }}" class="form-label">Total Amount</label>
+                            {{ form.total_amount }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Status -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Status</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="{{ form.status.id_for_label }}" class="form-label">Booking Status</label>
+                            {{ form.status }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.payment_status.id_for_label }}" class="form-label">Payment Status</label>
+                            {{ form.payment_status }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="card">
+                    <div class="card-body">
+                        <button type="submit" class="btn btn-primary w-100 mb-2">
+                            <i class="ti tabler-check me-1"></i> Create Booking
+                        </button>
+                        <a href="{% url 'booking_list' %}" class="btn btn-secondary w-100">
+                            <i class="ti tabler-x me-1"></i> Cancel
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let participantCount = 0;
+let tourPricing = {};
+
+// Add participant form
+document.getElementById('addParticipant').addEventListener('click', function() {
+    addParticipantForm();
+});
+
+function addParticipantForm(data = {}) {
+    participantCount++;
+    const participantId = `participant-${participantCount}`;
+    
+    const participantHtml = `
+        <div class="participant-item border rounded p-3 mb-3" id="${participantId}">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="mb-0">Participant #${participantCount}</h6>
+                <button type="button" class="btn btn-sm btn-danger remove-participant" data-id="${participantId}">
+                    <i class="ti tabler-trash"></i>
+                </button>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <label class="form-label">Type *</label>
+                    <select class="form-select participant-type" name="type_${participantCount}" required>
+                        <option value="adult" ${data.participant_type === 'adult' ? 'selected' : ''}>Adult</option>
+                        <option value="child" ${data.participant_type === 'child' ? 'selected' : ''}>Child</option>
+                        <option value="infant" ${data.participant_type === 'infant' ? 'selected' : ''}>Infant</option>
+                        <option value="senior" ${data.participant_type === 'senior' ? 'selected' : ''}>Senior</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="form-label">Price</label>
+                    <input type="number" class="form-control participant-price" name="price_${participantCount}" 
+                           value="${data.price || 0}" step="0.01" readonly>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="form-label">First Name *</label>
+                    <input type="text" class="form-control" name="first_name_${participantCount}" 
+                           value="${data.first_name || ''}" required>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label class="form-label">Last Name *</label>
+                    <input type="text" class="form-control" name="last_name_${participantCount}" 
+                           value="${data.last_name || ''}" required>
+                </div>
+                <div class="col-md-4 mb-2">
+                    <label class="form-label">Age</label>
+                    <input type="number" class="form-control" name="age_${participantCount}" 
+                           value="${data.age || ''}">
+                </div>
+                <div class="col-md-4 mb-2">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" name="email_${participantCount}" 
+                           value="${data.email || ''}">
+                </div>
+                <div class="col-md-4 mb-2">
+                    <label class="form-label">Phone</label>
+                    <input type="text" class="form-control" name="phone_${participantCount}" 
+                           value="${data.phone || ''}">
+                </div>
+                <div class="col-12 mb-2">
+                    <label class="form-label">Special Requirements</label>
+                    <textarea class="form-control" name="special_requirements_${participantCount}" rows="2">${data.special_requirements || ''}</textarea>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('participantsList').insertAdjacentHTML('beforeend', participantHtml);
+    
+    // Add event listener for type change
+    const typeSelect = document.querySelector(`#${participantId} .participant-type`);
+    typeSelect.addEventListener('change', function() {
+        updateParticipantPrice(participantId);
+    });
+    
+    // Add event listener for remove button
+    document.querySelector(`#${participantId} .remove-participant`).addEventListener('click', function() {
+        document.getElementById(participantId).remove();
+        updatePricing();
+    });
+    
+    updateParticipantPrice(participantId);
+}
+
+// Update participant price based on type
+function updateParticipantPrice(participantId) {
+    const participantDiv = document.getElementById(participantId);
+    const type = participantDiv.querySelector('.participant-type').value;
+    const priceInput = participantDiv.querySelector('.participant-price');
+    
+    // Get price from tour pricing (you can fetch this via AJAX from tour selection)
+    const basePrice = 100; // Default price, should be fetched from selected tour
+    let price = basePrice;
+    
+    // Apply pricing based on type
+    switch(type) {
+        case 'child':
+            price = basePrice * 0.7; // 70% of adult price
+            break;
+        case 'infant':
+            price = 0; // Free for infants
+            break;
+        case 'senior':
+            price = basePrice * 0.8; // 80% of adult price
+            break;
+    }
+    
+    priceInput.value = price.toFixed(2);
+    updatePricing();
+}
+
+// Update total pricing
+function updatePricing() {
+    const participants = document.querySelectorAll('.participant-item');
+    let subtotal = 0;
+    
+    participants.forEach(p => {
+        const price = parseFloat(p.querySelector('.participant-price').value) || 0;
+        subtotal += price;
+    });
+    
+    const discount = parseFloat(document.getElementById('{{ form.discount_amount.id_for_label }}').value) || 0;
+    const tax = parseFloat(document.getElementById('{{ form.tax_amount.id_for_label }}').value) || 0;
+    const total = subtotal - discount + tax;
+    
+    document.getElementById('{{ form.total_participants.id_for_label }}').value = participants.length;
+    document.getElementById('{{ form.subtotal.id_for_label }}').value = subtotal.toFixed(2);
+    document.getElementById('{{ form.total_amount.id_for_label }}').value = total.toFixed(2);
+}
+
+// Collect participants data before form submission
+document.getElementById('bookingForm').addEventListener('submit', function(e) {
+    const participants = [];
+    const participantDivs = document.querySelectorAll('.participant-item');
+    
+    if (participantDivs.length === 0) {
+        e.preventDefault();
+        alert('Please add at least one participant.');
+        return false;
+    }
+    
+    participantDivs.forEach((div, index) => {
+        const participantNum = index + 1;
+        participants.push({
+            type: div.querySelector(`[name="type_${participantNum}"]`).value,
+            first_name: div.querySelector(`[name="first_name_${participantNum}"]`).value,
+            last_name: div.querySelector(`[name="last_name_${participantNum}"]`).value,
+            age: div.querySelector(`[name="age_${participantNum}"]`).value,
+            email: div.querySelector(`[name="email_${participantNum}"]`).value,
+            phone: div.querySelector(`[name="phone_${participantNum}"]`).value,
+            special_requirements: div.querySelector(`[name="special_requirements_${participantNum}"]`).value,
+            price: div.querySelector('.participant-price').value
+        });
+    });
+    
+    document.getElementById('participantsData').value = JSON.stringify(participants);
+});
+
+// Add discount/tax change listeners
+document.getElementById('{{ form.discount_amount.id_for_label }}').addEventListener('input', updatePricing);
+document.getElementById('{{ form.tax_amount.id_for_label }}').addEventListener('input', updatePricing);
+
+// Initialize with one participant
+addParticipantForm();
+</script>
+{% endblock %}

@@ -1,0 +1,152 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Customer Wishlist{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Users / <a href="{% url 'customer_list' %}" class="text-muted">Customers</a> /</span> Wishlist
+    </h4>
+
+    <!-- Wishlist Table -->
+    <div class="card">
+        <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">Wishlist for {{ customer.user.get_full_name|default:customer.user.username }}</h5>
+            <a href="{% url 'customer_list' %}" class="btn btn-label-secondary">
+                <i class="icon-base ti tabler-arrow-left me-1"></i> Back to List
+            </a>
+        </div>
+
+        <div class="card-datatable table-responsive">
+            <div id="DataTables_Table_0_wrapper" class="dt-container dt-bootstrap5 dt-empty-footer">
+                
+                <!-- Table -->
+                <div class="justify-content-between dt-layout-table">
+                    <div class="d-md-flex justify-content-between align-items-center dt-layout-full table-responsive">
+                        <table class="datatables-products table dataTable dtr-column" id="DataTables_Table_0"
+                            aria-describedby="DataTables_Table_0_info">
+                            <thead class="border-top">
+                                <tr>
+                                    <th class="control dt-orderable-none" rowspan="1" colspan="1" style="width: 50px;">#</th>
+                                    <th class="dt-orderable-asc dt-orderable-desc" rowspan="1" colspan="1">Tour</th>
+                                    <th class="dt-orderable-asc dt-orderable-desc" rowspan="1" colspan="1">Price</th>
+                                    <th class="dt-orderable-asc dt-orderable-desc" rowspan="1" colspan="1">Added On</th>
+                                    <th class="dt-orderable-none" rowspan="1" colspan="1">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in page_obj %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>
+                                        <div class="d-flex justify-content-start align-items-center product-name">
+                                            <div class="avatar-wrapper me-3">
+                                                <a href="{% url 'tour_detail' item.tour.pk %}"> <!-- Assuming dynamic tour detail admin url exists or user sees frontend -->
+                                                    <div class="avatar rounded-2 bg-label-secondary">
+                                                        {% if item.tour.main_image %}
+                                                        <img src="{{ item.tour.main_image.url }}" alt="{{ item.tour.title }}" class="rounded-2">
+                                                        {% else %}
+                                                        <span class="avatar-initial rounded-2 bg-label-secondary"><i class="ti tabler-photo-off"></i></span>
+                                                        {% endif %}
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="d-flex flex-column">
+                                                <h6 class="text-nowrap mb-0">
+                                                    <a href="#" class="text-body text-truncate">{{ item.tour.title }}</a>
+                                                </h6>
+                                                <small class="text-truncate text-muted">
+                                                    {{ item.tour.destination_region.name|default:"-" }}
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="text-truncate">{{ item.tour.currency }} {{ item.tour.price|floatformat:2 }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-truncate">{{ item.created_at|date:"d M Y, H:i" }}</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-inline-block text-nowrap">
+                                            <a href="#" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light me-1" target="_blank" title="View Tour">
+                                                <i class="icon-base ti tabler-eye icon-22px"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="dt-empty text-center py-5">
+                                        <div class="fs-4 text-muted">No items in wishlist</div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="row mx-3 justify-content-between">
+                    <div class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
+                        <div class="dt-info" aria-live="polite" id="DataTables_Table_0_info" role="status">
+                            Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} entries
+                        </div>
+                    </div>
+                    <div class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto gap-md-2 gap-0 mt-0">
+                        <div class="dt-paging">
+                            <nav aria-label="pagination">
+                                {% if page_obj.has_other_pages %}
+                                <ul class="pagination">
+                                    {% if page_obj.has_previous %}
+                                    <li class="page-item prev">
+                                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                                            <i class="icon-base ti tabler-caret-left icon-22px"></i>
+                                        </a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item prev disabled">
+                                        <a class="page-link" href="javascript:void(0);">
+                                            <i class="icon-base ti tabler-caret-left icon-22px"></i>
+                                        </a>
+                                    </li>
+                                    {% endif %}
+
+                                    {% for i in page_obj.paginator.page_range %}
+                                    {% if page_obj.number == i %}
+                                    <li class="page-item active">
+                                        <a class="page-link" href="javascript:void(0);">{{ i }}</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                                    </li>
+                                    {% endif %}
+                                    {% endfor %}
+
+                                    {% if page_obj.has_next %}
+                                    <li class="page-item next">
+                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                                            <i class="icon-base ti tabler-caret-right icon-22px"></i>
+                                        </a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item next disabled">
+                                        <a class="page-link" href="javascript:void(0);">
+                                            <i class="icon-base ti tabler-caret-right icon-22px"></i>
+                                        </a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                                {% endif %}
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

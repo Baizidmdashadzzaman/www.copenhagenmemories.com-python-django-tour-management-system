@@ -1,0 +1,103 @@
+@use "../utils/variables";
+
+/*============================
+  64.agent-list
+============================*/
+.place-nav {
+    &.listing-nav {
+        li {
+            a {
+                background: variables.$light;
+            }
+        }
+    }
+}
+.add-reply {
+    &:hover {
+        background: variables.$primary !important;
+        color: variables.$white !important;
+    }
+}
+.review-reply {
+    display: none;
+    &.show {
+        display: block;
+    }
+}
+.earning-box {
+    .avatar-md {
+        width: 40px;
+        height: 40px;
+        background: variables.$primary-800;
+    }
+}
+.card {
+    &.card-detail {
+        background: variables.$light-transparent;
+        p {
+            color: variables.$gray-600;
+        }
+    }
+}
+.modal-lg.invoice-modal {
+    max-width: 945px;
+}
+.modal-md.w-500 {
+    max-width: 500px !important;
+}
+.digit-group {
+    input {
+        width: 40px;
+        height: 40px;
+        text-align: center;
+    }
+}
+.integration-card {
+    position: relative;
+    .circle-check-top {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        opacity: 0;
+    }
+    &.selected {
+        border-color: variables.$success;
+        .circle-check-top {
+            opacity: 1;
+        }
+    }
+}
+.payment-img {
+    width: 50px;
+    height: 43px;
+}
+.edit-delete-icon {
+    .avatar {
+        width: 30px;
+        height: 30px;
+        color: variables.$gray-600;
+        &:hover {
+            background: variables.$primary;
+            color: variables.$white;
+            border-color: variables.$primary !important;
+        }
+    }
+}
+.edit-delete-item {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    a {
+        width: 30px;
+        height: 30px;
+        background: variables.$white;
+        border-radius: 50%;
+        &:hover {
+            background: variables.$primary;
+            color: variables.$white;
+        }
+    }
+}
+.iti.iti--allow-dropdown.iti--show-flags.iti--inline-dropdown {
+    display: block;
+}

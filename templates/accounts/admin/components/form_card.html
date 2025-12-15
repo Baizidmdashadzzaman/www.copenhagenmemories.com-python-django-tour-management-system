@@ -1,0 +1,34 @@
+{% comment %}
+Reusable form card component for admin forms
+Usage:
+{% include 'accounts/admin/components/form_card.html' with
+form_title="Form Title"
+form_action="/submit/url/"
+form_method="POST"
+submit_text="Save"
+cancel_url="/cancel/url/"
+%}
+{% endcomment %}
+
+<div class="card mb-6">
+    <h5 class="card-header">{{ form_title|default:"Form" }}</h5>
+    <form class="card-body" method="{{ form_method|default:'POST' }}" action="{{ form_action|default:'' }}" {% if
+        has_file_upload %}enctype="multipart/form-data" {% endif %}>
+        {% csrf_token %}
+
+        {% block form_content %}
+        <!-- Form content goes here -->
+        {% endblock %}
+
+        <div class="pt-6">
+            <button type="submit" class="btn btn-primary me-4 waves-effect waves-light">
+                {{ submit_text|default:"Submit" }}
+            </button>
+            {% if cancel_url %}
+            <a href="{{ cancel_url }}" class="btn btn-label-secondary waves-effect">Cancel</a>
+            {% else %}
+            <button type="reset" class="btn btn-label-secondary waves-effect">Reset</button>
+            {% endif %}
+        </div>
+    </form>
+</div>

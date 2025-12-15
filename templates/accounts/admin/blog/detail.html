@@ -1,0 +1,197 @@
+{% extends "accounts/admin/layout.html" %}
+{% load static %}
+
+{% block page_title %}Blog Post Details - {{ post.title }}{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="py-3 mb-0">
+            <span class="text-muted fw-light">Blog Management /</span> {{ post.title }}
+        </h4>
+        <div>
+            <a href="{% url 'blog_edit' post.pk %}" class="btn btn-primary">
+                <i class="icon-base ti tabler-edit me-1"></i> Edit Post
+            </a>
+            <a href="{% url 'blog_list' %}" class="btn btn-secondary">
+                <i class="icon-base ti tabler-arrow-left me-1"></i> Back to List
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left Column -->
+        <div class="col-xl-8 col-lg-7">
+            <!-- About Post -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">About this Post</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-4">
+                        {% if post.featured_image %}
+                        <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="rounded me-3" style="width: 100px; height: 100px; object-fit: cover;">
+                        {% else %}
+                        <div class="rounded me-3 bg-lighter d-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                            <i class="icon-base ti tabler-photo icon-32px text-muted"></i>
+                        </div>
+                        {% endif %}
+                        <div>
+                            <h5 class="mb-1">{{ post.title }}</h5>
+                            <p class="mb-0 text-muted">by {{ post.author.get_full_name|default:post.author.username }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <p class="mb-1"><span class="fw-medium">Category:</span> {{ post.category.name|default:"Uncategorized" }}</p>
+                            <p class="mb-1"><span class="fw-medium">Views:</span> {{ post.view_count }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-1"><span class="fw-medium">Published:</span> {{ post.published_at|date:"M d, Y H:i"|default:"Not published" }}</p>
+                            <p class="mb-1"><span class="fw-medium">Status:</span> 
+                                {% if post.status == 'published' %}
+                                <span class="badge bg-label-success">Published</span>
+                                {% elif post.status == 'draft' %}
+                                <span class="badge bg-label-warning">Draft</span>
+                                {% else %}
+                                <span class="badge bg-label-secondary">Archived</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+                    
+                    {% if post.excerpt %}
+                    <h6>Excerpt</h6>
+                    <div class="mb-4 p-3 bg-lighter rounded">
+                        {{ post.excerpt }}
+                    </div>
+                    {% endif %}
+
+                    <h6>Content</h6>
+                    <div class="mb-4">
+                        {{ post.content|safe }}
+                    </div>
+
+                    {% if post.content_dk %}
+                    <hr class="my-4">
+                    <h6>Content (Danish)</h6>
+                    <div class="mb-4 text-muted">
+                        {{ post.content_dk|safe }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-xl-4 col-lg-5">
+            <!-- Actions Card -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'blog_status_update' post.pk %}" class="btn btn-label-warning">
+                            <i class="icon-base ti tabler-refresh me-1"></i> Update Status
+                        </a>
+                        <a href="{% url 'blog_feature_toggle' post.pk %}" class="btn btn-label-info">
+                            <i class="icon-base ti tabler-star me-1"></i> {% if post.is_featured %}Unfeature{% else %}Feature{% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Image -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Featured Image</h5>
+                </div>
+                <div class="card-body">
+                    {% if post.featured_image %}
+                    <img src="{{ post.featured_image.url }}" class="img-fluid rounded" alt="Featured Image" style="width: 100%;">
+                    {% else %}
+                    <div class="text-center p-4 bg-lighter rounded">
+                        <i class="icon-base ti tabler-photo icon-32px text-muted mb-2"></i>
+                        <p class="text-muted mb-0">No featured image</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- SEO Settings -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">SEO Settings</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <small class="text-uppercase text-muted fw-bold">Meta Title</small>
+                        <p class="mb-0">{{ post.meta_title|default:"-" }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-uppercase text-muted fw-bold">Meta Description</small>
+                        <p class="mb-0">{{ post.meta_description|default:"-" }}</p>
+                    </div>
+                    <div>
+                        <small class="text-uppercase text-muted fw-bold">Keywords</small>
+                        <p class="mb-0">
+                            {% if post.meta_keywords %}
+                                {% for keyword in post.meta_keywords.split|slice:":5" %} <!-- Assuming comma separated or just text -->
+                                <span class="badge bg-label-secondary me-1">{{ keyword }}</span>
+                                {% endfor %}
+                            {% else %}
+                            -
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Publishing Info -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Publishing Info</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="icon-base ti tabler-calendar me-2 text-muted"></i>
+                                <div>
+                                    <small class="text-muted d-block">Created</small>
+                                    <span class="fw-medium">{{ post.created_at|date:"M d, Y H:i" }}</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="icon-base ti tabler-calendar-time me-2 text-muted"></i>
+                                <div>
+                                    <small class="text-muted d-block">Last Updated</small>
+                                    <span class="fw-medium">{{ post.updated_at|date:"M d, Y H:i" }}</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="d-flex align-items-center">
+                                <i class="icon-base ti tabler-user me-2 text-muted"></i>
+                                <div>
+                                    <small class="text-muted d-block">Author</small>
+                                    <span class="fw-medium">{{ post.author.get_full_name|default:post.author.username }}</span>
+                                    <br>
+                                    <small class="text-muted">{{ post.author.email }}</small>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

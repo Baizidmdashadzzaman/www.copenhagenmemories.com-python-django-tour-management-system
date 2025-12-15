@@ -1,0 +1,164 @@
+@use "../utils/mixins";
+@use "../utils/variables";
+
+/*============================
+  28.footer
+============================*/
+
+footer {
+    background: variables.$light-500;
+    .footer-top {
+        padding: 40px 0 0;
+        .footer-widget {
+            margin-bottom: 20px;
+            h5 {
+                margin-bottom: 22px;
+                position: relative;
+                &::before {
+                    content: "";
+                    position: absolute;
+                    bottom: -6px;
+                    left: 0;
+                    width: 38px;
+                    height: 2px;
+                    background: variables.$primary;
+                    @include mixins.rounded(30px);
+                }
+            }
+            .footer-menu {
+                li {
+                    margin-bottom: 8px;
+                    a {
+                        position: relative;
+                        color: variables.$text-color;
+                        &:hover {
+                            color: variables.$primary;
+                        }
+                    }
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
+    }
+    .footer-wrap {
+        @include mixins.rounded(10px);
+        box-shadow: variables.$box-shadow;
+        padding: 20px 20px 4px;
+        margin: 20px 0 24px;
+    }
+    .footer-bottom {
+        background: variables.$light;
+        padding-top: 10px;
+        p {
+            margin-bottom: 10px;
+        }
+        .card-links {
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+            li {
+                a {
+                    position: relative;
+                    margin-right: 8px;
+                    color: variables.$gray-700;
+                }
+                &:last-child {
+                    a {
+                        margin-right: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+.social-icon {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-bottom: 10px;
+    li {
+        margin-right: 12px;
+        padding-right: 12px;
+        position: relative;
+        &::after {
+            content: "";
+            width: 2px;
+            height: 25px;
+            background: variables.$light-500;
+            position: absolute;
+            top: 0;
+            right: 0;
+            @include mixins.transform(rotate(15deg));
+        }
+        a {
+            color: variables.$gray-900;
+            &:hover {
+                color: variables.$primary;
+            }
+        }
+        &:last-child {
+            margin-right: 0;
+            padding-right: 0;
+            &::after {
+                content: none;
+            }
+        }
+    }
+}
+.footer-logo-dark {
+    display: none;
+}
+
+// Footer Seven
+.footer-seven {
+    .footer-top {
+        padding: 40px 0 40px 0 !important;
+        @include mixins.respond-below(sm) {
+            padding: 24px 0 24px 0 !important;
+        }
+        .footer-widget {
+            @include mixins.respond-below(sm) {
+                margin-bottom: 10px;
+                margin-top: 10px;
+            }
+            h5 {
+                margin-bottom: 20px !important;
+                @include mixins.respond-below(sm) {
+                    margin-bottom: 12px !important;
+                }
+                &::before {
+                    content: unset !important;
+                }
+            }
+        }
+        .footer-menu {
+            li {
+                margin-bottom: 12px !important;
+                &:last-child {
+                    margin-bottom: 0 !important;
+                }
+            }
+        }
+    }
+    .social-icon {
+        a {
+            background: variables.$gray-800 !important;
+            color: variables.$white !important;
+            transition: all 0.3s;
+            &:hover {
+                background: variables.$primary !important;
+                transform: translateY(-5px);
+            }
+        }
+    }
+}

@@ -1,0 +1,133 @@
+{% extends 'frontend/layout/base.html' %}
+{% load static %}
+{% load translate_tags %}
+
+{% block title %}Testimonial - {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+
+<div class="breadcrumb-bar breadcrumb-bg-02 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-12">
+                <h2 class="breadcrumb-title mb-2">Testimonial</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="isax isax-home5"></i></a></li>
+                        <li class="breadcrumb-item">Pages</li>
+                        <li class="breadcrumb-item active" aria-current="page">Testimonial</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="container">
+        <div class="row justify-content-center">
+
+            {% for review in page_obj %}
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card border-white wow fadeInUp h-100" data-wow-delay="0.2s">
+                    <div class="card-body text-center d-flex flex-column">
+                        <div class="d-flex align-items-center justify-content-center fs-12 mb-3">
+                            <i class="ti ti-star-filled text-primary"></i>
+                            <i class="ti ti-star-filled text-primary"></i>
+                            <i class="ti ti-star-filled text-primary"></i>
+                            <i class="ti ti-star-filled text-primary"></i>
+                            <i class="ti ti-star-filled text-primary me-1"></i>
+                            <p class="fs-14 text-gray-9">
+                                {% if review.customer %}
+                                    {{ review.overall_rating }}
+                                {% else %}
+                                    {{ review.rating }}
+                                {% endif %}
+                            </p>
+                        </div>
+                        <h6 class="mb-1"></h6>
+                        <p class="mb-3 flex-grow-1" style="min-height: 100px;">
+                            {% if review.customer %}
+                                {{ review.review|truncatechars:180 }}
+                            {% else %}
+                                {{ review.review|truncatechars:180 }}
+                            {% endif %}
+                        </p>
+                        <div class="d-flex align-items-center justify-content-center mt-auto">
+                            <a href="#" class="avatar avatar-md flex-shrink-0">
+                                {% if review.customer %}
+                                    {% if review.customer.profile_image %}
+                                        <img src="{{ review.customer.profile_image.url }}" class="rounded-circle" alt="{{ review.customer.user.first_name }}">
+                                    {% else %}
+                                        <img src="{% static 'frontend/assets/img/users/user-01.jpg' %}" class="rounded-circle" alt="User">
+                                    {% endif %}
+                                {% else %}
+                                    {% if review.image %}
+                                        <img src="{{ review.image.url }}" class="rounded-circle" alt="{{ review.name }}">
+                                    {% else %}
+                                        <img src="{% static 'frontend/assets/img/users/user-01.jpg' %}" class="rounded-circle" alt="{{ review.name }}">
+                                    {% endif %}
+                                {% endif %}
+                            </a>
+                            <div class="d-flex align-items-center ms-2 text-start">
+                                {% if review.customer %}
+                                    <div>
+                                        <h6 class="fs-16 fw-medium mb-0"><a href="#">{{ review.customer.user.first_name }} {{ review.customer.user.last_name }}</a></h6>
+                                        <p class="fs-14 testimonial-divide-dot mb-0">{{ review.tour.city.name|default:review.tour.destination_region.name|default:'Verified Customer' }}</p>
+                                    </div>
+                                {% else %}
+                                    <div>
+                                        <h6 class="fs-16 fw-medium mb-0"><a href="#">{{ review.name }}</a></h6>
+                                        <p class="fs-14 testimonial-divide-dot mb-0">{{ review.address }}</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+
+         <!-- Pagination -->
+         {% if page_obj.has_other_pages %}
+         <div class="row">
+            <div class="col-12">
+               <ul class="pagination-list d-flex justify-content-center mt-4">
+                  {% if page_obj.has_previous %}
+                  <li class="page-item">
+                     <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                        <i class="isax isax-arrow-left-2"></i>
+                     </a>
+                  </li>
+                  {% endif %}
+                  
+                  {% for i in page_obj.paginator.page_range %}
+                    {% if page_obj.number == i %}
+                        <li class="page-item active">
+                            <a class="page-link" href="#">{{ i }}</a>
+                        </li>
+                    {% elif i > page_obj.number|add:'-3' and i < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                        </li>
+                    {% endif %}
+                  {% endfor %}
+
+                  {% if page_obj.has_next %}
+                  <li class="page-item">
+                     <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                        <i class="isax isax-arrow-right-3"></i>
+                     </a>
+                  </li>
+                  {% endif %}
+               </ul>
+            </div>
+         </div>
+         {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}

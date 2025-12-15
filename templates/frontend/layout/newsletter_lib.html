@@ -1,0 +1,26 @@
+{% load static %}
+<section class="news-letter-sec">
+    <div class="news-sec-bg">
+        <img src="{% static 'frontend/assets/img/bg/hotel-bg-04.svg' %}" class="bg-1" alt="Img">
+    </div>
+    <div class="container">
+        <div class="update-sec news-letter">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <div class="section-header">
+                        <h2 class="mb-1 text-white">Subscribe to our Newsletter</h2>
+                        <p class="sub-title text-white">Just sign up and we'll send you a notification by email.</p>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <form action="{% url 'newsletter_subscribe' %}" method="POST" class="input-group justify-content-center">
+                        {% csrf_token %}
+                        <span class="input-group-text px-1"><i class="isax isax-message-favorite5"></i></span>
+                        <input type="email" name="email" class="form-control" placeholder="Enter Email Address" required>
+                        <button type="submit" class="btn btn-primary">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

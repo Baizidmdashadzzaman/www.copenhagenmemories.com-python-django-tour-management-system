@@ -1,0 +1,51 @@
+@use "../utils/mixins";
+@use "../utils/variables";
+
+/*============================
+  47.booking-confirmation
+============================*/
+
+.booking-confirmation {
+  box-shadow: none;
+  .status {
+    &::before {
+      content: "";
+      width: 5px;
+      height: 5px;
+      background-color: variables.$white;
+      border-radius: 50%;
+      margin-right: 8px;
+      margin-left: 2px;
+    }
+  }
+  .booking-hotels {
+    img{
+      @include mixins.respond-below(md){
+        margin-bottom: 8px;
+      }
+      @include mixins.respond-below(lg){
+        margin-bottom: 10px;
+      }
+    }
+    .booking-details {
+      .booking-items {
+        p {
+          margin-bottom: 0;
+          @include mixins.respond-below(md){
+            margin-bottom: 8px;
+          }
+          @include mixins.respond-below(lg){
+            margin-bottom: 8px;
+          }
+        }
+      }
+    }
+    
+  }
+  .service-info {
+    span {
+      color: variables.$gray-600;
+      font-weight: 400;
+    }
+  }
+}

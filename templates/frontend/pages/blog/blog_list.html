@@ -1,0 +1,116 @@
+{% extends 'frontend/layout/base.html' %}
+
+{% block title %}Blog List - {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<div class="breadcrumb-bar breadcrumb-bg-02 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-12">
+                <h2 class="breadcrumb-title mb-2">Blog List</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="isax isax-home5"></i></a></li>
+                        <li class="breadcrumb-item">Pages</li>
+                        <li class="breadcrumb-item active" aria-current="page">Blog List</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="content">
+        <div class="container">
+            <div class="row justify-content-center">
+
+                {% for blog in page_obj %}
+                <!-- Blog Item-->
+                <div class="col-xl-4 col-md-6">
+                    <div class="blog-item mb-4 wow fadeInUp" data-wow-delay="0.2s">
+                        <a href="{% url 'blog_detail_fronted' blog.pk %}" class="blog-img">
+                            {% if blog.featured_image %}
+                            <img src="{{ blog.featured_image.url }}" alt="{{ blog.title }}" class="img-fluid" style="height: 250px; object-fit: cover;">
+                            {% else %}
+                            <img src="{% static 'frontend/assets/img/blog/blog-01.jpg' %}" alt="img" class="img-fluid" style="height: 250px; object-fit: cover;">
+                            {% endif %}
+                        </a>
+                        {% if blog.category %}
+                        <span class="badge bg-primary fs-13 fw-medium">{{ blog.category.name }}</span>
+                        {% endif %}
+                        <div class="blog-info text-center">
+                            <div class="d-inline-flex align-items-center justify-content-center">
+                                <div class="d-inline-flex align-items-center border-end pe-3 me-3 mb-2">
+                                    <a href="#" class="d-flex align-items-center">
+                                        <span class="avatar avatar-sm me-2">
+											<img src="{% static 'frontend/assets/img/users/user-01.jpg' %}" class="rounded-circle border border-white" alt="img">
+										</span>
+                                        <p>{{ blog.author.get_full_name|default:blog.author.username }}</p>
+                                    </a>
+                                </div>
+                                <p class="text-white mb-2"><i class="isax isax-calendar-2 me-2"></i>{{ blog.created_at|date:"d M Y" }}</p>
+                            </div>
+                            <h5><a href="{% url 'blog_detail_fronted' blog.pk %}">{{ blog.title }}</a></h5>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Blog Item-->
+                {% empty %}
+                <div class="col-12 text-center">
+                    <p>No blog posts found.</p>
+                </div>
+                {% endfor %}
+
+
+                <!-- Pagination -->
+                {% if page_obj.has_other_pages %}
+                <nav class="pagination-nav">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% for i in page_obj.paginator.page_range %}
+                            {% if page_obj.number == i %}
+                            <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+                            {% else %}
+                            <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                                <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}

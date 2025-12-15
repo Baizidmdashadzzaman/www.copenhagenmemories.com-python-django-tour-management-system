@@ -1,0 +1,341 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ site_settings.site_name }} - {% block title %}Travel and Tour Booking{% endblock %}</title>
+
+    <meta name="description"
+        content="{% if site_settings.site_metadescription %}{{ site_settings.site_metadescription }}{% else %}DreamsTour - A premium Bootstrap 5 template crafted for travel and tour booking. Tailored for travel agencies and booking platforms, it features flight, hotel, and tour reservations, and holiday packages.{% endif %}">
+    <meta name="keywords"
+        content="{% if site_settings.site_metakey %}{{ site_settings.site_metakey }}{% else %}travel booking template, tour booking, Bootstrap 5 travel template, DreamsTour, hotel booking, flights booking, holiday packages, tour agency website, travel agency template, travel HTML template, booking system, responsive travel template, Bootstrap travel website{% endif %}">
+    <meta name="author" content="baizid.md.ashadzzaman@gmail.com">
+    <meta name="robots" content="index, follow">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'frontend/assets/img/apple-touch-icon.png' %}">
+    <link rel="icon" href="{% static 'frontend/assets/img/favicon.png' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'frontend/assets/img/favicon.png' %}" type="image/x-icon">
+    <script src="{% static 'frontend/assets/js/theme-script.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'frontend/assets/css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'frontend/assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'frontend/assets/css/meanmenu.css' %}">
+    <link rel="stylesheet" href="{% static 'frontend/assets/plugins/tabler-icons/tabler-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'frontend/assets/plugins/fontawesome/css/fontawesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'frontend/assets/plugins/fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'frontend/assets/plugins/fancybox/jquery.fancybox.min.css' %}">
+    <link rel="stylesheet" href="{% static 'frontend/assets/plugins/owlcarousel/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'frontend/assets/plugins/slick/slick.css' %}">
+    <link rel="stylesheet" href="{% static 'frontend/assets/css/iconsax.css' %}">
+    <link rel="stylesheet" href="{% static 'frontend/assets/css/bootstrap-datetimepicker.min.css' %}">
+    <link rel="stylesheet" href="{% static 'frontend/assets/css/style.css' %}">
+
+    <link rel="stylesheet" href="{% static 'frontend/assets/plugins/owlcarousel/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'frontend/assets/plugins/ion-rangeslider/css/ion.rangeSlider.css' %}">
+    <link rel="stylesheet" href="{% static 'frontend/assets/plugins/ion-rangeslider/css/ion.rangeSlider.min.css' %}">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="{% static 'frontend/assets/css/asadzaman.css' %}">
+
+</head>
+
+<body>
+    {% include 'frontend/layout/chatcustomer_lib.html' %}
+    {% include 'frontend/layout/aisupport_lib.html' %}
+    <!-- <div id="loader-wrapper">
+        <div id="loader">
+            <span class="loader-line"></span>
+        </div>
+    </div> -->
+    <div class="main-header main-header-four">
+        <header class="header-four">
+            <div class="container">
+                <div class="offcanvas-info">
+                    <div class="offcanvas-wrap">
+                        <div class="offcanvas-detail">
+                            <div class="offcanvas-head">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <a href="{% url 'home' %}" class="black-logo-responsive">
+                                        <img src="{{ site_settings.site_logo_dark.url }}" alt="logo-img">
+                                    </a>
+                                    <a href="{% url 'home' %}" class="white-logo-responsive">
+                                        <img src="{{ site_settingsa.site_logo.url }}" alt="logo-img">
+                                    </a>
+                                    <div class="offcanvas-close">
+                                        <i class="ti ti-x"></i>
+                                    </div>
+                                </div>
+                                <div class="wishlist-info d-flex justify-content-between align-items-center">
+                                    <h6 class="fs-16 fw-medium">Wishlist</h6>
+                                    <div class="d-flex align-items-center">
+                                        <div class="fav-dropdown">
+                                            <a href="{% url 'customer_wishlist_page' %}" class="position-relative">
+                                                <i class="isax isax-heart"></i><span
+                                                    class="count-icon bg-secondary text-gray-9">0</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mobile-menu fix mb-3"></div>
+                            <div class="offcanvas__contact">
+                                <div class="mt-4">
+                                    <div class="header-dropdown d-flex flex-fill">
+                                        <div class="w-100">
+                                            <div class="dropdown flag-dropdown mb-2">
+                                                <a href="#"
+                                                    class="dropdown-toggle bg-white border d-flex align-items-center"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <img src="{% static 'frontend/assets/img/flags/us-flag.svg' %}"
+                                                        class="me-2" alt="flag">ENG
+                                                </a>
+                                                <ul class="dropdown-menu p-2">
+                                                    <li>
+                                                        <a class="dropdown-item rounded d-flex align-items-center"
+                                                            href="#">
+                                                            <img src="{% static 'frontend/assets/img/flags/us-flag.svg' %}"
+                                                                class="me-2" alt="flag">ENG
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item rounded d-flex align-items-center"
+                                                            href="#">
+                                                            <img src="{% static 'frontend/assets/img/flags/arab-flag.svg' %}"
+                                                                class="me-2" alt="flag">ARA
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item rounded d-flex align-items-center"
+                                                            href="#">
+                                                            <img src="{% static 'frontend/assets/img/flags/france-flag.svg' %}"
+                                                                class="me-2" alt="flag">FRE
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="dropdown">
+                                                <a href="#" class="dropdown-toggle bg-white border d-block"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    USD
+                                                </a>
+                                                <ul class="dropdown-menu p-2">
+                                                    <li><a class="dropdown-item rounded" href="#">USD</a></li>
+                                                    <li><a class="dropdown-item rounded" href="#">YEN</a></li>
+                                                    <li><a class="dropdown-item rounded" href="#">EURO</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="btn btn-dark w-100 mb-3"><a href="#" class="text-white"
+                                            data-bs-toggle="modal" data-bs-target="#login-modal">Sign In</a> / <a
+                                            href="#" class="text-white" data-bs-toggle="modal"
+                                            data-bs-target="#register-modal">Sign Up</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="offcanvas-overlay"></div>
+                <div class="header-nav">
+                    <div class="main-menu-wrapper">
+                        <div class="navbar-logo">
+                            <a class="logo-white header-logo" href="{% url 'home' %}">
+                                <img src="{{ site_settings.site_logo_dark.url }}" class="logo" alt="Logo">
+                            </a>
+                            <a class="logo-dark header-logo" href="{% url 'home' %}">
+                                <img src="{{ site_settings.site_logo.url }}" class="logo" alt="Logo">
+                            </a>
+                        </div>
+                        <nav id="mobile-menu">
+                            <ul class="main-nav">
+                                {% include 'frontend/layout/menu_lib.html' %}
+                            </ul>
+                        </nav>
+                        <div class="header-btn d-flex align-items-center">
+                 
+                            {% include 'frontend/layout/lang_lib.html' %}
+                 
+                            <div class="dropdown me-3">
+                                <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    USD
+                                </a>
+                                <ul class="dropdown-menu p-2 mt-2">
+                                    <li><a class="dropdown-item rounded" href="#">USD</a></li>
+                                </ul>
+                            </div>
+                            
+                            <div class="me-3">
+                                <a href="#" id="dark-mode-toggle" class="theme-toggle">
+                                    <i class="isax isax-moon"></i>
+                                </a>
+                                <a href="#" id="light-mode-toggle" class="theme-toggle">
+                                    <i class="isax isax-sun-1"></i>
+                                </a>
+                            </div>
+                            
+                            <div class="fav-dropdown me-3">
+                                <a href="{% url 'customer_wishlist_page' %}" class="position-relative">
+                                    <i class="isax isax-heart"></i><span
+                                        class="count-icon bg-secondary text-gray-9">
+                                        {% if user.is_authenticated and not user.is_staff %}
+                                            {{ user.customer_profile.wishlist.count }}
+                                        {% else %}
+                                            0
+                                        {% endif %}
+                                    </span>
+                                </a>
+                            </div>
+                            <div class="me-3">
+                                <a href="{% url 'customer_dashboard' %}">
+                                    <i class="isax isax-user"></i>
+                                </a>
+                            </div>
+                            {% if user.is_authenticated and not user.is_staff %}
+                            <div class="dropdown profile-dropdown">
+                                <a href="#" class="d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span class="avatar avatar-md">
+									<img src="{% static 'frontend/assets/img/users/user-05.jpg' %}" alt="Img" class="img-fluid rounded-circle border border-white border-4" style="border: 1px solid #f92c2c!important">
+								</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end p-3" >
+                                    <li>
+                                        <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2" href="{% url 'customer_dashboard' %}">Dashboard</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2" href="{% url 'logout' %}">Logout</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            {% else %}
+                            <a href="{% url 'login' %}" class="btn btn-primary">
+                                Login/Register
+                            </a>
+                            {% endif %}
+                            <div class="header__hamburger d-xl-none my-auto">
+                                <div class="sidebar-menu">
+                                    <i class="isax isax-menu5"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </div>
+
+    {% if messages %}
+    <div class="container mt-4" style="z-index: 1050; position: relative;">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+
+    {% include 'frontend/layout/newsletter_lib.html' %}
+
+    <footer class="footer-two">
+        <div class="container">
+            <div class="footer-top">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="footer-widget">
+                            <span class="d-block mb-2 footer-logo-light"><img
+                                    src="{{ site_settings.site_logo_dark.url }}" alt="Img"></span>
+                            <span class="mb-2 footer-logo-dark"><img src="{{ site_settings.site_logo.url }}"
+                                    alt="Img"></span>
+                            <p class="mb-3">
+                                {{ site_settings.site_description }}
+                            </p>
+                            <span class="d-block mb-2">Available on</span>
+                            <div class="d-flex align-items-center row-gap-2 flex-wrap">
+                                <a href="{{ site_settings.app_google }}" class="d-block me-2">
+                                    <img src="{% static 'frontend/assets/img/icons/googleplay.svg' %}" alt="logo">
+                                </a>
+                                <a href="{{ site_settings.ios_app }}" class="d-block">
+                                    <img src="{% static 'frontend/assets/img/icons/appstore.svg' %}" alt="logo">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9">
+                        {% include 'frontend/layout/menu_footer_lib.html' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                            <p class="fs-14">Copyright &copy; 2025. All Rights Reserved, <a href="#"
+                                    class="text-primary fw-medium">{{ site_settings.site_name }}</a>. Developed by <a  href="https://www.softscandic.com" target="_blank" style="color: rgb(255, 255, 255);"><img  src="{% static 'frontend/scandicsoft-logo-black.webp' %}" alt="Scandicsoft" style="width: 110px;"></a></p>
+                            <div class="d-flex align-items-center">
+                                <ul class="social-icon social-icon-two">
+                                    <li>
+                                        <a href="{{ site_settings.fb_link }}"><i class="fa-brands fa-facebook"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ site_settings.x_link }}"><i class="fa-brands fa-x-twitter"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ site_settings.insta_link }}"><i class="fa-brands fa-instagram"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ site_settings.linkdin_link }}"><i class="fa-brands fa-linkedin"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ site_settings.pintrest_link }}"><i class="fa-brands fa-pinterest"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </footer>
+
+    <div class="xb-cursor tx-js-cursor">
+        <div class="xb-cursor-wrapper">
+            <div class="xb-cursor--follower xb-js-follower"></div>
+        </div>
+    </div>
+
+    <div class="back-to-top">
+        <a class="back-to-top-icon align-items-center justify-content-center d-flex" href="#top"><i
+                class="fa-solid fa-arrow-up"></i></a>
+    </div>
+
+    <script src="{% static 'frontend/assets/js/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'frontend/assets/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'frontend/assets/js/wow.min.js' %}"></script>
+    <script src="{% static 'frontend/assets/js/jquery.meanmenu.min.js' %}"></script>
+    <script src="{% static 'frontend/assets/plugins/owlcarousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'frontend/assets/plugins/fancybox/jquery.fancybox.min.js' %}"></script>
+    <script src="{% static 'frontend/assets/plugins/theia-sticky-sidebar/ResizeSensor.js' %}"></script>
+    <script src="{% static 'frontend/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js' %}"></script>
+    <script src="{% static 'frontend/assets/plugins/ion-rangeslider/js/ion.rangeSlider.js' %}"></script>
+    <script src="{% static 'frontend/assets/plugins/ion-rangeslider/js/custom-rangeslider.js' %}"></script>
+    <script src="{% static 'frontend/assets/plugins/ion-rangeslider/js/ion.rangeSlider.min.js' %}"></script>
+    <script src="{% static 'frontend/assets/plugins/slick/slick.min.js' %}"></script>
+    <script src="{% static 'frontend/assets/js/jquery.counterup.min.js' %}"></script>
+    <script src="{% static 'frontend/assets/js/jquery.waypoints.min.js' %}"></script>
+    <script src="{% static 'frontend/assets/plugins/moment/moment.js' %}"></script>
+    <script src="{% static 'frontend/assets/js/bootstrap-datetimepicker.min.js' %}"></script>
+    <script src="{% static 'frontend/assets/js/cursor.js' %}"></script>
+    <script src="{% static 'frontend/assets/js/script.js' %}"></script>
+
+ 
+
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

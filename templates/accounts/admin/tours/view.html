@@ -1,0 +1,333 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Tour Details - {{ tour.title }}{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="py-3 mb-0">
+            <span class="text-muted fw-light">Tour Management /</span> {{ tour.title }}
+        </h4>
+        <div>
+            <a href="{% url 'tour_edit' tour.pk %}" class="btn btn-primary">
+                <i class="icon-base ti tabler-edit me-1"></i> Edit Tour
+            </a>
+            <a href="{% url 'tour_list' %}" class="btn btn-secondary">
+                <i class="icon-base ti tabler-arrow-left me-1"></i> Back to List
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left Column -->
+        <div class="col-xl-8 col-lg-7">
+            <!-- About Tour -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">About this Tour</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-4">
+                        {% if tour.images.first %}
+                        <img src="{{ tour.images.first.image.url }}" alt="{{ tour.title }}" class="rounded me-3" style="width: 100px; height: 100px; object-fit: cover;">
+                        {% else %}
+                        <div class="rounded me-3 bg-lighter d-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                            <i class="icon-base ti tabler-photo icon-32px text-muted"></i>
+                        </div>
+                        {% endif %}
+                        <div>
+                            <h5 class="mb-1">{{ tour.title }}</h5>
+                            <p class="mb-0 text-muted">{{ tour.supplier.company_name }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <p class="mb-1"><span class="fw-medium">Category:</span> {{ tour.category.name }}</p>
+                            <p class="mb-1"><span class="fw-medium">Location:</span> {{ tour.city.name }}, {{ tour.destination_region.name }}</p>
+                            <p class="mb-1"><span class="fw-medium">Duration:</span> {{ tour.duration_hours }} hours</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-1"><span class="fw-medium">Price:</span> {{ tour.base_price }} {{ tour.currency }}</p>
+                            <p class="mb-1"><span class="fw-medium">Max Participants:</span> {{ tour.max_participants }}</p>
+                            <p class="mb-1"><span class="fw-medium">Status:</span> 
+                                {% if tour.status == 'active' %}
+                                <span class="badge bg-label-success">Active</span>
+                                {% elif tour.status == 'draft' %}
+                                <span class="badge bg-label-warning">Draft</span>
+                                {% else %}
+                                <span class="badge bg-label-danger">Inactive</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+                    
+                    <h6>Description</h6>
+                    <div class="mb-4">
+                        {{ tour.description|linebreaks }}
+                    </div>
+
+                    {% if tour.description_dk %}
+                    <h6>Description (Danish)</h6>
+                    <div class="mb-4 text-muted">
+                        {{ tour.description_dk|linebreaks }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Itinerary -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Itinerary</h5>
+                    <a href="{% url 'tour_itinerary_list' tour.pk %}" class="btn btn-sm btn-outline-primary">Manage</a>
+                </div>
+                <div class="card-body">
+                    {% if itinerary_steps %}
+                    <ul class="timeline ms-2">
+                        {% for step in itinerary_steps %}
+                        <li class="timeline-item timeline-item-transparent">
+                            <span class="timeline-point timeline-point-primary"></span>
+                            <div class="timeline-event">
+                                <div class="timeline-header mb-1">
+                                    <h6 class="mb-0">{{ step.step_number }}. {{ step.title }}</h6>
+                                    <small class="text-muted">{{ step.duration_minutes }} min</small>
+                                </div>
+                                <p class="mb-2">{{ step.description }}</p>
+                                {% if step.location %}
+                                <div class="d-flex align-items-center">
+                                    <i class="icon-base ti tabler-map-pin me-1 text-muted"></i>
+                                    <small class="text-muted">{{ step.location }}</small>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted mb-0">No itinerary steps added yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- FAQs -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">FAQs</h5>
+                    <a href="{% url 'tour_faq_list' tour.pk %}" class="btn btn-sm btn-outline-primary">Manage</a>
+                </div>
+                <div class="card-body">
+                    {% if faqs %}
+                    <div class="accordion" id="faqAccordion">
+                        {% for faq in faqs %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading{{ faq.id }}">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ faq.id }}" aria-expanded="false" aria-controls="collapse{{ faq.id }}">
+                                    {{ faq.question }}
+                                </button>
+                            </h2>
+                            <div id="collapse{{ faq.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ faq.id }}" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    {{ faq.answer }}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted mb-0">No FAQs added yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-xl-4 col-lg-5">
+            <!-- Map location -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Map Location</h5>
+                </div>
+                <div class="card-body">
+                    {% if tour.map_location  %}
+                    <div class="row g-2">
+                        <div class="col-12">
+                            <iframe src="{{ tour.map_location }}" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p class="text-muted mb-0">No map location added yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Images -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Images</h5>
+                    <a href="{% url 'tour_image_list' tour.pk %}" class="btn btn-sm btn-outline-primary">Manage</a>
+                </div>
+                <div class="card-body">
+                    {% if images %}
+                    <div class="row g-2">
+                        {% for img in images %}
+                        <div class="col-4">
+                            <img src="{{ img.image.url }}" class="img-fluid rounded" alt="Tour Image" style="width: 100%; height: 80px; object-fit: cover;">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted mb-0">No images uploaded yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Included/Excluded -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Inclusions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="mb-0 text-success"><i class="icon-base ti tabler-check me-1"></i> Included</h6>
+                            <a href="{% url 'tour_included_list' tour.pk %}" class="btn btn-sm btn-icon btn-text-secondary rounded-pill"><i class="icon-base ti tabler-edit"></i></a>
+                        </div>
+                        {% if included_items %}
+                        <ul class="list-unstyled mb-0">
+                            {% for item in included_items %}
+                            <li class="mb-1"><i class="icon-base ti tabler-check text-success me-2"></i> {{ item.item }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p class="text-muted small mb-0">No included items.</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="mb-0 text-danger"><i class="icon-base ti tabler-x me-1"></i> Excluded</h6>
+                            <a href="{% url 'tour_excluded_list' tour.pk %}" class="btn btn-sm btn-icon btn-text-secondary rounded-pill"><i class="icon-base ti tabler-edit"></i></a>
+                        </div>
+                        {% if excluded_items %}
+                        <ul class="list-unstyled mb-0">
+                            {% for item in excluded_items %}
+                            <li class="mb-1"><i class="icon-base ti tabler-x text-danger me-2"></i> {{ item.item }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p class="text-muted small mb-0">No excluded items.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pricing Options -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Pricing Options</h5>
+                    <a href="{% url 'tour_pricing_list' tour.pk %}" class="btn btn-sm btn-outline-primary">Manage</a>
+                </div>
+                <div class="card-body">
+                    {% if pricing_options %}
+                    <ul class="list-group list-group-flush">
+                        {% for option in pricing_options %}
+                        <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="fw-medium text-capitalize">{{ option.participant_type }}</span>
+                                <br>
+                                <small class="text-muted">{{ option.min_age }}-{{ option.max_age }} years</small>
+                            </div>
+                            <span class="fw-bold">{{ option.price }} {{ option.currency }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted mb-0">No pricing options defined.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Requirements -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Requirements</h5>
+                    <a href="{% url 'tour_requirement_list' tour.pk %}" class="btn btn-sm btn-outline-primary">Manage</a>
+                </div>
+                <div class="card-body">
+                    {% if requirements %}
+                    <ul class="list-unstyled mb-0">
+                        {% for req in requirements %}
+                        <li class="mb-2 d-flex">
+                            <i class="icon-base ti tabler-alert-circle text-warning me-2 mt-1"></i>
+                            <span>
+                                {{ req.requirement }}
+                                {% if req.is_mandatory %}
+                                <span class="badge bg-label-danger ms-1">Mandatory</span>
+                                {% endif %}
+                            </span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted mb-0">No requirements listed.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Schedule & Blackout -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Availability</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="mb-0">Upcoming Schedules</h6>
+                            <a href="{% url 'tour_schedule_list' tour.pk %}" class="btn btn-sm btn-icon btn-text-secondary rounded-pill"><i class="icon-base ti tabler-edit"></i></a>
+                        </div>
+                        {% if schedules %}
+                        <ul class="list-unstyled mb-0">
+                            {% for schedule in schedules|slice:":3" %}
+                            <li class="mb-1 small">
+                                <i class="icon-base ti tabler-calendar me-1"></i> {{ schedule.date }} 
+                                <span class="text-muted">({{ schedule.start_time }})</span>
+                            </li>
+                            {% endfor %}
+                            {% if schedules.count > 3 %}
+                            <li class="mt-1 small text-muted">+{{ schedules.count|add:"-3" }} more</li>
+                            {% endif %}
+                        </ul>
+                        {% else %}
+                        <p class="text-muted small mb-0">No schedules added.</p>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="mb-0">Blackout Dates</h6>
+                            <a href="{% url 'tour_blackout_list' tour.pk %}" class="btn btn-sm btn-icon btn-text-secondary rounded-pill"><i class="icon-base ti tabler-edit"></i></a>
+                        </div>
+                        {% if blackout_dates %}
+                        <ul class="list-unstyled mb-0">
+                            {% for date in blackout_dates|slice:":3" %}
+                            <li class="mb-1 small">
+                                <i class="icon-base ti tabler-calendar-off me-1 text-danger"></i> 
+                                {{ date.start_date }} - {{ date.end_date }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p class="text-muted small mb-0">No blackout dates.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

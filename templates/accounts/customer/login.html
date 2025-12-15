@@ -1,0 +1,15 @@
+{% extends 'frontend/layout/base.html' %}
+
+{% block title %}Customer Login{% endblock %}
+
+{% block content %}
+{% load static %}
+<h2>Customer Login</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Login as Customer</button>
+</form>
+<p>Are you an admin? <a href="{% url 'admin_login' %}">Admin Login</a></p>
+<p>Don't have an account? <a href="{% url 'register_customer' %}">Register here</a></p>
+{% endblock %}

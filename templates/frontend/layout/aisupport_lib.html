@@ -1,0 +1,187 @@
+{% load static %}
+<style>
+.float2{
+	position:fixed;
+	width:50px;
+	height:50px;
+	bottom:120px;
+	right:40px;
+	background-color:#D4483B;
+	color:#FFF;
+	border-radius:50px;
+	text-align:center;
+  font-size:30px;
+  z-index:9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.float2:hover{
+    transform: scale(1.1);
+    transition: 0.2s ease;
+}
+
+.chat-popup2 {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  right: 15px;
+  border: 3px solid #f1f1f1;
+  z-index: 10000;
+}
+</style>
+
+<a href="javascript:void(0);" class="float2" onclick="openFormAi()">
+     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+     <g clip-path="url(#clip0_3280_13122)">
+     <path d="M19.75 16.77L18.67 17.02C17.9 17.2 17.29 17.8 17.11 18.57L16.86 19.65C16.84 19.76 16.67 19.76 16.64 19.65L16.39 18.57C16.21 17.8 15.61 17.19 14.84 17.01L13.76 16.76C13.65 16.74 13.65 16.57 13.76 16.54L14.84 16.29C15.61 16.11 16.22 15.51 16.4 14.74L16.65 13.66C16.67 13.55 16.84 13.55 16.87 13.66L17.12 14.74C17.3 15.51 17.9 16.12 18.67 16.3L19.75 16.55C19.86 16.57 19.86 16.74 19.75 16.77Z" stroke="#fff" stroke-width="1.5" stroke-miterlimit="10" />
+     <path d="M12 12C14.76 12 17 9.76 17 7C17 4.24 14.76 2 12 2C9.24 2 7 4.24 7 7C7 9.76 9.24 12 12 12Z" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+     <path d="M12 15C7.25997 15 3.40997 18.13 3.40997 22" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+     <path d="M20.59 22.0001C20.59 21.0901 20.38 20.2301 19.99 19.4301" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+     </g>
+     <defs>
+     <clipPath id="clip0_3280_13122">
+     <rect width="24" height="24" fill="white"/>
+     </clipPath>
+     </defs>
+     </svg>
+</a>
+
+
+
+<div class="chat-popup2" id="myFormAi" style="border-radius: 10px;">
+  <div>
+   <form class="form-container" id="chatFormAi">
+   {% csrf_token %}
+   <h5>CHAT WITH AI AGENT</h5>
+   <hr>
+   <p style="font-size: 14px;">AI Chat is not available yet. We are working on it.</p>
+   <div style="height: 350px;">
+     <img src="{% static 'frontend/assets/img/ai.gif' %}" alt="AI Chat" style="width: 100%; height: auto;">
+   </div>
+   <!-- <div class="chat-body" id="aiChatBox" style="height: 350px; overflow-y: scroll;">
+   </div> -->
+   <!-- 
+   <div style="position: relative;">
+     <input type="text" id="aiMessageInput" placeholder="Enter your message ..." required class="form-control my-1">
+   </div>
+   <button type="submit" class="btn btn-block btn-primary rounded" style="padding: 8px 8px;">
+      Send message to ai
+   </button> -->
+
+   </form>
+
+<script>
+  let aiChatPollInterval;
+
+  function aiFormatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function aiAppendMessage(text, side = 'left', timeStr = '') {
+        const messageHtml = `
+            <div class="answer ${side}">
+                <div class="text"><span style="font-size:14px">${text}</span></div>
+                <div class="time"><span style="font-size:10px">${timeStr}</span></div>
+            </div>
+        `;
+        $('#aiChatBox').append(messageHtml);
+        $('#aiChatBox').scrollTop($('#aiChatBox')[0].scrollHeight);
+    }
+
+  function aiLoadChatMessages() {
+      $.ajax({
+          url: '{% url "customer_chat_messages" %}',
+          type: 'GET',
+          success: function(res) {
+              if(res.status === 'success') {
+                  $('#aiChatBox').html(''); 
+                  
+                  if(res.messages.length === 0) {
+                      $('#aiChatBox').append('<div class="text-center p-3 text-muted">No messages yet. Start a conversation!</div>');
+                  }
+
+                  res.messages.forEach(msg => {
+                      // If admin_id is present, it's from admin (left). Else from customer (right).
+                      const side = (msg.admin_id) ? 'left' : 'right';
+                      let content = msg.message;
+                      // File handling removed as it's not yet implemented in backend
+                      // if(msg.file) content += `<br><a href="..." target="_blank">View</a>`;
+                      
+                      const time = aiFormatDate(msg.created_at);
+                      aiAppendMessage(content, side, time);
+                  });
+              }
+          },
+          error: function(err) {
+              console.error("Failed to load messages", err);
+          }
+      });
+  }
+
+  $('#chatFormAi').on('submit', function(e) {
+      e.preventDefault();
+      const message = $('#aiMessageInput').val().trim();
+      if (message === '') return;
+      
+      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      
+      // Clear input
+      $('#aiMessageInput').val('');
+      
+      // $.ajax({
+      //     url: '{% url "customer_chat_send" %}',
+      //     type: 'POST',
+      //     data: { 
+      //         message: message,
+      //         csrfmiddlewaretoken: csrfToken
+      //     },
+      //     success: function(res) {
+      //         if(res.status === 'success') {
+      //             aiLoadChatMessages(); 
+      //         } else {
+      //             alert("Error: " + (res.message || "Unknown error"));
+      //         }
+      //     },
+      //     error: function() {
+      //         alert('Failed to send message over the network.');
+      //     }
+      // });
+  });
+
+    const aiIsLoggedIn = JSON.parse("{{ user.is_authenticated|yesno:'true,false' }}");
+
+    function openFormAi() {
+      document.getElementById("myFormAi").style.display = "block";
+      
+      if(aiIsLoggedIn) {
+          ///aiLoadChatMessages();
+          // Clear any existing interval to prevent duplicates
+          //if(aiChatPollInterval) clearInterval(aiChatPollInterval);
+        //   aiChatPollInterval = setInterval(aiLoadChatMessages, 5000);
+      }
+    }
+
+    function closeFormAi() {
+      document.getElementById("myFormAi").style.display = "none";
+      if(aiChatPollInterval) clearInterval(aiChatPollInterval);
+    }
+  
+</script>
+
+    <div class="text-center" style="background-color: white">
+    <button type="button" class="btn cancel book-btn w-100" onclick="closeFormAi()" style="position: relative; width: 95%;padding: 0px;">
+        <span style="font-size: 16px; font-weight: bold;">Close</span>
+    </button>
+    </div>
+    </div>
+</div>
+
+
+
+
+
+
+

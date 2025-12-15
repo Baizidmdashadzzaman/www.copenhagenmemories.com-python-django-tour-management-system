@@ -1,0 +1,47 @@
+{% load static %}
+
+<div class="row">
+    {% for menu in website_menus_footer %}
+    <div class="col-lg-3 col-sm-6">
+        <div class="footer-widget">
+            <h5>
+                <a href="{{ menu.link|default:'#' }}" {% if menu.is_open_new_tab %}target="_blank"{% endif %}>
+                    {{ menu.title }}
+                </a>
+            </h5>
+            <ul class="footer-menu">
+                {% for submenu in menu.submenus.all %}
+                <li>
+                    <a href="{{ submenu.link }}" {% if submenu.is_open_new_tab %}target="_blank"{% endif %}>
+                        {{ submenu.title }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="col-lg-3 col-sm-6">
+        <div class="footer-widget">
+            <h5>Services</h5>
+            <div class="customer-info">
+                <div class="customer-info-icon">
+                    <span><i class="isax isax-headphone5"></i></span>
+                </div>
+                <div class="customer-info-content">
+                    <span>Customer Support</span>
+                    <h6>{{ site_settings.site_phone }}</h6>
+                </div>
+            </div>
+            <div class="customer-info">
+                <div class="customer-info-icon">
+                    <span><i class="isax isax-sms5"></i></span>
+                </div>
+                <div class="customer-info-content">
+                    <span>Drop Us an Email</span>
+                    <h6>{{ site_settings.site_email }}</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

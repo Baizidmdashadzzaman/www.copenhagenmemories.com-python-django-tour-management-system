@@ -1,0 +1,148 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Edit Destination Region{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Destination Regions /</span> Edit Region
+    </h4>
+
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card mb-6">
+                <h5 class="card-header">Edit Region: {{ region.name }}</h5>
+                <form class="card-body" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <h6 class="alert-heading mb-1">Please correct the errors below</h6>
+                        <ul class="mb-0">
+                            {% for field in form %}
+                            {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                            {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+
+                    <h6>1. Basic Details</h6>
+                    <div class="row g-6">
+                        <div class="col-md-6">
+                            <label class="form-label" for="id_name">Region Name <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" id="id_name" name="name" class="form-control"
+                                placeholder="Enter region name" value="{{ form.name.value|default:'' }}" required>
+                            <div class="form-text">Name of the destination region</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label" for="id_country">Country <span
+                                    class="text-danger">*</span></label>
+                            {{ form.country }}
+                            <div class="form-text">Select the country this region belongs to</div>
+                        </div>
+                    </div>
+
+                    <div class="row g-6 mt-2">
+                        <div class="col-md-12">
+                            <label class="form-label" for="id_description">Description</label>
+                            <textarea id="id_description" name="description" class="form-control" rows="3"
+                                placeholder="Enter description">{{ form.description.value|default:'' }}</textarea>
+                        </div>
+                    </div>
+
+                    <hr class="my-6 mx-n6">
+
+                    <h6>2. Images</h6>
+                    <div class="row g-6">
+                        <div class="col-md-6">
+                            <label class="form-label" for="id_image">Main Image</label>
+                            <input type="file" id="id_image" name="image" class="form-control" accept="image/*">
+                            <div class="form-text">Upload new main image (leave empty to keep current)</div>
+                            {% if region.image %}
+                            <div class="mt-2">
+                                <img src="{{ region.image.url }}" alt="Current Image" style="max-width: 200px; max-height: 150px;" class="img-thumbnail">
+                                <p class="text-muted small mb-0">Current main image</p>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label" for="id_cover_image">Cover Image</label>
+                            <input type="file" id="id_cover_image" name="cover_image" class="form-control" accept="image/*">
+                            <div class="form-text">Upload new cover image (leave empty to keep current)</div>
+                            {% if region.cover_image %}
+                            <div class="mt-2">
+                                <img src="{{ region.cover_image.url }}" alt="Current Cover" style="max-width: 200px; max-height: 150px;" class="img-thumbnail">
+                                <p class="text-muted small mb-0">Current cover image</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <hr class="my-6 mx-n6">
+
+                    <h6>3. Status & Info</h6>
+                    <div class="row g-6">
+                        <div class="col-md-6">
+                            <div class="form-check form-switch mb-2">
+                                {% if form.is_active.value %}
+                                <input class="form-check-input" type="checkbox" id="id_is_active" name="is_active"
+                                    checked>
+                                {% else %}
+                                <input class="form-check-input" type="checkbox" id="id_is_active" name="is_active">
+                                {% endif %}
+                                <label class="form-check-label" for="id_is_active">Active Status</label>
+                            </div>
+                            <div class="form-text">Enable this destination region</div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="alert alert-secondary mb-0" role="alert">
+                                <small>
+                                    <i class="ti ti-clock me-1"></i> Created:
+                                    {{ region.created_at|date:"M d, Y H:i" }}<br>
+                                    <i class="ti ti-refresh me-1"></i> Last Updated:
+                                    {{ region.updated_at|date:"M d, Y H:i" }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-6">
+                        <button type="submit" class="btn btn-primary me-2 waves-effect waves-light">
+                            <i class="icon-base ti tabler-check icon-22px"></i> Update
+                        </button>
+                        <a href="{% url 'destination_region_list' %}" class="btn btn-label-secondary me-2 waves-effect">
+                            <i class="icon-base ti tabler-ban icon-22px"></i> Cancel
+                        </a>
+                        <a href="{% url 'destination_region_delete' region.pk %}"
+                            class="btn btn-label-danger waves-effect float-end"
+                            onclick="return confirm('Are you sure you want to delete this region?')">
+                            <i class="icon-base ti tabler-ban icon-22px"></i> Delete
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const countrySelect = document.getElementById('id_country');
+        if (countrySelect) {
+            countrySelect.classList.add('form-select');
+        }
+    });
+</script>
+{% endblock %}

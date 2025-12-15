@@ -1,0 +1,26 @@
+@use "../utils/variables";
+
+/*============================
+  42.tour
+============================*/
+
+.vertical-splits {
+  width: 1px;
+  height: 20px;
+}
+.place-item {
+  position: relative;
+  .place-content {
+    position: relative;
+  }
+  .car-avatar-image {
+    position: absolute;
+    right: 20px;
+    top: -20px;
+    z-index: 1;
+    border: 1px solid variables.$white;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+  }
+}

@@ -1,0 +1,117 @@
+{% extends 'accounts/customer/layout.html' %}
+
+{% block customer_content %}
+{% load static %}
+
+
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">My Wishlist</h5>
+        <span class="badge bg-primary-subtle text-primary rounded-pill px-3">{{ wishlist_items|length }} Tours</span>
+    </div>
+
+    <div class="card-body p-0">
+        {% if wishlist_items %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="border-0 py-3 ps-4">Tour Details</th>
+                        <th class="border-0 py-3">Price</th>
+                        <th class="border-0 py-3">Added On</th>
+                        <th class="border-0 py-3 text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in wishlist_items %}
+                    <tr id="wishlist-item-{{ item.tour.id }}">
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center">
+                                <a href="{% url 'tour_detail' item.tour.id %}" class="flex-shrink-0 me-3">
+                                    {% if item.tour.main_image %}
+                                    <img src="{{ item.tour.main_image.url }}" alt="{{ item.tour.title }}" class="rounded-3 object-fit-cover" width="80" height="60">
+                                    {% else %}
+                                    <div class="rounded-3 bg-light d-flex align-items-center justify-content-center" style="width: 80px; height: 60px;">
+                                        <i class="isax isax-image text-muted"></i>
+                                    </div>
+                                    {% endif %}
+                                </a>
+                                <div>
+                                    <h6 class="mb-1">
+                                        <a href="{% url 'tour_detail' item.tour.id %}" class="text-dark text-decoration-none">{{ item.tour.title }}</a>
+                                    </h6>
+                                    <div class="small text-muted">
+                                        <i class="isax isax-location5 fs-12 me-1"></i>
+                                        {% if item.tour.city %}{{ item.tour.city.name }}{% else %}{{ item.tour.destination_region.name }}{% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="fw-medium text-primary">
+                            {{ item.tour.currency }} {{ item.tour.base_price|floatformat:0 }}
+                        </td>
+                        <td class="text-muted small">
+                            {{ item.created_at|date:"M d, Y" }}
+                        </td>
+                        <td class="text-end pe-4">
+                            <a href="{% url 'tour_detail' item.tour.id %}" class="btn btn-sm btn-light rounded-pill me-2">
+                                View Tour
+                            </a>
+                            <button onclick="removeFromWishlist({{ item.tour.id }})" class="btn btn-sm btn-outline-danger btn-icon rounded-circle">
+                                <i class="isax isax-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <div class="avatar avatar-xl bg-light rounded-circle shadow-sm d-inline-flex align-items-center justify-content-center mb-3">
+                <i class="isax isax-heart text-muted fs-24"></i>
+            </div>
+            <h6>Your wishlist is empty</h6>
+            <p class="text-muted fs-14 mb-4">Browse our tours and save your favorites here.</p>
+            <a href="{% url 'tour_list' %}" class="btn btn-primary rounded-pill px-4">
+                Explore Tours
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function removeFromWishlist(tourId) {
+    if (!confirm('Are you sure you want to remove this tour from your wishlist?')) return;
+
+    fetch("{% url 'toggle_wishlist' %}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({ tour_id: tourId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'removed') {
+            // Remove the row from the table
+            const row = document.getElementById('wishlist-item-' + tourId);
+            if (row) {
+                row.remove();
+                
+                // Update count or show empty state if needed (simplified for now)
+                const tbody = document.querySelector('tbody');
+                if (tbody && tbody.children.length === 0) {
+                    location.reload(); // Reload to show empty state
+                }
+            }
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+</script>
+
+{% endblock %}

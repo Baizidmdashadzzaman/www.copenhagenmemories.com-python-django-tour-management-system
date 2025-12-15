@@ -1,0 +1,158 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Management /</span> {{ title }}
+    </h4>
+
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">{{ title }}</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="id_title">Title</label>
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                        <div class="text-danger">{{ form.title.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="id_title_dk">Title (Danish)</label>
+                        {{ form.title_dk }}
+                        {% if form.title_dk.errors %}
+                        <div class="text-danger">{{ form.title_dk.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="id_slug">Slug</label>
+                        {{ form.slug }}
+                        {% if form.slug.errors %}
+                        <div class="text-danger">{{ form.slug.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="id_image">Image (Optional)</label>
+                        {{ form.image }}
+                        {% if form.image.errors %}
+                        <div class="text-danger">{{ form.image.errors }}</div>
+                        {% endif %}
+                        {% if page.image %}
+                        <div class="mt-2">
+                            <img src="{{ page.image.url }}" alt="Current Image" style="max-height: 100px;"
+                                class="rounded">
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+                <div class="row mb-3">
+                    <div class="col-md-12" style="padding-bottom: 100px;">
+                        <label class="form-label" for="id_content">Content</label>
+                        <div id="editor-content" style="min-height: 200px;">{{ form.content.value|safe }}</div>
+                        {{ form.content }}
+                        {% if form.content.errors %}
+                        <div class="text-danger">{{ form.content.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-12" style="padding-bottom: 100px;">
+                        <label class="form-label" for="id_content_dk">Content (Danish)</label>
+                        <div id="editor-content-dk" style="min-height: 200px;">{{ form.content_dk.value|safe }}</div>
+                        {{ form.content_dk }}
+                        {% if form.content_dk.errors %}
+                        <div class="text-danger">{{ form.content_dk.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        var quillContent = new Quill('#editor-content', {
+                            theme: 'snow',
+                            modules: {
+                                toolbar: [
+                                    [{ 'header': [1, 2, 3, false] }],
+                                    ['bold', 'italic', 'underline', 'strike'],
+                                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                    [{ 'indent': '-1' }, { 'indent': '+1' }],
+                                    ['link', 'image', 'video'],
+                                    ['clean']
+                                ]
+                            }
+                        });
+                        var hiddenContentInput = document.querySelector('#id_content');
+                        hiddenContentInput.style.display = 'none'; // Hide the original textarea
+                        quillContent.root.innerHTML = hiddenContentInput.value;
+
+                        quillContent.on('text-change', function () {
+                            hiddenContentInput.value = quillContent.root.innerHTML;
+                        });
+
+                        var quillContentDk = new Quill('#editor-content-dk', {
+                            theme: 'snow',
+                            modules: {
+                                toolbar: [
+                                    [{ 'header': [1, 2, 3, false] }],
+                                    ['bold', 'italic', 'underline', 'strike'],
+                                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                    [{ 'indent': '-1' }, { 'indent': '+1' }],
+                                    ['link', 'image', 'video'],
+                                    ['clean']
+                                ]
+                            }
+                        });
+                        var hiddenContentDkInput = document.querySelector('#id_content_dk');
+                        hiddenContentDkInput.style.display = 'none'; // Hide the original textarea
+                        quillContentDk.root.innerHTML = hiddenContentDkInput.value;
+
+                        quillContentDk.on('text-change', function () {
+                            hiddenContentDkInput.value = quillContentDk.root.innerHTML;
+                        });
+
+                        // Ensure the hidden input is updated on form submission
+                        var form = document.querySelector('form');
+                        if (form) {
+                            form.addEventListener('submit', function () {
+                                hiddenContentInput.value = quillContent.root.innerHTML;
+                                hiddenContentDkInput.value = quillContentDk.root.innerHTML;
+                            });
+                        }
+                    });
+                </script>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="id_display_section">Display Section</label>
+                        {{ form.display_section }}
+                        {% if form.display_section.errors %}
+                        <div class="text-danger">{{ form.display_section.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-check form-switch mb-2">
+                        {{ form.is_active }}
+                        <label class="form-check-label" for="id_is_active">Active Status</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save Page</button>
+                <a href="{% url 'page_list' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

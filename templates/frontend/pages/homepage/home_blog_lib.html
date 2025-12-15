@@ -1,0 +1,54 @@
+{% load static %}
+
+<section class="section blog-sec-two pt-0">
+    <div class="container">
+        <div class="section-header d-flex align-items-center justify-content-between flex-wrap row-gap-3">
+            <div>
+                <p class="mb-2 fw-medium d-flex align-items-center"><span class="text-bar"></span>Latest Articles
+                </p>
+                <h2>Stay Updated on the Stories<span class="text-primary">.</span></h2>
+            </div>
+            <div>
+                <a href="{% url 'blog_list_fronted' %}" class="btn btn-primary">View All<i
+                        class="isax isax-arrow-right-3 ms-2"></i></a>
+            </div>
+        </div>
+        <div class="blog-slider owl-carousel">
+            {% for blog in featured_blogs %}
+            <div class="card blog-grid wow fadeInUp" data-wow-delay="0.2s">
+                <div class="card-img rounded-top">
+                    <a href="{% url 'blog_detail_fronted' blog.id %}" class="blog-img">
+                        {% if blog.featured_image %}
+                            <img src="{{ blog.featured_image.url }}" class="rounded-top" alt="{{ blog.title }}">
+                        {% else %}
+                            <img src="{% static 'frontend/assets/img/blog/blog-default.jpg' %}" class="rounded-top" alt="{{ blog.title }}">
+                        {% endif %}
+                    </a>
+                    <div class="blog-date">
+                        <h6>{{ blog.created_at|date:"d" }}<span class="d-block">{{ blog.created_at|date:"M" }}</span></h6>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h5 class="mb-3"><a href="{% url 'blog_detail_fronted' blog.id %}" class="two-line-ellipsis">{{ blog.title }}</a></h5>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <a href="#" class="d-flex align-items-center overflow-hidden">
+                            <span class="avatar avatar-md flex-shrink-0 me-2">
+                                <img src="{% static 'frontend/assets/img/users/user-01.jpg' %}" class="rounded-circle" alt="{{ blog.author.get_full_name }}">
+                            </span>
+                            <p class="fs-14 text-truncate">{{ blog.author.get_full_name|default:blog.author.username }}</p>
+                        </a>
+                        <a href="{% url 'blog_detail_fronted' blog.id %}" class="rounded-arrow-next"><i
+                                class="isax isax-arrow-right-3"></i></a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <p class="text-muted">No featured blogs available at the moment.</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section

@@ -1,0 +1,472 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Invoice - #{{ booking.booking_number }}{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="py-3 mb-0">
+            <span class="text-muted fw-light">Booking Management /</span> Invoice #{{ booking.booking_number }}
+        </h4>
+        <div>
+            <a href="{% url 'booking_detail' booking.pk %}" class="btn btn-secondary">
+                <i class="icon-base ti tabler-arrow-left me-1"></i> Back to Details
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="">
+              <div class="row invoice-preview">
+                <!-- Invoice -->
+                <div class="col-xl-9 col-md-8 col-12 mb-md-0 mb-6">
+                  <div class="card invoice-preview-card p-sm-12 p-6">
+                    <div class="card-body invoice-preview-header rounded">
+                      <div class="d-flex justify-content-between flex-xl-row flex-md-column flex-sm-row flex-column align-items-xl-center align-items-md-start align-items-sm-center align-items-start">
+                        <div class="mb-xl-0 mb-6 text-heading">
+                          <div class="d-flex svg-illustration mb-6 gap-2 align-items-center">
+                            <span class="app-brand-logo demo">
+                              <span class="text-primary">
+                                <svg width="32" height="22" viewBox="0 0 32 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path fill-rule="evenodd" clip-rule="evenodd" d="M0.00172773 0V6.85398C0.00172773 6.85398 -0.133178 9.01207 1.98092 10.8388L13.6912 21.9964L19.7809 21.9181L18.8042 9.88248L16.4951 7.17289L9.23799 0H0.00172773Z" fill="currentColor"></path>
+                                  <path opacity="0.06" fill-rule="evenodd" clip-rule="evenodd" d="M7.69824 16.4364L12.5199 3.23696L16.5541 7.25596L7.69824 16.4364Z" fill="#161616"></path>
+                                  <path opacity="0.06" fill-rule="evenodd" clip-rule="evenodd" d="M8.07751 15.9175L13.9419 4.63989L16.5849 7.28475L8.07751 15.9175Z" fill="#161616"></path>
+                                  <path fill-rule="evenodd" clip-rule="evenodd" d="M7.77295 16.3566L23.6563 0H32V6.88383C32 6.88383 31.8262 9.17836 30.6591 10.4057L19.7824 22H13.6938L7.77295 16.3566Z" fill="currentColor"></path>
+                                </svg>
+                              </span>
+                            </span>
+                            <span class="app-brand-text fw-bold fs-4 ms-50">YourTourGuide</span>
+                          </div>
+                          <p class="mb-2">Copenhagen, Denmark</p>
+                          <p class="mb-2">Scandic Region</p>
+                          <p class="mb-0">info@yourtourguide.com</p>
+                        </div>
+                        <div>
+                          <h5 class="mb-6">Invoice #{{ booking.booking_number }}</h5>
+                          <div class="mb-1 text-heading">
+                            <span>Booking Date:</span>
+                            <span class="fw-medium">{{ booking.booking_date|date:"M d, Y" }}</span>
+                          </div>
+                          <div class="text-heading">
+                            <span>Tour Date:</span>
+                            <span class="fw-medium">{{ booking.tour_date|date:"M d, Y" }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-body px-0">
+                      <div class="row">
+                        <div class="col-xl-6 col-md-12 col-sm-5 col-12 mb-xl-0 mb-md-6 mb-sm-0 mb-6">
+                          <h6>Invoice To:</h6>
+                          <p class="mb-1">{{ booking.contact_name }}</p>
+                          <p class="mb-1">{{ booking.customer.user.get_full_name|default:booking.customer.user.username }}</p>
+                          <p class="mb-1">{{ booking.contact_phone|default:"-" }}</p>
+                          <p class="mb-0">{{ booking.contact_email }}</p>
+                        </div>
+                        <div class="col-xl-6 col-md-12 col-sm-7 col-12">
+                          <h6>Booking Summary:</h6>
+                          <table>
+                            <tbody>
+                              <tr>
+                                <td class="pe-4">Total Amount:</td>
+                                <td class="fw-medium">{{ booking.total_amount }} {{ booking.currency }}</td>
+                              </tr>
+                              <tr>
+                                <td class="pe-4">Payment Status:</td>
+                                <td>
+                                  <span class="badge bg-label-{% if booking.payment_status == 'paid' %}success{% elif booking.payment_status == 'pending' %}warning{% else %}danger{% endif %}">
+                                    {{ booking.get_payment_status_display }}
+                                  </span>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td class="pe-4">Booking Status:</td>
+                                <td>
+                                  <span class="badge bg-label-{% if booking.status == 'confirmed' %}success{% elif booking.status == 'pending' %}warning{% elif booking.status == 'cancelled' %}danger{% else %}info{% endif %}">
+                                    {{ booking.get_status_display }}
+                                  </span>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td class="pe-4">Participants:</td>
+                                <td>{{ booking.total_participants }}</td>
+                              </tr>
+                              {% if booking.pickup_location %}
+                              <tr>
+                                <td class="pe-4">Pickup Location:</td>
+                                <td>{{ booking.pickup_location }}</td>
+                              </tr>
+                              {% endif %}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="table-responsive border border-bottom-0 border-top-0 rounded">
+                      <table class="table m-0">
+                        <thead>
+                          <tr>
+                            <th>Participant</th>
+                            <th>Type</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Price</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for participant in participants %}
+                          <tr>
+                            <td class="text-nowrap text-heading">{{ participant.first_name }} {{ participant.last_name }}</td>
+                            <td class="text-nowrap">
+                              <span class="badge bg-label-info">{{ participant.participant_type }}</span>
+                            </td>
+                            <td>{{ participant.email|default:"-" }}</td>
+                            <td>{{ participant.phone|default:"-" }}</td>
+                            <td>{{ participant.price }} {{ booking.currency }}</td>
+                          </tr>
+                          {% empty %}
+                          <tr>
+                            <td colspan="5" class="text-center py-4">
+                              <div class="text-muted mb-2">No participants found.</div>
+                            </td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="table-responsive">
+                      <table class="table m-0 table-borderless">
+                        <tbody>
+                          <tr>
+                            <td class="align-top pe-6 ps-0 py-6 text-body">
+                              <p class="mb-1">
+                                <span class="me-2 h6">Tour:</span>
+                                <span>{{ booking.tour.title }}</span>
+                              </p>
+                              <span>Thank you for booking with us!</span>
+                            </td>
+                            <td class="px-0 py-6 w-px-100">
+                              <p class="mb-2">Subtotal:</p>
+                              <p class="mb-2">Discount:</p>
+                              <p class="mb-2 border-bottom pb-2">Tax:</p>
+                              <p class="mb-0">Total:</p>
+                            </td>
+                            <td class="text-end px-0 py-6 w-px-100 fw-medium text-heading">
+                              <p class="fw-medium mb-2">{{ booking.subtotal }} {{ booking.currency }}</p>
+                              <p class="fw-medium mb-2 text-danger">-{{ booking.discount_amount }} {{ booking.currency }}</p>
+                              <p class="fw-medium mb-2 border-bottom pb-2">{{ booking.tax_amount }} {{ booking.currency }}</p>
+                              <p class="fw-medium mb-0">{{ booking.total_amount }} {{ booking.currency }}</p>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <hr class="mt-0 mb-6">
+                    <div class="card-body p-0">
+                      <div class="row">
+                        <div class="col-12">
+                          <span class="fw-medium text-heading">Note:</span>
+                          {% if booking.customer_notes %}
+                          <span>{{ booking.customer_notes }}</span>
+                          {% else %}
+                          <span>Thank you for choosing YourTourGuide. We look forward to providing you with an excellent tour experience!</span>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /Invoice -->
+
+                <!-- Invoice Actions -->
+                <div class="col-xl-3 col-md-4 col-12 invoice-actions">
+                  <div class="card">
+                    <div class="card-body">
+                      <button class="btn btn-primary d-grid w-100 mb-4 waves-effect waves-light" data-bs-toggle="offcanvas" data-bs-target="#sendInvoiceOffcanvas">
+                        <span class="d-flex align-items-center justify-content-center text-nowrap"><i class="icon-base ti tabler-send icon-xs me-2"></i>Send Invoice</span>
+                      </button>
+                      <button class="btn btn-label-secondary d-grid w-100 mb-4 waves-effect text-nowrap" onclick="window.print()">
+                        <span class="d-flex align-items-center justify-content-center text-nowrap">
+                        <i class="icon-base ti tabler-printer icon-xs me-2"></i>Print
+                        </span>
+                      </button>
+                      <div class="d-flex mb-4">
+                        <a class="btn btn-label-secondary d-grid w-100 me-4 waves-effect text-nowrap" href="{% url 'booking_detail' booking.pk %}">
+                            <span class="d-flex align-items-center justify-content-center text-nowrap">
+                          <i class="icon-base ti tabler-eye icon-xs me-2"></i>View Details
+                          </span>
+                        </a>
+                        <a href="{% url 'booking_status_update' booking.pk %}" class="btn btn-label-secondary d-grid w-100 waves-effect">
+                            <span class="d-flex align-items-center justify-content-center text-nowrap">
+                          <i class="icon-base ti tabler-edit icon-xs me-2"></i>Edit Status
+                          </span>
+                        </a>
+                      </div>
+                      {% if booking.payment_status != 'paid' %}
+                      <button class="btn btn-success d-grid w-100 waves-effect waves-light" data-bs-toggle="offcanvas" data-bs-target="#addPaymentOffcanvas">
+                        <span class="d-flex align-items-center justify-content-center text-nowrap"><i class="icon-base ti tabler-currency-dollar icon-xs me-2"></i>Add Payment</span>
+                      </button>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+                <!-- /Invoice Actions -->
+              </div>
+
+              <!-- Offcanvas -->
+              <!-- Send Invoice Sidebar -->
+              <div class="offcanvas offcanvas-end" id="sendInvoiceOffcanvas" aria-hidden="true">
+                <div class="offcanvas-header mb-6 border-bottom">
+                  <h5 class="offcanvas-title">Send Invoice</h5>
+                  <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body pt-0 flex-grow-1">
+                  <form>
+                    <div class="mb-6">
+                      <label for="invoice-from" class="form-label">From</label>
+                      <input type="text" class="form-control" id="invoice-from" value="info@yourtourguide.com" placeholder="company@email.com">
+                    </div>
+                    <div class="mb-6">
+                      <label for="invoice-to" class="form-label">To</label>
+                      <input type="text" class="form-control" id="invoice-to" value="{{ booking.contact_email }}" placeholder="customer@email.com">
+                    </div>
+                    <div class="mb-6">
+                      <label for="invoice-subject" class="form-label">Subject</label>
+                      <input type="text" class="form-control" id="invoice-subject" value="Invoice for Booking #{{ booking.booking_number }}" placeholder="Invoice subject">
+                    </div>
+                    <div class="mb-6">
+                      <label for="invoice-message" class="form-label">Message</label>
+                      <textarea class="form-control" name="invoice-message" id="invoice-message" cols="3" rows="8">Dear {{ booking.contact_name }},
+
+Thank you for your booking with YourTourGuide!
+
+We have generated an invoice for your booking #{{ booking.booking_number }} for {{ booking.tour.title }}.
+Total Amount: {{ booking.total_amount }} {{ booking.currency }}
+Tour Date: {{ booking.tour_date|date:"M d, Y" }}
+
+We look forward to providing you with an excellent tour experience!
+
+Best regards,
+YourTourGuide Team</textarea>
+                    </div>
+                    <div class="mb-6">
+                      <span class="badge bg-label-primary">
+                        <i class="icon-base ti tabler-link icon-xs"></i>
+                        <span class="align-middle">Invoice Attached</span>
+                      </span>
+                    </div>
+                    <div class="mb-6 d-flex flex-wrap">
+                      <button type="button" class="btn btn-primary me-4 waves-effect waves-light" id="btn-send-invoice">Send</button>
+                      <button type="button" class="btn btn-label-secondary waves-effect" data-bs-dismiss="offcanvas">Cancel</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <!-- /Send Invoice Sidebar -->
+
+              <!-- Add Payment Sidebar -->
+              <div class="offcanvas offcanvas-end" id="addPaymentOffcanvas">
+                <div class="offcanvas-header border-bottom">
+                  <h5 class="offcanvas-title">Add Payment</h5>
+                  <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body flex-grow-1">
+                  <div class="d-flex justify-content-between bg-lighter p-2 mb-4">
+                    <p class="mb-0">Invoice Balance:</p>
+                    <p class="fw-medium mb-0">{{ booking.total_amount }} {{ booking.currency }}</p>
+                  </div>
+                  <form method="post" action="#">
+                    {% csrf_token %}
+                    <div class="mb-6">
+                      <label class="form-label" for="invoiceAmount">Payment Amount</label>
+                      <div class="input-group">
+                        <span class="input-group-text">{{ booking.currency }}</span>
+                        <input type="text" id="invoiceAmount" name="invoiceAmount" class="form-control invoice-amount" placeholder="100" value="{{ booking.total_amount }}">
+                      </div>
+                    </div>
+                    <div class="mb-6">
+                      <label class="form-label" for="payment-date">Payment Date</label>
+                      <input id="payment-date" class="form-control invoice-date" type="date">
+                    </div>
+                    <div class="mb-6">
+                      <label class="form-label" for="payment-method">Payment Method</label>
+                      <select class="form-select" id="payment-method">
+                        <option value="" selected="" disabled="">Select payment method</option>
+                        <option value="card">Credit/Debit Card</option>
+                        <option value="bank_transfer">Bank Transfer</option>
+                        <option value="cash">Cash</option>
+                        <option value="mobile_payment">Mobile Payment</option>
+                      </select>
+                    </div>
+                    <div class="mb-6">
+                      <label class="form-label" for="payment-note">Internal Payment Note</label>
+                      <textarea class="form-control" id="payment-note" rows="2"></textarea>
+                    </div>
+                    <div class="mb-6 d-flex flex-wrap">
+                      <button type="button" class="btn btn-primary me-4 waves-effect waves-light" id="btn-add-payment">Add Payment</button>
+                      <button type="button" class="btn btn-label-secondary waves-effect" data-bs-dismiss="offcanvas">Cancel</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <!-- /Add Payment Sidebar -->
+
+              <!-- /Offcanvas -->
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add Payment Form Handler
+    const addPaymentBtn = document.getElementById('btn-add-payment');
+    if (addPaymentBtn) {
+        addPaymentBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const amount = document.getElementById('invoiceAmount').value;
+            const paymentDate = document.getElementById('payment-date').value;
+            const paymentMethod = document.getElementById('payment-method').value;
+            const paymentNote = document.getElementById('payment-note').value;
+            
+            // Basic validation
+            if (!amount || parseFloat(amount) <= 0) {
+                alert('Please enter a valid payment amount');
+                return;
+            }
+            
+            if (!paymentMethod) {
+                alert('Please select a payment method');
+                return;
+            }
+            
+            // Prepare form data
+            const formData = new FormData();
+            formData.append('amount', amount);
+            formData.append('payment_date', paymentDate);
+            formData.append('payment_method', paymentMethod);
+            formData.append('payment_note', paymentNote);
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+            
+            // Disable submit button
+            addPaymentBtn.disabled = true;
+            addPaymentBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing...';
+            
+            // Submit via AJAX
+            fetch('{% url "booking_add_payment" booking.pk %}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success message
+                    alert(data.message);
+                    // Reload page to show updated payment status
+                    window.location.reload();
+                } else {
+                    // Show error message
+                    alert('Error: ' + data.error);
+                    // Re-enable submit button
+                    addPaymentBtn.disabled = false;
+                    addPaymentBtn.textContent = 'Add Payment';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while processing the payment');
+                // Re-enable submit button
+                addPaymentBtn.disabled = false;
+                addPaymentBtn.textContent = 'Add Payment';
+            });
+        });
+    }
+    
+    // Send Invoice Form Handler
+    const sendInvoiceBtn = document.getElementById('btn-send-invoice');
+    if (sendInvoiceBtn) {
+        sendInvoiceBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const fromEmail = document.getElementById('invoice-from').value;
+            const toEmail = document.getElementById('invoice-to').value;
+            const subject = document.getElementById('invoice-subject').value;
+            const message = document.getElementById('invoice-message').value;
+            
+            // Basic validation
+            if (!toEmail) {
+                alert('Please enter recipient email');
+                return;
+            }
+            
+            if (!subject) {
+                alert('Please enter email subject');
+                return;
+            }
+            
+            if (!message) {
+                alert('Please enter email message');
+                return;
+            }
+            
+            // Prepare form data
+            const formData = new FormData();
+            formData.append('from_email', fromEmail);
+            formData.append('to_email', toEmail);
+            formData.append('subject', subject);
+            formData.append('message', message);
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+            
+            // Disable submit button
+            sendInvoiceBtn.disabled = true;
+            sendInvoiceBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Sending...';
+            
+            // Submit via AJAX
+            fetch('{% url "booking_send_invoice" booking.pk %}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success message
+                    alert(data.message);
+                    // Close the offcanvas
+                    const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('sendInvoiceOffcanvas'));
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    }
+                    // Re-enable submit button
+                    sendInvoiceBtn.disabled = false;
+                    sendInvoiceBtn.textContent = 'Send';
+                } else {
+                    // Show error message
+                    alert('Error: ' + data.error);
+                    // Re-enable submit button
+                    sendInvoiceBtn.disabled = false;
+                    sendInvoiceBtn.textContent = 'Send';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while sending the invoice');
+                // Re-enable submit button
+                sendInvoiceBtn.disabled = false;
+                sendInvoiceBtn.textContent = 'Send';
+            });
+        });
+    }
+});
+</script>
+{% endblock %}

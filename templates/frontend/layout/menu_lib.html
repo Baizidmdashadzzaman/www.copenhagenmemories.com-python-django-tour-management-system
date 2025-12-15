@@ -1,0 +1,39 @@
+{% load static %}
+{% for menu in website_menus %}
+<li class="has-submenu {% if menu.has_submenu %}mega-innermenu{% endif %} {% if request.path == menu.link %}active{% endif %}">
+    <a href="{{ menu.link|default:'#' }}" {% if menu.is_open_new_tab %}target="_blank"{% endif %}>
+        {{ menu.title }}{% if menu.has_submenu %}<i class="fa-solid fa-angle-down"></i>{% endif %}
+    </a>
+    {% if menu.has_submenu %}
+    <ul class="submenu mega-submenu">
+        <li>
+            <div class="megamenu-wrapper">
+                <div class="row">
+                    <div class="col-lg-{% if menu.is_banner_showing and menu.banner %}6{% else %}12{% endif %}">
+                        <h6>{{ menu.title }}</h6>
+                        <ul>
+                            {% for submenu in menu.submenus.all %}
+                                {% if submenu.status == 'active' %}
+                                <li>
+                                    <a href="{{ submenu.link }}" {% if submenu.is_open_new_tab %}target="_blank"{% endif %}>
+                                        {{ submenu.title }}
+                                    </a>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% if menu.is_banner_showing and menu.banner %}
+                    <div class="col-lg-6">
+                        <div class="menu-img">
+                            <img src="{{ menu.banner.url }}" alt="{{ menu.title }}" class="img-fluid">
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </li>
+    </ul>
+    {% endif %}
+</li>
+{% endfor %}

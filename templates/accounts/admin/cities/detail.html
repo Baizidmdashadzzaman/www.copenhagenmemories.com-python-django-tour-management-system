@@ -1,0 +1,210 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}City Details - {{ city.name }}{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="py-3 mb-0">
+            <span class="text-muted fw-light">City Management /</span> {{ city.name }}
+        </h4>
+        <div>
+            <a href="{% url 'city_edit' city.pk %}" class="btn btn-primary">
+                <i class="icon-base ti tabler-edit me-1"></i> Edit City
+            </a>
+            <a href="{% url 'city_list' %}" class="btn btn-secondary">
+                <i class="icon-base ti tabler-arrow-left me-1"></i> Back to List
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left Column -->
+        <div class="col-xl-8 col-lg-7">
+            <!-- About City -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">About this City</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-4">
+                        {% if city.image %}
+                        <img src="{{ city.image.url }}" alt="{{ city.name }}" class="rounded me-3" style="width: 100px; height: 100px; object-fit: cover;">
+                        {% else %}
+                        <div class="rounded me-3 bg-lighter d-flex align-items-center justify-content-center" style="width: 100px; height: 100px;">
+                            <i class="icon-base ti tabler-photo icon-32px text-muted"></i>
+                        </div>
+                        {% endif %}
+                        <div>
+                            <h5 class="mb-1">{{ city.name }}</h5>
+                            <p class="mb-0 text-muted">{{ city.country.name }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <p class="mb-1"><span class="fw-medium">Region:</span> {{ city.region.name|default:"-" }}</p>
+                            <p class="mb-1"><span class="fw-medium">Country:</span> {{ city.country.name }}</p>
+                            <p class="mb-1"><span class="fw-medium">Slug:</span> <code>{{ city.slug }}</code></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-1"><span class="fw-medium">Latitude:</span> {{ city.latitude|default:"-" }}</p>
+                            <p class="mb-1"><span class="fw-medium">Longitude:</span> {{ city.longitude|default:"-" }}</p>
+                            <p class="mb-1"><span class="fw-medium">Status:</span> 
+                                {% if city.is_active %}
+                                <span class="badge bg-label-success">Active</span>
+                                {% else %}
+                                <span class="badge bg-label-danger">Inactive</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+                    
+                    <h6>Description</h6>
+                    <div class="mb-4">
+                        {% if city.description %}
+                        {{ city.description|linebreaks }}
+                        {% else %}
+                        <p class="text-muted">No description available.</p>
+                        {% endif %}
+                    </div>
+
+                    {% if city.description_dk %}
+                    <h6>Description (Danish)</h6>
+                    <div class="mb-4 text-muted">
+                        {{ city.description_dk|linebreaks }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Related Tours -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Tours in {{ city.name }} ({{ city.tours.count }})</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Title</th>
+                                <th>Supplier</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for tour in city.tours.all %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        {% if tour.main_image %}
+                                        <img src="{{ tour.main_image.url }}" alt="" class="rounded me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                                        {% else %}
+                                        <div class="rounded me-2 bg-lighter d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                            <i class="icon-base ti tabler-photo text-muted"></i>
+                                        </div>
+                                        {% endif %}
+                                        <div>
+                                            <a href="{% url 'tour_view' tour.pk %}" class="fw-medium text-heading">{{ tour.title }}</a>
+                                            <small class="d-block text-muted">{{ tour.category.name }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{ tour.supplier.company_name }}</td>
+                                <td>{{ tour.base_price }} {{ tour.currency }}</td>
+                                <td>
+                                    {% if tour.status == 'active' %}
+                                    <span class="badge bg-label-success">Active</span>
+                                    {% elif tour.status == 'draft' %}
+                                    <span class="badge bg-label-warning">Draft</span>
+                                    {% else %}
+                                    <span class="badge bg-label-danger">Inactive</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'tour_view' tour.pk %}" class="btn btn-sm btn-icon btn-text-secondary rounded-pill"><i class="icon-base ti tabler-eye"></i></a>
+                                    <a href="{% url 'tour_edit' tour.pk %}" class="btn btn-sm btn-icon btn-text-secondary rounded-pill"><i class="icon-base ti tabler-edit"></i></a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center py-4">
+                                    <div class="text-muted mb-2">No tours found in this city.</div>
+                                    <a href="{% url 'tour_create' %}?city={{ city.pk }}" class="btn btn-sm btn-primary">Create Tour</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-xl-4 col-lg-5">
+            <!-- Status Card -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Status & Visibility</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label d-block">Active Status</label>
+                        <div class="d-flex align-items-center">
+                            {% if city.is_active %}
+                            <span class="badge bg-label-success me-2">Active</span>
+                            <a href="{% url 'city_toggle_active' city.pk %}" class="btn btn-sm btn-outline-danger">Deactivate</a>
+                            {% else %}
+                            <span class="badge bg-label-danger me-2">Inactive</span>
+                            <a href="{% url 'city_toggle_active' city.pk %}" class="btn btn-sm btn-outline-success">Activate</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-label d-block">Popularity</label>
+                        <div class="d-flex align-items-center">
+                            {% if city.is_popular %}
+                            <span class="badge bg-label-warning me-2"><i class="icon-base ti tabler-star-filled me-1"></i> Popular</span>
+                            <a href="{% url 'city_toggle_popular' city.pk %}" class="btn btn-sm btn-outline-secondary">Remove from Popular</a>
+                            {% else %}
+                            <span class="badge bg-label-secondary me-2">Standard</span>
+                            <a href="{% url 'city_toggle_popular' city.pk %}" class="btn btn-sm btn-outline-warning">Mark as Popular</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metadata -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Metadata</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <span class="fw-medium">Created:</span>
+                            <br>
+                            <span class="text-muted">{{ city.created_at|date:"M d, Y H:i" }}</span>
+                        </li>
+                        <li class="mb-2">
+                            <span class="fw-medium">Last Updated:</span>
+                            <br>
+                            <span class="text-muted">{{ city.updated_at|date:"M d, Y H:i" }}</span>
+                        </li>
+                        <li>
+                            <span class="fw-medium">ID:</span>
+                            <span class="text-muted">{{ city.pk }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

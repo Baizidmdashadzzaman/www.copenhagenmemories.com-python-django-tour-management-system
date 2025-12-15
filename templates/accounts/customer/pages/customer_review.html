@@ -1,0 +1,79 @@
+{% extends 'accounts/customer/layout.html' %}
+
+{% block customer_content %}
+{% load static %}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">My Reviews</h5>
+        <span class="badge bg-primary-subtle text-primary rounded-pill px-3">{{ reviews.count }} Reviews</span>
+    </div>
+    
+    <div class="card-body">
+        {% if reviews %}
+            <div class="review-list">
+                {% for review in reviews %}
+                <div class="card border mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <h6 class="mb-1"><a href="{% url 'tour_detail' review.tour.id %}" class="text-dark">{{ review.tour.title }}</a></h6>
+                                <p class="text-muted fs-13 mb-0">Reviewed on {{ review.created_at|date:"M d, Y" }}</p>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <span class="badge {% if review.status == 'approved' %}bg-success{% elif review.status == 'pending' %}bg-warning{% else %}bg-danger{% endif %} rounded-pill me-2">
+                                    {{ review.get_status_display }}
+                                </span>
+                                <form action="{% url 'customer_review_delete' review.id %}" method="POST" onsubmit="return confirm('Are you sure you want to delete this review?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-danger btn-icon">
+                                        <i class="isax isax-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="fw-medium me-2">Rating:</span>
+                                <div class="d-flex align-items-center">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= review.overall_rating %}
+                                        <i class="ti ti-star-filled text-warning fs-14 me-1"></i>
+                                        {% else %}
+                                        <i class="ti ti-star text-muted fs-14 me-1"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <h6 class="fs-15 mb-2">{{ review.title }}</h6>
+                            <p class="text-muted mb-0">{{ review.review }}</p>
+                        </div>
+
+                        {% if review.supplier_response %}
+                        <div class="bg-light rounded p-3 mt-3">
+                            <div class="d-flex align-items-center mb-2">
+                                <h6 class="fs-14 fw-bold mb-0 text-primary">Response from {{ review.tour.supplier.company_name }}</h6>
+                                <span class="text-muted fs-12 ms-2">{{ review.supplier_response_date|date:"M d, Y" }}</span>
+                            </div>
+                            <p class="fs-13 text-muted mb-0">{{ review.supplier_response }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <div class="avatar avatar-xl bg-light rounded-circle mb-3 mx-auto d-flex align-items-center justify-content-center">
+                    <i class="isax isax-star fs-24 text-muted"></i>
+                </div>
+                <h6>No reviews yet</h6>
+                <p class="text-muted">You haven't customized any reviews yet.</p>
+                <a href="{% url 'tour_list_fronted' %}" class="btn btn-primary btn-sm mt-3">Browse Tours</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
