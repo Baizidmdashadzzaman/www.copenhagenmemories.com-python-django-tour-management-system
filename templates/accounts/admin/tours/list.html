@@ -131,10 +131,10 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <span class="badge bg-label-info me-2">
-                                                {{ tour.average_rating|default:"0" }}/5
+                                                {{ tour.calculated_average_rating|floatformat:1 }}/5
                                             </span>
                                             <small class="text-muted">
-                                                ({{ tour.total_reviews|default:"0" }}reviews)
+                                                ({{ tour.calculated_total_reviews }}reviews)
                                             </small>
                                         </div>
                                     </td>
@@ -253,8 +253,7 @@
                                     {% else %}
                                     <li class="page-item">
                                         <a class="page-link"
-                                            href="?page={{ i }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status %}&status={{ status }}{% endif %}">{{
-                                            i }}</a>
+                                            href="?page={{ i }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status %}&status={{ status }}{% endif %}">{{ i }}</a>
                                     </li>
                                     {% endif %}
                                     {% endfor %}

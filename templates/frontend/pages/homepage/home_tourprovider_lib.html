@@ -22,9 +22,9 @@
                 <div class="card-body text-center">
                     <a href="{% url 'tour_list_type_filtered' %}?supplier={{ supplier.id }}" class="d-block mb-3">
                         {% if supplier.logo %}
-                            <img src="{{ supplier.logo.url }}" class="rounded-circle w-auto m-auto" alt="{{ supplier.company_name }}">
+                            <img src="{{ supplier.logo.url }}" class=" m-auto" alt="{{ supplier.company_name }}" style="height: 200px;width: 100%;border-radius: 10px;">
                         {% else %}
-                            <img src="{% static 'frontend/assets/img/icons/hotel-logo-02.svg' %}" class="rounded-circle w-auto m-auto" alt="{{ supplier.company_name }}">
+                            <img src="{% static 'frontend/assets/img/icons/hotel-logo-02.svg' %}" class="rounded-circle w-auto m-auto" alt="{{ supplier.company_name }}" >
                         {% endif %}
                     </a>
                     <h5 class="mb-2" style="min-height:100px">

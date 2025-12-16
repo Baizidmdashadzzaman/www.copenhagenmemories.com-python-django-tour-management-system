@@ -36,12 +36,12 @@
                                 <div class="slider-for nav-center" id="large-img">
                                     {% if tour.main_image %}
                                     <div class="service-img">
-                                        <img src="{{ tour.main_image.url }}" class="img-fluid" alt="{{ tour.title }}">
+                                        <img src="{{ tour.main_image.url }}" class="img-fluid" alt="{{ tour.title }}" style="width: 100%;">
                                     </div>
                                     {% endif %}
                                     {% for image in images %}
                                     <div class="service-img">
-                                        <img src="{{ image.image.url }}" class="img-fluid" alt="{{ image.caption|default:tour.title }}">
+                                        <img src="{{ image.image.url }}" class="img-fluid" alt="{{ image.caption|default:tour.title }}" style="width: 100%;">
                                     </div>
                                     {% endfor %}
                                     {% if not tour.main_image and not images %}
@@ -85,10 +85,10 @@
                                         <a href="#location" class="link-primary text-decoration-underline fw-medium ms-2">View Location</a>
                                     </p>
                                     {% endif %}
-                                    {% if tour.average_rating > 0 %}
+                                    {% if avg_rating > 0 %}
                                     <div class="d-flex align-items-center mb-2">
-                                        <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">{{ tour.average_rating|floatformat:1 }}</span>
-                                        <p class="fs-14"><a href="#reviews">({{ tour.total_reviews }} Reviews)</a></p>
+                                        <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">{{ avg_rating|floatformat:1 }}</span>
+                                        <p class="fs-14"><a href="#reviews">({{ total_reviews }} Reviews)</a></p>
                                     </div>
                                     {% endif %}
                                 </div>
@@ -219,8 +219,8 @@
                             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3!2d{{ tour.meeting_point_longitude }}!3d{{ tour.meeting_point_latitude }}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM!5e0!3m2!1sen!2s!4v1"
                             allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="tour-detail-map w-100"></iframe>
                             {% else %}
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6509170.989457427!2d-123.80081967108484!3d37.192957227641294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb9fe5f285e3d%3A0x8b5109a227086f55!2sCalifornia%2C%20USA!5e0!3m2!1sen!2sin!4v1669181581381!5m2!1sen!2sin"
-                            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="tour-detail-map w-100"></iframe>
+                            <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6509170.989457427!2d-123.80081967108484!3d37.192957227641294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb9fe5f285e3d%3A0x8b5109a227086f55!2sCalifornia%2C%20USA!5e0!3m2!1sen!2sin!4v1669181581381!5m2!1sen!2sin"
+                            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="tour-detail-map w-100"></iframe> -->
                             {% endif %}
                             {% if tour.meeting_point %}
                             <div class="mt-3">
@@ -258,7 +258,7 @@
 
                     <!-- Reviews -->
                     <div class="d-flex align-items-center justify-content-between flex-wrap mb-2" id="reviews">
-                        <h6 class="mb-3">Reviews ({{ tour.total_reviews }})</h6>
+                        <h6 class="mb-3">Reviews ({{ total_reviews }})</h6>
                         <a href="#" data-bs-toggle="modal" data-bs-target="#add_review" class="btn btn-primary btn-md mb-3"><i class="isax isax-edit-2 me-1"></i>Write a Review</a>
                     </div>
                     <div class="row">

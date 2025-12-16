@@ -117,9 +117,9 @@
                                                 <span class="me-1"><i class="ti ti-receipt text-primary"></i></span> {{ tour.category.name }}
                                             </p>
                                             {% endif %}
-                                            {% if tour.average_rating %}
-                                            <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">{{ tour.average_rating|floatformat:1 }}</span>
-                                            <p class="fs-14">({{ tour.total_reviews }} Reviews)</p>
+                                            {% if tour.calculated_average_rating > 0 %}
+                                            <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">{{ tour.calculated_average_rating|floatformat:1 }}</span>
+                                            <p class="fs-14">({{ tour.calculated_total_reviews }} Reviews)</p>
                                             {% endif %}
                                         </div>
                                     </div>

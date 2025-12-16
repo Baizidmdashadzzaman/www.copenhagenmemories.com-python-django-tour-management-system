@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Q, Avg, Count, Value
+from django.db.models.functions import Coalesce
 from accounts.models import Tour, TourImage, TourHighlight, TourIncluded, TourExcluded, TourItinerary, TourRequirement, TourFAQ, TourPricing, TourSchedule, TourBlackoutDate
 from .decorators import permission_required_with_message
 from .forms_additions import TourForm, TourImageForm, TourHighlightForm, TourIncludedForm, TourExcludedForm, TourItineraryForm, TourRequirementForm, TourFAQForm, TourPricingForm, TourScheduleForm, TourBlackoutDateForm
@@ -14,7 +15,10 @@ def tour_list(request):
     search_query = request.GET.get('search', '')
     status = request.GET.get('status', '')
     
-    tours = Tour.objects.select_related('supplier', 'category', 'destination_region', 'city').all()
+    tours = Tour.objects.select_related('supplier', 'category', 'destination_region', 'city').annotate(
+        calculated_average_rating=Coalesce(Avg('reviews__overall_rating'), Value(0.0)),
+        calculated_total_reviews=Count('reviews')
+    ).all()
     
     if search_query:
         tours = tours.filter(

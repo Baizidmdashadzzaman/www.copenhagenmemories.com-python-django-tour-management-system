@@ -70,7 +70,13 @@
                                         <div class="fav-dropdown">
                                             <a href="{% url 'customer_wishlist_page' %}" class="position-relative">
                                                 <i class="isax isax-heart"></i><span
-                                                    class="count-icon bg-secondary text-gray-9">0</span>
+                                                    class="count-icon bg-secondary text-gray-9">
+                                                {% if user.is_authenticated and not user.is_staff %}
+                                                        {{ user.customer_profile.wishlist.count }}
+                                                    {% else %}
+                                                        0
+                                                    {% endif %}
+                                                </span>
                                             </a>
                                         </div>
                                     </div>
@@ -85,29 +91,25 @@
                                                 <a href="#"
                                                     class="dropdown-toggle bg-white border d-flex align-items-center"
                                                     data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <img src="{% static 'frontend/assets/img/flags/us-flag.svg' %}"
-                                                        class="me-2" alt="flag">ENG
+                                                        {% if current_lang == 'dk' %}
+                                                        <img src="{% static 'frontend/assets/img/flags/dk.png' %}" alt="flag">DKK
+                                                        {% else %}
+                                                        <img src="{% static 'frontend/assets/img/flags/us.png' %}" alt="flag">ENG
+                                                        {% endif %}
                                                 </a>
                                                 <ul class="dropdown-menu p-2">
                                                     <li>
                                                         <a class="dropdown-item rounded d-flex align-items-center"
-                                                            href="#">
-                                                            <img src="{% static 'frontend/assets/img/flags/us-flag.svg' %}"
-                                                                class="me-2" alt="flag">ENG
+                                                           href="{% url 'set_language' 'en' %}">
+                                                            <img src="{% static 'frontend/assets/img/flags/us.png' %}"
+                                                                class="me-2" alt="ENG">ENG
                                                         </a>
                                                     </li>
                                                     <li>
                                                         <a class="dropdown-item rounded d-flex align-items-center"
-                                                            href="#">
-                                                            <img src="{% static 'frontend/assets/img/flags/arab-flag.svg' %}"
-                                                                class="me-2" alt="flag">ARA
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="dropdown-item rounded d-flex align-items-center"
-                                                            href="#">
-                                                            <img src="{% static 'frontend/assets/img/flags/france-flag.svg' %}"
-                                                                class="me-2" alt="flag">FRE
+                                                            href="{% url 'set_language' 'dk' %}">
+                                                            <img src="{% static 'frontend/assets/img/flags/dk.png' %}"
+                                                                class="me-2" alt="flag">DKK
                                                         </a>
                                                     </li>
                                                 </ul>
@@ -115,20 +117,18 @@
                                             <div class="dropdown">
                                                 <a href="#" class="dropdown-toggle bg-white border d-block"
                                                     data-bs-toggle="dropdown" aria-expanded="false">
-                                                    USD
+                                                    DKK
                                                 </a>
                                                 <ul class="dropdown-menu p-2">
-                                                    <li><a class="dropdown-item rounded" href="#">USD</a></li>
-                                                    <li><a class="dropdown-item rounded" href="#">YEN</a></li>
-                                                    <li><a class="dropdown-item rounded" href="#">EURO</a></li>
+                                                    <li><a class="dropdown-item rounded" href="#">DKK</a></li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="btn btn-dark w-100 mb-3"><a href="#" class="text-white"
-                                            data-bs-toggle="modal" data-bs-target="#login-modal">Sign In</a> / <a
-                                            href="#" class="text-white" data-bs-toggle="modal"
-                                            data-bs-target="#register-modal">Sign Up</a></div>
+                                    <div class="btn btn-dark w-100 mb-3">
+                                        <a href="{% url 'login' %}" class="text-white" >Sign In</a> / <a
+                                            href="{% url 'login' %}" >Sign Up</a>
+                                        </div>
                                 </div>
                             </div>
                         </div>
@@ -156,10 +156,10 @@
                  
                             <div class="dropdown me-3">
                                 <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                    USD
+                                    Dkk
                                 </a>
                                 <ul class="dropdown-menu p-2 mt-2">
-                                    <li><a class="dropdown-item rounded" href="#">USD</a></li>
+                                    <li><a class="dropdown-item rounded" href="#">Dkk</a></li>
                                 </ul>
                             </div>
                             

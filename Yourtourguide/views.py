@@ -1,9 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
-from django.db.models import Q, Avg, Count
+from django.db.models import Q, Avg, Count, Value
+from django.db.models.functions import Coalesce
 from accounts.models import Tour, Category, DestinationRegion, City, TourReview
 
-from accounts.models import BlogPost, ContactUs, SiteSetting, CustomerReviewStatic, FAQ, TourSupplier, Country, FeatureSection, Slider,Page
+from accounts.models import BlogPost, ContactUs, SiteSetting, CustomerReviewStatic, FAQ, TourSupplier, Country, FeatureSection, Slider,Page, Tour
+from django.db.models import Prefetch
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import translation
 from django.conf import settings
@@ -107,10 +109,14 @@ def home(request):
     destination_regions = DestinationRegion.objects.filter(is_active=True).annotate(tour_count=Count('tours', filter=Q(tours__status='active'))).order_by('name')
     countries = Country.objects.filter(is_active=True).annotate(tour_count=Count('cities__tours', filter=Q(cities__tours__status='active'))).order_by('name')
     feature_sections = FeatureSection.objects.filter(status='active').prefetch_related(
-        'section_tours__tour__images',
-        'section_tours__tour__supplier',
-        'section_tours__tour__city__country',
-        'section_tours__tour__destination_region'
+        Prefetch('section_tours__tour', queryset=Tour.objects.annotate(
+            calculated_average_rating=Coalesce(Avg('reviews__overall_rating'), Value(0.0)),
+            calculated_total_reviews=Count('reviews')
+        ).select_related(
+            'supplier',
+            'city__country',
+            'destination_region'
+        ).prefetch_related('images')),
     ).order_by('rank', '-created_at')
     sliders = Slider.objects.filter(status='active').order_by('-created_at')
     
@@ -235,7 +241,10 @@ def _build_tour_list_context(request):
     }
 
     # Base queryset with related data
-    tours = Tour.objects.select_related(
+    tours = Tour.objects.annotate(
+        calculated_average_rating=Coalesce(Avg('reviews__overall_rating'), Value(0.0)),
+        calculated_total_reviews=Count('reviews')
+    ).select_related(
         'supplier', 'category', 'destination_region', 'city'
     ).prefetch_related(
         'images', 'reviews'
@@ -280,7 +289,7 @@ def _build_tour_list_context(request):
         
     # Apply rating filter
     if rating:
-        tours = tours.filter(average_rating__gte=rating)
+        tours = tours.filter(calculated_average_rating__gte=rating)
 
     # Apply difficulty filter
     if difficulty:
@@ -312,11 +321,11 @@ def _build_tour_list_context(request):
     elif sort_by == 'price_high':
         tours = tours.order_by('-base_price')
     elif sort_by == 'rating':
-        tours = tours.order_by('-average_rating')
+        tours = tours.order_by('-calculated_average_rating')
     elif sort_by == 'newest':
         tours = tours.order_by('-created_at')
     else:  # recommended - featured tours first, then by rating
-        tours = tours.order_by('-is_featured', '-average_rating', '-created_at')
+        tours = tours.order_by('-is_featured', '-calculated_average_rating', '-created_at')
 
     # Capture total before pagination
     total_tours = tours.count()
@@ -424,12 +433,17 @@ def tour_detail(request, tour_id):
     from decimal import Decimal
     import random
     import string
+    from django.db.models import Avg, Count, Value
+    from django.db.models.functions import Coalesce
 
 
     # Get tour with all related data
     tour = get_object_or_404(
         Tour.objects.select_related(
             'supplier', 'category', 'destination_region', 'city'
+        ).annotate(
+            calculated_average_rating=Coalesce(Avg('reviews__overall_rating'), Value(0.0)),
+            calculated_total_reviews=Count('reviews')
         ).prefetch_related(
             'images', 'highlights', 'included_items', 'excluded_items',
             'itinerary_steps', 'requirements', 'faqs', 'pricing_options',
@@ -790,6 +804,9 @@ def tour_feature_section(request, feature_id):
         status='active'
     ).select_related(
         'city', 'city__country', 'destination_region'
+    ).annotate(
+        calculated_average_rating=Coalesce(Avg('reviews__overall_rating'), Value(0.0)),
+        calculated_total_reviews=Count('reviews')
     ).prefetch_related(
         'images'
     ).order_by('-created_at')
