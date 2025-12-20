@@ -44,7 +44,6 @@
 <div class="content">
     <div class="container">
         
-        <!-- Feature Section Description -->
         <div class="row mb-4">
             <div class="col-12 text-center">
                  {% if feature_section.description or feature_section.description_dk %}
@@ -61,7 +60,6 @@
 
         <div class="row justify-content-center">
             <div class="col-xl-12 col-lg-12 row">
-                <!-- Tours List -->
                 {% for tour in page_obj %}
                 <div class="col-xl-4 col-lg-4">
                 <div class="place-item mb-4">
@@ -195,9 +193,8 @@
                     <a href="{% url 'home' %}" class="btn btn-primary mt-3">{% trans "Go Home" %}</a>
                 </div>
                 {% endfor %}
-                <!-- /Tours List -->
 
-                <!-- Pagination -->
+                
                 {% if page_obj.has_other_pages %}
                 <nav class="pagination-nav">
                     <ul class="pagination justify-content-center">
@@ -241,7 +238,6 @@
                     </ul>
                 </nav>
                 {% endif %}
-                <!-- /Pagination -->
 
             </div>
         </div>
@@ -249,7 +245,6 @@
 </div>
 
 <style>
-/* Override Owl Carousel default display:none */
 .img-slider.owl-carousel,
 .image-slide.owl-carousel {
     display: block !important;

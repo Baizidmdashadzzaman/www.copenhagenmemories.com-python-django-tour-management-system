@@ -62,7 +62,6 @@
                 <div class="hotel-list">
                     <div class="row justify-content-center">
                         <div class="col-md-12">
-                            <!-- Tours List -->
                             {% for tour in page_obj %}
                             <div class="place-item mb-4">
                                 <div class="place-img">
@@ -156,13 +155,11 @@
                                 </div>
                             </div>
                             {% endfor %}
-                            <!-- /Tours List -->
                         </div>
                     </div>
                 </div>
                 
                 <div class="col-xl-12">
-                <!-- Pagination -->
                 {% if page_obj.has_other_pages %}
                 <nav class="pagination-nav">
                     <ul class="pagination justify-content-center">
@@ -206,7 +203,6 @@
                     </ul>
                 </nav>
                 {% endif %}
-                <!-- /Pagination -->
 
             </div>
 
@@ -214,7 +210,6 @@
     </div>
 </div>
 <style>
-/* Override Owl Carousel default display:none */
 .img-slider.owl-carousel,
 .image-slide.owl-carousel {
     display: block !important;

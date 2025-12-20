@@ -10,9 +10,7 @@
     </div>
     
     <div class="card-body p-0">
-        <!-- Message History -->
         <div class="chat-history p-4 bg-light" id="dashboard-chat-box" style="height: 500px; overflow-y: auto;">
-            <!-- Messages will be loaded here via AJAX -->
              <div class="text-center py-5 loading-placeholder">
                 <div class="spinner-border text-primary" role="status">
                     <span class="visually-hidden">Loading...</span>
@@ -20,13 +18,11 @@
             </div>
         </div>
         
-        <!-- Send Message Form -->
         <div class="card-footer bg-white p-3 border-top">
             <h6 class="fs-14 fw-bold mb-3">Send a Message</h6>
             <form id="dashboard-chat-form">
                 {% csrf_token %}
                 <div class="mb-3">
-                     <!-- Hidden subject field, default value for quick chat -->
                     <input type="hidden" name="subject" value="Support Chat">
                 </div>
                 <div class="mb-3">
@@ -58,7 +54,6 @@
         
         let avatarHtml = '';
         if (side === 'right') {
-             // User avatar
              avatarHtml = `
                 <div class="avatar avatar-sm flex-shrink-0">
                     {% if user.customer_profile.profile_image %}
@@ -69,7 +64,6 @@
                 </div>
              `;
         } else {
-            // Admin avatar
              avatarHtml = `
                 <div class="avatar avatar-sm flex-shrink-0">
                     <img src="{% static 'admin/assets/img/users/admin-avatar.png' %}" onerror="this.src='{% static 'frontend/assets/img/users/user-01.jpg' %}'" alt="support" class="rounded-circle w-100 h-100">
@@ -105,8 +99,6 @@
             success: function(res) {
                 if(res.status === 'success') {
                     const chatBox = $('#dashboard-chat-box');
-                    // Check if we need to clear (only if currently showing placeholder or if we want full refresh)
-                    // For logic simplicity, we'll clear and rebuild. In prod, efficient appending is better.
                     chatBox.empty(); 
                     
                     if(res.messages.length === 0) {
@@ -121,16 +113,13 @@
                         `);
                     } else {
                         res.messages.forEach(msg => {
-                            const side = (msg.admin_id) ? 'left' : 'right'; // left=admin, right=customer
+                            const side = (msg.admin_id) ? 'left' : 'right'; 
                             const time = formatDate(msg.created_at);
-                            // Assuming msg.is_read could be added to API response, defaulting false for now if not present
                             const isRead = msg.is_read || false; 
                             appendDashboardMessage(msg.message, side, time, isRead);
                         });
-                        // Scroll to bottom
                         chatBox.scrollTop(chatBox[0].scrollHeight);
                     }
-                    // Update count
                     $('#message-count').text(res.messages.length + ' Messages');
                 }
             },
@@ -140,13 +129,10 @@
         });
     }
 
-    // Initial Load
     loadDashboardMessages();
     
-    // Poll every 5 seconds
     setInterval(loadDashboardMessages, 5000);
 
-    // Send Message
     $('#dashboard-chat-form').on('submit', function(e) {
         e.preventDefault();
         const form = $(this);

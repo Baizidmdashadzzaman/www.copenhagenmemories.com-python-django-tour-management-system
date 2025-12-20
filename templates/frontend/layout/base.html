@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -65,13 +66,15 @@
                                     </div>
                                 </div>
                                 <div class="wishlist-info d-flex justify-content-between align-items-center">
-                                    <h6 class="fs-16 fw-medium">Wishlist</h6>
+                                    <h6 class="fs-16 fw-medium">
+                                        {% trans "Wishlist" %}
+                                    </h6>
                                     <div class="d-flex align-items-center">
                                         <div class="fav-dropdown">
                                             <a href="{% url 'customer_wishlist_page' %}" class="position-relative">
                                                 <i class="isax isax-heart"></i><span
                                                     class="count-icon bg-secondary text-gray-9">
-                                                {% if user.is_authenticated and not user.is_staff %}
+                                                    {% if user.is_authenticated and not user.is_staff %}
                                                         {{ user.customer_profile.wishlist.count }}
                                                     {% else %}
                                                         0
@@ -126,8 +129,11 @@
                                         </div>
                                     </div>
                                     <div class="btn btn-dark w-100 mb-3">
-                                        <a href="{% url 'login' %}" class="text-white" >Sign In</a> / <a
-                                            href="{% url 'login' %}" >Sign Up</a>
+                                        <a href="{% url 'login' %}" class="text-white" >
+                                            {% trans "Sign In" %}
+                                        </a> / <a href="{% url 'login' %}" >
+                                            {% trans "Sign Up" %}
+                                        </a>
                                         </div>
                                 </div>
                             </div>
@@ -198,16 +204,20 @@
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end p-3" >
                                     <li>
-                                        <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2" href="{% url 'customer_dashboard' %}">Dashboard</a>
+                                        <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2" href="{% url 'customer_dashboard' %}">
+                                            {% trans "Dashboard" %}
+                                        </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2" href="{% url 'logout' %}">Logout</a>
+                                        <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2" href="{% url 'logout' %}">
+                                            {% trans "Logout" %}
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
                             {% else %}
                             <a href="{% url 'login' %}" class="btn btn-primary">
-                                Login/Register
+                                {% trans "Login/Register" %}
                             </a>
                             {% endif %}
                             <div class="header__hamburger d-xl-none my-auto">
@@ -250,7 +260,9 @@
                             <p class="mb-3">
                                 {{ site_settings.site_description }}
                             </p>
-                            <span class="d-block mb-2">Available on</span>
+                            <span class="d-block mb-2">
+                                {% trans "Available on" %}
+                            </span>
                             <div class="d-flex align-items-center row-gap-2 flex-wrap">
                                 <a href="{{ site_settings.app_google }}" class="d-block me-2">
                                     <img src="{% static 'frontend/assets/img/icons/googleplay.svg' %}" alt="logo">
@@ -274,8 +286,8 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="d-flex align-items-center justify-content-between flex-wrap">
-                            <p class="fs-14">Copyright &copy; 2025. All Rights Reserved, <a href="#"
-                                    class="text-primary fw-medium">{{ site_settings.site_name }}</a>. Developed by <a  href="https://www.softscandic.com" target="_blank" style="color: rgb(255, 255, 255);"><img  src="{% static 'frontend/scandicsoft-logo-black.webp' %}" alt="Scandicsoft" style="width: 110px;"></a></p>
+                            <p class="fs-14">{% trans "Copyright" %} &copy; 2025-{{ current_year }}. {% trans "All Rights Reserved" %}, <a href="#"
+                                    class="text-primary fw-medium">{{ site_settings.site_name }}</a>. {% trans "Developed by" %} <a  href="https://www.softscandic.com" target="_blank" style="color: rgb(255, 255, 255);"><img  src="{% static 'frontend/scandicsoft-logo-black.webp' %}" alt="Scandicsoft" style="width: 110px;"></a></p>
                             <div class="d-flex align-items-center">
                                 <ul class="social-icon social-icon-two">
                                     <li>

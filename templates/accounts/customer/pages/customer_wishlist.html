@@ -102,7 +102,6 @@ function removeFromWishlist(tourId) {
             if (row) {
                 row.remove();
                 
-                // Update count or show empty state if needed (simplified for now)
                 const tbody = document.querySelector('tbody');
                 if (tbody && tbody.children.length === 0) {
                     location.reload(); // Reload to show empty state

@@ -47,12 +47,9 @@
             {% endfor %}
 
 
-
-            <!-- Pagination -->
             {% if cities.has_other_pages %}
             <nav class="pagination-nav">
                 <ul class="pagination justify-content-center">
-
                     {% if cities.has_previous %}
                     <li class="page-item">
                         <a class="page-link" href="?page={{ cities.previous_page_number }}" aria-label="Previous">
@@ -95,7 +92,6 @@
                 </ul>
             </nav>
             {% endif %}
-            <!-- /Pagination -->
         </div>
     </div>
 </div>

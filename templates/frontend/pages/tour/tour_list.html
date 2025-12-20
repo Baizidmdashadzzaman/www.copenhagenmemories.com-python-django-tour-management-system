@@ -197,7 +197,9 @@
                                             </div>
                                             <div class="mt-3">
                                                 <button type="submit" class="btn btn-primary btn-sm">Apply Filters</button>
-                                                <a href="{% url 'tour_list' %}" class="btn btn-light btn-sm ms-2">Clear All</a>
+                                                <a href="{% url 'tour_list' %}" class="btn btn-light btn-sm ms-2">
+                                                    Clear All
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -406,7 +408,9 @@
                 <div class="bg-info br-10 p-3 pb-2 mb-4">
                     <div class="d-flex align-items-center justify-content-between flex-wrap">
                         <p class="fs-14 fw-medium mb-2 d-inline-flex align-items-center"><i class="isax isax-info-circle me-2"></i>Save an average of 15% on thousands of hotels when you're signed in</p>
-                        <a href="login.html" class="btn btn-white btn-sm mb-2">Sign In</a>
+                        {% if not request.user.is_authenticated %}
+                        <a href="{% url 'login' %}" class="btn btn-white btn-sm mb-2">Sign In</a>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="hotel-list">
@@ -564,7 +568,6 @@
     </div>
 </div>
 <style>
-/* Override Owl Carousel default display:none */
 .img-slider.owl-carousel,
 .image-slide.owl-carousel {
     display: block !important;

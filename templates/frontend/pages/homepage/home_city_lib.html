@@ -1,6 +1,5 @@
 {% load translate_tags %}
 {% load static %}
-    <!-- Cities Section -->
 <section class="section destination-section" style="padding-top: 100px;">
         <div class="container">
             <div class="row justify-content-center">
@@ -43,7 +42,10 @@
                 
             </div>
             <div class="text-center view-all wow fadeInUp">
-                <a href="{% url 'tour_cities_fronted' %}" class="btn btn-dark d-inline-flex align-items-center">View All Cities<i class="isax isax-arrow-right-3 ms-2"></i></a>
+                <a href="{% url 'tour_cities_fronted' %}" class="btn btn-dark d-inline-flex align-items-center">
+                    View All Cities
+                    <i class="isax isax-arrow-right-3 ms-2"></i>
+                </a>
             </div>
         </div>
 </section>

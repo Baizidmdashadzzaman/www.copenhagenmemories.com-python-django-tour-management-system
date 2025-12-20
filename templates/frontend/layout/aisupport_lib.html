@@ -1,6 +1,6 @@
 {% load static %}
+{% load i18n %}
 <style>
-/* Floating Button */
 .float2 {
     position: fixed;
     width:50px;
@@ -25,7 +25,6 @@
     background-color: #df7e76;
 }
 
-/* Chat Popup Window */
 .chat-popup2 {
     display: none;
     position: fixed;
@@ -42,9 +41,8 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Header */
 .chat-header {
-    background-color: #D4483B; /* Dark header like ChatGPT sidebar */
+    background-color: #D4483B; 
     color: white;
     padding: 15px 20px;
     display: flex;
@@ -68,7 +66,6 @@
 }
 .close-chat-btn:hover { color: white; }
 
-/* Chat Body (Messages) */
 .chat-body {
     flex: 1;
     overflow-y: auto;
@@ -93,7 +90,7 @@
 .avatar {
     width: 30px;
     height: 30px;
-    border-radius: 2px; /* ChatGPT style is slightly rounded squares or circles */
+    border-radius: 2px; 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -108,7 +105,7 @@
 }
 
 .user-avatar {
-    background-color: #5436DA; /* User color */
+    background-color: #5436DA; 
     color: white;
     border-radius: 50%;
 }
@@ -123,23 +120,22 @@
     color: #333;
     max-width: 80%;
     word-wrap: break-word;
-    white-space: pre-wrap; /* Preserves newlines and spaces */
+    white-space: pre-wrap; 
 }
 
 .message.user .message-content {
-    background-color: #dcedc8; /* Light green/blue for user or just distinct */
+    background-color: #dcedc8; 
 }
 
 .typing-indicator {
-    display: none; /* Hidden by default */
+    display: none; 
     padding: 10px;
     background: transparent;
     font-size: 12px;
     color: #888;
-    margin-left: 42px; /* Shift for avatar */
+    margin-left: 42px; 
 }
 
-/* Footer / Input Area */
 .chat-footer {
     padding: 15px;
     background-color: white;
@@ -185,7 +181,7 @@
 .send-btn:hover { color: #0d8a6a; }
 .send-btn:disabled { color: #ccc; cursor: not-allowed; }
 
-/* Responsive */
+
 @media (max-width: 480px) {
     .chat-popup2 {
         bottom: 0;
@@ -197,7 +193,7 @@
 }
 </style>
 
-<!-- Floating Button -->
+
 <div class="float2" onclick="toggleChat()">
     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="#fff">
         <g clip-path="url(#clip0_3280_13046)">
@@ -214,26 +210,30 @@
     </svg>
 </div>
 
-<!-- Chat Interface -->
+
 <div class="chat-popup2" id="aiChatPopup">
     <div class="chat-header">
-        <h5 style="color: white">Copenhagen Memories assistant</h5>
+        <h5 style="color: white">
+            {% trans "Copenhagen Memories assistant" %}
+        </h5>
         <button class="close-chat-btn" onclick="toggleChat()">&times;</button>
     </div>
     
     <div class="chat-body" id="aiChatBody">
-        <!-- Welcome Message -->
         <div class="message bot">
             <div class="avatar bot-avatar">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 6C13.66 6 15 7.34 15 9C15 10.66 13.66 12 12 12C10.34 12 9 10.66 9 9C9 7.34 10.34 6 12 6ZM12 20C9.67 20 7.63 18.6 6.55 16.59C6.6 14.79 10.2 13.8 12 13.8C13.8 13.8 17.4 14.79 17.45 16.59C16.37 18.6 14.33 20 12 20Z" fill="currentColor"/></svg>
             </div>
-            <div class="message-content">Hello! I'm your Copenhagen Memories assistant. How can I help you today?
+            <div class="message-content">
+                {% trans "Hello! I'm your Copenhagen Memories assistant. How can I help you today?" %}
             </div>
         </div>
     </div>
 
     <div class="typing-indicator" id="aiTypingIndicator">
-        <span>AI is typing...</span>
+        <span>
+            {% trans "AI is thinking..." %}
+        </span>
     </div>
 
     <div class="chat-footer">
@@ -256,7 +256,6 @@
             popup.style.display = 'none';
         } else {
             popup.style.display = 'flex';
-            // Focus input when opened
             setTimeout(() => document.getElementById('aiMessageInput').focus(), 100);
         }
     }
@@ -284,7 +283,7 @@
         
         if (isBot) {
             let i = 0;
-            const speed = 20; // Type speed in ms
+            const speed = 20; 
             
             function typeWriter() {
                 if (i < text.length) {
@@ -308,18 +307,15 @@
         
         if (!message) return;
 
-        // User Message
         appendMessage(message, 'user');
         input.value = '';
-        input.disabled = true; // Disable input while waiting
+        input.disabled = true; 
         
-        // Show Typing Indicator
         const typingIndicator = document.getElementById('aiTypingIndicator');
         typingIndicator.style.display = 'block';
         const chatBody = document.getElementById('aiChatBody');
         chatBody.scrollTop = chatBody.scrollHeight;
 
-        // Send to Backend
         fetch('{% url "ai_chat_proxy" %}', {
             method: 'POST',
             headers: {
