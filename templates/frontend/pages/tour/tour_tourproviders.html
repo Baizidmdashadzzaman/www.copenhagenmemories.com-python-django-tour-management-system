@@ -4,17 +4,18 @@
 
 {% block content %}
 {% load static %}
+{% load translate_tags %}
 
 <div class="breadcrumb-bar breadcrumb-bg-02 text-center">
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title mb-2">Tour Providers</h2>
+                <h2 class="breadcrumb-title mb-2">{% translate "Tour Providers" %}</h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center mb-0">
                         <li class="breadcrumb-item"><a href="/"><i class="isax isax-home5"></i></a></li>
-                        <li class="breadcrumb-item">Tours</li>
-                        <li class="breadcrumb-item active" aria-current="page">Tour Providers</li>
+                        <li class="breadcrumb-item">{% translate "Tours" %}</li>
+                        <li class="breadcrumb-item active" aria-current="page">{% translate "Tour Providers" %}</li>
                     </ol>
                 </nav>
             </div>
@@ -41,7 +42,7 @@
                             <a href="{% url 'tour_list_type_filtered' %}?supplier={{ supplier.id }}">{{ supplier.company_name }}</a>
                         </h5>
                         <div class="d-flex align-items-center seperate-dot justify-content-center">
-                            <span>{% if supplier.specialization %}{{ supplier.specialization }}{% else %}Tour Provider{% endif %}</span>
+                            <span>{% if supplier.specialization %}{{ supplier.specialization }}{% else %}{% translate "Tour Provider" %}{% endif %}</span>
                             <span>
                                 {% if supplier.country %}
                                     {{ supplier.country.name }}
@@ -54,11 +55,11 @@
                                     {% if supplier.rating %}{{ supplier.rating }}{% else %}5.0{% endif %}
                                 </span>
                                 <p>(
-                                    {% if supplier.review_count %}{{ supplier.review_count }}{% else %}0{% endif %} Reviews)
+                                    {% if supplier.review_count %}{{ supplier.review_count }}{% else %}0{% endif %} {% translate "Reviews" %})
                                 </p>
                             </div>
                             <span class="badge bg-teal">
-                                {% if supplier.tour_count %}{{ supplier.tour_count }}{% else %}0{% endif %} Tours
+                                {% if supplier.tour_count %}{{ supplier.tour_count }}{% else %}0{% endif %} {% translate "Tours" %}
                             </span>
                         </div>
                     </div>
@@ -67,7 +68,7 @@
             {% empty %}
             <div class="col-12">
                 <div class="text-center py-5">
-                    <p class="text-muted mb-0">No tour providers available.</p>
+                    <p class="text-muted mb-0">{% translate "No tour providers available." %}</p>
                 </div>
             </div>
             {% endfor %}

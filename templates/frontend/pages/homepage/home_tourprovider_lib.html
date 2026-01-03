@@ -1,12 +1,13 @@
 {% load static %}
+{% load translate_tags %}
 
 <section class="section" style="padding-top: 200px;">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8 wow fadeInUp" data-wow-delay="0.2s">
                 <div class="section-header-six">
-                    <span class="badge badge-soft-primary rounded-pill mb-1">Most Popular Providers</span>
-                    <h2>Try Best Tour Provider<span class="text-primary">.</span></h2>
+                    <span class="badge badge-soft-primary rounded-pill mb-1">{% translate "Most Popular Providers" %}</span>
+                    <h2>{% translate "Try Best Tour Provider" %}<span class="text-primary">.</span></h2>
                 </div>
             </div>
             <div class="col-md-4">
@@ -31,7 +32,7 @@
                         <a href="{% url 'tour_list_type_filtered' %}?supplier={{ supplier.id }}">{{ supplier.company_name }}</a>
                     </h5>
                     <div class="d-flex align-items-center seperate-dot justify-content-center">
-                        <span>{% if supplier.specialization %}{{ supplier.specialization }}{% else %}Tour Provider{% endif %}</span>
+                        <span>{% if supplier.specialization %}{{ supplier.specialization }}{% else %}{% translate "Tour Provider" %}{% endif %}</span>
                         <span>
                             {% if supplier.country %}
                                 {{ supplier.country.name }}
@@ -48,7 +49,7 @@
                             </p>
                         </div>
                         <span class="badge bg-teal">
-                            {% if supplier.tour_count %}{{ supplier.tour_count }}{% else %}0{% endif %} Tours
+                            {% if supplier.tour_count %}{{ supplier.tour_count }}{% else %}0{% endif %} {% translate "Tours" %}
                         </span>
                     </div>
                 </div>
@@ -56,7 +57,7 @@
             {% empty %}
             <div class="col-12">
                 <div class="text-center py-5">
-                    <p class="text-muted">No tour providers available at the moment.</p>
+                    <p class="text-muted">{% translate "No tour providers available at the moment." %}</p>
                 </div>
             </div>
             {% endfor %}

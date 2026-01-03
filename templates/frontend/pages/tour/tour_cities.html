@@ -4,17 +4,18 @@
 
 {% block content %}
 {% load static %}
+{% load translate_tags %}
 
 <div class="breadcrumb-bar breadcrumb-bg-02 text-center">
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title mb-2">Tour Cities</h2>
+                <h2 class="breadcrumb-title mb-2">{% translate "Tour Cities" %}</h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center mb-0">
                         <li class="breadcrumb-item"><a href="/"><i class="isax isax-home5"></i></a></li>
-                        <li class="breadcrumb-item">Tours</li>
-                        <li class="breadcrumb-item active" aria-current="page">Tour Cities</li>
+                        <li class="breadcrumb-item">{% translate "Tours" %}</li>
+                        <li class="breadcrumb-item active" aria-current="page">{% translate "Tour Cities" %}</li>
                     </ol>
                 </nav>
             </div>
@@ -36,7 +37,7 @@
                             <img src="{% static 'frontend/assets/img/destination/destination-01.jpg' %}" alt="{{ city.name }}">
                         {% endif %}
                     </a>
-                    <span class="badge bg-primary fs-13 fw-medium">{{ city.tour_count }} Tours</span>
+                    <span class="badge bg-primary fs-13 fw-medium">{{ city.tour_count }} {% translate "Tours" %}</span>
                     <div class="blog-info text-center">
                         <div class="d-inline-flex align-items-center justify-content-center">
                         </div>

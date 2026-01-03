@@ -1,3 +1,4 @@
+{% load translate_tags %}
 <style>
 .float{
 	position:fixed;
@@ -172,20 +173,20 @@
 <div class="chat-popup" id="myForm" style="border-radius: 10px;">
    <form class="form-container" id="chatForm">
    {% csrf_token %}
-   {# <h3>Chat with us</h3><hr> #}
+   <h3>{% translate "Chat with us" %}</h3><hr>
    <div class="chat-body" id="chatBox" style="height: 450px; overflow-y: scroll;">
    </div>
 
    {% if not user.is_authenticated or user.is_staff %}
    <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-block btn-primary rounded text-white text-decoration-none d-block text-center" style="padding: 8px 8px;">
-      Please login to send
+      {% translate "Please login to send" %}
    </a>
    {% else %}
    <div style="position: relative;">
      <input type="text" id="messageInput" placeholder="Enter your message ..." required class="form-control my-1">
    </div>
    <button type="submit" class="btn btn-block btn-primary rounded" style="padding: 8px 8px;">
-      Send message
+      {% translate "Send message" %}
    </button>
    {% endif %}
 
@@ -292,7 +293,7 @@
 
     <div class="text-center" style="background-color: white">
     <button type="button" class="btn cancel book-btn w-100" onclick="closeForm()" style="position: relative; width: 95%;padding: 0px;">
-        <span style="font-size: 16px; font-weight: bold;">Close</span>
+        <span style="font-size: 16px; font-weight: bold;">{% translate "Close" %}</span>
     </button>
     </div>
     </div>

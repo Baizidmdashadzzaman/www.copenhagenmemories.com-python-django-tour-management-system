@@ -1,5 +1,5 @@
 {% load static %}
-{% load i18n %}
+{% load translate_tags %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -67,7 +67,7 @@
                                 </div>
                                 <div class="wishlist-info d-flex justify-content-between align-items-center">
                                     <h6 class="fs-16 fw-medium">
-                                        {% trans "Wishlist" %}
+                                        {% translate "Wishlist" %}
                                     </h6>
                                     <div class="d-flex align-items-center">
                                         <div class="fav-dropdown">
@@ -130,9 +130,9 @@
                                     </div>
                                     <div class="btn btn-dark w-100 mb-3">
                                         <a href="{% url 'login' %}" class="text-white" >
-                                            {% trans "Sign In" %}
+                                            {% translate "Sign In" %}
                                         </a> / <a href="{% url 'login' %}" >
-                                            {% trans "Sign Up" %}
+                                            {% translate "Sign Up" %}
                                         </a>
                                         </div>
                                 </div>
@@ -205,19 +205,19 @@
                                 <ul class="dropdown-menu dropdown-menu-end p-3" >
                                     <li>
                                         <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2" href="{% url 'customer_dashboard' %}">
-                                            {% trans "Dashboard" %}
+                                            {% translate "Dashboard" %}
                                         </a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2" href="{% url 'logout' %}">
-                                            {% trans "Logout" %}
+                                            {% translate "Logout" %}
                                         </a>
                                     </li>
                                 </ul>
                             </div>
                             {% else %}
                             <a href="{% url 'login' %}" class="btn btn-primary">
-                                {% trans "Login/Register" %}
+                                {% translate "Login/Register" %}
                             </a>
                             {% endif %}
                             <div class="header__hamburger d-xl-none my-auto">
@@ -261,7 +261,7 @@
                                 {{ site_settings.site_description }}
                             </p>
                             <span class="d-block mb-2">
-                                {% trans "Available on" %}
+                                {% translate "Available on" %}
                             </span>
                             <div class="d-flex align-items-center row-gap-2 flex-wrap">
                                 <a href="{{ site_settings.app_google }}" class="d-block me-2">
@@ -286,8 +286,8 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="d-flex align-items-center justify-content-between flex-wrap">
-                            <p class="fs-14">{% trans "Copyright" %} &copy; 2025-{{ current_year }}. {% trans "All Rights Reserved" %}, <a href="#"
-                                    class="text-primary fw-medium">{{ site_settings.site_name }}</a>. {% trans "Developed by" %} <a  href="https://www.softscandic.com" target="_blank" style="color: rgb(255, 255, 255);"><img  src="{% static 'frontend/scandicsoft-logo-black.webp' %}" alt="Scandicsoft" style="width: 110px;"></a></p>
+                            <p class="fs-14">{% translate "Copyright" %} &copy; 2025-{{ current_year }}. {% translate "All Rights Reserved" %}, <a href="#"
+                                    class="text-primary fw-medium">{{ site_settings.site_name }}</a>. {% translate "Developed by" %} <a  href="https://www.softscandic.com" target="_blank" style="color: rgb(255, 255, 255);"><img  src="{% static 'frontend/scandicsoft-logo-black.webp' %}" alt="Scandicsoft" style="width: 110px;"></a></p>
                             <div class="d-flex align-items-center">
                                 <ul class="social-icon social-icon-two">
                                     <li>

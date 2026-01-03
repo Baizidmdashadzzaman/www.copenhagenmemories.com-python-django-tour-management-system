@@ -4,20 +4,20 @@
 
 {% block content %}
 {% load static %}
-
+{% load translate_tags %}
 
 <div class="breadcrumb-bar breadcrumb-bg-02 text-center">
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title mb-2">Tours</h2>
+                <h2 class="breadcrumb-title mb-2">{% translate "Tours" %}</h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center mb-0">
                         <li class="breadcrumb-item"><a href="{% url 'home' %}">
                             <i class="isax isax-home5"></i></a>
                         </li>
-                        <li class="breadcrumb-item">Tours</li>
-                        <li class="breadcrumb-item active" aria-current="page">Tour Grid</li>
+                        <li class="breadcrumb-item">{% translate "Tours" %}</li>
+                        <li class="breadcrumb-item active" aria-current="page">{% translate "Tour Grid" %}</li>
                     </ol>
                 </nav>
             </div>
@@ -36,28 +36,28 @@
                     <form class="d-lg-flex" method="GET" action="{% url 'tour_list' %}">
                         <div class="d-flex form-info">
                             <div class="form-item">
-                                <label class="form-label fs-14 text-default mb-1">Where to?</label>
+                                <label class="form-label fs-14 text-default mb-1">{% translate "Where to?" %}</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-white border-end-0 ps-3"><i class="isax isax-location"></i></span>
                                     <input type="text" name="search" class="form-control border-start-0" placeholder="City, Region or Tour..." value="{{ search_query }}">
                                 </div>
                             </div>
                             <div class="form-item">
-                                <label class="form-label fs-14 text-default mb-1">Date</label>
+                                <label class="form-label fs-14 text-default mb-1">{% translate "Date" %}</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-white border-end-0 ps-3"><i class="isax isax-calendar"></i></span>
                                     <input type="date" name="start_date" class="form-control border-start-0" value="{{ start_date }}">
                                 </div>
                             </div>
                             <div class="form-item">
-                                <label class="form-label fs-14 text-default mb-1">Guests</label>
+                                <label class="form-label fs-14 text-default mb-1">{% translate "Guests" %}</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-white border-end-0 ps-3"><i class="isax isax-profile-2user"></i></span>
                                     <input type="number" name="guests" class="form-control border-start-0" placeholder="1" min="1" value="{{ guests }}">
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary search-btn rounded">Search</button>
+                        <button type="submit" class="btn btn-primary search-btn rounded">{% translate "Search" %}</button>
                     </form>
                 </div>
             </div>
@@ -67,9 +67,9 @@
         <!-- Tour Types -->
         <div class="mb-2">
             <div class="mb-3 d-flex justify-content-between align-items-center flex-wrap">
-                <h5 class="mb-2">Choose type of Tours you are interested</h5>
+                <h5 class="mb-2">{% translate "Choose type of Tours you are interested" %}</h5>
                 {% if categories %}
-                <a class="text-primary fs-14" href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if region_id %}region={{ region_id }}&{% endif %}{% if city_id %}city={{ city_id }}&{% endif %}{% if min_price %}min_price={{ min_price }}&{% endif %}{% if max_price %}max_price={{ max_price }}&{% endif %}{% if sort_by %}sort={{ sort_by }}{% endif %}">Clear category</a>
+                <a class="text-primary fs-14" href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if region_id %}region={{ region_id }}&{% endif %}{% if city_id %}city={{ city_id }}&{% endif %}{% if min_price %}min_price={{ min_price }}&{% endif %}{% if max_price %}max_price={{ max_price }}&{% endif %}{% if sort_by %}sort={{ sort_by }}{% endif %}">{% translate "Clear category" %}</a>
                 {% endif %}
             </div>
             <div class="row">
@@ -89,13 +89,13 @@
                                     {{ cat.name }}
                                 </a>
                             </h6>
-                            <p class="fs-14 mb-0">{{ cat.active_tour_count|default:0 }} tours</p>
+                            <p class="fs-14 mb-0">{{ cat.active_tour_count|default:0 }} {% translate "tours" %}</p>
                         </div>
                     </div>
                 </div>
                 {% empty %}
                 <div class="col-12">
-                    <p class="text-muted mb-0">No categories available.</p>
+                    <p class="text-muted mb-0">{% translate "No categories available." %}</p>
                 </div>
                 {% endfor %}
             </div>
@@ -108,13 +108,13 @@
             <div class="col-xl-3 col-lg-3 theiaStickySidebar">
                 <div class="card filter-sidebar mb-4 mb-lg-0">
                     <div class="card-header d-flex align-items-center justify-content-between">
-                        <h5>Filters</h5>
-                        <a href="{% url 'tour_list' %}" class="fs-14 link-primary">Reset</a>
+                        <h5>{% translate "Filters" %}</h5>
+                        <a href="{% url 'tour_list' %}" class="fs-14 link-primary">{% translate "Reset" %}</a>
                     </div>
                     <div class="card-body p-0">
                         <form method="GET" action="{% url 'tour_list' %}">
                             <div class="p-3 border-bottom">
-                                <label class="form-label fs-16">Search Tours</label>
+                                <label class="form-label fs-16">{% translate "Search Tours" %}</label>
                                 <div class="input-icon">
                                     <span class="input-icon-addon">
                                         <i class="isax isax-search-normal"></i>
@@ -126,7 +126,7 @@
                                 <div class="accordion-item border-bottom p-3">
                                     <div class="accordion-header">
                                         <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#s" aria-expanded="true" aria-controls="accordion-populars" role="button">
-                                            <i class="isax isax-ranking me-2 text-primary"></i>Tour Features
+                                            <i class="isax isax-ranking me-2 text-primary"></i>{% translate "Tour Features" %}
                                         </div>
                                     </div>
                                     <div id="accordion-populars" class="accordion-collapse collapse show">
@@ -134,25 +134,25 @@
                                             <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
                                                 <input class="form-check-input ms-0 mt-0" name="live_guide" type="checkbox" id="live_guide" {% if features.live_guide %}checked{% endif %}>
                                                 <label class="form-check-label ms-2" for="live_guide">
-                                                    Live Guide
+                                                    {% translate "Live Guide" %}
                                                 </label>
                                             </div>
                                             <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
                                                 <input class="form-check-input ms-0 mt-0" name="skip_the_line" type="checkbox" id="skip_the_line" {% if features.skip_the_line %}checked{% endif %}>
                                                 <label class="form-check-label ms-2" for="skip_the_line">
-                                                    Skip the Line
+                                                    {% translate "Skip the Line" %}
                                                 </label>
                                             </div>
                                             <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
                                                 <input class="form-check-input ms-0 mt-0" name="instant_confirmation" type="checkbox" id="instant_confirmation" {% if features.instant_confirmation %}checked{% endif %}>
                                                 <label class="form-check-label ms-2" for="instant_confirmation">
-                                                    Instant Confirmation
+                                                    {% translate "Instant Confirmation" %}
                                                 </label>
                                             </div>
                                             <div class="form-checkbox form-check form-check-inline d-inline-flex align-items-center mt-2 me-2">
                                                 <input class="form-check-input ms-0 mt-0" name="free_cancellation" type="checkbox" id="free_cancellation" {% if features.free_cancellation %}checked{% endif %}>
                                                 <label class="form-check-label ms-2" for="free_cancellation">
-                                                    Free Cancellation
+                                                    {% translate "Free Cancellation" %}
                                                 </label>
                                             </div>
                                         </div>
@@ -161,7 +161,7 @@
                                 <div class="accordion-item border-bottom p-3">
                                     <div class="accordion-header">
                                         <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-popular" aria-expanded="true" aria-controls="accordion-popular" role="button">
-                                            <i class="isax isax-coin me-2 text-primary"></i>Price Range
+                                            <i class="isax isax-coin me-2 text-primary"></i>{% translate "Price Range" %}
                                         </div>
                                     </div>
                                     <div id="accordion-popular" class="accordion-collapse collapse show">
@@ -180,7 +180,7 @@
                                 <div class="accordion-item border-bottom p-3">
                                     <div class="accordion-header">
                                         <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-hotel" aria-expanded="true" aria-controls="accordion-hotel" role="button">
-                                            <i class="isax isax-buildings me-2 text-primary"></i>Tour Types
+                                            <i class="isax isax-buildings me-2 text-primary"></i>{% translate "Tour Types" %}
                                         </div>
                                     </div>
                                     <div id="accordion-hotel" class="accordion-collapse collapse show">
@@ -196,9 +196,9 @@
                                                 {% endfor %}
                                             </div>
                                             <div class="mt-3">
-                                                <button type="submit" class="btn btn-primary btn-sm">Apply Filters</button>
+                                                <button type="submit" class="btn btn-primary btn-sm">{% translate "Apply Filters" %}</button>
                                                 <a href="{% url 'tour_list' %}" class="btn btn-light btn-sm ms-2">
-                                                    Clear All
+                                                    {% translate "Clear All" %}
                                                 </a>
                                             </div>
                                         </div>
@@ -207,7 +207,7 @@
                                 <div class="accordion-item border-bottom p-3">
                                     <div class="accordion-header">
                                         <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-country" aria-expanded="true" aria-controls="accordion-country" role="button">
-                                            <i class="isax isax-global me-2 text-primary"></i>Country
+                                            <i class="isax isax-global me-2 text-primary"></i>{% translate "Country" %}
                                         </div>
                                     </div>
                                     <div id="accordion-country" class="accordion-collapse collapse show">
@@ -228,7 +228,7 @@
                                 <div class="accordion-item border-bottom p-3">
                                     <div class="accordion-header">
                                         <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-city" aria-expanded="true" aria-controls="accordion-city" role="button">
-                                            <i class="isax isax-building-3 me-2 text-primary"></i>City
+                                            <i class="isax isax-building-3 me-2 text-primary"></i>{% translate "City" %}
                                         </div>
                                     </div>
                                     <div id="accordion-city" class="accordion-collapse collapse show">
@@ -249,7 +249,7 @@
                                 <div class="accordion-item border-bottom p-3">
                                     <div class="accordion-header">
                                         <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-supplier" aria-expanded="true" aria-controls="accordion-supplier" role="button">
-                                            <i class="isax isax-briefcase me-2 text-primary"></i>Tour Supplier
+                                            <i class="isax isax-briefcase me-2 text-primary"></i>{% translate "Tour Supplier" %}
                                         </div>
                                     </div>
                                     <div id="accordion-supplier" class="accordion-collapse collapse show">
@@ -270,7 +270,7 @@
                                 <div class="accordion-item border-bottom p-3">
                                     <div class="accordion-header">
                                         <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-region" aria-expanded="true" aria-controls="accordion-region" role="button">
-                                            <i class="isax isax-map-1 me-2 text-primary"></i>Destination Region
+                                            <i class="isax isax-map-1 me-2 text-primary"></i>{% translate "Destination Region" %}
                                         </div>
                                     </div>
                                     <div id="accordion-region" class="accordion-collapse collapse show">
@@ -291,7 +291,7 @@
                                 <div class="accordion-item border-bottom p-3">
                                     <div class="accordion-header">
                                         <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-amenity" aria-expanded="true" aria-controls="accordion-amenity" role="button">
-                                            <i class="isax isax-activity me-2 text-primary"></i>Difficulty Level
+                                            <i class="isax isax-activity me-2 text-primary"></i>{% translate "Difficulty Level" %}
                                         </div>
                                     </div>
                                     <div id="accordion-amenity" class="accordion-collapse collapse show">
@@ -313,7 +313,7 @@
                                 <div class="accordion-item border-bottom p-3">
                                     <div class="accordion-header">
                                         <div class="accordion-button p-0" data-bs-toggle="collapse" data-bs-target="#accordion-brand" aria-expanded="true" aria-controls="accordion-brand" role="button">
-                                            <i class="isax isax-star me-2 text-primary"></i>Rating
+                                            <i class="isax isax-star me-2 text-primary"></i>{% translate "Rating" %}
                                         </div>
                                     </div>
                                     <div id="accordion-brand" class="accordion-collapse collapse show">
@@ -327,7 +327,7 @@
                                                         <i class="fas fa-star filled text-primary me-1"></i>
                                                         <i class="fas fa-star filled text-primary me-1"></i>
                                                         <i class="fas fa-star filled text-primary"></i>
-                                                        <span class="ms-2">5 Star</span>
+                                                        <span class="ms-2">5 {% translate "Star" %}</span>
                                                     </span>
                                                 </label>
                                             </div>
@@ -339,7 +339,7 @@
                                                         <i class="fas fa-star filled text-primary me-1"></i>
                                                         <i class="fas fa-star filled text-primary me-1"></i>
                                                         <i class="fas fa-star filled text-primary"></i>
-                                                        <span class="ms-2">4 Star & Up</span>
+                                                        <span class="ms-2">4 {% translate "Star & Up" %}</span>
                                                     </span>
                                                 </label>
                                             </div>
@@ -350,7 +350,7 @@
                                                         <i class="fas fa-star filled text-primary me-1"></i>
                                                         <i class="fas fa-star filled text-primary me-1"></i>
                                                         <i class="fas fa-star filled text-primary"></i>
-                                                        <span class="ms-2">3 Star & Up</span>
+                                                        <span class="ms-2">3 {% translate "Star & Up" %}</span>
                                                     </span>
                                                 </label>
                                             </div>
@@ -360,7 +360,7 @@
                                                     <span class="rating d-flex align-items-center">
                                                         <i class="fas fa-star filled text-primary me-1"></i>
                                                         <i class="fas fa-star filled text-primary"></i>
-                                                        <span class="ms-2">2 Star & Up</span>
+                                                        <span class="ms-2">2 {% translate "Star & Up" %}</span>
                                                     </span>
                                                 </label>
                                             </div>
@@ -369,8 +369,8 @@
                                 </div>
                             </div>
                             <div class="p-3">
-                                <button type="submit" class="btn btn-primary w-100 mb-2">Apply Filters</button>
-                                <a href="{% url 'tour_list' %}" class="btn btn-outline-light w-100">Reset Filters</a>
+                                <button type="submit" class="btn btn-primary w-100 mb-2">{% translate "Apply Filters" %}</button>
+                                <a href="{% url 'tour_list' %}" class="btn btn-outline-light w-100">{% translate "Reset Filters" %}</a>
                             </div>
                         </form>
                     </div>
@@ -380,7 +380,7 @@
 
             <div class="col-xl-9 col-lg-9">
                 <div class="d-flex align-items-center justify-content-between flex-wrap">
-                    <h6 class="mb-3">{{ total_tours }} Tours Found{% if search_query %} for "{{ search_query }}"{% endif %}</h6>
+                    <h6 class="mb-3">{{ total_tours }} {% translate "Tours Found" %}{% if search_query %} for "{{ search_query }}"{% endif %}</h6>
                     <div class="d-flex align-items-center flex-wrap">
                         <div class="list-item d-flex align-items-center mb-3">
                             <a href="tour-grid.html" class="list-icon me-2"><i class="isax isax-grid-1"></i></a>
@@ -389,17 +389,17 @@
                         </div>
                         <div class="dropdown mb-3">
                             <a href="#" class="dropdown-toggle py-2" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span class="fw-medium text-gray-9">Sort By : </span>
-                                {% if sort_by == 'price_low' %}Price: Low to High{% elif sort_by == 'price_high' %}Price: High to Low{% elif sort_by == 'rating' %}Rating{% elif sort_by == 'newest' %}Newest{% else %}Recommended{% endif %}
+                                <span class="fw-medium text-gray-9">{% translate "Sort By" %}: </span>
+                                {% if sort_by == 'price_low' %}{% translate "Price: Low to High" %}{% elif sort_by == 'price_high' %}{% translate "Price: High to Low" %}{% elif sort_by == 'rating' %}{% translate "Rating" %}{% elif sort_by == 'newest' %}{% translate "Newest" %}{% else %}{% translate "Recommended" %}{% endif %}
                             </a>
                             <div class="dropdown-menu dropdown-sm">
-                                <h6 class="fw-medium fs-16 mb-3">Sort By</h6>
+                                <h6 class="fw-medium fs-16 mb-3">{% translate "Sort By" %}</h6>
                                 <div class="mb-2">
-                                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if category_id %}category={{ category_id }}&{% endif %}{% if region_id %}region={{ region_id }}&{% endif %}{% if city_id %}city={{ city_id }}&{% endif %}{% if min_price %}min_price={{ min_price }}&{% endif %}{% if max_price %}max_price={{ max_price }}&{% endif %}sort=recommended" class="dropdown-item {% if sort_by == 'recommended' or not sort_by %}active{% endif %}">Recommended</a>
-                                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if category_id %}category={{ category_id }}&{% endif %}{% if region_id %}region={{ region_id }}&{% endif %}{% if city_id %}city={{ city_id }}&{% endif %}{% if min_price %}min_price={{ min_price }}&{% endif %}{% if max_price %}max_price={{ max_price }}&{% endif %}sort=price_low" class="dropdown-item {% if sort_by == 'price_low' %}active{% endif %}">Price: Low to High</a>
-                                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if category_id %}category={{ category_id }}&{% endif %}{% if region_id %}region={{ region_id }}&{% endif %}{% if city_id %}city={{ city_id }}&{% endif %}{% if min_price %}min_price={{ min_price }}&{% endif %}{% if max_price %}max_price={{ max_price }}&{% endif %}sort=price_high" class="dropdown-item {% if sort_by == 'price_high' %}active{% endif %}">Price: High to Low</a>
-                                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if category_id %}category={{ category_id }}&{% endif %}{% if region_id %}region={{ region_id }}&{% endif %}{% if city_id %}city={{ city_id }}&{% endif %}{% if min_price %}min_price={{ min_price }}&{% endif %}{% if max_price %}max_price={{ max_price }}&{% endif %}sort=newest" class="dropdown-item {% if sort_by == 'newest' %}active{% endif %}">Newest</a>
-                                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if category_id %}category={{ category_id }}&{% endif %}{% if region_id %}region={{ region_id }}&{% endif %}{% if city_id %}city={{ city_id }}&{% endif %}{% if min_price %}min_price={{ min_price }}&{% endif %}{% if max_price %}max_price={{ max_price }}&{% endif %}sort=rating" class="dropdown-item {% if sort_by == 'rating' %}active{% endif %}">Rating</a>
+                                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if category_id %}category={{ category_id }}&{% endif %}{% if region_id %}region={{ region_id }}&{% endif %}{% if city_id %}city={{ city_id }}&{% endif %}{% if min_price %}min_price={{ min_price }}&{% endif %}{% if max_price %}max_price={{ max_price }}&{% endif %}sort=recommended" class="dropdown-item {% if sort_by == 'recommended' or not sort_by %}active{% endif %}">{% translate "Recommended" %}</a>
+                                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if category_id %}category={{ category_id }}&{% endif %}{% if region_id %}region={{ region_id }}&{% endif %}{% if city_id %}city={{ city_id }}&{% endif %}{% if min_price %}min_price={{ min_price }}&{% endif %}{% if max_price %}max_price={{ max_price }}&{% endif %}sort=price_low" class="dropdown-item {% if sort_by == 'price_low' %}active{% endif %}">{% translate "Price: Low to High" %}</a>
+                                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if category_id %}category={{ category_id }}&{% endif %}{% if region_id %}region={{ region_id }}&{% endif %}{% if city_id %}city={{ city_id }}&{% endif %}{% if min_price %}min_price={{ min_price }}&{% endif %}{% if max_price %}max_price={{ max_price }}&{% endif %}sort=price_high" class="dropdown-item {% if sort_by == 'price_high' %}active{% endif %}">{% translate "Price: High to Low" %}</a>
+                                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if category_id %}category={{ category_id }}&{% endif %}{% if region_id %}region={{ region_id }}&{% endif %}{% if city_id %}city={{ city_id }}&{% endif %}{% if min_price %}min_price={{ min_price }}&{% endif %}{% if max_price %}max_price={{ max_price }}&{% endif %}sort=newest" class="dropdown-item {% if sort_by == 'newest' %}active{% endif %}">{% translate "Newest" %}</a>
+                                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if category_id %}category={{ category_id }}&{% endif %}{% if region_id %}region={{ region_id }}&{% endif %}{% if city_id %}city={{ city_id }}&{% endif %}{% if min_price %}min_price={{ min_price }}&{% endif %}{% if max_price %}max_price={{ max_price }}&{% endif %}sort=rating" class="dropdown-item {% if sort_by == 'rating' %}active{% endif %}">{% translate "Rating" %}</a>
                                 </div>
                             </div>
                         </div>
@@ -407,9 +407,9 @@
                 </div>
                 <div class="bg-info br-10 p-3 pb-2 mb-4">
                     <div class="d-flex align-items-center justify-content-between flex-wrap">
-                        <p class="fs-14 fw-medium mb-2 d-inline-flex align-items-center"><i class="isax isax-info-circle me-2"></i>Save an average of 15% on thousands of hotels when you're signed in</p>
+                        <p class="fs-14 fw-medium mb-2 d-inline-flex align-items-center"><i class="isax isax-info-circle me-2"></i>{% translate "Save an average of 15% on thousands of hotels when you're signed in" %}</p>
                         {% if not request.user.is_authenticated %}
-                        <a href="{% url 'login' %}" class="btn btn-white btn-sm mb-2">Sign In</a>
+                        <a href="{% url 'login' %}" class="btn btn-white btn-sm mb-2">{% translate "Sign In" %}</a>
                         {% endif %}
                     </div>
                 </div>
@@ -450,9 +450,9 @@
                                             <i class="isax isax-heart5"></i>
                                         </a>
                                         {% if tour.is_featured %}
-                                        <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Featured</span>
+                                        <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>{% translate "Featured" %}</span>
                                         {% elif tour.is_bestseller %}
-                                        <span class="badge bg-success d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Bestseller</span>
+                                        <span class="badge bg-success d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>{% translate "Bestseller" %}</span>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -462,7 +462,7 @@
                                             <h5 class="mb-1 text-truncate"><a href="{% url 'tour_detail' tour.id %}">{{ tour.title }}</a></h5>
                                             <p class="fs-14 d-flex align-items-center">
                                                 <i class="isax isax-location5 me-2"></i>
-                                                {% if tour.city %}{{ tour.city.name }}{% elif tour.destination_region %}{{ tour.destination_region.name }}{% else %}Location TBA{% endif %}
+                                                {% if tour.city %}{{ tour.city.name }}{% elif tour.destination_region %}{{ tour.destination_region.name }}{% else %}{% translate "Location TBA" %}{% endif %}
                                             </p>
                                         </div>
                                         <div class="d-flex align-items-center">
@@ -473,7 +473,7 @@
                                             {% endif %}
                                             {% if tour.calculated_average_rating > 0 %}
                                             <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">{{ tour.calculated_average_rating|floatformat:1 }}</span>
-                                            <p class="fs-14">({{ tour.calculated_total_reviews }} Reviews)</p>
+                                            <p class="fs-14">({{ tour.calculated_total_reviews }} {% translate "Reviews" %})</p>
                                             {% endif %}
                                         </div>
                                     </div>
@@ -486,13 +486,13 @@
                                             {% endif %}
                                             {% if tour.max_participants %}
                                             <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
-                                                <i class="isax isax-profile-2user me-1"></i>{{ tour.max_participants }} Guests
+                                                <i class="isax isax-profile-2user me-1"></i>{{ tour.max_participants }} {% translate "Guests" %}
                                             </p>
                                             {% endif %}
                                         </div>
                                         <div class="d-flex align-items-center">
                                             <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal border-end pe-2 me-2">
-                                                Starts From 
+                                                {% translate "Starts From" %}
                                                 <span class="ms-1 fs-18 fw-semibold text-primary">${{ tour.base_price|floatformat:0 }}</span>
                                                 {% if tour.discount_percentage > 0 %}
                                                 <span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">

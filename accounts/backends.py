@@ -13,15 +13,11 @@ class EmailBackend(ModelBackend):
             username = kwargs.get(UserModel.USERNAME_FIELD)
         
         try:
-            # Check for user by username or email
             user = UserModel.objects.get(Q(username__iexact=username) | Q(email__iexact=username))
         except UserModel.DoesNotExist:
-            # Run the default password hasher once to reduce the timing
-            # difference between an existing and a nonexistent user (#20760).
             UserModel().set_password(password)
             return None
         except UserModel.MultipleObjectsReturned:
-            # If multiple users match (e.g. same email), take the first one
             user = UserModel.objects.filter(Q(username__iexact=username) | Q(email__iexact=username)).order_by('id').first()
 
         if user.check_password(password) and self.user_can_authenticate(user):

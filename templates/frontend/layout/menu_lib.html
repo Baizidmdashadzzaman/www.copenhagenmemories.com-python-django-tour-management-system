@@ -1,4 +1,5 @@
 {% load static %}
+
 {% for menu in website_menus %}
 <li class="has-submenu {% if menu.has_submenu %}mega-innermenu{% endif %} {% if request.path == menu.link %}active{% endif %}">
     <a href="{{ menu.link|default:'#' }}" {% if menu.is_open_new_tab %}target="_blank"{% endif %}>

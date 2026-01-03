@@ -4,17 +4,18 @@
 
 {% block content %}
 {% load static %}
+{% load translate_tags %}
 
 <div class="breadcrumb-bar breadcrumb-bg-02 text-center">
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title mb-2">Search</h2>
+                <h2 class="breadcrumb-title mb-2">{% translate "Search" %}</h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center mb-0">
                         <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="isax isax-home5"></i></a></li>
-                        <li class="breadcrumb-item">Pages</li>
-                        <li class="breadcrumb-item active" aria-current="page">Search</li>
+                        <li class="breadcrumb-item">{% translate "Pages" %}</li>
+                        <li class="breadcrumb-item active" aria-current="page">{% translate "Search" %}</li>
                     </ol>
                 </nav>
             </div>
@@ -34,35 +35,35 @@
                             <form class="d-lg-flex" method="GET" action="{% url 'find_tour' %}">
                                 <div class="d-flex form-info flex-wrap">
                                     <div class="form-item">
-                                        <label class="form-label fs-14 text-default mb-1" for="search_query">Where to?</label>
+                                        <label class="form-label fs-14 text-default mb-1" for="search_query">{% translate "Where to?" %}</label>
                                         <div class="input-group">
                                             <span class="input-group-text bg-white border-end-0 ps-3"><i class="isax isax-location"></i></span>
                                             <input id="search_query" type="text" name="search" class="form-control border-start-0" placeholder="City, Region or Tour..." value="{{ search_query }}">
                                         </div>
                                     </div>
                                     <div class="form-item">
-                                        <label class="form-label fs-14 text-default mb-1" for="start_date">Date</label>
+                                        <label class="form-label fs-14 text-default mb-1" for="start_date">{% translate "Date" %}</label>
                                         <div class="input-group">
                                             <span class="input-group-text bg-white border-end-0 ps-3"><i class="isax isax-calendar"></i></span>
                                             <input id="start_date" type="date" name="start_date" class="form-control border-start-0" value="{{ start_date }}">
                                         </div>
                                     </div>
                                     <div class="form-item">
-                                        <label class="form-label fs-14 text-default mb-1" for="guests">Guests</label>
+                                        <label class="form-label fs-14 text-default mb-1" for="guests">{% translate "Guests" %}</label>
                                         <div class="input-group">
                                             <span class="input-group-text bg-white border-end-0 ps-3"><i class="isax isax-profile-2user"></i></span>
                                             <input id="guests" type="number" name="guests" class="form-control border-start-0" placeholder="1" min="1" value="{{ guests }}">
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary search-btn rounded">Search</button>
+                                <button type="submit" class="btn btn-primary search-btn rounded">{% translate "Search" %}</button>
                             </form>
                         </div>
                     </div>
                 </div>
 
                 <div class="d-flex align-items-center justify-content-between flex-wrap mb-3">
-                    <h6 class="mb-2">{{ total_tours }} Tours Found{% if search_query %} for "{{ search_query }}"{% endif %}</h6>
+                    <h6 class="mb-2">{{ total_tours }} {% translate "Tours Found" %}{% if search_query %} {% translate "for" %} "{{ search_query }}"{% endif %}</h6>
                     {% if location_label %}
                     <span class="badge bg-primary">{{ location_label }}</span>
                     {% endif %}
@@ -96,10 +97,10 @@
                                     <h5 class="mb-1"><a href="{% url 'tour_detail' tour.id %}">{{ tour.title }}</a></h5>
                                     <p class="fs-14 mb-2 d-flex align-items-center">
                                         <i class="isax isax-location5 me-2"></i>
-                                        {% if tour.city %}{{ tour.city.name }}{% elif tour.destination_region %}{{ tour.destination_region.name }}{% else %}Location TBA{% endif %}
+                                        {% if tour.city %}{{ tour.city.name }}{% elif tour.destination_region %}{{ tour.destination_region.name }}{% else %}{% translate "Location TBA" %}{% endif %}
                                     </p>
                                     <div class="d-flex align-items-center justify-content-between">
-                                        <span class="fs-14 text-gray-9">From <span class="fw-semibold text-primary">${{ tour.base_price|floatformat:0 }}</span></span>
+                                        <span class="fs-14 text-gray-9">{% translate "From" %} <span class="fw-semibold text-primary">${{ tour.base_price|floatformat:0 }}</span></span>
                                         {% if tour.duration_text %}
                                         <span class="fs-14 text-gray-9 d-inline-flex align-items-center">
                                             <i class="isax isax-calendar-tick me-1"></i>{{ tour.duration_text }}
@@ -112,7 +113,7 @@
                         {% empty %}
                         <div class="col-12">
                             <div class="alert alert-info mb-0">
-                                No tours found. Try a different search term.
+                                {% translate "No tours found. Try a different search term." %}
                             </div>
                         </div>
                         {% endfor %}

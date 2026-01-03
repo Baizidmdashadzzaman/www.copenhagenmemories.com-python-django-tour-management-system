@@ -6,8 +6,8 @@
             <div class="row justify-content-center">
                 <div class="col-xl-6 col-lg-10 text-center wow fadeInUp" data-wow-delay="0.2s">
                     <div class="section-header text-center">
-                        <h2 class="mb-2">Search by  <span class="text-primary  text-decoration-underline">Countries</span> Around the World </h2>
-                        <p class="sub-title">{{site_settings.site_name}} is a platform designed to connect fans with exclusive experiences related to a specific tour</p>
+                        <h2 class="mb-2">{% translate "Search by" %}  <span class="text-primary  text-decoration-underline">{% translate "Countries" %}</span> {% translate "Around the World" %} </h2>
+                        <p class="sub-title">{{site_settings.site_name}} {% translate "is a platform designed to connect fans with exclusive experiences related to a specific tour" %}</p>
                     </div>
                 </div>
             </div>
@@ -33,7 +33,7 @@
                                     <i class="fa-solid fa-star filled me-1"></i>
                                     <i class="fa-solid fa-star filled"></i>
                                 </div>
-                                <p class="fs-14 text-white">{{ country.tour_count }} Tours</p>
+                                <p class="fs-14 text-white">{{ country.tour_count }} {% translate "Tours" %}</p>
                             </div>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
             </div>
             <div class="text-center view-all wow fadeInUp">
                 <a href="{% url 'tour_countries_fronted' %}" class="btn btn-dark d-inline-flex align-items-center">
-                    View All Locations<i class="isax isax-arrow-right-3 ms-2"></i>
+                    {% translate "View All Locations" %}<i class="isax isax-arrow-right-3 ms-2"></i>
                 </a>
             </div>
         </div>

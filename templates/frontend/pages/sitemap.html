@@ -4,18 +4,18 @@
 
 {% block content %}
 {% load static %}
-
+{% load translate_tags %}
 
 <div class="breadcrumb-bar breadcrumb-bg-02 text-center">
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title mb-2">Site map</h2>
+                <h2 class="breadcrumb-title mb-2">{% translate "Site map" %}</h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center mb-0">
                         <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="isax isax-home5"></i></a></li>
-                        <li class="breadcrumb-item">Pages</li>
-                        <li class="breadcrumb-item active" aria-current="page">Site map</li>
+                        <li class="breadcrumb-item">{% translate "Pages" %}</li>
+                        <li class="breadcrumb-item active" aria-current="page">{% translate "Site map" %}</li>
                     </ol>
                 </nav>
             </div>
@@ -28,7 +28,7 @@
         <div class="row">
             <!-- General & Information -->
             <div class="col-lg-3 col-md-6 mb-4">
-                <h4 class="mb-3">General Pages</h4>
+                <h4 class="mb-3">{% translate "General Pages" %}</h4>
                 <ul class="list-unstyled">
                     {% for page in static_pages %}
                     <li class="mb-2">
@@ -40,7 +40,7 @@
                 </ul>
 
                 {% if pages %}
-                <h4 class="mb-3 mt-4">Information</h4>
+                <h4 class="mb-3 mt-4">{% translate "Information" %}</h4>
                 <ul class="list-unstyled">
                     {% for page in pages %}
                     <li class="mb-2">
@@ -55,10 +55,10 @@
 
             <!-- Destinations -->
             <div class="col-lg-3 col-md-6 mb-4">
-                <h4 class="mb-3">Destinations</h4>
+                <h4 class="mb-3">{% translate "Destinations" %}</h4>
                 
                 {% if countries %}
-                <h5 class="fs-6 fw-bold">Countries</h5>
+                <h5 class="fs-6 fw-bold">{% translate "Countries" %}</h5>
                 <ul class="list-unstyled mb-3">
                     {% for country in countries %}
                     <li class="mb-2">
@@ -71,7 +71,7 @@
                 {% endif %}
 
                 {% if destination_regions %}
-                <h5 class="fs-6 fw-bold">Regions</h5>
+                <h5 class="fs-6 fw-bold">{% translate "Regions" %}</h5>
                 <ul class="list-unstyled mb-3">
                     {% for region in destination_regions %}
                     <li class="mb-2">
@@ -84,7 +84,7 @@
                 {% endif %}
 
                 {% if cities %}
-                <h5 class="fs-6 fw-bold">Cities</h5>
+                <h5 class="fs-6 fw-bold">{% translate "Cities" %}</h5>
                 <ul class="list-unstyled">
                     {% for city in cities %}
                     <li class="mb-2">
@@ -100,7 +100,7 @@
             <!-- Categories & Blogs -->
             <div class="col-lg-3 col-md-6 mb-4">
                 {% if categories %}
-                <h4 class="mb-3">Tour Categories</h4>
+                <h4 class="mb-3">{% translate "Tour Categories" %}</h4>
                 <ul class="list-unstyled mb-4">
                     {% for category in categories %}
                     <li class="mb-2">
@@ -113,7 +113,7 @@
                 {% endif %}
 
                 {% if blogs %}
-                <h4 class="mb-3">Latest Blogs</h4>
+                <h4 class="mb-3">{% translate "Latest Blogs" %}</h4>
                 <ul class="list-unstyled">
                     {% for blog in blogs %}
                     <li class="mb-2">
@@ -129,7 +129,7 @@
             <!-- All Tours -->
             <div class="col-lg-3 col-md-6 mb-4">
                 {% if tours %}
-                <h4 class="mb-3">Our Tours</h4>
+                <h4 class="mb-3">{% translate "Our Tours" %}</h4>
                 <ul class="list-unstyled" style="max-height: 1000px; overflow-y: auto;">
                     {% for tour in tours %}
                     <li class="mb-2">

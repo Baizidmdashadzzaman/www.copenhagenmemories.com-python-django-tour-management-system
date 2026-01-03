@@ -1,6 +1,6 @@
 {% extends 'frontend/layout/base.html' %}
 {% load static %}
-{% load i18n %}
+{% load translate_tags %}
 
 {% block title %}
     {% if LANGUAGE_CODE == 'dk' and feature_section.title_dk %}
@@ -26,7 +26,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center mb-0">
                         <li class="breadcrumb-item"><a href="/"><i class="isax isax-home5"></i></a></li>
-                        <li class="breadcrumb-item">{% trans "Tours" %}</li>
+                        <li class="breadcrumb-item">{% translate "Tours" %}</li>
                         <li class="breadcrumb-item active" aria-current="page">
                             {% if LANGUAGE_CODE == 'dk' and feature_section.title_dk %}
                                 {{ feature_section.title_dk }}
@@ -94,9 +94,9 @@
                                 <i class="isax isax-heart5"></i>
                             </a>
                             {% if tour.is_featured %}
-                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>{% trans "Featured" %}</span>
+                            <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>{% translate "Featured" %}</span>
                             {% elif tour.is_bestseller %}
-                            <span class="badge bg-success d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>{% trans "Bestseller" %}</span>
+                            <span class="badge bg-success d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>{% translate "Bestseller" %}</span>
                             {% endif %}
                         </div>
                     </div>
@@ -127,7 +127,7 @@
                                             {{ tour.destination_region.name }}
                                         {% endif %}
                                     {% else %}
-                                        {% trans "Location TBA" %}
+                                        {% translate "Location TBA" %}
                                     {% endif %}
                                 </p>
                             </div>
@@ -144,7 +144,7 @@
                                 {% endif %}
                                 {% if tour.calculated_average_rating > 0 %}
                                 <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">{{ tour.calculated_average_rating|floatformat:1 }}</span>
-                                <p class="fs-14">({{ tour.calculated_total_reviews }} {% trans "Reviews" %})</p>
+                                <p class="fs-14">({{ tour.calculated_total_reviews }} {% translate "Reviews" %})</p>
                                 {% endif %}
                             </div>
                         </div>
@@ -163,13 +163,13 @@
                                 {% endif %}
                                 {% if tour.max_participants %}
                                 <p class="fs-14 text-gray-9 mb-0 text-truncate d-flex align-items-center">
-                                    <i class="isax isax-profile-2user me-1"></i>{{ tour.max_participants }} {% trans "Guests" %}
+                                    <i class="isax isax-profile-2user me-1"></i>{{ tour.max_participants }} {% translate "Guests" %}
                                 </p>
                                 {% endif %}
                             </div>
                             <div class="d-flex align-items-center">
                                 <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal border-end pe-2 me-2">
-                                    {% trans "Starts From" %} 
+                                    {% translate "Starts From" %} 
                                     <span class="ms-1 fs-18 fw-semibold text-primary">{{ tour.base_price|floatformat:0 }} {{ tour.currency }}</span>
                                     {% if tour.discount_percentage > 0 %}
                                     <span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">
@@ -189,8 +189,8 @@
                 </div>
                 {% empty %}
                 <div class="text-center py-5">
-                    <h3>{% trans "No tours found in this section." %}</h3>
-                    <a href="{% url 'home' %}" class="btn btn-primary mt-3">{% trans "Go Home" %}</a>
+                    <h3>{% translate "No tours found in this section." %}</h3>
+                    <a href="{% url 'home' %}" class="btn btn-primary mt-3">{% translate "Go Home" %}</a>
                 </div>
                 {% endfor %}
 

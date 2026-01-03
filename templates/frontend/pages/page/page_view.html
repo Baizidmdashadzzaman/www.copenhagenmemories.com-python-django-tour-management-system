@@ -4,7 +4,7 @@
 
 {% block content %}
 {% load static %}
-
+{% load translate_tags %}
 
 <div class="breadcrumb-bar breadcrumb-bg-02 text-center">
     <div class="container">
@@ -14,7 +14,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center mb-0">
                         <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="isax isax-home5"></i></a></li>
-                        <li class="breadcrumb-item">Pages</li>
+                        <li class="breadcrumb-item">{% translate "Pages" %}</li>
                         <li class="breadcrumb-item active" aria-current="page">{{ page.title }}</li>
                     </ol>
                 </nav>

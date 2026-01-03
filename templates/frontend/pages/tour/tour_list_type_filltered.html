@@ -4,20 +4,20 @@
 
 {% block content %}
 {% load static %}
-
+{% load translate_tags %}
 
 <div class="breadcrumb-bar breadcrumb-bg-02 text-center">
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title mb-2">Tours</h2>
+                <h2 class="breadcrumb-title mb-2">{% translate "Tours" %}</h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center mb-0">
                         <li class="breadcrumb-item"><a href="/">
                             <i class="isax isax-home5"></i></a>
                         </li>
-                        <li class="breadcrumb-item">Tours type filtered</li>
-                        <li class="breadcrumb-item active" aria-current="page">Tours</li>
+                        <li class="breadcrumb-item">{% translate "Tours type filtered" %}</li>
+                        <li class="breadcrumb-item active" aria-current="page">{% translate "Tours" %}</li>
                     </ol>
                 </nav>
             </div>
@@ -33,7 +33,7 @@
 
             <div class="col-xl-12 col-lg-12">
                 <div class="d-flex align-items-center justify-content-between flex-wrap">
-                    <h6 class="mb-3">{{ total_tours }} Tours Found{% if location_label %} in {{ location_label }}{% endif %}{% if search_query %} for "{{ search_query }}"{% endif %}</h6>
+                    <h6 class="mb-3">{{ total_tours }} {% translate "Tours Found" %}{% if location_label %} in {{ location_label }}{% endif %}{% if search_query %} for "{{ search_query }}"{% endif %}</h6>
                     <div class="d-flex align-items-center flex-wrap">
                         <div class="list-item d-flex align-items-center mb-3">
                             <a href="tour-grid.html" class="list-icon me-2"><i class="isax isax-grid-1"></i></a>
@@ -43,16 +43,16 @@
                         <div class="dropdown mb-3">
                             <a href="#" class="dropdown-toggle py-2" data-bs-toggle="dropdown" aria-expanded="false">
                                 <span class="fw-medium text-gray-9">Sort By : </span>
-                                {% if sort_by == 'price_low' %}Price: Low to High{% elif sort_by == 'price_high' %}Price: High to Low{% elif sort_by == 'rating' %}Rating{% elif sort_by == 'newest' %}Newest{% else %}Recommended{% endif %}
+                                {% if sort_by == 'price_low' %}{% translate "Price: Low to High" %}{% elif sort_by == 'price_high' %}{% translate "Price: High to Low" %}{% elif sort_by == 'rating' %}{% translate "Rating" %}{% elif sort_by == 'newest' %}{% translate "Newest" %}{% else %}{% translate "Recommended" %}{% endif %}
                             </a>
                             <div class="dropdown-menu dropdown-sm">
                                 <h6 class="fw-medium fs-16 mb-3">Sort By</h6>
                                 <div class="mb-2">
-                                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if category_id %}category={{ category_id }}&{% endif %}{% if country_id %}country={{ country_id }}&{% endif %}{% if region_id %}region={{ region_id }}&{% endif %}{% if city_id %}city={{ city_id }}&{% endif %}{% if min_price %}min_price={{ min_price }}&{% endif %}{% if max_price %}max_price={{ max_price }}&{% endif %}sort=recommended" class="dropdown-item {% if sort_by == 'recommended' or not sort_by %}active{% endif %}">Recommended</a>
-                                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if category_id %}category={{ category_id }}&{% endif %}{% if country_id %}country={{ country_id }}&{% endif %}{% if region_id %}region={{ region_id }}&{% endif %}{% if city_id %}city={{ city_id }}&{% endif %}{% if min_price %}min_price={{ min_price }}&{% endif %}{% if max_price %}max_price={{ max_price }}&{% endif %}sort=price_low" class="dropdown-item {% if sort_by == 'price_low' %}active{% endif %}">Price: Low to High</a>
-                                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if category_id %}category={{ category_id }}&{% endif %}{% if country_id %}country={{ country_id }}&{% endif %}{% if region_id %}region={{ region_id }}&{% endif %}{% if city_id %}city={{ city_id }}&{% endif %}{% if min_price %}min_price={{ min_price }}&{% endif %}{% if max_price %}max_price={{ max_price }}&{% endif %}sort=price_high" class="dropdown-item {% if sort_by == 'price_high' %}active{% endif %}">Price: High to Low</a>
-                                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if category_id %}category={{ category_id }}&{% endif %}{% if country_id %}country={{ country_id }}&{% endif %}{% if region_id %}region={{ region_id }}&{% endif %}{% if city_id %}city={{ city_id }}&{% endif %}{% if min_price %}min_price={{ min_price }}&{% endif %}{% if max_price %}max_price={{ max_price }}&{% endif %}sort=newest" class="dropdown-item {% if sort_by == 'newest' %}active{% endif %}">Newest</a>
-                                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if category_id %}category={{ category_id }}&{% endif %}{% if country_id %}country={{ country_id }}&{% endif %}{% if region_id %}region={{ region_id }}&{% endif %}{% if city_id %}city={{ city_id }}&{% endif %}{% if min_price %}min_price={{ min_price }}&{% endif %}{% if max_price %}max_price={{ max_price }}&{% endif %}sort=rating" class="dropdown-item {% if sort_by == 'rating' %}active{% endif %}">Rating</a>
+                                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if category_id %}category={{ category_id }}&{% endif %}{% if country_id %}country={{ country_id }}&{% endif %}{% if region_id %}region={{ region_id }}&{% endif %}{% if city_id %}city={{ city_id }}&{% endif %}{% if min_price %}min_price={{ min_price }}&{% endif %}{% if max_price %}max_price={{ max_price }}&{% endif %}sort=recommended" class="dropdown-item {% if sort_by == 'recommended' or not sort_by %}active{% endif %}">{% translate "Recommended" %}</a>
+                                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if category_id %}category={{ category_id }}&{% endif %}{% if country_id %}country={{ country_id }}&{% endif %}{% if region_id %}region={{ region_id }}&{% endif %}{% if city_id %}city={{ city_id }}&{% endif %}{% if min_price %}min_price={{ min_price }}&{% endif %}{% if max_price %}max_price={{ max_price }}&{% endif %}sort=price_low" class="dropdown-item {% if sort_by == 'price_low' %}active{% endif %}">{% translate "Price: Low to High" %}</a>
+                                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if category_id %}category={{ category_id }}&{% endif %}{% if country_id %}country={{ country_id }}&{% endif %}{% if region_id %}region={{ region_id }}&{% endif %}{% if city_id %}city={{ city_id }}&{% endif %}{% if min_price %}min_price={{ min_price }}&{% endif %}{% if max_price %}max_price={{ max_price }}&{% endif %}sort=price_high" class="dropdown-item {% if sort_by == 'price_high' %}active{% endif %}">{% translate "Price: High to Low" %}</a>
+                                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if category_id %}category={{ category_id }}&{% endif %}{% if country_id %}country={{ country_id }}&{% endif %}{% if region_id %}region={{ region_id }}&{% endif %}{% if city_id %}city={{ city_id }}&{% endif %}{% if min_price %}min_price={{ min_price }}&{% endif %}{% if max_price %}max_price={{ max_price }}&{% endif %}sort=newest" class="dropdown-item {% if sort_by == 'newest' %}active{% endif %}">{% translate "Newest" %}</a>
+                                    <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if category_id %}category={{ category_id }}&{% endif %}{% if country_id %}country={{ country_id }}&{% endif %}{% if region_id %}region={{ region_id }}&{% endif %}{% if city_id %}city={{ city_id }}&{% endif %}{% if min_price %}min_price={{ min_price }}&{% endif %}{% if max_price %}max_price={{ max_price }}&{% endif %}sort=rating" class="dropdown-item {% if sort_by == 'rating' %}active{% endif %}">{% translate "Rating" %}</a>
                                 </div>
                             </div>
                         </div>
@@ -95,9 +95,9 @@
                                             <i class="isax isax-heart5"></i>
                                         </a>
                                         {% if tour.is_featured %}
-                                        <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Featured</span>
+                                        <span class="badge bg-info d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>{% translate "Featured" %}</span>
                                         {% elif tour.is_bestseller %}
-                                        <span class="badge bg-success d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>Bestseller</span>
+                                        <span class="badge bg-success d-inline-flex align-items-center"><i class="isax isax-ranking me-1"></i>{% translate "Bestseller" %}</span>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -107,7 +107,7 @@
                                             <h5 class="mb-1 text-truncate"><a href="{% url 'tour_detail' tour.id %}">{{ tour.title }}</a></h5>
                                             <p class="fs-14 d-flex align-items-center">
                                                 <i class="isax isax-location5 me-2"></i>
-                                                {% if tour.city %}{{ tour.city.name }}{% elif tour.destination_region %}{{ tour.destination_region.name }}{% else %}Location TBA{% endif %}
+                                                {% if tour.city %}{{ tour.city.name }}{% elif tour.destination_region %}{{ tour.destination_region.name }}{% else %}{% translate "Location TBA" %}{% endif %}
                                             </p>
                                         </div>
                                         <div class="d-flex align-items-center">
@@ -118,7 +118,7 @@
                                             {% endif %}
                                             {% if tour.calculated_average_rating > 0 %}
                                             <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-1">{{ tour.calculated_average_rating|floatformat:1 }}</span>
-                                            <p class="fs-14">({{ tour.calculated_total_reviews }} Reviews)</p>
+                                            <p class="fs-14">({{ tour.calculated_total_reviews }} {% translate "Reviews" %})</p>
                                             {% endif %}
                                         </div>
                                     </div>
@@ -137,7 +137,7 @@
                                         </div>
                                         <div class="d-flex align-items-center">
                                             <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal border-end pe-2 me-2">
-                                                Starts From 
+                                                {% translate "Starts From" %}
                                                 <span class="ms-1 fs-18 fw-semibold text-primary">${{ tour.base_price|floatformat:0 }}</span>
                                                 {% if tour.discount_percentage > 0 %}
                                                 <span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">

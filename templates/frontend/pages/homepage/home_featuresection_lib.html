@@ -1,5 +1,5 @@
 {% load static %}
-{% load i18n %}
+{% load translate_tags %}
 
 {% for feature_section in feature_sections %}
     {% if feature_section.section_tours.exists %}
@@ -37,7 +37,7 @@
                 </div>
                 <div>
                     <a href="{% url 'tour_feature_section_fronted' feature_section.id %}" class="btn btn-primary">
-                        {% trans "View All Tours" %}<i class="isax isax-arrow-right-3 ms-2"></i>
+                        {% translate "View All Tours" %}<i class="isax isax-arrow-right-3 ms-2"></i>
                     </a>
                 </div>
             </div>
@@ -83,11 +83,11 @@
                                 <div class="fav-item">
                                     {% if tour.is_featured %}
                                         <span class="badge bg-info d-inline-flex align-items-center">
-                                            <i class="isax isax-ranking me-1"></i>{% trans "Featured" %}
+                                            <i class="isax isax-ranking me-1"></i>{% translate "Featured" %}
                                         </span>
                                     {% elif tour.is_bestseller %}
                                         <span class="badge bg-success d-inline-flex align-items-center">
-                                            <i class="isax isax-star me-1"></i>{% trans "Bestseller" %}
+                                            <i class="isax isax-star me-1"></i>{% translate "Bestseller" %}
                                         </span>
                                     {% endif %}
                                     <a href="javascript:void(0);" class="fav-icon">
@@ -100,9 +100,9 @@
                                 <div class="d-flex align-items-center mb-1">
                                     {% if tour.calculated_average_rating > 0 %}
                                         <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">{{ tour.calculated_average_rating|floatformat:1 }}</span>
-                                        <p class="fs-14">({{ tour.calculated_total_reviews }} {% trans "Reviews" %})</p>
+                                        <p class="fs-14">({{ tour.calculated_total_reviews }} {% translate "Reviews" %})</p>
                                     {% else %}
-                                        <p class="fs-14 text-muted">{% trans "No reviews yet" %}</p>
+                                        <p class="fs-14 text-muted">{% translate "No reviews yet" %}</p>
                                     {% endif %}
                                 </div>
                                 
@@ -134,18 +134,18 @@
                                             {{ tour.destination_region.name }}
                                         {% endif %}
                                     {% else %}
-                                        {% trans "Location not specified" %}
+                                        {% translate "Location not specified" %}
                                     {% endif %}
                                 </p>
                                 
                                 <!-- <div class="border-top pt-2 mb-2">
                                     <h6 class="d-flex align-items-center">
-                                        {% trans "Features" %} :
-                                        {% if tour.live_guide %}<i class="isax isax-microphone-2 ms-2 me-2 text-primary" title="{% trans 'Live Guide' %}"></i>{% endif %}
-                                        {% if tour.skip_the_line %}<i class="isax isax-ticket-discount ms-2 me-2 text-primary" title="{% trans 'Skip the Line' %}"></i>{% endif %}
-                                        {% if tour.free_cancellation %}<i class="isax isax-close-circle ms-2 me-2 text-primary" title="{% trans 'Free Cancellation' %}"></i>{% endif %}
-                                        {% if tour.wheelchair_accessible %}<i class="isax isax-profile-2user ms-2 me-2 text-primary" title="{% trans 'Wheelchair Accessible' %}"></i>{% endif %}
-                                        {% if tour.instant_confirmation %}<i class="isax isax-tick-circle ms-2 me-2 text-primary" title="{% trans 'Instant Confirmation' %}"></i>{% endif %}
+                                        {% translate "Features" %} :
+                                        {% if tour.live_guide %}<i class="isax isax-microphone-2 ms-2 me-2 text-primary" title="{% translate 'Live Guide' %}"></i>{% endif %}
+                                        {% if tour.skip_the_line %}<i class="isax isax-ticket-discount ms-2 me-2 text-primary" title="{% translate 'Skip the Line' %}"></i>{% endif %}
+                                        {% if tour.free_cancellation %}<i class="isax isax-close-circle ms-2 me-2 text-primary" title="{% translate 'Free Cancellation' %}"></i>{% endif %}
+                                        {% if tour.wheelchair_accessible %}<i class="isax isax-profile-2user ms-2 me-2 text-primary" title="{% translate 'Wheelchair Accessible' %}"></i>{% endif %}
+                                        {% if tour.instant_confirmation %}<i class="isax isax-tick-circle ms-2 me-2 text-primary" title="{% translate 'Instant Confirmation' %}"></i>{% endif %}
                                     </h6>
                                 </div> -->
                                 
@@ -154,7 +154,7 @@
                                         {% if tour.discount_percentage > 0 %}
                                             <h5 class="text-primary text-nowrap me-2">
                                                 {{ tour.base_price }} {{ tour.currency }}
-                                                <span class="fs-14 fw-normal text-default">/ {% trans "Person" %}</span>
+                                                <span class="fs-14 fw-normal text-default">/ {% translate "Person" %}</span>
                                             </h5>
                                             <p class="fs-12 text-muted text-decoration-line-through">
                                                 {{ tour.original_price|floatformat:2 }} {{ tour.currency }}
@@ -162,7 +162,7 @@
                                         {% else %}
                                             <h5 class="text-primary text-nowrap me-2">
                                                 {{ tour.base_price }} {{ tour.currency }}
-                                                <span class="fs-14 fw-normal text-default">/ {% trans "Person" %}</span>
+                                                <span class="fs-14 fw-normal text-default">/ {% translate "Person" %}</span>
                                             </h5>
                                         {% endif %}
                                     </div>

@@ -1,4 +1,5 @@
 {% load static %}
+{% load translate_tags %}
 <section class="section faq-sec-two pt-0">
     <div class="faq-sec-bg">
         <img src="{% static 'frontend/assets/img/bg/hotel-bg-05.svg' %}" class="bg-1" alt="Img">
@@ -18,9 +19,9 @@
                     <div class="section-header">
                         <div>
                             <p class="mb-2 fw-medium d-flex align-items-center"><span class="text-bar"></span>
-                                Frequently Asked Questions
+                                {% translate "Frequently Asked Questions" %}
                             </p>
-                            <h2>Specializing in dream destinations<span class="text-primary">.</span></h2>
+                            <h2>{% translate "Specializing in dream destinations" %}<span class="text-primary">.</span></h2>
                         </div>
                     </div>
                     <div class="accordion accordion-flush faq-accordion-five" id="accordionFaq">
@@ -43,7 +44,7 @@
                         {% empty %}
                         <div class="accordion-item">
                             <div class="accordion-body text-center">
-                                <p class="text-muted mb-0">No FAQs available at the moment.</p>
+                                <p class="text-muted mb-0">{% translate "No FAQs available at the moment" %}</p>
                             </div>
                         </div>
                         {% endfor %}

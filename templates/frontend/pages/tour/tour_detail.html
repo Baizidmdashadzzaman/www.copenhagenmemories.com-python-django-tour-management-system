@@ -4,16 +4,17 @@
 
 {% block content %}
 {% load static %}
+{% load translate_tags %}
 
 <div class="breadcrumb-bar breadcrumb-bg-02 text-center">
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title mb-2">Tour Details</h2>
+                <h2 class="breadcrumb-title mb-2">{% translate "Tour Details" %}</h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center mb-0">
                         <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="isax isax-home5"></i></a></li>
-                        <li class="breadcrumb-item"><a href="{% url 'tour_list' %}">Tours</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'tour_list' %}">{% translate "Tours" %}</a></li>
                         <li class="breadcrumb-item active" aria-current="page">{{ tour.title }}</li>
                     </ol>
                 </nav>
@@ -49,7 +50,7 @@
                                     </div>
                                     {% endif %}
                                 </div>
-                                <a href="{% if tour.main_image %}{{ tour.main_image.url }}{% elif images %}{{ images.0.image.url }}{% endif %}" data-fancybox="gallery" class="btn btn-white btn-xs view-btn"><i class="isax isax-image me-1"></i>See All</a>
+                                <a href="{% if tour.main_image %}{{ tour.main_image.url }}{% elif images %}{{ images.0.image.url }}{% endif %}" data-fancybox="gallery" class="btn btn-white btn-xs view-btn"><i class="isax isax-image me-1"></i>{% translate "See All" %}</a>
                                 <div class="slider-nav nav-center" id="small-img">
                                     {% if tour.main_image %}
                                     <div><img src="{{ tour.main_image.url }}" class="img-fluid" alt="{{ tour.title }}"></div>
@@ -65,10 +66,10 @@
                                 <h4 class="mb-1 d-flex align-items-center flex-wrap mb-2">
                                     {{ tour.title }}
                                     {% if tour.is_featured %}
-                                    <span class="badge badge-xs bg-success rounded-pill ms-2"><i class="isax isax-ticket-star me-1"></i>Featured</span>
+                                    <span class="badge badge-xs bg-success rounded-pill ms-2"><i class="isax isax-ticket-star me-1"></i>{% translate "Featured" %}</span>
                                     {% endif %}
                                     {% if tour.is_bestseller %}
-                                    <span class="badge badge-xs bg-primary rounded-pill ms-2"><i class="isax isax-ranking me-1"></i>Bestseller</span>
+                                    <span class="badge badge-xs bg-primary rounded-pill ms-2"><i class="isax isax-ranking me-1"></i>{% translate "Bestseller" %}</span>
                                     {% endif %}
                                 </h4>
                                 <div class="d-flex align-items-center flex-wrap">
@@ -77,24 +78,24 @@
                                     {% endif %}
                                     {% if tour.city %}
                                     <p class="fs-14 mb-2 me-3 pe-3 border-end"><i class="isax isax-location5 me-2"></i>{{ tour.city.name }}
-                                        <a href="#location" class="link-primary text-decoration-underline fw-medium ms-2">View Location</a>
+                                        <a href="#location" class="link-primary text-decoration-underline fw-medium ms-2">{% translate "View Location" %}</a>
                                     </p>
                                     {% elif tour.destination_region %}
                                     <p class="fs-14 mb-2 me-3 pe-3 border-end"><i class="isax isax-location5 me-2"></i>{{ tour.destination_region.name }}
-                                        <a href="#location" class="link-primary text-decoration-underline fw-medium ms-2">View Location</a>
+                                        <a href="#location" class="link-primary text-decoration-underline fw-medium ms-2">{% translate "View Location" %}</a>
                                     </p>
                                     {% endif %}
                                     {% if avg_rating > 0 %}
                                     <div class="d-flex align-items-center mb-2">
                                         <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">{{ avg_rating|floatformat:1 }}</span>
-                                        <p class="fs-14"><a href="#reviews">({{ total_reviews }} Reviews)</a></p>
+                                        <p class="fs-14"><a href="#reviews">({{ total_reviews }} {% translate "Reviews" %})</a></p>
                                     </div>
                                     {% endif %}
                                 </div>
                             </div>
                             <div class="d-flex align-items-center mb-3">
                                 <a href="#" class="btn btn-outline-light btn-icon btn-sm d-flex align-items-center justify-content-center me-2"><i class="isax isax-share"></i></a>
-                                <a href="#" class="btn btn-outline-light btn-sm d-inline-flex align-items-center"><i class="isax isax-heart5 text-danger me-1"></i>Save</a>
+                                <a href="#" class="btn btn-outline-light btn-sm d-inline-flex align-items-center"><i class="isax isax-heart5 text-danger me-1"></i>{% translate "Save" %}</a>
                             </div>
                         </div>
                     </div>
@@ -102,7 +103,7 @@
 
                     <!-- Description -->
                     <div class="bg-light-200 card-bg-light mb-4">
-                        <h5 class="fs-18 mb-3">Description</h5>
+                        <h5 class="fs-18 mb-3">{% translate "Description" %}</h5>
                         <div class="mb-2">
                             <p>{{ tour.description|truncatewords:50 }}</p>
                         </div>
@@ -111,7 +112,7 @@
                             <div class="more-text">
                                 <p>{{ tour.description }}</p>
                             </div>
-                            <a href="#" class="fs-14 fw-medium more-link text-decoration-underline mb-2">Show More</a>
+                            <a href="#" class="fs-14 fw-medium more-link text-decoration-underline mb-2">{% translate "Show More" %}</a>
                         </div>
                         {% endif %}
                     </div>
@@ -120,7 +121,7 @@
                     <!-- Highlights -->
                     {% if highlights %}
                     <div class="bg-light-200 card-bg-light mb-4">
-                        <h5 class="fs-18 mb-3">Highlights</h5>
+                        <h5 class="fs-18 mb-3">{% translate "Highlights" %}</h5>
                         <div>
                             {% for highlight in highlights %}
                             <div class="d-flex align-items-center mb-2">
@@ -138,7 +139,7 @@
                     <!-- Itinerary -->
                     {% if itinerary_steps %}
                     <div class="bg-light-200 card-bg-light mb-4">
-                        <h5 class="fs-18 mb-3">Itinerary</h5>
+                        <h5 class="fs-18 mb-3">{% translate "Itinerary" %}</h5>
                         <div class="card shadow-none mb-0">
                             <div class="card-body p-3">
                                 <div class="stage-flow">
@@ -150,7 +151,7 @@
                                                 <div>
                                                     <h6 class="fw-medium mb-1">{{ step.title }}</h6>
                                                     {% if step.duration_minutes %}
-                                                    <p>Duration: {{ step.duration_minutes }} minutes</p>
+                                                    <p>{% translate "Duration" %}: {{ step.duration_minutes }} minutes</p>
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -170,7 +171,7 @@
                     <!-- Includes & Excludes -->
                     {% if included_items or excluded_items %}
                     <div class="bg-light-200 card-bg-light mb-4">
-                        <h5 class="fs-18 mb-3">Includes & Excludes</h5>
+                        <h5 class="fs-18 mb-3">{% translate "Includes & Excludes" %}</h5>
                         <div class="row gy-2">
                             <div class="col-md-6">
                                 {% for item in included_items %}
@@ -194,7 +195,7 @@
                     <!-- Gallery -->
                     {% if images %}
                     <div class="bg-light-200 card-bg-light mb-4">
-                        <h5 class="fs-18 mb-3">Gallery</h5>
+                        <h5 class="fs-18 mb-3">{% translate "Gallery" %}</h5>
                         <div class="tour-gallery-slider owl-carousel">
                             {% for image in images %}
                             <a class="galley-wrap" data-fancybox="gallery" href="{{ image.image.url }}">
@@ -208,7 +209,7 @@
 
                     <!-- Location -->
                     <div class="bg-light-200 card-bg-light mb-4" id="location">
-                        <h5 class="fs-18 mb-3">Location</h5>
+                        <h5 class="fs-18 mb-3">{% translate "Location" %}</h5>
                         <!-- Map -->
                         <div>
                             {% if tour.map_location %}
@@ -223,7 +224,7 @@
                             {% endif %}
                             {% if tour.meeting_point %}
                             <div class="mt-3">
-                                <h6 class="fw-medium">Meeting Point:</h6>
+                                <h6 class="fw-medium">{% translate "Meeting Point" %} :</h6>
                                 <p>{{ tour.meeting_point }}</p>
                             </div>
                             {% endif %}
@@ -234,7 +235,7 @@
                     <!-- FAQ -->
                     {% if faqs %}
                     <div class="bg-light-200 card-bg-light mb-4">
-                        <h5 class="fs-18 mb-3">Frequently Asked Questions</h5>
+                        <h5 class="fs-18 mb-3">{% translate "Frequently Asked Questions" %}</h5>
                         <div class="accordion faq-accordion" id="accordionFaq">
                             {% for faq in faqs %}
                             <div class="accordion-item {% if forloop.first %}show{% endif %} mb-2">
@@ -257,13 +258,13 @@
 
                     <!-- Reviews -->
                     <div class="d-flex align-items-center justify-content-between flex-wrap mb-2" id="reviews">
-                        <h6 class="mb-3">Reviews ({{ total_reviews }})</h6>
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#add_review" class="btn btn-primary btn-md mb-3"><i class="isax isax-edit-2 me-1"></i>Write a Review</a>
+                        <h6 class="mb-3">{% translate "Reviews" %} ({{ total_reviews }})</h6>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#add_review" class="btn btn-primary btn-md mb-3"><i class="isax isax-edit-2 me-1"></i>{% translate "Write a Review" %}</a>
                     </div>
                     <div class="row">
                         <div class="col-md-6 d-flex">
                             <div class="rating-item bg-light-200 text-center flex-fill mb-3">
-                                <h6 class="fw-medium mb-3">Customer Reviews & Ratings</h6>
+                                <h6 class="fw-medium mb-3">{% translate "Customer Reviews & Ratings" %}</h6>
                                 <h5 class="display-6">{{ avg_rating|floatformat:1 }} / 5.0</h5>
                                 <div class="d-inline-flex align-items-center justify-content-center mb-3">
                                     {% for i in "12345" %}
@@ -274,7 +275,7 @@
                                         {% endif %}
                                     {% endfor %}
                                 </div>
-                                <p>Based On {{ total_reviews }} Reviews</p>
+                                <p>{% translate "Based On" %} {{ total_reviews }} {% translate "Reviews" %}</p>
                             </div>
                         </div>
                         <div class="col-md-6 d-flex">
@@ -282,7 +283,7 @@
                                 <div class="card-body">
                                     {% for star, stat in rating_stats.items %}
                                     <div class="d-flex align-items-center mb-2">
-                                        <p class="me-2 text-nowrap mb-0">{{ star }} Star Ratings</p>
+                                        <p class="me-2 text-nowrap mb-0">{{ star }} {% translate "Star Ratings" %}</p>
                                         <div class="progress w-100" role="progressbar" aria-valuenow="{{ stat.percentage|floatformat:0 }}" aria-valuemin="0" aria-valuemax="100">
                                             <div class="progress-bar bg-primary" style="width: {{ stat.percentage|floatformat:0 }}%"></div>
                                         </div>
@@ -325,7 +326,7 @@
                                     {% if review.supplier_response %}
                                     <div class="bg-light-200 rounded p-3 mt-3">
                                         <div class="d-flex align-items-center mb-2">
-                                            <h6 class="fs-14 fw-bold mb-0 text-primary">Response from {{ tour.supplier.company_name }}</h6>
+                                            <h6 class="fs-14 fw-bold mb-0 text-primary">{% translate "Response from" %} {{ tour.supplier.company_name }}</h6>
                                             <span class="text-muted fs-12 ms-2">{{ review.supplier_response_date|date:"d M Y" }}</span>
                                         </div>
                                         <p class="fs-13 text-muted mb-0">{{ review.supplier_response }}</p>
@@ -339,8 +340,8 @@
                             <div class="avatar avatar-xl bg-light rounded-circle mb-3 mx-auto d-flex align-items-center justify-content-center">
                                 <i class="isax isax-message-text5 fs-24 text-muted"></i>
                             </div>
-                            <h6>No reviews yet</h6>
-                            <p class="text-muted">Be the first to review this tour!</p>
+                            <h6>{% translate "No reviews yet" %}</h6>
+                            <p class="text-muted">{% translate "Be the first to review this tour!" %}</p>
                         </div>
                         {% endfor %}
                     </div>
@@ -353,41 +354,41 @@
                         <div class="card-body">
                             <h5 class="d-flex align-items-center fs-18 mb-3">
 								<span class="avatar avatar-md rounded-circle bg-primary me-2"><i class="isax isax-signpost5"></i></span>
-								Tour Details
+								{% translate "Tour Details" %}
 							</h5>
                             <div>
                                 {% if tour.start_date and tour.end_date %}
                                 <div class="d-flex align-items-center justify-content-between details-info">
-                                    <h6 class="fw-medium">Date</h6>
+                                    <h6 class="fw-medium">{% translate "Date" %}</h6>
                                     <p class="flex-fill">{{ tour.start_date|date:"d M Y" }} - {{ tour.end_date|date:"d M Y" }}</p>
                                 </div>
                                 {% endif %}
                                 {% if tour.destination_region %}
                                 <div class="d-flex align-items-center justify-content-between details-info">
-                                    <h6 class="fw-medium">Destination</h6>
+                                    <h6 class="fw-medium">{% translate "Destination" %}</h6>
                                     <p class="flex-fill">{{ tour.destination_region.name }}</p>
                                 </div>
                                 {% endif %}
                                 {% if tour.duration_text %}
                                 <div class="d-flex align-items-center justify-content-between details-info">
-                                    <h6 class="fw-medium">Duration</h6>
+                                    <h6 class="fw-medium">{% translate "Duration" %}</h6>
                                     <p class="flex-fill">{{ tour.duration_text }}</p>
                                 </div>
                                 {% elif tour.duration_hours %}
                                 <div class="d-flex align-items-center justify-content-between details-info">
-                                    <h6 class="fw-medium">Duration</h6>
+                                    <h6 class="fw-medium">{% translate "Duration" %}</h6>
                                     <p class="flex-fill">{{ tour.duration_hours }} Hours</p>
                                 </div>
                                 {% endif %}
                                 {% if tour.difficulty_level %}
                                 <div class="d-flex align-items-center justify-content-between details-info">
-                                    <h6 class="fw-medium">Difficulty</h6>
+                                    <h6 class="fw-medium">{% translate "Difficulty" %}</h6>
                                     <p class="flex-fill">{{ tour.get_difficulty_level_display }}</p>
                                 </div>
                                 {% endif %}
                                 {% if tour.max_participants %}
                                 <div class="d-flex align-items-center justify-content-between details-info">
-                                    <h6 class="fw-medium">Max Participants</h6>
+                                    <h6 class="fw-medium">{% translate "Max Participants" %}</h6>
                                     <p class="flex-fill">{{ tour.max_participants }}</p>
                                 </div>
                                 {% endif %}
@@ -397,8 +398,8 @@
                     <div class="card shadow-none">
                         <div class="card-body">
                             <div class="mb-3">
-                                <p class="fs-13 fw-medium mb-1">Starts From</p>
-                                <h5 class="text-primary mb-1">${{ tour.base_price|floatformat:0 }} <span class="fs-14 text-default fw-normal">/ Person</span></h5>
+                                <p class="fs-13 fw-medium mb-1">{% translate "Starts From" %}</p>
+                                <h5 class="text-primary mb-1">${{ tour.base_price|floatformat:0 }} <span class="fs-14 text-default fw-normal">/ {% translate "Person" %}</span></h5>
                                 {% if tour.discount_percentage > 0 %}
                                 <p class="text-muted text-decoration-line-through mb-0">${{ tour.original_price|floatformat:0 }}</p>
                                 <span class="badge bg-success">{{ tour.discount_percentage }}% OFF</span>
@@ -408,9 +409,9 @@
                             {% if not user.is_authenticated %}
                             <div class="alert alert-warning mb-3">
                                 <i class="isax isax-info-circle me-2"></i>
-                                <strong>Please log in to book this tour.</strong>
+                                <strong>{% translate "Please log in to book this tour." %}</strong>
                                 <br>
-                                <a href="{% url 'login' %}" class="alert-link">Login here</a> or <a href="{% url 'register_customer' %}" class="alert-link">create an account</a>.
+                                <a href="{% url 'login' %}" class="alert-link">{% translate "Login here" %}</a> or <a href="{% url 'register_customer' %}" class="alert-link">{% translate "create an account" %}</a>.
                             </div>
                             {% else %}
                             <!-- Booking Form -->
@@ -438,9 +439,9 @@
 
                                     <!-- Tour Date -->
                                     <div class="form-item border rounded p-3 mb-3 w-100">
-                                        <label class="form-label fs-14 text-default mb-2 fw-medium">Select Tour Date</label>
+                                        <label class="form-label fs-14 text-default mb-2 fw-medium">{% translate "Select Tour Date" %}</label>
                                         {{ booking_form.tour_date }}
-                                        <p class="fs-12 text-muted mb-0">Choose your preferred tour date</p>
+                                        <p class="fs-12 text-muted mb-0">{% translate "Choose your preferred tour date" %}</p>
                                         {% if booking_form.tour_date.errors %}
                                         <div class="text-danger fs-12 mt-1">
                                             {% for error in booking_form.tour_date.errors %}{{ error }}{% endfor %}
@@ -451,9 +452,9 @@
                                     <!-- Tour Time  -->
                                     {% if schedules %}
                                     <div class="form-item border rounded p-3 mb-3 w-100">
-                                        <label class="form-label fs-14 text-default mb-2 fw-medium">Select Time Slot (Optional)</label>
+                                        <label class="form-label fs-14 text-default mb-2 fw-medium">{% translate "Select Time Slot (Optional)" %}</label>
                                         {{ booking_form.tour_time }}
-                                        <p class="fs-12 text-muted mb-0">Available time slots for selected date</p>
+                                        <p class="fs-12 text-muted mb-0">{% translate "Available time slots for selected date" %}</p>
                                     </div>
                                     {% endif %}
 
@@ -462,11 +463,11 @@
                                         <div class="card-body p-3 pb-0">
                                             <div class="border-bottom pb-2 mb-3 d-flex justify-content-between align-items-center">
                                                 <div>
-                                                    <h6 class="mb-0">Participants</h6>
-                                                    <small class="text-muted">Add participants and their details</small>
+                                                    <h6 class="mb-0">{% translate "Participants" %}</h6>
+                                                    <small class="text-muted">{% translate "Add participants and their details" %}</small>
                                                 </div>
                                                 <button type="button" class="btn btn-primary btn-sm" id="addParticipant">
-                                                    <i class="isax isax-add me-1"></i>Add Participant
+                                                    <i class="isax isax-add me-1"></i>{% translate "Add Participant" %}
                                                 </button>
                                             </div>
 
@@ -478,17 +479,17 @@
                                             {% if not participantsList %}
                                             <div class="text-center text-muted mb-3" id="noParticipantsMessage">
                                                 <i class="isax isax-user-add fs-24 mb-2"></i>
-                                                <p>No participants added yet. Click "Add Participant" to get started.</p>
+                                                <p>{% translate "No participants added yet. Click 'Add Participant' to get started." %}</p>
                                             </div>
                                             {% endif %}
 
                                             <!-- Coupon Code -->
                                             <div class="border-top pt-3">
                                                 <label class="form-label fs-14 text-default mb-2 fw-medium">
-                                                    Coupon Code (Optional)
+                                                    {% translate "Coupon Code (Optional)" %}
                                                 </label>
                                                 {{ booking_form.coupon_code }}
-                                                <p class="fs-12 text-muted mb-0">Enter coupon code to get discount</p>
+                                                <p class="fs-12 text-muted mb-0">{% translate "Enter coupon code to get discount" %}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -497,11 +498,11 @@
                                     <div class="card shadow-none mb-3">
                                         <div class="card-body p-3 pb-0">
                                             <div class="border-bottom pb-2 mb-3">
-                                                <h6 class="mb-0">Contact Information</h6>
+                                                <h6 class="mb-0">{% translate "Contact Information" %}</h6>
                                             </div>
 
                                             <div class="mb-3">
-                                                <label class="form-label fs-14 text-default mb-2 fw-medium">Full Name</label>
+                                                <label class="form-label fs-14 text-default mb-2 fw-medium">{% translate "Full Name" %}</label>
                                                 {{ booking_form.contact_name }}
                                                 {% if booking_form.contact_name.errors %}
                                                 <div class="text-danger fs-12 mt-1">
@@ -511,7 +512,7 @@
                                             </div>
 
                                             <div class="mb-3">
-                                                <label class="form-label fs-14 text-default mb-2 fw-medium">Email Address</label>
+                                                <label class="form-label fs-14 text-default mb-2 fw-medium">{% translate "Email Address" %}</label>
                                                 {{ booking_form.contact_email }}
                                                 {% if booking_form.contact_email.errors %}
                                                 <div class="text-danger fs-12 mt-1">
@@ -521,7 +522,7 @@
                                             </div>
 
                                             <div class="mb-3">
-                                                <label class="form-label fs-14 text-default mb-2 fw-medium">Phone Number</label>
+                                                <label class="form-label fs-14 text-default mb-2 fw-medium">{% translate "Phone Number" %}</label>
                                                 {{ booking_form.contact_phone }}
                                                 {% if booking_form.contact_phone.errors %}
                                                 <div class="text-danger fs-12 mt-1">
@@ -531,7 +532,7 @@
                                             </div>
 
                                             <div class="mb-3">
-                                                <label class="form-label fs-14 text-default mb-2 fw-medium">Special Requirements (Optional)</label>
+                                                <label class="form-label fs-14 text-default mb-2 fw-medium">{% translate "Special Requirements (Optional)" %}</label>
                                                 {{ booking_form.special_requirements }}
                                                 {% if booking_form.special_requirements.errors %}
                                                 <div class="text-danger fs-12 mt-1">
@@ -541,7 +542,7 @@
                                             </div>
 
                                             <div class="mb-3">
-                                                <label class="form-label fs-14 text-default mb-2 fw-medium">Pickup Location (Optional)</label>
+                                                <label class="form-label fs-14 text-default mb-2 fw-medium">{% translate "Pickup Location (Optional)" %}</label>
                                                 {{ booking_form.pickup_location }}
                                                 {% if booking_form.pickup_location.errors %}
                                                 <div class="text-danger fs-12 mt-1">
@@ -551,12 +552,12 @@
                                             </div>
 
                                             <div class="mb-3">
-                                                <label class="form-label fs-14 text-default mb-2 fw-medium">Special Requirements (Optional)</label>
+                                                <label class="form-label fs-14 text-default mb-2 fw-medium">{% translate "Special Requirements (Optional)" %}</label>
                                                 {{ booking_form.special_requirements }}
                                             </div>
 
                                             <div class="mb-3">
-                                                <label class="form-label fs-14 text-default mb-2 fw-medium">Pickup Location (Optional)</label>
+                                                <label class="form-label fs-14 text-default mb-2 fw-medium">{% translate "Pickup Location (Optional)" %}</label>
                                                 {{ booking_form.pickup_location }}
                                             </div>
                                         </div>
@@ -565,13 +566,13 @@
                                     <!-- Price Summary -->
                                     <div class="card shadow-none mb-3" id="priceSummary" style="display: none;">
                                         <div class="card-body p-3">
-                                            <h6 class="mb-3">Price Summary</h6>
+                                            <h6 class="mb-3">{% translate "Price Summary" %}</h6>
                                             <div id="priceBreakdown"></div>
                                         </div>
                                     </div>
 
                                     <button type="submit" class="btn btn-primary btn-lg w-100 fs-14" id="bookNowBtn">
-                                        <i class="isax isax-calendar-add me-2"></i>Book Now
+                                        <i class="isax isax-calendar-add me-2"></i>{% translate "Book Now" %}
                                     </button>
                                 </form>
                             </div>
@@ -580,54 +581,54 @@
                     </div>
                     <div class="card shadow-none">
                         <div class="card-body">
-                            <h5 class="fs-18 mb-3">Why Book With Us</h5>
+                            <h5 class="fs-18 mb-3">{% translate "Why Book With Us" %}</h5>
                             <div>
                                 {% if tour.instant_confirmation %}
-                                <p class="d-flex align-items-center mb-3"><i class="isax isax-tick-circle text-primary me-2"></i>Instant Confirmation</p>
+                                <p class="d-flex align-items-center mb-3"><i class="isax isax-tick-circle text-primary me-2"></i>{% translate "Instant Confirmation" %}</p>
                                 {% endif %}
                                 {% if tour.free_cancellation %}
-                                <p class="d-flex align-items-center mb-3"><i class="isax isax-close-circle text-primary me-2"></i>Free Cancellation ({{ tour.cancellation_hours }}h)</p>
+                                <p class="d-flex align-items-center mb-3"><i class="isax isax-close-circle text-primary me-2"></i>{% translate "Free Cancellation" %} ({{ tour.cancellation_hours }}h)</p>
                                 {% endif %}
                                 {% if tour.skip_the_line %}
-                                <p class="d-flex align-items-center mb-3"><i class="isax isax-flash text-primary me-2"></i>Skip the Line</p>
+                                <p class="d-flex align-items-center mb-3"><i class="isax isax-flash text-primary me-2"></i>{% translate "Skip the Line" %}</p>
                                 {% endif %}
                                 {% if tour.live_guide %}
-                                <p class="d-flex align-items-center mb-3"><i class="isax isax-user-add text-primary me-2"></i>Live Tour Guide</p>
+                                <p class="d-flex align-items-center mb-3"><i class="isax isax-user-add text-primary me-2"></i>{% translate "Live Tour Guide" %}</p>
                                 {% endif %}
-                                <p class="d-flex align-items-center"><i class="isax isax-grammerly text-primary me-2"></i>24/7 Support</p>
+                                <p class="d-flex align-items-center"><i class="isax isax-grammerly text-primary me-2"></i>{% translate "24/7 Support" %}</p>
                             </div>
                         </div>
                     </div>
                     <div class="card shadow-none">
                         <div class="card-body">
-                            <h5 class="fs-18 mb-3">Enquire Us</h5>
+                            <h5 class="fs-18 mb-3">{% translate "Enquire Us" %}</h5>
                             <div class="banner-form">
                                 <form action="#" method="POST">
                                     {% csrf_token %}
                                     <div class="mb-3">
-                                        <label class="form-label">Name</label>
+                                        <label class="form-label">{% translate "Name" %}</label>
                                         <input type="text" class="form-control" name="name" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label">Email</label>
+                                        <label class="form-label">{% translate "Email" %}</label>
                                         <input type="email" class="form-control" name="email" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label">Phone</label>
+                                        <label class="form-label">{% translate "Phone" %}</label>
                                         <input type="text" class="form-control" name="phone">
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label">Message</label>
+                                        <label class="form-label">{% translate "Message" %}</label>
                                         <textarea class="form-control" rows="3" name="message" required></textarea>
                                     </div>
-                                    <button type="submit" class="btn btn-primary btn-lg search-btn ms-0 w-100 fs-14">Submit Enquiry</button>
+                                    <button type="submit" class="btn btn-primary btn-lg search-btn ms-0 w-100 fs-14">{% translate "Submit Enquiry" %}</button>
                                 </form>
                             </div>
                         </div>
                     </div>
                     <div class="card shadow-none mb-0">
                         <div class="card-body">
-                            <h5 class="fs-18 mb-3">Provider Details</h5>
+                            <h5 class="fs-18 mb-3">{% translate "Provider Details" %}</h5>
                             <div class="py-1">
                                 <div class="bg-light-500 br-10 mb-3 d-flex align-items-center p-3">
                                     {% if tour.supplier.logo %}
@@ -641,30 +642,30 @@
                                     {% endif %}
                                     <div class="ms-2 overflow-hidden">
                                         <h6 class="fw-medium text-truncate"><a href="#">{{ tour.supplier.company_name }}</a></h6>
-                                        <p class="fs-14">Member Since : {{ tour.supplier.created_at|date:"d M Y" }}</p>
+                                        <p class="fs-14">{% translate "Member Since" %} : {{ tour.supplier.created_at|date:"d M Y" }}</p>
                                     </div>
                                 </div>
                                 <div class="border br-10 mb-3 p-3">
                                     {% if tour.supplier.phone %}
                                     <div class="d-flex align-items-center border-bottom pb-3 mb-3">
                                         <span class="avatar avatar-sm me-2 rounded-circle flex-shrink-0 bg-primary"><i class="isax isax-call-outgoing5"></i></span>
-                                        <p>Call Us : {{ tour.supplier.phone }}</p>
+                                        <p>{% translate "Call Us" %} : {{ tour.supplier.phone }}</p>
                                     </div>
                                     {% endif %}
                                     {% if tour.supplier.email %}
                                     <div class="d-flex align-items-center">
                                         <span class="avatar avatar-sm me-2 rounded-circle flex-shrink-0 bg-primary"><i class="isax isax-message-search5"></i></span>
-                                        <p>Email : {{ tour.supplier.email }}</p>
+                                        <p>{% translate "Email" %} : {{ tour.supplier.email }}</p>
                                     </div>
                                     {% endif %}
                                 </div>
                             </div>
                             <div class="row g-2">
                                 <div class="col-sm-6">
-                                    <a href="#" class="btn btn-light d-flex align-items-center justify-content-center"><i class="isax isax-messages5 me-2"></i>Whatsapp</a>                      
+                                    <a href="#" class="btn btn-light d-flex align-items-center justify-content-center"><i class="isax isax-messages5 me-2"></i>{% translate "Whatsapp" %}</a>                      
                                 </div>
                                 <div class="col-sm-6">
-                                    <a href="#" class="btn btn-primary d-flex align-items-center justify-content-center"><i class="isax isax-message-notif5 me-2"></i>Chat Now</a>
+                                    <a href="#" class="btn btn-primary d-flex align-items-center justify-content-center"><i class="isax isax-message-notif5 me-2"></i>{% translate "Chat Now" %}</a>
                                 </div>
                             </div>
                         </div>
@@ -684,7 +685,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center justify-content-between">
-                    <h5>Write a Review</h5>
+                    <h5>{% translate "Write a Review" %}</h5>
                     <a href="#" data-bs-dismiss="modal" aria-label="Close">
                         <i class="ti ti-x fs-16"></i>
                     </a>
@@ -696,7 +697,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label">Your Rating <span class="text-danger">*</span></label>
+                                    <label class="form-label">{% translate "Your Rating" %} <span class="text-danger">*</span></label>
                                     <div class="selection-wrap">
                                         <div class="d-inline-block">
                                                 <div class="rating-selction">
@@ -711,13 +712,13 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label">Review Title <span class="text-danger">*</span></label>
+                                    <label class="form-label">{% translate "Review Title" %} <span class="text-danger">*</span></label>
                                     {{ review_form.title }}
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label">Write Your Review <span class="text-danger">*</span></label>
+                                    <label class="form-label">{% translate "Write Your Review" %} <span class="text-danger">*</span></label>
                                     {{ review_form.review }}
                                 </div>
                             </div>
@@ -726,10 +727,10 @@
                     <div class="modal-footer">
                         <div class="d-flex align-items-center justify-content-end m-0">
                             {% if user.is_authenticated %}
-                            <button type="submit" class="btn btn-primary btn-md"><i class="isax isax-edit-2 me-1"></i>Submit Review</button>
+                            <button type="submit" class="btn btn-primary btn-md"><i class="isax isax-edit-2 me-1"></i>{% translate "Submit Review" %}</button>
                             {% else %}
                             <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-primary btn-md">
-                                Login to Review
+                                {% translate "Login to Review" %}
                             </a>
                             {% endif %}
                         </div>

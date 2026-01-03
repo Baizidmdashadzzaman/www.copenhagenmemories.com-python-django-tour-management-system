@@ -1,4 +1,5 @@
 {% load static %}
+{% load translate_tags %}
 
 <div class="row">
     {% for menu in website_menus_footer %}
@@ -23,13 +24,13 @@
     {% endfor %}
     <div class="col-lg-3 col-sm-6">
         <div class="footer-widget">
-            <h5>Services</h5>
+            <h5>{% translate "Services" %}</h5>
             <div class="customer-info">
                 <div class="customer-info-icon">
                     <span><i class="isax isax-headphone5"></i></span>
                 </div>
                 <div class="customer-info-content">
-                    <span>Customer Support</span>
+                    <span>{% translate "Customer Support" %}</span>
                     <h6>{{ site_settings.site_phone }}</h6>
                 </div>
             </div>
@@ -38,7 +39,7 @@
                     <span><i class="isax isax-sms5"></i></span>
                 </div>
                 <div class="customer-info-content">
-                    <span>Drop Us an Email</span>
+                    <span>{% translate "Drop Us an Email" %}</span>
                     <h6>{{ site_settings.site_email }}</h6>
                 </div>
             </div>

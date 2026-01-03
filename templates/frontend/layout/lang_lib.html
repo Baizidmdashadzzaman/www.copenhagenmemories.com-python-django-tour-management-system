@@ -1,4 +1,5 @@
 {% load static %}
+{% load translate_tags %}
 <div class="dropdown flag-dropdown me-3">
     <a href="#" class="d-inline-flex align-items-center" data-bs-toggle="dropdown"
         aria-expanded="false">
@@ -13,14 +14,14 @@
             <a class="dropdown-item rounded d-flex align-items-center {% if current_lang == 'en' %}active{% endif %}" 
                href="{% url 'set_language' 'en' %}">
                 <img src="{% static 'frontend/assets/img/flags/us.png' %}" class="me-2"
-                    alt="flag">ENG
+                    alt="flag">{% translate "ENG" %}
             </a>
         </li>
         <li>
             <a class="dropdown-item rounded d-flex align-items-center {% if current_lang == 'dk' %}active{% endif %}" 
                href="{% url 'set_language' 'dk' %}">
                 <img src="{% static 'frontend/assets/img/flags/dk.png' %}"
-                    class="me-2" alt="flag">DKK
+                    class="me-2" alt="flag">{% translate "DKK" %}
             </a>
         </li>
     </ul>
