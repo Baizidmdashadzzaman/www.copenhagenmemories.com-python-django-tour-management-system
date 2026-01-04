@@ -10,13 +10,12 @@
 	color:#FFF;
 	border-radius:50px;
 	text-align:center;
-    font-size:30px;
+  font-size:30px;
 	/* box-shadow: 2px 2px 3px #999; */
-    z-index:9999;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  z-index:9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .float:hover{
@@ -33,7 +32,7 @@
  display:block;
 }
 }
-/* Button used to open the chat form - fixed at the bottom of the page */
+
 .open-button {
   padding: 16px 20px;
   border: none;
@@ -47,7 +46,6 @@
   color:black;
 }
 
-/* The popup chat - hidden by default */
 .chat-popup {
   display: none;
   position: fixed;
@@ -57,14 +55,12 @@
   z-index: 10000;
 }
 
-/* Add styles to the form container */
 .form-container {
   width: 350px;
   padding: 10px;
   background-color: white;
 }
 
-/* Full-width textarea */
 .form-container textarea {
   width: 100%;
   padding: 15px;
@@ -75,13 +71,11 @@
   min-height: 200px;
 }
 
-/* When the textarea gets focus, do something */
 .form-container textarea:focus {
   background-color: #ddd;
   outline: none;
 }
 
-/* Set a style for the submit/send button */
 .form-container .btn {
   color: white;
   padding: 16px 20px;
@@ -91,7 +85,6 @@
   margin-bottom:10px;
 }
 
-/* Add a red background color to the cancel button */
 .form-container .cancel {
 
 }
@@ -123,7 +116,6 @@
   border-radius: 10px;
 }
 
-/* Base chat message style */
 .answer {
   display: flex;
   flex-direction: column;
@@ -132,7 +124,6 @@
   word-wrap: break-word;
 }
 
-/* Left (bot/admin) messages */
 .answer.left {
   align-self: flex-start;
   background-color: #e4e6eb;
@@ -141,7 +132,6 @@
   color: #000;
 }
 
-/* Right (user) messages */
 .answer.right {
   align-self: flex-end;
   background-color: #f5793d;
@@ -150,12 +140,10 @@
   color: #000;
 }
 
-/* Message text */
 .answer .text {
   font-size: 14px;
 }
 
-/* Timestamp */
 .answer .time {
   text-align: right;
   font-size: 10px;
@@ -173,7 +161,7 @@
 <div class="chat-popup" id="myForm" style="border-radius: 10px;">
    <form class="form-container" id="chatForm">
    {% csrf_token %}
-   <h3>{% translate "Chat with us" %}</h3><hr>
+   <!-- <h3>{% translate "Chat with us" %}</h3><hr> -->
    <div class="chat-body" id="chatBox" style="height: 450px; overflow-y: scroll;">
    </div>
 
