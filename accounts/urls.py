@@ -26,6 +26,10 @@ from accounts import views_frontend
 urlpatterns = [
     path('newsletter/subscribe/', views_frontend.newsletter_subscribe, name='newsletter_subscribe'),
     path('register/customer/', customer_views.register_customer, name='register_customer'),
+    path('register/supplier/', views_frontend.register_tour_supplier, name='register_tour_supplier'),
+    path('login/supplier/', views_frontend.login_tour_supplier, name='login_tour_supplier'),
+    path('logout/supplier/', views_frontend.logout_tour_supplier, name='logout_tour_supplier'),
+    path('dashboard/supplier/', views_frontend.tour_supplier_dashboard, name='tour_supplier_dashboard'),
     path('register/admin/', admin_views.register_admin, name='register_admin'),
     path('login/customer/', customer_views.login_view, name='customer_login'),
     path('login/admin/', admin_views.login_view, name='admin_login'),

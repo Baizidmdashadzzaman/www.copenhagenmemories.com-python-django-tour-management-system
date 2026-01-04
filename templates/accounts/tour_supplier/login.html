@@ -1,0 +1,107 @@
+{% extends 'frontend/layout/base.html' %}
+
+{% block title %}Supplier Login - {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+{% load static %}
+{% load translate_tags %}
+
+<div class="breadcrumb-bar breadcrumb-bg-02 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-12">
+                <h2 class="breadcrumb-title mb-2">{% translate "Supplier Login" %}</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="isax isax-home5"></i></a></li>
+                        <li class="breadcrumb-item">{% translate "Partner" %}</li>
+                        <li class="breadcrumb-item active" aria-current="page">{% translate "Login" %}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid" style="padding-top: 50px;">
+    <div class="w-100  position-relative flex-wrap d-block ">
+        <div class="row justify-content-center align-items-center flex-wrap ">
+            <div class="col-xxl-4 col-lg-6 col-md-6 col-11 mx-auto">
+                <div class="card authentication-card">
+                    <div class="card-header">
+                        <div class="text-center">
+                            <h5 class="mb-1">{% translate "Welcome Back!" %}</h5>
+                            <p>{% translate "Login to manage your tours" %}</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">
+                            {% csrf_token %}
+                            {% if form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    {% for error in form.non_field_errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            
+                            <div class="mb-3">
+                                <label class="form-label">{% translate "Email" %}</label>
+                                <div class="input-icon">
+                                    <span class="input-icon-addon">
+                                        <i class="isax isax-message"></i>
+                                    </span>
+                                    {{ form.email }}
+                                </div>
+                                {% if form.email.errors %}
+                                    <div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">{% translate "Password" %}</label>
+                                <div class="input-icon">
+                                    <span class="input-icon-addon">
+                                        <i class="isax isax-lock"></i>
+                                    </span>
+                                    {{ form.password }}
+                                    <span class="input-icon-addon toggle-password" style="cursor: pointer;">
+                                        <i class="isax isax-eye-slash"></i>
+                                    </span>
+                                </div>
+                                {% if form.password.errors %}
+                                    <div class="text-danger small mt-1">{{ form.password.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="remember-me">
+                                            <label class="form-check-label" for="remember-me">{% translate "Remember Me" %}</label>
+                                        </div>
+                                    </div>
+                                    <!-- Forgot password logic can be added later -->
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-xl btn-primary d-flex align-items-center justify-content-center w-100">{% translate "Login" %}<i class="isax isax-arrow-right-3 ms-2"></i></button>
+                            </div>
+                            
+                            <div class="login-or mb-3">
+                                <span class="span-or">{% translate "Or" %}</span>
+                            </div>
+
+                            <div class="d-flex justify-content-center">
+                                <p class="fs-14">{% translate "Don't have an account?" %} <a href="{% url 'register_tour_supplier' %}" class="link-primary fw-medium">{% translate "Register" %}</a></p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

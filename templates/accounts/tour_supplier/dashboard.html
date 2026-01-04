@@ -1,0 +1,126 @@
+{% extends 'frontend/layout/base.html' %}
+
+{% block title %}Supplier Dashboard - {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+{% load static %}
+{% load translate_tags %}
+
+<div class="breadcrumb-bar breadcrumb-bg-02 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-12">
+                <h2 class="breadcrumb-title mb-2">{% translate "Supplier Dashboard" %}</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="isax isax-home5"></i></a></li>
+                        <li class="breadcrumb-item">{% translate "Partner" %}</li>
+                        <li class="breadcrumb-item active" aria-current="page">{% translate "Dashboard" %}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content-section" style="padding: 100px 0;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-4">
+                <div class="card account-menu">
+                    <div class="card-body">
+                        <div class="account-author">
+                            <div class="author-img">
+                                <img src="{% if supplier.logo %}{{ supplier.logo.url }}{% else %}{% static 'assets/img/user.png' %}{% endif %}" alt="">
+                            </div>
+                            <div class="author-details">
+                                <h6>{{ supplier.company_name }}</h6>
+                                <span>{{ supplier.contact_name }}</span>
+                            </div>
+                        </div>
+                        <hr>
+                        <ul class="list-unstyled">
+                            <li>
+                                <a href="{% url 'tour_supplier_dashboard' %}" class="active">
+                                    <i class="isax isax-element-4"></i> {% translate "Dashboard" %}
+                                </a>
+                            </li>
+                             <li>
+                                <a href="#">
+                                    <i class="isax isax-box"></i> {% translate "My Tours" %}
+                                </a>
+                            </li>
+                             <li>
+                                <a href="#">
+                                    <i class="isax isax-calendar-1"></i> {% translate "Bookings" %}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'logout_tour_supplier' %}">
+                                    <i class="isax isax-logout"></i> {% translate "Logout" %}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-9 col-md-8">
+                <div class="dashboard-content">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6">
+                            <div class="card dashboard-card">
+                                <div class="card-body">
+                                    <div class="dashboard-icon">
+                                        <i class="isax isax-box"></i>
+                                    </div>
+                                    <div class="dashboard-info">
+                                        <h3>0</h3>
+                                        <p>{% translate "Total Tours" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="col-lg-4 col-md-6">
+                            <div class="card dashboard-card">
+                                <div class="card-body">
+                                    <div class="dashboard-icon">
+                                        <i class="isax isax-calendar-1"></i>
+                                    </div>
+                                    <div class="dashboard-info">
+                                        <h3>0</h3>
+                                        <p>{% translate "Total Bookings" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="col-lg-4 col-md-6">
+                            <div class="card dashboard-card">
+                                <div class="card-body">
+                                    <div class="dashboard-icon">
+                                        <i class="isax isax-star"></i>
+                                    </div>
+                                    <div class="dashboard-info">
+                                        <h3>{{ supplier.rating }}</h3>
+                                        <p>{% translate "Average Rating" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h5>{% translate "Recent Activity" %}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>{% translate "No recent activity." %}</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

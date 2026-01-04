@@ -151,7 +151,7 @@ class TourSupplierForm(forms.ModelForm):
             'company_name', 'contact_name', 'email', 'phone', 'address', 
             'city', 'country', 'website', 'logo', 'tax_id', 'payment_details', 
             'bank_account', 'commission_rate', 'rating', 'total_reviews', 
-            'verified', 'status', 'other_details'
+            'verified', 'status', 'password', 'other_details'
         ]
         widgets = {
             'company_name': forms.TextInput(attrs={'placeholder': 'Enter company name'}),
@@ -172,7 +172,21 @@ class TourSupplierForm(forms.ModelForm):
             'total_reviews': forms.NumberInput(attrs={'placeholder': 'Enter total reviews', 'min': '0'}),
             'status': forms.Select(attrs={'class': 'form-select', 'id': 'id_status'}),
             'verified': forms.CheckboxInput(attrs={'class': 'form-check-input', 'id': 'id_verified'}),
+            'password': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Enter password', 'autocomplete': 'new-password'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not self.instance.pk:
+            self.fields['password'].required = True
+        else:
+            self.fields['password'].required = False
+
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        if not password and self.instance.pk:
+            return self.instance.password
+        return password
 
 class CategoryForm(forms.ModelForm):
     class Meta:

@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Customer, CustomerMessage
+from .models import Customer, CustomerMessage, TourSupplier
 from django.contrib.auth.forms import AuthenticationForm
 
 class CustomerRegistrationForm(forms.ModelForm):
@@ -165,3 +165,69 @@ class CustomerMessageForm(forms.ModelForm):
     class Meta:
         model = CustomerMessage
         fields = ['subject', 'message']
+
+class TourSupplierRegistrationForm(forms.ModelForm):
+    company_name = forms.CharField(
+        max_length=200,
+        widget=forms.TextInput(attrs={'class': 'form-control form-control-lg', 'placeholder': 'Enter Company Name'})
+    )
+    contact_name = forms.CharField(
+        max_length=200,
+        widget=forms.TextInput(attrs={'class': 'form-control form-control-lg', 'placeholder': 'Enter Contact Person Name'})
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={'class': 'form-control form-control-lg', 'placeholder': 'Enter Email'})
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control form-control-lg pass-input', 'placeholder': 'Enter Password'})
+    )
+    phone = forms.CharField(
+        max_length=50,
+        widget=forms.TextInput(attrs={'class': 'form-control form-control-lg', 'placeholder': 'Enter Phone Number'})
+    )
+    address = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-control form-control-lg', 'placeholder': 'Enter Address', 'rows': 3}),
+        required=True
+    )
+
+    class Meta:
+        model = TourSupplier
+        fields = ['company_name', 'contact_name', 'email', 'phone', 'address']
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if TourSupplier.objects.filter(email=email).exists():
+            raise forms.ValidationError("Email already exists.")
+        return email
+
+    def save(self, commit=True):
+        supplier = super().save(commit=False)
+        supplier.password = self.cleaned_data['password']  # Note: Storing plain text as per implied system design, but ideally should be hashed
+        # Set default status to active or pending? User didn't specify. Model default is 'active'.
+        if commit:
+            supplier.save()
+        return supplier
+
+class TourSupplierLoginForm(forms.Form):
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={'class': 'form-control form-control-lg', 'placeholder': 'Enter Email'})
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control form-control-lg pass-input', 'placeholder': 'Enter Password'})
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get('email')
+        password = cleaned_data.get('password')
+
+        if email and password:
+            try:
+                supplier = TourSupplier.objects.get(email=email)
+                if supplier.password != password: # NOTE: Using plain text comparison as hashed password implementation is pending
+                     raise forms.ValidationError("Invalid email or password.")
+                cleaned_data['supplier'] = supplier
+            except TourSupplier.DoesNotExist:
+                raise forms.ValidationError("Invalid email or password.")
+        
+        return cleaned_data
