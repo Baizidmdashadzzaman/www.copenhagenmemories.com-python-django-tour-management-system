@@ -2,28 +2,29 @@
 
 {% block customer_content %}
 {% load static %}
+{% load translate_tags %}
 
 <div class="card border-0 shadow-sm print-card">
     <div class="card-header bg-white d-flex justify-content-between align-items-center py-3 border-bottom">
         <div>
-            <h5 class="mb-1">Booking #{{ booking.booking_number }}</h5>
-            <span class="text-muted fs-14">Booked on {{ booking.created_at|date:"d M, Y H:i" }}</span>
+            <h5 class="mb-1">{% translate "Booking #" %}{{ booking.booking_number }}</h5>
+            <span class="text-muted fs-14">{% translate "Booked on" %} {{ booking.created_at|date:"d M, Y H:i" }}</span>
         </div>
         <div class="d-flex align-items-center gap-2">
             {% if booking.status == 'confirmed' %}
-            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3">Confirmed</span>
+            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3">{% translate "Confirmed" %}</span>
             {% elif booking.status == 'pending' %}
-            <span class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill px-3">Pending</span>
+            <span class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill px-3">{% translate "Pending" %}</span>
             {% elif booking.status == 'cancelled' %}
-            <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-3">Cancelled</span>
+            <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-3">{% translate "Cancelled" %}</span>
             {% elif booking.status == 'completed' %}
-            <span class="badge bg-info-subtle text-info border border-info-subtle rounded-pill px-3">Completed</span>
+            <span class="badge bg-info-subtle text-info border border-info-subtle rounded-pill px-3">{% translate "Completed" %}</span>
             {% else %}
             <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill px-3">{{ booking.status|title }}</span>
             {% endif %}
             
             <button onclick="window.print()" class="btn btn-outline-primary btn-sm rounded-pill d-print-none">
-                <i class="isax isax-printer me-1"></i> Print Invoice
+                <i class="isax isax-printer me-1"></i> {% translate "Print Invoice" %}
             </button>
         </div>
     </div>
@@ -45,7 +46,7 @@
                     <div class="col-sm-6 col-md-4">
                         <div class="d-flex align-items-center mb-1">
                             <i class="isax isax-calendar-1 me-2 text-primary"></i> 
-                            <span>Tour Date:</span>
+                            <span>{% translate "Tour Date" %}</span>
                         </div>
                         <span class="fw-medium text-dark ms-4">{{ booking.tour_date|date:"d M, Y" }}</span>
                     </div>
@@ -53,7 +54,7 @@
                     <div class="col-sm-6 col-md-4">
                         <div class="d-flex align-items-center mb-1">
                             <i class="isax isax-clock me-2 text-primary"></i>
-                            <span>Start Time:</span>
+                            <span>{% translate "Start Time" %}</span>
                         </div>
                         <span class="fw-medium text-dark ms-4">{{ booking.tour_time|time:"H:i" }}</span>
                     </div>
@@ -61,7 +62,7 @@
                     <div class="col-sm-6 col-md-4">
                          <div class="d-flex align-items-center mb-1">
                             <i class="isax isax-location me-2 text-primary"></i>
-                            <span>Location:</span>
+                            <span>{% translate "Location" %}</span>
                         </div>
                         <span class="fw-medium text-dark ms-4">
                              {% if booking.tour.city %}{{ booking.tour.city.name }}, {% endif %}
@@ -71,14 +72,14 @@
                     <div class="col-sm-6 col-md-4">
                         <div class="d-flex align-items-center mb-1">
                            <i class="isax isax-people me-2 text-primary"></i>
-                           <span>Participants:</span>
+                           <span>{% translate "Participants" %}</span>
                        </div>
                        <span class="fw-medium text-dark ms-4">{{ booking.total_participants }} Person(s)</span>
                    </div>
                      <div class="col-sm-6 col-md-4">
                         <div class="d-flex align-items-center mb-1">
                            <i class="isax isax-timer-1 me-2 text-primary"></i>
-                           <span>Duration:</span>
+                           <span>{% translate "Duration" %}</span>
                        </div>
                        <span class="fw-medium text-dark ms-4">{{ booking.tour.duration_text|default:"N/A" }}</span>
                    </div>
@@ -91,23 +92,23 @@
         <div class="row">
             <!-- Customer Details -->
             <div class="col-md-6 mb-4">
-                <h6 class="mb-3 text-uppercase fs-13 text-muted fw-bold ls-1">Customer Information</h6>
+                <h6 class="mb-3 text-uppercase fs-13 text-muted fw-bold ls-1">{% translate "Customer Information" %}</h6>
                 <div class="p-3 bg-light rounded">
                     <div class="mb-2">
-                        <span class="text-muted fs-14">Name:</span>
+                        <span class="text-muted fs-14">{% translate "Name" %}</span>
                         <span class="fw-medium ms-2 text-dark">{{ booking.contact_name }}</span>
                     </div>
                     <div class="mb-2">
-                        <span class="text-muted fs-14">Email:</span>
+                        <span class="text-muted fs-14">{% translate "Email" %}</span>
                         <span class="fw-medium ms-2 text-dark">{{ booking.contact_email }}</span>
                     </div>
                      <div class="mb-2">
-                        <span class="text-muted fs-14">Phone:</span>
+                        <span class="text-muted fs-14">{% translate "Phone" %}</span>
                         <span class="fw-medium ms-2 text-dark">{{ booking.contact_phone }}</span>
                     </div>
                     {% if booking.pickup_location %}
                     <div class="mb-0">
-                        <span class="text-muted fs-14">Pickup Location:</span>
+                        <span class="text-muted fs-14">{% translate "Pickup Location" %}</span>
                         <span class="fw-medium ms-2 text-dark">{{ booking.pickup_location }}</span>
                     </div>
                     {% endif %}
@@ -116,35 +117,35 @@
             
             <!-- Payment Summary -->
              <div class="col-md-6 mb-4">
-                <h6 class="mb-3 text-uppercase fs-13 text-muted fw-bold ls-1">Payment Summary</h6>
+                <h6 class="mb-3 text-uppercase fs-13 text-muted fw-bold ls-1">{% translate "Payment Summary" %}</h6>
                 <div class="border rounded p-3">
                     <div class="d-flex justify-content-between mb-2 fs-14">
-                        <span class="text-muted">Subtotal</span>
+                        <span class="text-muted">{% translate "Subtotal" %}</span>
                         <span class="fw-medium">{{ booking.currency }} {{ booking.subtotal }}</span>
                     </div>
                     {% if booking.discount_amount > 0 %}
                     <div class="d-flex justify-content-between mb-2 fs-14 text-success">
-                        <span>Discount</span>
+                        <span>{% translate "Discount" %}</span>
                         <span>- {{ booking.currency }} {{ booking.discount_amount }}</span>
                     </div>
                     {% endif %}
                     {% if booking.tax_amount > 0 %}
                     <div class="d-flex justify-content-between mb-2 fs-14">
-                        <span class="text-muted">Tax / VAT</span>
+                        <span class="text-muted">{% translate "Tax / VAT" %}</span>
                         <span>{{ booking.currency }} {{ booking.tax_amount }}</span>
                     </div>
                     {% endif %}
                     <div class="d-flex justify-content-between pt-2 border-top mt-2">
-                        <span class="fw-bold fs-16 text-dark">Total Amount</span>
+                        <span class="fw-bold fs-16 text-dark">{% translate "Total Amount" %}</span>
                         <span class="fw-bold fs-16 text-primary">{{ booking.currency }} {{ booking.total_amount }}</span>
                     </div>
                      <div class="mt-2 text-end">
                          {% if booking.payment_status == 'paid' %}
-                         <span class="badge bg-success-subtle text-success">Paid</span>
+                         <span class="badge bg-success-subtle text-success">{% translate "Paid" %}</span>
                          {% elif booking.payment_status == 'pending' %}
-                         <span class="badge bg-warning-subtle text-warning">Payment Pending</span>
+                         <span class="badge bg-warning-subtle text-warning">{% translate "Payment Pending" %}</span>
                           {% elif booking.payment_status == 'refunded' %}
-                         <span class="badge bg-info-subtle text-info">Refunded</span>
+                         <span class="badge bg-info-subtle text-info">{% translate "Refunded" %}</span>
                          {% else %}
                          <span class="badge bg-secondary-subtle text-secondary">{{ booking.payment_status|title }}</span>
                          {% endif %}
@@ -156,15 +157,15 @@
         <!-- Participant Details -->
         {% if booking.participants.all %}
         <div class="mb-0">
-            <h6 class="mb-3 text-uppercase fs-13 text-muted fw-bold ls-1">Participant Details</h6>
+            <h6 class="mb-3 text-uppercase fs-13 text-muted fw-bold ls-1">{% translate "Participant Details" %}</h6>
             <div class="table-responsive border rounded">
                 <table class="table table-sm table-striped mb-0 fs-14">
                     <thead class="bg-light">
                         <tr>
-                            <th class="ps-3">Name</th>
-                            <th>Type</th>
-                            <th>Age</th>
-                             <th class="pe-3 text-end">Price</th>
+                            <th class="ps-3">{% translate "Name" %}</th>
+                            <th>{% translate "Type" %}</th>
+                            <th>{% translate "Age" %}</th>
+                             <th class="pe-3 text-end">{% translate "Price" %}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -185,9 +186,9 @@
     </div>
     <div class="card-footer bg-light py-3 d-flex justify-content-between align-items-center d-print-none">
         <a href="{% url 'customer_my_bookings' %}" class="btn btn-light border btn-sm rounded-pill">
-            <i class="isax isax-arrow-left-2 me-1"></i> Back to List
+            <i class="isax isax-arrow-left-2 me-1"></i> {% translate "Back to List" %}
         </a>
-        <a href="{% url 'contactus' %}" class="text-primary fs-14 text-decoration-underline">Need Help? Contact Support</a>
+        <a href="{% url 'contactus' %}" class="text-primary fs-14 text-decoration-underline">{% translate "Need Help? Contact Support" %}</a>
     </div>
 </div>
 

@@ -2,13 +2,13 @@
 
 {% block customer_content %}
 {% load static %}
-
+{% load translate_tags %}
 
 
 <div class="card border-0 shadow-sm">
     <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-        <h5 class="mb-0">My Wishlist</h5>
-        <span class="badge bg-primary-subtle text-primary rounded-pill px-3">{{ wishlist_items|length }} Tours</span>
+        <h5 class="mb-0">{% translate "My Wishlist" %}</h5>
+        <span class="badge bg-primary-subtle text-primary rounded-pill px-3">{{ wishlist_items|length }} {% translate "Tours" %}</span>
     </div>
 
     <div class="card-body p-0">
@@ -17,10 +17,10 @@
             <table class="table table-hover align-middle mb-0">
                 <thead class="bg-light">
                     <tr>
-                        <th class="border-0 py-3 ps-4">Tour Details</th>
-                        <th class="border-0 py-3">Price</th>
-                        <th class="border-0 py-3">Added On</th>
-                        <th class="border-0 py-3 text-end pe-4">Actions</th>
+                        <th class="border-0 py-3 ps-4">{% translate "Tour Details" %}</th>
+                        <th class="border-0 py-3">{% translate "Price" %}</th>
+                        <th class="border-0 py-3">{% translate "Added On" %}</th>
+                        <th class="border-0 py-3 text-end pe-4">{% translate "Actions" %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -56,7 +56,7 @@
                         </td>
                         <td class="text-end pe-4">
                             <a href="{% url 'tour_detail' item.tour.id %}" class="btn btn-sm btn-light rounded-pill me-2">
-                                View Tour
+                                {% translate "View Tour" %}
                             </a>
                             <button onclick="removeFromWishlist({{ item.tour.id }})" class="btn btn-sm btn-outline-danger btn-icon rounded-circle">
                                 <i class="isax isax-trash"></i>
@@ -72,10 +72,10 @@
             <div class="avatar avatar-xl bg-light rounded-circle shadow-sm d-inline-flex align-items-center justify-content-center mb-3">
                 <i class="isax isax-heart text-muted fs-24"></i>
             </div>
-            <h6>Your wishlist is empty</h6>
-            <p class="text-muted fs-14 mb-4">Browse our tours and save your favorites here.</p>
+            <h6>{% translate "Your wishlist is empty" %}</h6>
+            <p class="text-muted fs-14 mb-4">{% translate "Browse our tours and save your favorites here." %}</p>
             <a href="{% url 'tour_list' %}" class="btn btn-primary rounded-pill px-4">
-                Explore Tours
+                {% translate "Explore Tours" %}
             </a>
         </div>
         {% endif %}

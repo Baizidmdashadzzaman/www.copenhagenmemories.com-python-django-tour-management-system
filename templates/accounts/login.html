@@ -4,17 +4,18 @@
 
 {% block content %}
 {% load static %}
+{% load translate_tags %}
 
 <div class="breadcrumb-bar breadcrumb-bg-02 text-center">
         <div class="container">
             <div class="row">
                 <div class="col-md-12 col-12">
-                    <h2 class="breadcrumb-title mb-2">Login</h2>
+                    <h2 class="breadcrumb-title mb-2">{% translate "Login" %}</h2>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center mb-0">
                             <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="isax isax-home5"></i></a></li>
-                            <li class="breadcrumb-item">Customer</li>
-                            <li class="breadcrumb-item active" aria-current="page">Login</li>
+                            <li class="breadcrumb-item">{% translate "Customer" %}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{% translate "Login" %}</li>
                         </ol>
                     </nav>
                 </div>
@@ -30,8 +31,8 @@
                         <div class="card authentication-card">
                             <div class="card-header">
                                 <div class="text-center">
-                                    <h5 class="mb-1">Sign In</h5>
-                                    <p>Sign in to Start Manage your Account</p>
+                                    <h5 class="mb-1">{% translate "Sign In" %}</h5>
+                                    <p>{% translate "Sign in to Start Manage your Account" %}</p>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -45,7 +46,7 @@
                                         </div>
                                     {% endif %}
                                     <div class="mb-3">
-                                        <label class="form-label">Username or Email</label>
+                                        <label class="form-label">{% translate "Username or Email" %}</label>
                                         <div class="input-icon">
                                             <span class="input-icon-addon">
 												<i class="isax isax-message"></i>
@@ -57,7 +58,7 @@
                                         {% endif %}
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label">Password</label>
+                                        <label class="form-label">{% translate "Password" %}</label>
                                         <div class="input-icon">
                                             <span class="input-icon-addon">
 												<i class="isax isax-lock"></i>
@@ -76,17 +77,17 @@
                                             <div class="form-check d-flex align-items-center mb-2">
                                                 <input class="form-check-input mt-0" type="checkbox" value="" id="remembers_me">
                                                 <label class="form-check-label ms-2 text-gray-9 fs-14" for="remembers_me">
-                                                    Remember Me
+                                                    {% translate "Remember Me" %}
                                                 </label>
                                             </div>
-                                            <a href="#" class="link-primary fw-medium fs-14 mb-2">Forgot Password?</a>
+                                            <a href="#" class="link-primary fw-medium fs-14 mb-2">{% translate "Forgot Password?" %}</a>
                                         </div>
                                     </div>
                                     <div class="mb-3">
-                                        <button type="submit" class="btn btn-xl btn-primary d-flex align-items-center justify-content-center w-100">Login<i class="isax isax-arrow-right-3 ms-2"></i></button>
+                                        <button type="submit" class="btn btn-xl btn-primary d-flex align-items-center justify-content-center w-100">{% translate "Login" %}<i class="isax isax-arrow-right-3 ms-2"></i></button>
                                     </div>
                                     <div class="login-or mb-3">
-                                        <span class="span-or">Or</span>
+                                        <span class="span-or">{% translate "Or" %}</span>
                                     </div>
                                     <!-- <div class="d-flex align-items-center mb-3">
                                         <a href="#" class="btn btn-light flex-fill d-flex align-items-center justify-content-center me-2">
@@ -97,7 +98,7 @@
                                         </a>
                                     </div> -->
                                     <div class="d-flex justify-content-center">
-                                        <p class="fs-14">Don't have an account? <a href="{% url 'register_customer' %}" class="link-primary fw-medium">Sign up</a></p>
+                                        <p class="fs-14">{% translate "Don't have an account?" %} <a href="{% url 'register_customer' %}" class="link-primary fw-medium">{% translate "Sign up" %}</a></p>
                                     </div>
                                 </form>
                             </div>

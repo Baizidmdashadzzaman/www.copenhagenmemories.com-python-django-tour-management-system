@@ -4,17 +4,17 @@
 
 {% block content %}
 {% load static %}
-
+{% load translate_tags %}
 
 <div class="breadcrumb-bar breadcrumb-bg-04 text-center">
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title mb-2">Dashboard</h2>
+                <h2 class="breadcrumb-title mb-2">{% translate "Dashboard" %}</h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center mb-0">
                         <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="isax isax-home5"></i></a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                        <li class="breadcrumb-item active" aria-current="page">{% translate "Dashboard" %}</li>
                     </ol>
                 </nav>
             </div>
@@ -53,52 +53,52 @@
                         <div class="card-body user-sidebar-body">
                             <ul>
                                 <li>
-                                    <span class="fs-14 text-gray-3 fw-medium mb-2">Main</span>
+                                    <span class="fs-14 text-gray-3 fw-medium mb-2">{% translate "Main" %}</span>
                                 </li>
                                 <li>
                                     <a href="{% url 'customer_dashboard' %}" class="d-flex align-items-center active">
-                                        <i class="isax isax-grid-55"></i> Dashboard
+                                        <i class="isax isax-grid-55"></i> {% translate "Dashboard" %}
                                     </a>
                                 </li>
                                 <li class="submenu">
                                     <a href="#" class="d-block"><i class="isax isax-calendar-tick5"></i><span>
-                                        My Bookings</span><span class="menu-arrow"></span></a>
+                                        {% translate "My Bookings" %}</span><span class="menu-arrow"></span></a>
                                     <ul>
                                         <li>
-                                            <a href="{% url 'customer_my_bookings' %}" class="fs-14 d-inline-flex align-items-center">Tour</a>
+                                            <a href="{% url 'customer_my_bookings' %}" class="fs-14 d-inline-flex align-items-center">{% translate "Tour" %}</a>
                                         </li>
                                     </ul>
                                 </li>
                                 <li>
                                     <a href="{% url 'customer_reviews' %}" class="d-flex align-items-center">
-                                        <i class="isax isax-magic-star5"></i> My Reviews
+                                        <i class="isax isax-magic-star5"></i> {% translate "My Reviews" %}
                                     </a>
                                 </li>
                                 <li>
                                     <div class="message-content">
                                         <a href="{% url 'customer_messages' %}" class="d-flex align-items-center">
-                                            <i class="isax isax-message-square5"></i> Messages
+                                            <i class="isax isax-message-square5"></i> {% translate "Messages" %}
                                         </a>
                                         <!-- <span class="msg-count rounded-circle">02</span> -->
                                     </div>
                                 </li>
                                 <li class="mb-2">
                                     <a href="{% url 'customer_wishlist_page' %}" class="d-flex align-items-center">
-                                        <i class="isax isax-heart5"></i> Wishlist
+                                        <i class="isax isax-heart5"></i> {% translate "Wishlist" %}
                                     </a>
                                 </li>
                                 <li>
-                                    <span class="fs-14 text-gray-3 fw-medium mb-2">Account</span>
+                                    <span class="fs-14 text-gray-3 fw-medium mb-2">{% translate "Account" %}</span>
                                 </li>
                                 <li>
                                     <a href="{% url 'customer_profile' %}" class="d-flex align-items-center">
-                                        <i class="isax isax-profile-tick5"></i> My Profile
+                                        <i class="isax isax-profile-tick5"></i> {% translate "My Profile" %}
                                     </a>
                                 </li>
                                 
                                 <li>
                                     <a href="{% url 'logout' %}" class="d-flex align-items-center pb-0">
-                                        <i class="isax isax-logout-15"></i> Logout
+                                        <i class="isax isax-logout-15"></i> {% translate "Logout" %}
                                     </a>
                                 </li>
                             </ul>
