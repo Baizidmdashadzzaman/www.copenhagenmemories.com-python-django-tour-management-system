@@ -1,72 +1,17 @@
-{% extends 'frontend/layout/base.html' %}
+{% extends 'accounts/tour_supplier/layout.html' %}
 
 {% block title %}Supplier Dashboard - {{ site_settings.site_name }}{% endblock %}
 
-{% block content %}
+
 {% load static %}
 {% load translate_tags %}
 
-<div class="breadcrumb-bar breadcrumb-bg-02 text-center">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title mb-2">{% translate "Supplier Dashboard" %}</h2>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb justify-content-center mb-0">
-                        <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="isax isax-home5"></i></a></li>
-                        <li class="breadcrumb-item">{% translate "Partner" %}</li>
-                        <li class="breadcrumb-item active" aria-current="page">{% translate "Dashboard" %}</li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
-    </div>
-</div>
+{% block supplier_content_title %}{% translate "Supplier Dashboard" %}{% endblock %}
+{% block supplier_content_subtitle %}{% translate "Dashboard" %}{% endblock %}
 
-<div class="content-section" style="padding: 100px 0;">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3 col-md-4">
-                <div class="card account-menu">
-                    <div class="card-body">
-                        <div class="account-author">
-                            <div class="author-img">
-                                <img src="{% if supplier.logo %}{{ supplier.logo.url }}{% else %}{% static 'assets/img/user.png' %}{% endif %}" alt="">
-                            </div>
-                            <div class="author-details">
-                                <h6>{{ supplier.company_name }}</h6>
-                                <span>{{ supplier.contact_name }}</span>
-                            </div>
-                        </div>
-                        <hr>
-                        <ul class="list-unstyled">
-                            <li>
-                                <a href="{% url 'tour_supplier_dashboard' %}" class="active">
-                                    <i class="isax isax-element-4"></i> {% translate "Dashboard" %}
-                                </a>
-                            </li>
-                             <li>
-                                <a href="#">
-                                    <i class="isax isax-box"></i> {% translate "My Tours" %}
-                                </a>
-                            </li>
-                             <li>
-                                <a href="#">
-                                    <i class="isax isax-calendar-1"></i> {% translate "Bookings" %}
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{% url 'logout_tour_supplier' %}">
-                                    <i class="isax isax-logout"></i> {% translate "Logout" %}
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-lg-9 col-md-8">
-                <div class="dashboard-content">
+{% block supplier_content %}
+
+<div class="dashboard-content">
                     <div class="row">
                         <div class="col-lg-4 col-md-6">
                             <div class="card dashboard-card">
@@ -75,7 +20,7 @@
                                         <i class="isax isax-box"></i>
                                     </div>
                                     <div class="dashboard-info">
-                                        <h3>0</h3>
+                                        <h3>{{ total_tours }}</h3>
                                         <p>{% translate "Total Tours" %}</p>
                                     </div>
                                 </div>
@@ -88,7 +33,7 @@
                                         <i class="isax isax-calendar-1"></i>
                                     </div>
                                     <div class="dashboard-info">
-                                        <h3>0</h3>
+                                        <h3>{{ total_bookings }}</h3>
                                         <p>{% translate "Total Bookings" %}</p>
                                     </div>
                                 </div>
@@ -114,13 +59,42 @@
                             <h5>{% translate "Recent Activity" %}</h5>
                         </div>
                         <div class="card-body">
-                            <p>{% translate "No recent activity." %}</p>
+                            {% if recent_bookings %}
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>{% translate "Booking ID" %}</th>
+                                                <th>{% translate "Tour" %}</th>
+                                                <th>{% translate "Customer" %}</th>
+                                                <th>{% translate "Date" %}</th>
+                                                <th>{% translate "Status" %}</th>
+                                                <th>{% translate "Amount" %}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for booking in recent_bookings %}
+                                            <tr>
+                                                <td>#{{ booking.booking_number }}</td>
+                                                <td>{{ booking.tour.title|truncatechars:30 }}</td>
+                                                <td>{{ booking.contact_name }}</td>
+                                                <td>{{ booking.booking_date|date:"M d, Y" }}</td>
+                                                <td>
+                                                    <span class="badge {% if booking.status == 'confirmed' %}bg-success{% elif booking.status == 'pending' %}bg-warning{% elif booking.status == 'cancelled' %}bg-danger{% else %}bg-secondary{% endif %}">
+                                                        {{ booking.get_status_display }}
+                                                    </span>
+                                                </td>
+                                                <td>{{ booking.total_amount }} {{ booking.currency }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <p>{% translate "No recent activity." %}</p>
+                            {% endif %}
                         </div>
                     </div>
 
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 {% endblock %}

@@ -191,41 +191,11 @@
                                 </a>
                             </div>
                             <div class="me-3">
-                                {% if request.session.supplier_id %}
-                                <a href="{% url 'tour_supplier_dashboard' %}">
-                                    <i class="isax isax-profile-2user"></i>
-                                </a>
-                                {% elif user.is_authenticated and not user.is_staff %}
                                 <a href="{% url 'customer_dashboard' %}">
                                     <i class="isax isax-user"></i>
                                 </a>
-                                {% else %}
-                                <a href="{% url 'login' %}">
-                                    <i class="isax isax-lock"></i>
-                                </a>
-                                {% endif %}
                             </div>
-                            {% if request.session.supplier_id %}
-                            <div class="dropdown profile-dropdown">
-                                <a href="#" class="d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <span class="avatar avatar-md">
-									<img src="{% static 'frontend/assets/img/users/user-05.jpg' %}" alt="Img" class="img-fluid rounded-circle border border-white border-4" style="border: 1px solid #f92c2c!important">
-								</span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end p-3" >
-                                    <li>
-                                        <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2" href="{% url 'tour_supplier_dashboard' %}">
-                                            {% translate "Dashboard" %}
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item d-inline-flex align-items-center rounded fw-medium p-2" href="{% url 'logout_tour_supplier' %}">
-                                            {% translate "Logout" %}
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            {% elif user.is_authenticated and not user.is_staff %}
+                            {% if user.is_authenticated and not user.is_staff %}
                             <div class="dropdown profile-dropdown">
                                 <a href="#" class="d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
                                     <span class="avatar avatar-md">

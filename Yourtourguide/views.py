@@ -835,12 +835,6 @@ def testimonial(request):
     # Fetch reviews
     static_reviews = CustomerReviewStatic.objects.filter(is_active=True).order_by('-created_at')
     tour_reviews = TourReview.objects.filter(status='approved').select_related('customer__user').order_by('-created_at')
-
-    # Combine review querysets
-    # Note: Paginating combined querysets/lists can be tricky. 
-    # For a simple testimonial page, converting to a list and handling is acceptable if volume isn't massive.
-    # Otherwise, consider showing them in separate sections or handling differently.
-    # Here merging them into a list for unified display.
     
     combined_reviews = list(chain(static_reviews, tour_reviews))
     

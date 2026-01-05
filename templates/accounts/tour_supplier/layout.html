@@ -1,20 +1,25 @@
 {% extends 'frontend/layout/base.html' %}
 
-{% block title %}Customer Portal{% endblock %}
+{% block title %}Supplier Dashboard - {{ site_settings.site_name }}{% endblock %}
 
 {% block content %}
 {% load static %}
 {% load translate_tags %}
 
-<div class="breadcrumb-bar breadcrumb-bg-04 text-center">
+<div class="breadcrumb-bar breadcrumb-bg-02 text-center">
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title mb-2">{% translate "Dashboard" %}</h2>
+                <h2 class="breadcrumb-title mb-2">
+                    {% block supplier_content_title %}{% endblock %}
+                </h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center mb-0">
                         <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="isax isax-home5"></i></a></li>
-                        <li class="breadcrumb-item active" aria-current="page">{% translate "Dashboard" %}</li>
+                        <li class="breadcrumb-item">{% translate "Supplier" %}</li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            {% block supplier_content_subtitle %}{% endblock %}
+                        </li>
                     </ol>
                 </nav>
             </div>
@@ -27,7 +32,6 @@
 
             <div class="row">
 
-                <!-- Sidebar -->
                 <div class="col-xl-3 col-lg-4 theiaStickySidebar">
                     <div class="card user-sidebar mb-4">
                         <div class="card-header user-sidebar-header">
@@ -36,15 +40,15 @@
                                     <div class=" d-flex align-items-center justify-content-center">
                                         <img src="{% static 'frontend/assets/img/users/user-01.jpg' %}" alt="image" class="img-fluid avatar avatar-lg rounded-circle me-1">
                                         <div>
-                                            <h6 class="fs-16">{{ user.username }}</h6>
+                                            <h6 class="fs-16">{{ supplier.contact_name }}</h6>
                                             <span class="fs-14 text-gray-6">
-                                                {{ user.date_joined }}
+                                                {{ supplier.company_name }}
                                             </span>
                                         </div>
                                     </div>
                                     <div>
                                         <div class="d-flex align-items-center justify-content-center">
-                                            <a href="{% url 'customer_profile' %}" class="p-1 rounded-circle btn btn-light d-flex align-items-center justify-content-center"><i class="isax isax-edit-2 fs-14"></i></a>
+                                            <a href="#" class="p-1 rounded-circle btn btn-light d-flex align-items-center justify-content-center"><i class="isax isax-edit-2 fs-14"></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -56,48 +60,32 @@
                                     <span class="fs-14 text-gray-3 fw-medium mb-2">{% translate "Main" %}</span>
                                 </li>
                                 <li>
-                                    <a href="{% url 'customer_dashboard' %}" class="d-flex align-items-center active">
+                                    <a href="{% url 'tour_supplier_dashboard' %}" class="d-flex align-items-center active">
                                         <i class="isax isax-grid-55"></i> {% translate "Dashboard" %}
                                     </a>
                                 </li>
-                                <li class="submenu">
-                                    <a href="#" class="d-block"><i class="isax isax-calendar-tick5"></i><span>
-                                        {% translate "My Bookings" %}</span><span class="menu-arrow"></span></a>
-                                    <ul>
-                                        <li>
-                                            <a href="{% url 'customer_my_bookings' %}" class="fs-14 d-inline-flex align-items-center">{% translate "Tour" %}</a>
-                                        </li>
-                                    </ul>
-                                </li>
                                 <li>
-                                    <a href="{% url 'customer_reviews' %}" class="d-flex align-items-center">
-                                        <i class="isax isax-magic-star5"></i> {% translate "My Reviews" %}
-                                    </a>
-                                </li>
-                                <li>
-                                    <div class="message-content">
-                                        <a href="{% url 'customer_messages' %}" class="d-flex align-items-center">
-                                            <i class="isax isax-message-square5"></i> {% translate "Messages" %}
-                                        </a>
-                                        <!-- <span class="msg-count rounded-circle">02</span> -->
-                                    </div>
-                                </li>
-                                <li class="mb-2">
-                                    <a href="{% url 'customer_wishlist_page' %}" class="d-flex align-items-center">
-                                        <i class="isax isax-heart5"></i> {% translate "Wishlist" %}
-                                    </a>
-                                </li>
-                                <li>
-                                    <span class="fs-14 text-gray-3 fw-medium mb-2">{% translate "Account" %}</span>
-                                </li>
-                                <li>
-                                    <a href="{% url 'customer_profile' %}" class="d-flex align-items-center">
+                                    <a href="{% url 'supplier_profile' %}" class="d-flex align-items-center">
                                         <i class="isax isax-profile-tick5"></i> {% translate "My Profile" %}
                                     </a>
                                 </li>
-                                
                                 <li>
-                                    <a href="{% url 'logout' %}" class="d-flex align-items-center pb-0">
+                                    <a href="{% url 'supplier_tours' %}" class="d-flex align-items-center">
+                                        <i class="isax isax-profile-tick5"></i> {% translate "Tours" %}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'supplier_bookings' %}" class="d-flex align-items-center">
+                                        <i class="isax isax-profile-tick5"></i> {% translate "Bookings" %}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'supplier_payments' %}" class="d-flex align-items-center">
+                                        <i class="isax isax-profile-tick5"></i> {% translate "Payments" %}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'logout_tour_supplier' %}" class="d-flex align-items-center pb-0">
                                         <i class="isax isax-logout-15"></i> {% translate "Logout" %}
                                     </a>
                                 </li>
@@ -105,16 +93,12 @@
                         </div>
                     </div>
                 </div>
-                <!-- /Sidebar -->
-
+                
                 <div class="col-xl-9 col-lg-8">
-                     {% block customer_content %}{% endblock %}
+                     {% block supplier_content %}{% endblock %}
                 </div>
-
 
             </div>
         </div>
     </div>
-
-
 {% endblock %}

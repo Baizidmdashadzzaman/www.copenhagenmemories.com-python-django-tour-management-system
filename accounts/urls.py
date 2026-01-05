@@ -22,14 +22,21 @@ from accounts.admin_panel import views_feature_section as feature_section_views
 from accounts.admin_panel import views_website_menu as website_menu_views
 from accounts.admin_panel import views_faq as faq_views
 from accounts import views_frontend
-
+from accounts.supplier_panel import views as supplier_views
 urlpatterns = [
+    path('register/supplier/', supplier_views.register_tour_supplier, name='register_tour_supplier'),
+    path('login/supplier/', supplier_views.login_tour_supplier, name='login_tour_supplier'),
+    path('logout/supplier/', supplier_views.logout_tour_supplier, name='logout_tour_supplier'),
+    path('dashboard/supplier/', supplier_views.tour_supplier_dashboard, name='tour_supplier_dashboard'),
+    path('dashboard/supplier/tours/', supplier_views.supplier_tours, name='supplier_tours'),
+    path('dashboard/supplier/tours/<int:tour_id>/', supplier_views.supplier_tour_view, name='supplier_tour_view'),
+    path('dashboard/supplier/bookings/', supplier_views.supplier_bookings, name='supplier_bookings'),
+    path('dashboard/supplier/payments/', supplier_views.supplier_payments, name='supplier_payments'),
+    path('dashboard/supplier/profile/', supplier_views.supplier_profile, name='supplier_profile'),
+
+
     path('newsletter/subscribe/', views_frontend.newsletter_subscribe, name='newsletter_subscribe'),
     path('register/customer/', customer_views.register_customer, name='register_customer'),
-    path('register/supplier/', views_frontend.register_tour_supplier, name='register_tour_supplier'),
-    path('login/supplier/', views_frontend.login_tour_supplier, name='login_tour_supplier'),
-    path('logout/supplier/', views_frontend.logout_tour_supplier, name='logout_tour_supplier'),
-    path('dashboard/supplier/', views_frontend.tour_supplier_dashboard, name='tour_supplier_dashboard'),
     path('register/admin/', admin_views.register_admin, name='register_admin'),
     path('login/customer/', customer_views.login_view, name='customer_login'),
     path('login/admin/', admin_views.login_view, name='admin_login'),
