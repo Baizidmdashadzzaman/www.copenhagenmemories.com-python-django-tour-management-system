@@ -1,5 +1,6 @@
-from django.shortcuts import render, redirect
-from accounts.forms import TourSupplierRegistrationForm, TourSupplierLoginForm
+from django.shortcuts import render, redirect, get_object_or_404
+from django.core.paginator import Paginator
+from accounts.forms import TourSupplierRegistrationForm, TourSupplierLoginForm, TourSupplierProfileUpdateForm, SupplierTourForm
 from django.contrib import messages
 from accounts.models import TourSupplier,Tour,Booking,Payment
 
@@ -13,15 +14,15 @@ def supplier_profile(request):
     supplier = TourSupplier.objects.get(id=supplier_id)
     
     if request.method == 'POST':
-        supplier.name = request.POST.get('name')
-        supplier.email = request.POST.get('email')
-        supplier.phone = request.POST.get('phone')
-        supplier.address = request.POST.get('address')
-        supplier.save()
-        messages.success(request, 'Profile updated successfully.')
-        return redirect('supplier_profile')
+        form = TourSupplierProfileUpdateForm(request.POST, request.FILES, instance=supplier)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated successfully.')
+            return redirect('supplier_profile')
+    else:
+        form = TourSupplierProfileUpdateForm(instance=supplier)
         
-    return render(request, 'accounts/tour_supplier/pages/supplier_profile.html', {'supplier': supplier})
+    return render(request, 'accounts/tour_supplier/pages/supplier_profile.html', {'supplier': supplier, 'form': form})
 
 def supplier_tours(request):
     supplier_id = request.session.get('supplier_id')
@@ -30,8 +31,64 @@ def supplier_tours(request):
         return redirect('login_tour_supplier')
     
     supplier = TourSupplier.objects.get(id=supplier_id)
-    tours = Tour.objects.filter(supplier=supplier)
-    return render(request, 'accounts/tour_supplier/pages/supplier_tours.html', {'supplier': supplier, 'tours': tours})
+    
+    if request.method == 'POST':
+        form = SupplierTourForm(request.POST, request.FILES)
+        if form.is_valid():
+            tour = form.save(commit=False)
+            tour.supplier = supplier
+            tour.status = 'draft' # Default to draft
+            tour.save()
+            messages.success(request, 'Tour created successfully.')
+            return redirect('supplier_tours')
+        else:
+            messages.error(request, 'Error creating tour. Please check the form.')
+    else:
+        form = SupplierTourForm()
+
+    tours_list = Tour.objects.filter(supplier=supplier).order_by('-created_at')
+    
+    paginator = Paginator(tours_list, 10) # Show 10 tours per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'accounts/tour_supplier/pages/supplier_tours.html', {'supplier': supplier, 'tours': page_obj, 'form': form})
+
+def supplier_tour_edit(request, tour_id):
+    supplier_id = request.session.get('supplier_id')
+    if not supplier_id:
+        messages.error(request, 'Please login first.')
+        return redirect('login_tour_supplier')
+        
+    supplier = TourSupplier.objects.get(id=supplier_id)
+    tour = get_object_or_404(Tour, id=tour_id, supplier=supplier)
+    
+    # if request.method == 'POST':
+    #     form = TourForm(request.POST, request.FILES, instance=tour)
+    #     if form.is_valid():
+    #         form.save()
+    #         messages.success(request, 'Tour updated successfully.')
+    #         return redirect('supplier_tours')
+    # else:
+    #     form = TourForm(instance=tour)
+    
+    return render(request, 'accounts/tour_supplier/pages/supplier_tour_edit.html', {'tour': tour})
+
+def supplier_tour_delete(request, tour_id):
+    supplier_id = request.session.get('supplier_id')
+    if not supplier_id:
+        messages.error(request, 'Please login first.')
+        return redirect('login_tour_supplier')
+        
+    supplier = TourSupplier.objects.get(id=supplier_id)
+    tour = get_object_or_404(Tour, id=tour_id, supplier=supplier)
+    
+    if request.method == 'POST':
+        tour.delete()
+        messages.success(request, 'Tour deleted successfully.')
+        return redirect('supplier_tours')
+        
+    return render(request, 'accounts/tour_supplier/pages/supplier_tour_delete.html', {'tour': tour})
 
 def supplier_tour_view(request, tour_id):
     tour = Tour.objects.get(id=tour_id)

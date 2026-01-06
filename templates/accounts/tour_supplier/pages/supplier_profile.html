@@ -1,10 +1,8 @@
 {% extends 'accounts/tour_supplier/layout.html' %}
-
-{% block title %}Tour Provider Profile - {{ site_settings.site_name }}{% endblock %}
-
-
 {% load static %}
 {% load translate_tags %}
+
+{% block title %}Tour Provider Profile - {{ site_settings.site_name }}{% endblock %}
 
 {% block supplier_content_title %}{% translate "Tour Provider Profile" %}{% endblock %}
 {% block supplier_content_subtitle %}{% translate "Profile" %}{% endblock %}
@@ -12,7 +10,105 @@
 {% block supplier_content %}
 
 <div class="dashboard-content">
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white border-bottom">
+                    <h4 class="card-title mb-0">{% translate "Update Profile" %}</h4>
+                </div>
+                <div class="card-body">
+                    {% if supplier.logo %}
+                        <div class="mb-4 text-center">
+                            <img src="{{ supplier.logo.url }}" alt="{{ supplier.company_name }}" class="img-fluid rounded-circle shadow" style="width: 150px; height: 150px; object-fit: cover;">
+                        </div>
+                    {% endif %}
 
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{% translate "Company Name" %}</label>
+                                {{ form.company_name }}
+                                {{ form.company_name.errors }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{% translate "Contact Person Name" %}</label>
+                                {{ form.contact_name }}
+                                {{ form.contact_name.errors }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{% translate "Email" %}</label>
+                                {{ form.email }}
+                                {{ form.email.errors }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{% translate "Phone" %}</label>
+                                {{ form.phone }}
+                                {{ form.phone.errors }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{% translate "Website" %}</label>
+                                {{ form.website }}
+                                {{ form.website.errors }}
+                            </div>
+                             <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{% translate "Tax ID" %}</label>
+                                {{ form.tax_id }}
+                                {{ form.tax_id.errors }}
+                            </div>
+                             <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{% translate "Country" %}</label>
+                                {{ form.country }}
+                                {{ form.country.errors }}
+                            </div>
+                             <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{% translate "City" %}</label>
+                                {{ form.city }}
+                                {{ form.city.errors }}
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label fw-bold">{% translate "Address" %}</label>
+                                {{ form.address }}
+                                {{ form.address.errors }}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{% translate "Bank Account" %}</label>
+                                {{ form.bank_account }}
+                                {{ form.bank_account.errors }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{% translate "Payment Details" %}</label>
+                                {{ form.payment_details }}
+                                {{ form.payment_details.errors }}
+                            </div>
+                             <div class="col-md-12 mb-3">
+                                <label class="form-label fw-bold">{% translate "Other Details" %}</label>
+                                {{ form.other_details }}
+                                {{ form.other_details.errors }}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{% translate "Logo" %}</label>
+                                {{ form.logo }}
+                                {{ form.logo.errors }}
+                            </div>
+                             <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{% translate "New Password" %}</label>
+                                {{ form.new_password }}
+                                {{ form.new_password.errors }}
+                            </div>
 
+                        </div>
+
+                        <div class="mt-4 text-end">
+                            <button type="submit" class="btn btn-primary px-4">{% translate "Save Changes" %}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

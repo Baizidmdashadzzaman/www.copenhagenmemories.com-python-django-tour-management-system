@@ -18,7 +18,7 @@ def tour_list(request):
     tours = Tour.objects.select_related('supplier', 'category', 'destination_region', 'city').annotate(
         calculated_average_rating=Coalesce(Avg('reviews__overall_rating'), Value(0.0)),
         calculated_total_reviews=Count('reviews')
-    ).all()
+    ).order_by('-id')
     
     if search_query:
         tours = tours.filter(
@@ -30,7 +30,7 @@ def tour_list(request):
     if status:
         tours = tours.filter(status=status)
     
-    paginator = Paginator(tours, 10)
+    paginator = Paginator(tours, 20)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
