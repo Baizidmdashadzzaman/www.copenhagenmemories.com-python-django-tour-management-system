@@ -1,6 +1,6 @@
 {% extends 'frontend/layout/base.html' %}
 
-{% block title %}Supplier Login - {{ site_settings.site_name }}{% endblock %}
+{% block title %}Tour Provider Login - {{ site_settings.site_name }}{% endblock %}
 
 {% block content %}
 {% load static %}
@@ -10,7 +10,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title mb-2">{% translate "Supplier Login" %}</h2>
+                <h2 class="breadcrumb-title mb-2">{% translate "Tour Provider Login" %}</h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center mb-0">
                         <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="isax isax-home5"></i></a></li>
@@ -82,7 +82,6 @@
                                             <label class="form-check-label" for="remember-me">{% translate "Remember Me" %}</label>
                                         </div>
                                     </div>
-                                    <!-- Forgot password logic can be added later -->
                                 </div>
                             </div>
 
@@ -96,6 +95,8 @@
 
                             <div class="d-flex justify-content-center">
                                 <p class="fs-14">{% translate "Don't have an account?" %} <a href="{% url 'register_tour_supplier' %}" class="link-primary fw-medium">{% translate "Register" %}</a></p>
+                                &nbsp;&nbsp;
+                                <p class="fs-14">{% translate "Ready to book tours?" %} <a href="{% url 'login' %}" class="link-primary fw-medium">{% translate "Login as customer" %}</a></p>
                             </div>
                         </form>
                     </div>

@@ -34,7 +34,6 @@ urlpatterns = [
     path('dashboard/supplier/payments/', supplier_views.supplier_payments, name='supplier_payments'),
     path('dashboard/supplier/profile/', supplier_views.supplier_profile, name='supplier_profile'),
 
-
     path('newsletter/subscribe/', views_frontend.newsletter_subscribe, name='newsletter_subscribe'),
     path('register/customer/', customer_views.register_customer, name='register_customer'),
     path('register/admin/', admin_views.register_admin, name='register_admin'),

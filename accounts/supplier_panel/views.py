@@ -86,7 +86,6 @@ def login_tour_supplier(request):
         form = TourSupplierLoginForm(request.POST)
         if form.is_valid():
             supplier = form.cleaned_data['supplier']
-            # Manually storing supplier ID in session as this is a custom login
             request.session['supplier_id'] = supplier.id
             messages.success(request, 'Successfully logged in!')
             return redirect('tour_supplier_dashboard')
@@ -103,11 +102,9 @@ def tour_supplier_dashboard(request):
     
     supplier = TourSupplier.objects.get(id=supplier_id)
     
-    # Calculate stats
     total_tours = Tour.objects.filter(supplier=supplier).count()
     total_bookings = Booking.objects.filter(tour__supplier=supplier).count()
     
-    # Recent bookings (e.g., last 5)
     recent_bookings = Booking.objects.filter(
         tour__supplier=supplier
     ).select_related('tour', 'customer').order_by('-created_at')[:5]

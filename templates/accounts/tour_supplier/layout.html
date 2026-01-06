@@ -1,6 +1,6 @@
 {% extends 'frontend/layout/base.html' %}
 
-{% block title %}Supplier Dashboard - {{ site_settings.site_name }}{% endblock %}
+{% block title %}Tour Provider Dashboard - {{ site_settings.site_name }}{% endblock %}
 
 {% block content %}
 {% load static %}
@@ -16,7 +16,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center mb-0">
                         <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="isax isax-home5"></i></a></li>
-                        <li class="breadcrumb-item">{% translate "Supplier" %}</li>
+                        <li class="breadcrumb-item">{% translate "Tour Provider" %}</li>
                         <li class="breadcrumb-item active" aria-current="page">
                             {% block supplier_content_subtitle %}{% endblock %}
                         </li>
