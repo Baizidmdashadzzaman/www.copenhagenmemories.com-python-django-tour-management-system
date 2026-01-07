@@ -12,7 +12,613 @@
 {% block supplier_content %}
 
 <div class="dashboard-content">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h4 class="mb-3">{{ tour.title }}</h4>
+            
+            <ul class="nav nav-tabs" id="tourTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="details-tab" data-bs-toggle="tab" data-bs-target="#details" type="button" role="tab" aria-controls="details" aria-selected="true">{% translate "Tour Details" %}</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="bookings-tab" data-bs-toggle="tab" data-bs-target="#bookings" type="button" role="tab" aria-controls="bookings" aria-selected="false">{% translate "Bookings" %}</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="payments-tab" data-bs-toggle="tab" data-bs-target="#payments" type="button" role="tab" aria-controls="payments" aria-selected="false">{% translate "Payments" %}</button>
+                </li>
+            </ul>
+            
+            <div class="tab-content p-4 border border-top-0 bg-white rounded-bottom" id="tourTabContent">
+                <!-- Tour Details Tab -->
+                <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <h5 class="border-bottom pb-2 mb-3">{% translate "Basic Information" %}</h5>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">{% translate "Title" %}</label>
+                                {{ form.title }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">{% translate "Title (DK)" %}</label>
+                                {{ form.title_dk }}
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label class="form-label">{% translate "Category" %}</label>
+                                {{ form.category }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">{% translate "Region" %}</label>
+                                {{ form.destination_region }}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">{% translate "City" %}</label>
+                                {{ form.city }}
+                            </div>
+                            
+                            <div class="col-12">
+                                <label class="form-label">{% translate "Short Description" %}</label>
+                                {{ form.short_description }}
+                            </div>
+                             <div class="col-12">
+                                <label class="form-label">{% translate "Short Description (DK)" %}</label>
+                                {{ form.short_description_dk }}
+                            </div>
+                            
+                            <div class="col-12">
+                                <label class="form-label">{% translate "Full Description" %}</label>
+                                {{ form.description }}
+                            </div>
+                             <div class="col-12">
+                                <label class="form-label">{% translate "Full Description (DK)" %}</label>
+                                {{ form.description_dk }}
+                            </div>
+                             <div class="col-12">
+                                <label class="form-label">{% translate "Main Image" %}</label>
+                                {{ form.main_image }}
+                                {% if tour.main_image %}
+                                    <div class="mt-2">
+                                        <img src="{{ tour.main_image.url }}" alt="Current Image" style="height: 100px; width: auto; object-fit: cover;">
+                                        <small class="text-muted d-block">{% translate "Current Image" %}</small>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">{% translate "Video URL" %}</label>
+                                {{ form.video_url }}
+                            </div>
+                            
+                            <div class="col-12 mt-4">
+                                <h5 class="border-bottom pb-2 mb-3">{% translate "Pricing & Duration" %}</h5>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label class="form-label">{% translate "Base Price" %}</label>
+                                <div class="input-group">
+                                    {{ form.base_price }}
+                                    <span class="input-group-text">DKK</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">{% translate "Discount (%)" %}</label>
+                                {{ form.discount_percentage }}
+                            </div>
+                             <div class="col-md-4">
+                                <label class="form-label">{% translate "Currency" %}</label>
+                                {{ form.currency }}
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">{% translate "Duration (Hours)" %}</label>
+                                {{ form.duration_hours }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">{% translate "Duration Text" %}</label>
+                                {{ form.duration_text }}
+                            </div>
+                            
+                             <div class="col-md-6">
+                                <label class="form-label">{% translate "Min Participants" %}</label>
+                                {{ form.min_participants }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">{% translate "Max Participants" %}</label>
+                                {{ form.max_participants }}
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">{% translate "Age Restriction" %}</label>
+                                {{ form.age_restriction }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">{% translate "Difficulty Level" %}</label>
+                                {{ form.difficulty_level }}
+                            </div>
 
 
+                            <div class="col-12 mt-4">
+                                <h5 class="border-bottom pb-2 mb-3">{% translate "Location & Meeting Point" %}</h5>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label">{% translate "Meeting Point" %}</label>
+                                {{ form.meeting_point }}
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">{% translate "Meeting Point (DK)" %}</label>
+                                {{ form.meeting_point_dk }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">{% translate "Latitude" %}</label>
+                                {{ form.meeting_point_latitude }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">{% translate "Longitude" %}</label>
+                                {{ form.meeting_point_longitude }}
+                            </div>
+                             <div class="col-12">
+                                <label class="form-label">{% translate "Google Maps Embed URL" %}</label>
+                                {{ form.map_location }}
+                            </div>
+                            
+                             <div class="col-12 mt-4">
+                                <h5 class="border-bottom pb-2 mb-3">{% translate "Availability & Settings" %}</h5>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">{% translate "Start Date" %}</label>
+                                {{ form.start_date }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">{% translate "End Date" %}</label>
+                                {{ form.end_date }}
+                            </div>
+                            
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-md-4 mb-2">
+                                        <div class="form-check">
+                                            {{ form.instant_confirmation }}
+                                            <label class="form-check-label">{% translate "Instant Confirmation" %}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <div class="form-check">
+                                            {{ form.free_cancellation }}
+                                            <label class="form-check-label">{% translate "Free Cancellation" %}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                         <div class="form-check">
+                                            {{ form.mobile_ticket }}
+                                            <label class="form-check-label">{% translate "Mobile Ticket" %}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                         <div class="form-check">
+                                            {{ form.skip_the_line }}
+                                            <label class="form-check-label">{% translate "Skip the Line" %}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                         <div class="form-check">
+                                            {{ form.live_guide }}
+                                            <label class="form-check-label">{% translate "Live Guide" %}</label>
+                                        </div>
+                                    </div>
+                                     <div class="col-md-4 mb-2">
+                                         <div class="form-check">
+                                            {{ form.audio_guide }}
+                                            <label class="form-check-label">{% translate "Audio Guide" %}</label>
+                                        </div>
+                                    </div>
+                                     <div class="col-md-4 mb-2">
+                                         <div class="form-check">
+                                            {{ form.wheelchair_accessible }}
+                                            <label class="form-check-label">{% translate "Wheelchair Accessible" %}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                             <div class="col-md-4">
+                                <label class="form-label">{% translate "Cancellation Hours" %}</label>
+                                {{ form.cancellation_hours }}
+                            </div>
+
+                             <div class="col-12 mt-4">
+                                <h5 class="border-bottom pb-2 mb-3">{% translate "SEO Metadata" %}</h5>
+                            </div>
+                             <div class="col-12">
+                                <label class="form-label">{% translate "Meta Title" %}</label>
+                                {{ form.meta_title }}
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">{% translate "Meta Description" %}</label>
+                                {{ form.meta_description }}
+                            </div>
+                             <div class="col-12">
+                                <label class="form-label">{% translate "Meta Keywords" %}</label>
+                                {{ form.meta_keywords }}
+                            </div>
+                            
+                            <div class="col-12 mt-4 text-end">
+                                <button type="submit" class="btn btn-primary px-4">
+                                    <i class="fas fa-save me-2"></i>{% translate "Update Tour" %}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Bookings Tab -->
+                <div class="tab-pane fade" id="bookings" role="tabpanel" aria-labelledby="bookings-tab">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>{% translate "Booking No" %}</th>
+                                    <th>{% translate "Customer" %}</th>
+                                    <th>{% translate "Date" %}</th>
+                                    <th>{% translate "Participants" %}</th>
+                                    <th>{% translate "Total" %}</th>
+                                    <th>{% translate "Status" %}</th>
+                                    <th>{% translate "Actions" %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for booking in bookings %}
+                                <tr>
+                                    <td>
+                                        <span class="fw-bold text-primary">{{ booking.booking_number }}</span>
+                                    </td>
+                                    <td>
+                                        {{ booking.contact_name }}<br>
+                                        <small class="text-muted">{{ booking.contact_email }}</small>
+                                    </td>
+                                    <td>
+                                        <div><i class="far fa-calendar-alt me-1 text-muted"></i> {{ booking.tour_date|date:"M d, Y" }}</div>
+                                        <div><i class="far fa-clock me-1 text-muted"></i> {{ booking.tour_time|time:"H:i" }}</div>
+                                    </td>
+                                    <td>{{ booking.total_participants }}</td>
+                                    <td>{{ booking.total_amount }} {{ booking.currency }}</td>
+                                     <td>
+                                        {% if booking.status == 'confirmed' %}
+                                            <span class="badge bg-success">{{ booking.get_status_display }}</span>
+                                        {% elif booking.status == 'pending' %}
+                                            <span class="badge bg-warning text-dark">{{ booking.get_status_display }}</span>
+                                        {% elif booking.status == 'cancelled' %}
+                                            <span class="badge bg-danger">{{ booking.get_status_display }}</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ booking.get_status_display }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#bookingModal{{ booking.id }}" title="{% translate 'View Details' %}">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#invoiceModal{{ booking.id }}" title="{% translate 'View Invoice' %}">
+                                                <i class="fas fa-file-invoice"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="7" class="text-center py-4">
+                                        <p class="text-muted mb-0">{% translate "No bookings found for this tour." %}</p>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Booking Modals (Outside Table) -->
+                    {% for booking in bookings %}
+                    <!-- Booking Detail Modal -->
+                    <div class="modal fade" id="bookingModal{{ booking.id }}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">{% translate "Booking Details" %} - {{ booking.booking_number }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <h6 class="fw-bold">{% translate "Customer Information" %}</h6>
+                                            <p class="mb-1"><strong>{% translate "Name" %}:</strong> {{ booking.contact_name }}</p>
+                                            <p class="mb-1"><strong>{% translate "Email" %}:</strong> {{ booking.contact_email }}</p>
+                                            <p class="mb-1"><strong>{% translate "Phone" %}:</strong> {{ booking.contact_phone }}</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6 class="fw-bold">{% translate "Booking Status" %}</h6>
+                                            <p class="mb-1"><strong>{% translate "Status" %}:</strong> {{ booking.get_status_display }}</p>
+                                            <p class="mb-1"><strong>{% translate "Payment Status" %}:</strong> {{ booking.get_payment_status_display }}</p>
+                                            <p class="mb-1"><strong>{% translate "Booked On" %}:</strong> {{ booking.created_at|date:"M d, Y H:i" }}</p>
+                                        </div>
+                                        
+                                        <div class="col-12"><hr class="my-1"></div>
+                                        
+                                            <div class="col-md-6">
+                                            <h6 class="fw-bold">{% translate "Tour Information" %}</h6>
+                                            <p class="mb-1"><strong>{% translate "Tour" %}:</strong> {{ booking.tour.title }}</p>
+                                            <p class="mb-1"><strong>{% translate "Date" %}:</strong> {{ booking.tour_date|date:"M d, Y" }}</p>
+                                            <p class="mb-1"><strong>{% translate "Time" %}:</strong> {{ booking.tour_time|time:"H:i" }}</p>
+                                            {% if booking.pickup_location %}
+                                                    <p class="mb-1"><strong>{% translate "Pickup" %}:</strong> {{ booking.pickup_location }}</p>
+                                            {% endif %}
+                                        </div>
+                                            <div class="col-md-6">
+                                            <h6 class="fw-bold">{% translate "Payment Summary" %}</h6>
+                                            <p class="mb-1"><strong>{% translate "Subtotal" %}:</strong> {{ booking.subtotal }} {{ booking.currency }}</p>
+                                            <p class="mb-1"><strong>{% translate "Discount" %}:</strong> -{{ booking.discount_amount }} {{ booking.currency }}</p>
+                                            <p class="mb-1"><strong>{% translate "Tax" %}:</strong> {{ booking.tax_amount }} {{ booking.currency }}</p>
+                                            <p class="mb-1 text-primary fw-bold"><strong>{% translate "Total" %}:</strong> {{ booking.total_amount }} {{ booking.currency }}</p>
+                                        </div>
+                                        
+                                        {% if booking.special_requirements %}
+                                        <div class="col-12">
+                                            <div class="alert alert-info py-2 mb-0">
+                                                <strong>{% translate "Special Requirements" %}:</strong> {{ booking.special_requirements }}
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                        
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{% translate "Close" %}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Invoice Modal -->
+                    <div class="modal fade" id="invoiceModal{{ booking.id }}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">{% translate "Invoice" %}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body" id="invoiceArea{{ booking.id }}">
+                                    <div class="p-4 border bg-white">
+                                        <!-- Invoice Header -->
+                                        <div class="row mb-4 align-items-center">
+                                            <div class="col-6">
+                                                <h2 class="fw-bold text-primary mb-0">INVOICE</h2>
+                                                <p class="text-muted small mb-0">#{{ booking.booking_number }}</p>
+                                            </div>
+                                            <div class="col-6 text-end">
+                                                <h5 class="fw-bold">{{ site_settings.site_name|default:"Tour Company" }}</h5>
+                                                <p class="text-muted small mb-0">{% translate "Date" %}: {{ booking.created_at|date:"M d, Y" }}</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <hr class="my-4">
+                                        
+                                        <!-- Bill To / From -->
+                                        <div class="row mb-4">
+                                            <div class="col-6">
+                                                <h6 class="fw-bold text-uppercase text-muted mb-2">{% translate "Bill To" %}</h6>
+                                                <h5 class="fw-bold mb-1">{{ booking.contact_name }}</h5>
+                                                <p class="mb-0">{{ booking.contact_email }}</p>
+                                                <p class="mb-0">{{ booking.contact_phone }}</p>
+                                            </div>
+                                            <div class="col-6 text-end">
+                                                <h6 class="fw-bold text-uppercase text-muted mb-2">{% translate "Supplier" %}</h6>
+                                                <h5 class="fw-bold mb-1">{{ booking.tour.supplier.company_name }}</h5>
+                                                <p class="mb-0">{{ booking.tour.supplier.email }}</p>
+                                                <p class="mb-0">{{ booking.tour.supplier.phone }}</p>
+                                                <p class="mb-0">{{ booking.tour.supplier.address|linebreaksbr }}</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Line Items -->
+                                        <div class="table-responsive mb-4">
+                                            <table class="table table-bordered">
+                                                <thead class="bg-light">
+                                                    <tr>
+                                                        <th scope="col">{% translate "Description" %}</th>
+                                                        <th scope="col" class="text-center">{% translate "Qty" %}</th>
+                                                        <th scope="col" class="text-end">{% translate "Amount" %}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <strong class="d-block">{{ booking.tour.title }}</strong>
+                                                            <span class="small text-muted">{% translate "Date" %}: {{ booking.tour_date|date:"M d, Y" }} | {% translate "Time" %}: {{ booking.tour_time|time:"H:i" }}</span>
+                                                        </td>
+                                                        <td class="text-center">{{ booking.total_participants }}</td>
+                                                        <td class="text-end">{{ booking.subtotal }} {{ booking.currency }}</td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot class="border-top-2">
+                                                    <tr>
+                                                        <td colspan="2" class="text-end border-0 pt-3">{% translate "Subtotal" %}</td>
+                                                        <td class="text-end border-0 pt-3">{{ booking.subtotal }} {{ booking.currency }}</td>
+                                                    </tr>
+                                                    {% if booking.discount_amount > 0 %}
+                                                    <tr>
+                                                        <td colspan="2" class="text-end border-0 text-success">{% translate "Discount" %}</td>
+                                                        <td class="text-end border-0 text-success">-{{ booking.discount_amount }} {{ booking.currency }}</td>
+                                                    </tr>
+                                                    {% endif %}
+                                                    <tr>
+                                                        <td colspan="2" class="text-end border-0">{% translate "Tax" %}</td>
+                                                        <td class="text-end border-0">{{ booking.tax_amount }} {{ booking.currency }}</td>
+                                                    </tr>
+                                                    <tr class="fw-bold fs-5">
+                                                        <td colspan="2" class="text-end border-0 text-primary">{% translate "Total" %}</td>
+                                                        <td class="text-end border-0 text-primary">{{ booking.total_amount }} {{ booking.currency }}</td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                        
+                                        <!-- Payment Info -->
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="alert alert-light border">
+                                                    <h6 class="fw-bold mb-2">{% translate "Payment Information" %}</h6>
+                                                    <p class="mb-1"><strong>{% translate "Status" %}:</strong> {{ booking.get_payment_status_display }}</p>
+                                                    {% for payment in booking.payments.all %}
+                                                            <p class="mb-0 text-muted small">
+                                                            <i class="fas fa-check-circle text-success me-1"></i>
+                                                            #{{ payment.transaction_id|default:payment.id }} - {{ payment.created_at|date:"M d, Y" }} - {{ payment.get_payment_method_display }} - {{ payment.amount }} {{ payment.currency }}
+                                                            </p>
+                                                    {% empty %}
+                                                        <p class="mb-0 text-muted small">{% translate "No payment records found." %}</p>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{% translate "Close" %}</button>
+                                    <button type="button" class="btn btn-primary" onclick="printInvoice('invoiceArea{{ booking.id }}')">
+                                        <i class="fas fa-print me-2"></i>{% translate "Print Invoice" %}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+<script>
+    function printInvoice(areaID) {
+        var printContent = document.getElementById(areaID).innerHTML;
+        var originalContent = document.body.innerHTML;
+        
+        // Create a temporary container for printing
+        var printWindow = window.open('', '', 'height=600,width=800');
+        printWindow.document.write('<html><head><title>Print Invoice</title>');
+        // Include Bootstrap for styling in the print window
+        printWindow.document.write('<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">');
+        printWindow.document.write('</head><body >');
+        printWindow.document.write(printContent);
+        printWindow.document.write('</body></html>');
+        
+        printWindow.document.close();
+        printWindow.focus();
+        
+        // Wait for styles to load
+        setTimeout(function() {
+            printWindow.print();
+            printWindow.close();
+        }, 500);
+    }
+</script>
+                
+                <!-- Payments Tab -->
+                <div class="tab-pane fade" id="payments" role="tabpanel" aria-labelledby="payments-tab">
+                     <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>{% translate "Transaction ID" %}</th>
+                                    <th>{% translate "Booking Ref" %}</th>
+                                    <th>{% translate "Method" %}</th>
+                                    <th>{% translate "Amount" %}</th>
+                                    <th>{% translate "Date" %}</th>
+                                    <th>{% translate "Status" %}</th>
+                                    <th>{% translate "Actions" %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for payment in payments %}
+                                <tr>
+                                    <td>{{ payment.transaction_id|default:"-" }}</td>
+                                    <td>{{ payment.booking.booking_number }}</td>
+                                    <td>{{ payment.get_payment_method_display }}</td>
+                                     <td>{{ payment.amount }} {{ payment.currency }}</td>
+                                    <td>{{ payment.created_at|date:"M d, Y H:i" }}</td>
+                                    <td>
+                                         {% if payment.status == 'completed' %}
+                                            <span class="badge bg-success">{{ payment.get_status_display }}</span>
+                                        {% elif payment.status == 'pending' %}
+                                            <span class="badge bg-warning text-dark">{{ payment.get_status_display }}</span>
+                                        {% elif payment.status == 'failed' %}
+                                            <span class="badge bg-danger">{{ payment.get_status_display }}</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ payment.get_status_display }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#paymentModal{{ payment.id }}">
+                                            <i class="fas fa-eye"></i> {% translate "View" %}
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="7" class="text-center py-4">
+                                        <p class="text-muted mb-0">{% translate "No payments found for this tour." %}</p>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Payment Modals (Outside Table) -->
+                    {% for payment in payments %}
+                    <!-- Payment Detail Modal -->
+                    <div class="modal fade" id="paymentModal{{ payment.id }}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">{% translate "Payment Details" %}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row g-2">
+                                        <div class="col-12">
+                                            <p class="mb-1"><strong>{% translate "Transaction ID" %}:</strong> {{ payment.transaction_id|default:"-" }}</p>
+                                        </div>
+                                        <div class="col-12">
+                                            <p class="mb-1"><strong>{% translate "Booking Reference" %}:</strong> {{ payment.booking.booking_number }}</p>
+                                        </div>
+                                        <div class="col-12">
+                                            <p class="mb-1"><strong>{% translate "Payment Method" %}:</strong> {{ payment.get_payment_method_display }}</p>
+                                        </div>
+                                            <div class="col-12">
+                                            <p class="mb-1"><strong>{% translate "Amount" %}:</strong> {{ payment.amount }} {{ payment.currency }}</p>
+                                        </div>
+                                        <div class="col-12">
+                                            <p class="mb-1"><strong>{% translate "Date" %}:</strong> {{ payment.created_at|date:"M d, Y H:i" }}</p>
+                                        </div>
+                                        <div class="col-12">
+                                            <p class="mb-1"><strong>{% translate "Status" %}:</strong> {{ payment.get_status_display }}</p>
+                                        </div>
+                                        {% if payment.card_last_four %}
+                                            <div class="col-12">
+                                            <p class="mb-1"><strong>{% translate "Card" %}:</strong> {{ payment.card_brand }} **** {{ payment.card_last_four }}</p>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% translate "Close" %}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

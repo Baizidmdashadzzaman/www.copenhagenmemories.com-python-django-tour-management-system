@@ -91,8 +91,34 @@ def supplier_tour_delete(request, tour_id):
     return render(request, 'accounts/tour_supplier/pages/supplier_tour_delete.html', {'tour': tour})
 
 def supplier_tour_view(request, tour_id):
-    tour = Tour.objects.get(id=tour_id)
-    return render(request, 'accounts/tour_supplier/pages/supplier_tour_view.html', {'tour': tour})
+    supplier_id = request.session.get('supplier_id')
+    if not supplier_id:
+        messages.error(request, 'Please login first.')
+        return redirect('login_tour_supplier')
+        
+    supplier = TourSupplier.objects.get(id=supplier_id)
+    tour = get_object_or_404(Tour, id=tour_id, supplier=supplier)
+    
+    if request.method == 'POST':
+        form = SupplierTourForm(request.POST, request.FILES, instance=tour)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Tour updated successfully.')
+            return redirect('supplier_tour_view', tour_id=tour.id)
+    else:
+        form = SupplierTourForm(instance=tour)
+    
+    bookings = Booking.objects.filter(tour=tour).order_by('-created_at')
+    payments = Payment.objects.filter(booking__tour=tour).order_by('-created_at')
+    
+    context = {
+        'tour': tour,
+        'form': form,
+        'bookings': bookings,
+        'payments': payments,
+        'supplier': supplier
+    }
+    return render(request, 'accounts/tour_supplier/pages/supplier_tour_view.html', context)
 
 def supplier_bookings(request):
     supplier_id = request.session.get('supplier_id')

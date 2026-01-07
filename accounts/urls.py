@@ -23,7 +23,9 @@ from accounts.admin_panel import views_website_menu as website_menu_views
 from accounts.admin_panel import views_faq as faq_views
 from accounts import views_frontend
 from accounts.supplier_panel import views as supplier_views
+
 urlpatterns = [
+    # SUPPLIER PANEL START
     path('register/supplier/', supplier_views.register_tour_supplier, name='register_tour_supplier'),
     path('login/supplier/', supplier_views.login_tour_supplier, name='login_tour_supplier'),
     path('logout/supplier/', supplier_views.logout_tour_supplier, name='logout_tour_supplier'),
@@ -35,8 +37,9 @@ urlpatterns = [
     path('dashboard/supplier/bookings/', supplier_views.supplier_bookings, name='supplier_bookings'),
     path('dashboard/supplier/payments/', supplier_views.supplier_payments, name='supplier_payments'),
     path('dashboard/supplier/profile/', supplier_views.supplier_profile, name='supplier_profile'),
+    # SUPPLIER PANEL END
 
-    path('newsletter/subscribe/', views_frontend.newsletter_subscribe, name='newsletter_subscribe'),
+    # CUSTOMER PANEL START
     path('register/customer/', customer_views.register_customer, name='register_customer'),
     path('register/admin/', admin_views.register_admin, name='register_admin'),
     path('login/customer/', customer_views.login_view, name='customer_login'),
@@ -55,7 +58,10 @@ urlpatterns = [
     path('dashboard/customer/chat/messages/', customer_views.get_chat_messages, name='customer_chat_messages'),
     path('dashboard/customer/chat/send/', customer_views.send_chat_message, name='customer_chat_send'),
     path('dashboard/admin/', admin_views.admin_dashboard, name='admin_dashboard'),
-    
+    # CUSTOMER PANEL END    
+
+    path('newsletter/subscribe/', views_frontend.newsletter_subscribe, name='newsletter_subscribe'),
+
     # Destination Region CRUD
     path('admin/destination-regions/', admin_views.destination_region_list, name='destination_region_list'),
     path('admin/destination-regions/create/', admin_views.destination_region_create, name='destination_region_create'),
