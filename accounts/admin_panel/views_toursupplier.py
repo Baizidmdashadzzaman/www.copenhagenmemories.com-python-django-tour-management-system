@@ -57,7 +57,12 @@ def tour_supplier_edit(request, pk):
     if request.method == 'POST':
         form = TourSupplierForm(request.POST, request.FILES, instance=supplier)
         if form.is_valid():
-            form.save()
+            supplier_obj = form.save(commit=False)
+            
+            if 'logo' not in request.FILES and supplier.logo:
+                supplier_obj.logo = supplier.logo
+                
+            supplier_obj.save()
             messages.success(request, 'Tour Supplier updated successfully!')
             return redirect('tour_supplier_list')
     else:

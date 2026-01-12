@@ -129,7 +129,7 @@ class TourSupplier(models.Model):
     tax_id = models.CharField(max_length=100, blank=True)
     payment_details = models.TextField(blank=True)
     bank_account = models.CharField(max_length=100, blank=True)
-    commission_rate = models.DecimalField(max_digits=5, decimal_places=2, default=0, help_text='Commission percentage',blank=True)
+    commission_rate = models.DecimalField(max_digits=5, decimal_places=2, default=0, help_text='Commission percentage')
     rating = models.DecimalField(max_digits=3, decimal_places=2, default=0)
     total_reviews = models.IntegerField(default=0)
     verified = models.BooleanField(default=False)
