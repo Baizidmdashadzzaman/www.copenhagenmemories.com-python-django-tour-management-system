@@ -262,8 +262,6 @@ def send_chat_message(request):
             
         customer = request.user.customer_profile
         
-        # Create message
-        # We default subject since this is a quick chat
         CustomerMessage.objects.create(
             customer=customer,
             sender_type='customer',

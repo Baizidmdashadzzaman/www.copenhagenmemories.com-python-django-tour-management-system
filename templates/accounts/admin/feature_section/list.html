@@ -81,6 +81,11 @@
                                         <span class="dt-column-title" role="button">Title</span>
                                         <span class="dt-column-order"></span>
                                     </th>
+                                    <th class="dt-orderable-asc dt-orderable-desc" rowspan="1" colspan="1"
+                                        aria-label="Title: Activate to sort" tabindex="0">
+                                        <span class="dt-column-title" role="button">Page</span>
+                                        <span class="dt-column-order"></span>
+                                    </th>
                                     <th class="dt-orderable-asc dt-orderable-desc" rowspan="1" colspan="1">
                                         <span class="dt-column-title" role="button">Rank</span>
                                     </th>
@@ -114,6 +119,7 @@
                                             </div>
                                         </div>
                                     </td>
+                                    <td>/tour-feature-section/{{ item.pk }}/</td>
                                     <td>{{ item.rank }}</td>
                                     <td>
                                         {% if item.status == 'active' %}

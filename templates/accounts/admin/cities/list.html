@@ -93,6 +93,11 @@
                                         <span class="dt-column-order"></span>
                                     </th>
                                     <th class="dt-orderable-asc dt-orderable-desc" rowspan="1" colspan="1"
+                                        aria-label="Page: Activate to sort" tabindex="0">
+                                        <span class="dt-column-title" role="button">Page</span>
+                                        <span class="dt-column-order"></span>
+                                    </th>
+                                    <th class="dt-orderable-asc dt-orderable-desc" rowspan="1" colspan="1"
                                         aria-label="Country: Activate to sort" tabindex="0">
                                         <span class="dt-column-title" role="button">Country</span>
                                         <span class="dt-column-order"></span>
@@ -133,6 +138,7 @@
                                             <small class="text-muted">{{ city.name_dk }}</small>
                                         </span>
                                     </td>
+                                    <td>/tours/filter/?city={{ city.id }}</td>
                                     <td>{{ city.country.name }}</td>
                                     <td>{{ city.region.name|default:"—" }}</td>
                                     <td>
