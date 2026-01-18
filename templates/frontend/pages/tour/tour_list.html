@@ -383,9 +383,9 @@
                     <h6 class="mb-3">{{ total_tours }} {% translate "Tours Found" %}{% if search_query %} for "{{ search_query }}"{% endif %}</h6>
                     <div class="d-flex align-items-center flex-wrap">
                         <div class="list-item d-flex align-items-center mb-3">
-                            <a href="tour-grid.html" class="list-icon me-2"><i class="isax isax-grid-1"></i></a>
+                            <!-- <a href="tour-grid.html" class="list-icon me-2"><i class="isax isax-grid-1"></i></a>
                             <a href="tour-list.html" class="list-icon active me-2"><i class="isax isax-firstline"></i></a>
-                            <a href="tour-map.html" class="list-icon me-2"><i class="isax isax-map-1"></i></a>
+                            <a href="tour-map.html" class="list-icon me-2"><i class="isax isax-map-1"></i></a> -->
                         </div>
                         <div class="dropdown mb-3">
                             <a href="#" class="dropdown-toggle py-2" data-bs-toggle="dropdown" aria-expanded="false">
@@ -405,14 +405,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="bg-info br-10 p-3 pb-2 mb-4">
+                <!-- <div class="bg-info br-10 p-3 pb-2 mb-4">
                     <div class="d-flex align-items-center justify-content-between flex-wrap">
                         <p class="fs-14 fw-medium mb-2 d-inline-flex align-items-center"><i class="isax isax-info-circle me-2"></i>{% translate "Save an average of 15% on thousands of hotels when you're signed in" %}</p>
                         {% if not request.user.is_authenticated %}
                         <a href="{% url 'login' %}" class="btn btn-white btn-sm mb-2">{% translate "Sign In" %}</a>
                         {% endif %}
                     </div>
-                </div>
+                </div> -->
                 <div class="hotel-list">
                     <div class="row justify-content-center">
                         <div class="col-md-12">
@@ -493,10 +493,10 @@
                                         <div class="d-flex align-items-center">
                                             <h6 class="d-flex align-items-center text-gray-6 fs-14 fw-normal border-end pe-2 me-2">
                                                 {% translate "Starts From" %}
-                                                <span class="ms-1 fs-18 fw-semibold text-primary">${{ tour.base_price|floatformat:0 }}</span>
+                                                <span class="ms-1 fs-18 fw-semibold text-primary">DKK {{ tour.base_price|floatformat:0 }}</span>
                                                 {% if tour.discount_percentage > 0 %}
                                                 <span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">
-                                                    ${{ tour.original_price|floatformat:0 }}
+                                                    DKK {{ tour.original_price|floatformat:0 }}
                                                 </span>
                                                 {% endif %}
                                             </h6>

@@ -404,10 +404,6 @@
                                 <p class="text-muted text-decoration-line-through mb-0">DKK {{ tour.original_price|floatformat:0 }}</p>
                                 <span class="badge bg-success">{{ tour.discount_percentage }}% OFF</span>
                                 {% endif %}
-                                
-                            </div>
-                            <div class="form-item border rounded p-3 mb-3 w-100">
-                                <div id="tourConvertedPrices" class="pt-2  border-light-subtle" style="display:none;"></div>
                             </div>
 
                             {% if not user.is_authenticated %}
@@ -747,19 +743,8 @@
 
 <script>
 // Initialize global variables for JavaScript
-    // Safe parsing of pricing data
-    var rawPricing = "{{ pricing_options_json|escapejs }}";
-    if (rawPricing === "None" || rawPricing === "" || rawPricing === "null") {
-        window.tourPricingData = [];
-    } else {
-        try {
-            window.tourPricingData = JSON.parse(rawPricing);
-        } catch (e) {
-            console.warn("Error parsing pricing_options_json:", e);
-            window.tourPricingData = [];
-        }
-    }
-window.tourBasePrice = parseFloat("{{ tour.base_price|stringformat:'f'|default:0 }}");
+window.tourPricingData = {{ pricing_options_json|default:"[]"|safe }};
+window.tourBasePrice = {{ tour.base_price|default:0 }};
 window.tourCurrency = "{{ tour.currency|default:'DKK' }}";
 </script>
 
@@ -1032,47 +1017,4 @@ function checkParticipantsCount() {
 }
 </script>
 
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const basePrice = window.tourBasePrice; // Defined earlier in the file
-        const container = document.getElementById('tourConvertedPrices');
-        
-        if (basePrice && basePrice > 0 && container) {
-            const targets = ['EUR', 'USD', 'GBP', 'CAD', 'AUD'];
-            
-            // Show loading state
-            container.style.display = 'block';
-            container.innerHTML = '<small class="text-muted"><i class="fas fa-spinner fa-spin me-1"></i>Loading rates...</small>';
-            
-            fetch('https://cdn.moneyconvert.net/api/latest.json')
-                .then(r => r.json())
-                .then(data => {
-                    if(data && data.rates && data.rates.DKK) {
-                        const dkkRate = data.rates.DKK;
-                        let html = '<p class="fs-12 fw-medium text-muted mb-1">Approximate Prices:</p><ul class="list-unstyled mb-0 fs-13">';
-                        
-                        targets.forEach(curr => {
-                            if(data.rates[curr]) {
-                                const val = (basePrice / dkkRate) * data.rates[curr];
-                                html += `<li class="d-flex justify-content-between text-muted">
-                                    <span>${curr}</span>
-                                    <span class="fw-medium text-dark">${Math.round(val)}</span>
-                                </li>`;
-                            }
-                        });
-                        
-                        html += '</ul>';
-                        container.innerHTML = html;
-                    } else {
-                        container.style.display = 'none';
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                    container.style.display = 'none'; // Hide on error
-                });
-        }
-    });
-</script>
 {% endblock %}

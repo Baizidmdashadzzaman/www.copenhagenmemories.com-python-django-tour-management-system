@@ -118,6 +118,7 @@
                                                 </ul>
                                             </div>
                                             <div class="dropdown">
+                                                
                                                 <a href="#" class="dropdown-toggle bg-white border d-block"
                                                     data-bs-toggle="dropdown" aria-expanded="false">
                                                     DKK
@@ -162,10 +163,25 @@
                  
                             <div class="dropdown me-3">
                                 <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Dkk
+                                    <i class="isax isax-money-send"></i>
                                 </a>
-                                <ul class="dropdown-menu p-2 mt-2">
-                                    <li><a class="dropdown-item rounded" href="#">Dkk</a></li>
+                                <ul class="dropdown-menu p-3 mt-2 unique-currency-dropdown" style="min-width: 200px;">
+                                    <li>
+                                        <h6 class="dropdown-header px-0 pt-0 text-uppercase fs-12 text-muted fw-bold">1 DKK Exchange Rates</h6>
+                                    </li>
+                                    <li>
+                                        <div id="headerCurrencyRates" class="currency-rates-list">
+                                            <div class="text-center py-2">
+                                                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown-divider"></div>
+                                        <small class="text-muted d-block text-center fst-italic" style="font-size: 10px;">Source: MoneyConvert</small>
+                                    </li>
                                 </ul>
                             </div>
                             
@@ -376,6 +392,54 @@
     <script src="{% static 'frontend/assets/js/script.js' %}"></script>
 
  
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('headerCurrencyRates');
+            if (container) {
+                const targetCurrencies = ['EUR', 'USD', 'GBP', 'CAD', 'AUD']; 
+                
+                fetch('https://cdn.moneyconvert.net/api/latest.json')
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network error');
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data && data.rates && data.rates.DKK) {
+                            const dkkRate = data.rates.DKK;
+                            let html = '<ul class="list-unstyled mb-0">';
+                            
+                            targetCurrencies.forEach(curr => {
+                                if (data.rates[curr]) {
+                                    // 1 DKK = (1 / Rate_DKK) * Rate_Target
+                                    const rate = (1 / dkkRate) * data.rates[curr];
+                                    html += `
+                                        <li class="d-flex justify-content-between align-items-center py-1 border-bottom border-light">
+                                            <div class="d-flex align-items-center">
+                                                <img src="/static/frontend/assets/img/flags/${curr.toLowerCase().slice(0, 2)}.png" 
+                                                     onerror="this.style.display='none'" 
+                                                     class="me-2" style="width: 16px; height: 11px;" alt="${curr}">
+                                                <span class="fw-medium font-monospace">${curr}</span>
+                                            </div>
+                                            <span class="fw-bold text-primary">${rate.toFixed(3)}</span>
+                                        </li>
+                                    `;
+                                }
+                            });
+                            
+                            html += '</ul>';
+                            container.innerHTML = html;
+                        } else {
+                            container.innerHTML = '<p class="text-danger small text-center mb-0">Rates unavailable</p>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Header Currency Error:', error);
+                        container.innerHTML = '<p class="text-danger small text-center mb-0">Error loading rates</p>';
+                    });
+            }
+        });
+    </script>
 
     {% block scripts %}{% endblock %}
 </body>
