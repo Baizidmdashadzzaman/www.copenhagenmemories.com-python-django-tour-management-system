@@ -9,6 +9,18 @@ from django.db.models import Prefetch
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import translation
 from django.conf import settings
+from django.core.mail import send_mail
+from django.http import HttpResponse
+
+def send_test_email(request):
+    send_mail(
+        subject='Test Email from Django',
+        message='This is a test email.',
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=['ashad0167@gmail.com'],
+        fail_silently=False,
+    )
+    return HttpResponse("Email sent")
 
 
 def page_view(request, page_id, page_slug):

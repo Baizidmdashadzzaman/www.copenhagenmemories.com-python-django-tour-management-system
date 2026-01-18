@@ -46,6 +46,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('admin/', admin.site.urls),
     path('system-developer/', views.system_developer, name='system_developer'),
+    path('send-test-email/', views.send_test_email, name='send_test_email'),
     
 ]
 

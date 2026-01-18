@@ -41,6 +41,7 @@ urlpatterns = [
 
     # CUSTOMER PANEL START
     path('register/customer/', customer_views.register_customer, name='register_customer'),
+    path('forget-password/', customer_views.forget_password, name='forget_password'),
     path('register/admin/', admin_views.register_admin, name='register_admin'),
     path('login/customer/', customer_views.login_view, name='customer_login'),
     path('login/admin/', admin_views.login_view, name='admin_login'),

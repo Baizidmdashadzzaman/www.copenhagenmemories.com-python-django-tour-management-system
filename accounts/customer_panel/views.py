@@ -275,3 +275,45 @@ def send_chat_message(request):
         return JsonResponse({'status': 'success'})
         
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=405)
+
+def forget_password(request):
+    from django.contrib.auth.models import User
+    from django.core.mail import send_mail
+    from django.conf import settings
+    from django.utils.crypto import get_random_string
+    
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        try:
+            user = User.objects.filter(email=email).first()
+            
+            if user:
+                # Generate new password
+                new_password = get_random_string(length=10)
+                user.set_password(new_password)
+                user.save()
+                
+                # Send email
+                site_name = "Your Tour Guide"
+                try:
+                    from accounts.models import SiteSetting
+                    settings_obj = SiteSetting.get_settings()
+                    site_name = settings_obj.site_name
+                except:
+                    pass
+                    
+                subject = f'Password Reset - {site_name}'
+                message = f'Hello {user.username},\n\nYour password has been successfully reset upon your request.\n\nYour new password is: {new_password}\n\nPlease login using this password and change it immediately from your profile settings.\n\nBest regards,\n{site_name} Team'
+                email_from = getattr(settings, 'EMAIL_HOST_USER', 'noreply@example.com')
+                recipient_list = [user.email]
+                
+                send_mail(subject, message, email_from, recipient_list)
+                
+                messages.success(request, 'A new password has been sent to your email address. Please check your inbox.')
+                return redirect('login')
+            else:
+                messages.error(request, 'No account found with this email address.')
+        except Exception as e:
+            messages.error(request, f'An error occurred: {str(e)}')
+            
+    return render(request, 'accounts/customer/forget-password.html')
