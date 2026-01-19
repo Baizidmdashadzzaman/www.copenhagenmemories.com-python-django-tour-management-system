@@ -731,6 +731,9 @@ def tour_detail(request, tour_id):
     # Ensure pricing_options_json is always available (even if empty)
     if not pricing_options_json:
         pricing_options_json = []
+    
+    # Convert to JSON string for template
+    pricing_options_json = json.dumps(pricing_options_json)
 
     # Get non-form errors if form exists and has been validated
     non_form_errors = []
