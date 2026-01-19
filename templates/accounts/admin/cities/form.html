@@ -41,6 +41,12 @@
                                 <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
                                 {{ field }}
                                 {% if field.help_text %}<div class="form-text">{{ field.help_text|safe }}</div>{% endif %}
+                                {% if field.name == 'image' and form.instance.pk and form.instance.image %}
+                                <div class="mb-2">
+                                    <img src="{{ form.instance.image.url }}" alt="Current Image" class="img-fluid rounded mb-2" style="max-height: 200px; object-fit: cover;">
+                                    <div class="small text-muted mb-2">Current Image: {{ form.instance.image.name }}</div>
+                                </div>
+                                {% endif %}
                             </div>
                             {% endif %}
                         {% endfor %}
