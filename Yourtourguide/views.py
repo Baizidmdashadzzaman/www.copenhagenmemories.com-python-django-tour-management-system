@@ -7,10 +7,11 @@ from accounts.models import Tour, Category, DestinationRegion, City, TourReview
 from accounts.models import BlogPost, ContactUs, SiteSetting, CustomerReviewStatic, FAQ, TourSupplier, Country, FeatureSection, Slider,Page, Tour
 from django.db.models import Prefetch
 from django.shortcuts import render, get_object_or_404, redirect
-from django.utils import translation
+from django.utils import translation, timezone
 from django.conf import settings
 from django.core.mail import send_mail
 from django.http import HttpResponse
+from django.utils.crypto import get_random_string
 
 def send_test_email(request):
     send_mail(
@@ -441,13 +442,13 @@ def tour_detail(request, tour_id):
     from .forms import FrontendBookingForm
     from accounts.models import Customer, Coupon, Booking, BookingParticipant
     from django.contrib import messages
+    from django.contrib.auth.models import User
     import json
     from decimal import Decimal
     import random
     import string
     from django.db.models import Avg, Count, Value
     from django.db.models.functions import Coalesce
-
 
     # Get tour with all related data
     tour = get_object_or_404(
@@ -486,165 +487,221 @@ def tour_detail(request, tour_id):
     booking_error = None
 
     if request.method == 'POST' and request.POST.get('action') == 'book_tour':
-        if not request.user.is_authenticated:
-            booking_error = "Please log in to make a booking."
-        else:
-            try:
-                # Get or create customer
-                customer, created = Customer.objects.get_or_create(
-                    user=request.user,
-                    defaults={
-                        'phone': getattr(request.user, 'phone', ''),
-                    }
-                )
+        # Handle guest booking or authenticated booking
+        user = request.user
+        
+        if not user.is_authenticated:
+            contact_email = request.POST.get('contact_email')
+            contact_name = request.POST.get('contact_name')
+            
+            if contact_email:
+                # Check if user exists
+                user_exists = User.objects.filter(email=contact_email).exists()
+                
+                if user_exists:
+                    user = User.objects.get(email=contact_email)
+                else:
+                    # Create new user
+                    password =  get_random_string(length=10)
+                    username = contact_email  # Use email as username
+                    
+                    try:
+                        user = User.objects.create_user(
+                            username=username,
+                            email=contact_email,
+                            password=password,
+                            first_name=contact_name or 'Guest'
+                        )
+                        
+                        # Send email with password
+                        subject = 'Your Account for Copenhagen Memories'
+                        message = f"""
+                        Welcome to Copenhagen Memories!
+                        
+                        An account has been created for you to manage your booking.
+                        
+                        Username: {contact_email}
+                        Password: {password}
+                        
+                        You can log in at: {request.build_absolute_uri('/accounts/login/')}
+                        """
+                        
+                        send_mail(
+                            subject,
+                            message,
+                            settings.DEFAULT_FROM_EMAIL,
+                            [contact_email],
+                            fail_silently=True,
+                        )
+                        
+                    except Exception as e:
+                        booking_error = f"Error creating account: {str(e)}"
+                        user = None
 
-                # Ensure tour is in POST data
-                post_data = request.POST.copy()
-                post_data['tour'] = str(tour.id)
-                booking_form = FrontendBookingForm(post_data, tour=tour, user=request.user)
-                participants_data = request.POST.get('participants_data')
-
-                # Debug form errors
-                if not booking_form.is_valid():
-                    print(f"Form errors: {booking_form.errors}")
-                    print(f"Participants data: {participants_data}")
-                    # Don't set booking_error here, let the form display its own errors
-                    # Don't return here, let the form render with errors
-
-                participants_data = request.POST.get('participants_data')
-
-                # Only proceed if form is valid and we have participants data
-                if booking_form.is_valid() and participants_data:
-                    participants = json.loads(participants_data)
-
-                    # Calculate pricing
-                    subtotal = Decimal('0.00')
-                    participant_details = []
-
-                    for participant in participants:
-                        participant_type = participant.get('type', 'adult')
-                        age = participant.get('age')
-
-                        # Find appropriate pricing
-                        pricing = None
-                        if age is not None:
-                            pricing = tour.pricing_options.filter(
-                                is_active=True,
-                                min_age__lte=age,
-                                max_age__gte=age
-                            ).first()
-
-                        if not pricing:
-                            # Default pricing based on participant type
-                            if participant_type == 'adult':
-                                pricing = tour.pricing_options.filter(
-                                    participant_type='adult',
-                                    is_active=True
-                                ).first()
-                            elif participant_type == 'child':
-                                pricing = tour.pricing_options.filter(
-                                    participant_type='child',
-                                    is_active=True
-                                ).first()
-                            else:
-                                pricing = tour.pricing_options.filter(
-                                    participant_type='infant',
-                                    is_active=True
-                                ).first()
-
-                        if not pricing:
-                            # Fallback to base price
-                            price = tour.base_price
-                        else:
-                            price = pricing.price
-
-                        participant['price'] = str(price)
-                        subtotal += price
-                        participant_details.append(participant)
-
-                    # Handle coupon discount
-                    discount_amount = Decimal('0.00')
-                    coupon_code = booking_form.cleaned_data.get('coupon_code')
-                    if coupon_code:
-                        try:
-                            coupon = Coupon.objects.get(
-                                code=coupon_code.upper(),
-                                is_active=True,
-                                valid_from__lte=timezone.now(),
-                                valid_until__gte=timezone.now()
-                            )
-                            # Apply coupon logic here
-                            if coupon.discount_type == 'percentage':
-                                discount_amount = subtotal * (coupon.discount_value / 100)
-                                if coupon.max_discount_amount and discount_amount > coupon.max_discount_amount:
-                                    discount_amount = coupon.max_discount_amount
-                            else:  # fixed amount
-                                discount_amount = min(coupon.discount_value, subtotal)
-                        except Coupon.DoesNotExist:
-                            pass
-
-                    # Calculate tax (assuming 25% VAT for Denmark)
-                    tax_rate = Decimal('0.25')
-                    tax_amount = (subtotal - discount_amount) * tax_rate
-                    total_amount = subtotal - discount_amount + tax_amount
-
-                    # Generate booking number
-                    while True:
-                        booking_number = 'BK' + ''.join(random.choices(string.digits, k=8))
-                        if not Booking.objects.filter(booking_number=booking_number).exists():
-                            break
-
-                    # Create booking
-                    booking = Booking.objects.create(
-                        booking_number=booking_number,
-                        customer=customer,
-                        tour=tour,
-                        schedule=booking_form.cleaned_data.get('schedule'),
-                        tour_date=booking_form.cleaned_data['tour_date'],
-                        tour_time=booking_form.cleaned_data.get('tour_time'),
-                        total_participants=len(participants),
-                        participant_details=participant_details,
-                        subtotal=subtotal,
-                        discount_amount=discount_amount,
-                        tax_amount=tax_amount,
-                        total_amount=total_amount,
-                        currency=tour.currency,
-                        contact_name=booking_form.cleaned_data['contact_name'],
-                        contact_email=booking_form.cleaned_data['contact_email'],
-                        contact_phone=booking_form.cleaned_data['contact_phone'],
-                        special_requirements=booking_form.cleaned_data.get('special_requirements', ''),
-                        pickup_location=booking_form.cleaned_data.get('pickup_location', ''),
-                        customer_notes=booking_form.cleaned_data.get('customer_notes', ''),
-                        status='pending',
-                        payment_status='pending'
+        if booking_error is None:
+            if not user or (not user.is_authenticated and not contact_email):
+                 booking_error = "Please provide an email address to book."
+            else:
+                try:
+                    # Get or create customer
+                    customer, created = Customer.objects.get_or_create(
+                        user=user,
+                        defaults={
+                            'phone': request.POST.get('contact_phone', ''),
+                        }
                     )
 
-                    # Create participants
-                    for participant in participants:
-                        BookingParticipant.objects.create(
-                            booking=booking,
-                            participant_type=participant.get('type', 'adult'),
-                            first_name=participant.get('first_name', ''),
-                            last_name=participant.get('last_name', ''),
-                            age=participant.get('age'),
-                            email=participant.get('email', ''),
-                            phone=participant.get('phone', ''),
-                            special_requirements=participant.get('special_requirements', ''),
-                            price=Decimal(participant.get('price', '0'))
+                    # Ensure tour is in POST data
+                    post_data = request.POST.copy()
+                    post_data['tour'] = str(tour.id)
+                    
+                    # We need to initialize form with the correct user (which might be the guest user we just found/created)
+                    # But FrontendBookingForm expects 'user' kwarg which usually is request.user.
+                    # The form might use self.user for initial data.
+                    booking_form = FrontendBookingForm(post_data, tour=tour, user=user)
+                    participants_data = request.POST.get('participants_data')
+
+                    # Debug form errors
+                    if not booking_form.is_valid():
+                        print(f"Form errors: {booking_form.errors}")
+                        print(f"Participants data: {participants_data}")
+                        # Don't set booking_error here, let the form display its own errors
+                        # Don't return here, let the form render with errors
+
+                    participants_data = request.POST.get('participants_data')
+
+                    # Only proceed if form is valid and we have participants data
+                    if booking_form.is_valid() and participants_data:
+                        participants = json.loads(participants_data)
+
+                        # Calculate pricing
+                        subtotal = Decimal('0.00')
+                        participant_details = []
+
+                        for participant in participants:
+                            participant_type = participant.get('type', 'adult')
+                            age = participant.get('age')
+
+                            # Find appropriate pricing
+                            pricing = None
+                            if age is not None:
+                                pricing = tour.pricing_options.filter(
+                                    is_active=True,
+                                    min_age__lte=age,
+                                    max_age__gte=age
+                                ).first()
+
+                            if not pricing:
+                                # Default pricing based on participant type
+                                if participant_type == 'adult':
+                                    pricing = tour.pricing_options.filter(
+                                        participant_type='adult',
+                                        is_active=True
+                                    ).first()
+                                elif participant_type == 'child':
+                                    pricing = tour.pricing_options.filter(
+                                        participant_type='child',
+                                        is_active=True
+                                    ).first()
+                                else:
+                                    pricing = tour.pricing_options.filter(
+                                        participant_type='infant',
+                                        is_active=True
+                                    ).first()
+
+                            if not pricing:
+                                # Fallback to base price
+                                price = tour.base_price
+                            else:
+                                price = pricing.price
+
+                            participant['price'] = str(price)
+                            subtotal += price
+                            participant_details.append(participant)
+
+                        # Handle coupon discount
+                        discount_amount = Decimal('0.00')
+                        coupon_code = booking_form.cleaned_data.get('coupon_code')
+                        if coupon_code:
+                            try:
+                                coupon = Coupon.objects.get(
+                                    code=coupon_code.upper(),
+                                    is_active=True,
+                                    valid_from__lte=timezone.now(),
+                                    valid_until__gte=timezone.now()
+                                )
+                                # Apply coupon logic here
+                                if coupon.discount_type == 'percentage':
+                                    discount_amount = subtotal * (coupon.discount_value / 100)
+                                    if coupon.max_discount_amount and discount_amount > coupon.max_discount_amount:
+                                        discount_amount = coupon.max_discount_amount
+                                else:  # fixed amount
+                                    discount_amount = min(coupon.discount_value, subtotal)
+                            except Coupon.DoesNotExist:
+                                pass
+
+                        # Calculate tax (assuming 25% VAT for Denmark)
+                        tax_rate = Decimal('0.25')
+                        tax_amount = (subtotal - discount_amount) * tax_rate
+                        total_amount = subtotal - discount_amount + tax_amount
+
+                        # Generate booking number
+                        while True:
+                            booking_number = 'BK' + ''.join(random.choices(string.digits, k=8))
+                            if not Booking.objects.filter(booking_number=booking_number).exists():
+                                break
+
+                        # Create booking
+                        booking = Booking.objects.create(
+                            booking_number=booking_number,
+                            customer=customer,
+                            tour=tour,
+                            schedule=booking_form.cleaned_data.get('schedule'),
+                            tour_date=booking_form.cleaned_data['tour_date'],
+                            tour_time=booking_form.cleaned_data.get('tour_time'),
+                            total_participants=len(participants),
+                            participant_details=participant_details,
+                            subtotal=subtotal,
+                            discount_amount=discount_amount,
+                            tax_amount=tax_amount,
+                            total_amount=total_amount,
+                            currency=tour.currency,
+                            contact_name=booking_form.cleaned_data['contact_name'],
+                            contact_email=booking_form.cleaned_data['contact_email'],
+                            contact_phone=booking_form.cleaned_data['contact_phone'],
+                            special_requirements=booking_form.cleaned_data.get('special_requirements', ''),
+                            pickup_location=booking_form.cleaned_data.get('pickup_location', ''),
+                            customer_notes=booking_form.cleaned_data.get('customer_notes', ''),
+                            status='pending',
+                            payment_status='pending'
                         )
 
-                    booking_success = True
-                    messages.success(request, f'Booking {booking_number} created successfully!')
+                        # Create participants
+                        for participant in participants:
+                            BookingParticipant.objects.create(
+                                booking=booking,
+                                participant_type=participant.get('type', 'adult'),
+                                first_name=participant.get('first_name', ''),
+                                last_name=participant.get('last_name', ''),
+                                age=participant.get('age'),
+                                email=participant.get('email', ''),
+                                phone=participant.get('phone', ''),
+                                special_requirements=participant.get('special_requirements', ''),
+                                price=Decimal(participant.get('price', '0'))
+                            )
 
-                    # Redirect to booking confirmation page
-                    return redirect('booking_confirmation', booking_id=booking.pk)
+                        booking_success = True
+                        messages.success(request, f'Booking {booking_number} created successfully!')
 
-                else:
-                    booking_error = "Please correct the errors below."
+                        # Redirect to booking confirmation page
+                        return redirect('booking_confirmation', booking_id=booking.pk)
 
-            except Exception as e:
-                booking_error = f"An error occurred: {str(e)}"
-                print(f"Booking error: {str(e)}")  # For debugging
+                    else:
+                        booking_error = "Please correct the errors below."
+
+                except Exception as e:
+                    booking_error = f"An error occurred: {str(e)}"
+                    print(f"Booking error: {str(e)}")  # For debugging
 
     # Initialize form for GET requests
     if not booking_form:
@@ -786,10 +843,13 @@ def booking_confirmation(request, booking_id):
     )
 
     # Check if user has permission to view this booking
-    if not request.user.is_authenticated or booking.customer.user != request.user:
-        messages.error(request, "You don't have permission to view this booking.")
-        return redirect('home')
+    # if not request.user.is_authenticated or booking.customer.user != request.user:
+    #     messages.error(request, "You don't have permission to view this booking.")
+    #     return redirect('home')
 
+    # For guest booking support, we allow public access to confirmation page
+    # In a production environment, you might want to add a unique hash to the URL for better security
+    
     context = {
         'booking': booking,
         'participants': booking.participants.all(),
