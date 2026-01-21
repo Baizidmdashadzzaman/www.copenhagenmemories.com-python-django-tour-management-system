@@ -174,9 +174,14 @@
                                                 <i class="icon-base ti tabler-checks icon-22px"></i>
                                             </a>
                                             <a href="{% url 'booking_edit' booking.pk %}"
-                                                class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light"
+                                                class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light me-1"
                                                 title="Edit Booking">
                                                 <i class="icon-base ti tabler-edit icon-22px"></i>
+                                            </a>
+                                            <a href="{% url 'booking_delete' booking.pk %}"
+                                                class="btn btn-sm btn-icon btn-text-danger rounded-pill waves-effect waves-light"
+                                                title="Delete Booking">
+                                                <i class="icon-base ti tabler-trash icon-22px"></i>
                                             </a>
                                         </div>
                                     </td>

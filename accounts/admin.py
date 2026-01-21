@@ -10,6 +10,47 @@ from .models import (
 
 
 # Register your models here.
+
+class TourImageInline(admin.TabularInline):
+    model = TourImage
+    extra = 1
+
+class TourHighlightInline(admin.TabularInline):
+    model = TourHighlight
+    extra = 1
+
+class TourIncludedInline(admin.TabularInline):
+    model = TourIncluded
+    extra = 1
+
+class TourExcludedInline(admin.TabularInline):
+    model = TourExcluded
+    extra = 1
+
+class TourItineraryInline(admin.StackedInline):
+    model = TourItinerary
+    extra = 1
+
+class TourRequirementInline(admin.TabularInline):
+    model = TourRequirement
+    extra = 1
+
+class TourFAQInline(admin.TabularInline):
+    model = TourFAQ
+    extra = 1
+
+class TourPricingInline(admin.TabularInline):
+    model = TourPricing
+    extra = 1
+
+class TourScheduleInline(admin.TabularInline):
+    model = TourSchedule
+    extra = 1
+
+class TourBlackoutDateInline(admin.TabularInline):
+    model = TourBlackoutDate
+    extra = 1
+
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
     list_display = ('name', 'code', 'is_active', 'created_at')
@@ -113,6 +154,12 @@ class TourAdmin(admin.ModelAdmin):
         ('SEO', {'fields': ('meta_title', 'meta_description', 'meta_keywords')}),
         ('Status', {'fields': ('status', 'is_featured', 'is_bestseller', 'created_at', 'updated_at')}),
     )
+    inlines = [
+        TourImageInline, TourHighlightInline, TourIncludedInline, 
+        TourExcludedInline, TourItineraryInline, TourRequirementInline, 
+        TourFAQInline, TourPricingInline, TourScheduleInline, 
+        TourBlackoutDateInline
+    ]
 
 @admin.register(TourImage)
 class TourImageAdmin(admin.ModelAdmin):

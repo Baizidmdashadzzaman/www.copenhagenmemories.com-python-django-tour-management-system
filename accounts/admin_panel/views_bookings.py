@@ -386,3 +386,17 @@ def booking_edit(request, pk):
         'booking': booking,
         'participants_json': json.dumps(participants)
     })
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+@permission_required_with_message('accounts.delete_booking')
+def booking_delete(request, pk):
+    booking = get_object_or_404(Booking, pk=pk)
+    if request.method == 'POST':
+        try:
+            booking.delete()
+            messages.success(request, 'Booking deleted successfully!')
+        except Exception as e:
+            messages.error(request, f'Error deleting booking: {str(e)}')
+        return redirect('booking_list')
+    
+    return render(request, 'accounts/admin/bookings/delete_confirm.html', {'booking': booking})

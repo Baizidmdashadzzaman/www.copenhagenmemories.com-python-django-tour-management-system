@@ -14,9 +14,11 @@
         content="{% if site_settings.site_metakey %}{{ site_settings.site_metakey }}{% else %}travel booking template, tour booking, Bootstrap 5 travel template, DreamsTour, hotel booking, flights booking, holiday packages, tour agency website, travel agency template, travel HTML template, booking system, responsive travel template, Bootstrap travel website{% endif %}">
     <meta name="author" content="baizid.md.ashadzzaman@gmail.com">
     <meta name="robots" content="index, follow">
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'frontend/assets/img/apple-touch-icon.png' %}">
-    <link rel="icon" href="{% static 'frontend/assets/img/favicon.png' %}" type="image/x-icon">
-    <link rel="shortcut icon" href="{% static 'frontend/assets/img/favicon.png' %}" type="image/x-icon">
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ site_settings.site_favicon.url }}">
+    <link rel="icon" href="{{ site_settings.site_favicon.url }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ site_settings.site_favicon.url }}" type="image/x-icon">
+
     <script src="{% static 'frontend/assets/js/theme-script.js' %}"></script>
     <link rel="stylesheet" href="{% static 'frontend/assets/css/animate.css' %}">
     <link rel="stylesheet" href="{% static 'frontend/assets/css/bootstrap.min.css' %}">
@@ -62,10 +64,10 @@
                             <div class="offcanvas-head">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <a href="{% url 'home' %}" class="black-logo-responsive">
-                                        <img src="{{ site_settings.site_logo_dark.url }}" alt="logo-img">
+                                        <img src="{{ site_settings.site_logo_dark.url }}" alt="logo-img" style="max-width: 90px;">
                                     </a>
                                     <a href="{% url 'home' %}" class="white-logo-responsive">
-                                        <img src="{{ site_settingsa.site_logo.url }}" alt="logo-img">
+                                        <img src="{{ site_settingsa.site_logo.url }}" alt="logo-img" style="max-width: 90px;">
                                     </a>
                                     <div class="offcanvas-close">
                                         <i class="ti ti-x"></i>
@@ -152,10 +154,10 @@
                     <div class="main-menu-wrapper">
                         <div class="navbar-logo">
                             <a class="logo-white header-logo" href="{% url 'home' %}">
-                                <img src="{{ site_settings.site_logo_dark.url }}" class="logo" alt="Logo">
+                                <img src="{{ site_settings.site_logo_dark.url }}" class="logo" alt="Logo" style="max-width: 90px;">
                             </a>
                             <a class="logo-dark header-logo" href="{% url 'home' %}">
-                                <img src="{{ site_settings.site_logo.url }}" class="logo" alt="Logo">
+                                <img src="{{ site_settings.site_logo.url }}" class="logo" alt="Logo" style="max-width: 90px;">
                             </a>
                         </div>
                         <nav id="mobile-menu">
@@ -306,10 +308,10 @@
                     <div class="col-lg-3">
                         <div class="footer-widget">
                             <span class="d-block mb-2 footer-logo-light"><img
-                                    src="{{ site_settings.site_logo_dark.url }}" alt="Img"></span>
+                                    src="{{ site_settings.site_logo_dark.url }}" alt="Img" style="max-width: 150px;"></span>
                             <span class="mb-2 footer-logo-dark"><img src="{{ site_settings.site_logo.url }}"
                                     alt="Img"></span>
-                            <p class="mb-3">
+                            <p class="mb-3" style="max-width: 150px;">
                                 {{ site_settings.site_description }}
                             </p>
                             <!-- <span class="d-block mb-2">

@@ -149,9 +149,14 @@
                                                 <i class="icon-base ti tabler-refresh icon-22px"></i>
                                             </a>
                                             <a href="{% url 'tour_review_feature_toggle' review.pk %}"
-                                                class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light"
+                                                class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light me-1"
                                                 title="Toggle Featured">
                                                 <i class="icon-base ti tabler-star icon-22px"></i>
+                                            </a>
+                                            <a href="{% url 'tour_review_delete' review.pk %}"
+                                                class="btn btn-sm btn-icon btn-text-danger rounded-pill waves-effect waves-light"
+                                                title="Delete Review">
+                                                <i class="icon-base ti tabler-trash icon-22px"></i>
                                             </a>
                                         </div>
                                     </td>

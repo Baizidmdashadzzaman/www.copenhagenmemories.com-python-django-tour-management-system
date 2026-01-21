@@ -94,7 +94,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td>{{ supplier.name }}</td>
+                                    <td>{{ supplier.contact_name }}</td>
                                     <td>{{ supplier.email }}</td>
                                     <td>{{ supplier.phone }}</td>
                                     <td>
@@ -119,7 +119,7 @@
                                             </a>
                                             <a href="{% url 'tour_supplier_delete' supplier.pk %}"
                                                 class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light"
-                                                onclick="return confirm('Are you sure you want to delete this supplier?')">
+                                                title="Delete">
                                                 <i class="icon-base ti tabler-trash icon-22px"></i>
                                             </a>
                                         </div>

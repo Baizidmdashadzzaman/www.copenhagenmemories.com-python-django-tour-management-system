@@ -16,6 +16,9 @@
             <a href="{% url 'booking_list' %}" class="btn btn-secondary">
                 <i class="icon-base ti tabler-arrow-left me-1"></i> Back to List
             </a>
+            <a href="{% url 'booking_delete' booking.pk %}" class="btn btn-danger">
+                <i class="icon-base ti tabler-trash me-1"></i> Delete Booking
+            </a>
         </div>
     </div>
 

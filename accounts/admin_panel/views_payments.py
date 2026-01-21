@@ -73,3 +73,17 @@ def payment_status_update(request, pk):
         'payment': payment,
         'status_choices': Payment._meta.get_field('status').choices
     })
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+@permission_required_with_message('accounts.delete_payment')
+def payment_delete(request, pk):
+    payment = get_object_or_404(Payment, pk=pk)
+    if request.method == 'POST':
+        try:
+            payment.delete()
+            messages.success(request, 'Payment deleted successfully!')
+        except Exception as e:
+            messages.error(request, f'Error deleting payment: {str(e)}')
+        return redirect('payment_list')
+    
+    return render(request, 'accounts/admin/payments/delete_confirm.html', {'payment': payment})

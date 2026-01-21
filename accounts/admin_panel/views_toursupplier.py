@@ -80,7 +80,11 @@ def tour_supplier_edit(request, pk):
 def tour_supplier_delete(request, pk):
     supplier = get_object_or_404(TourSupplier, pk=pk)
     if request.method == 'POST':
-        supplier.delete()
-        messages.success(request, 'Tour Supplier deleted successfully!')
+        try:
+            supplier.delete()
+            messages.success(request, 'Tour Supplier deleted successfully!')
+        except Exception as e:
+            messages.error(request, f'Error deleting tour supplier: {str(e)}')
         return redirect('tour_supplier_list')
-    return redirect('tour_supplier_list')
+    
+    return render(request, 'accounts/admin/tour_suppliers/delete_confirm.html', {'supplier': supplier})

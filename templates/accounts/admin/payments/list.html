@@ -146,9 +146,14 @@
                                                 <i class="icon-base ti tabler-eye icon-22px"></i>
                                             </a>
                                             <a href="{% url 'payment_status_update' payment.pk %}"
-                                                class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light"
+                                                class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light me-1"
                                                 title="Update Status">
                                                 <i class="icon-base ti tabler-edit icon-22px"></i>
+                                            </a>
+                                            <a href="{% url 'payment_delete' payment.pk %}"
+                                                class="btn btn-sm btn-icon btn-text-danger rounded-pill waves-effect waves-light"
+                                                title="Delete Payment">
+                                                <i class="icon-base ti tabler-trash icon-22px"></i>
                                             </a>
                                         </div>
                                     </td>

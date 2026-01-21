@@ -157,3 +157,17 @@ def tour_review_feature_toggle(request, pk):
     messages.success(request, f'Review {"featured" if review.is_featured else "unfeatured"} successfully!')
     return redirect('tour_review_detail', pk=review.pk)
 
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+@permission_required_with_message('accounts.delete_tourreview')
+def tour_review_delete(request, pk):
+    review = get_object_or_404(TourReview, pk=pk)
+    if request.method == 'POST':
+        try:
+            review.delete()
+            messages.success(request, 'Tour Review deleted successfully!')
+        except Exception as e:
+            messages.error(request, f'Error deleting review: {str(e)}')
+        return redirect('tour_review_list')
+    
+    return render(request, 'accounts/admin/tour_reviews/delete_confirm.html', {'review': review})

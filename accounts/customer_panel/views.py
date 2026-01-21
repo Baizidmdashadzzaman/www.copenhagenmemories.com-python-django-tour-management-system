@@ -242,7 +242,7 @@ def get_chat_messages(request):
             'message': msg.message,
             'admin_id': msg.sender_admin.id if msg.sender_admin else None,
             'created_at': msg.created_at.isoformat(),
-            'file': None # File support not implemented in this quick chat
+            'file': None 
         })
         
     return JsonResponse({'status': 'success', 'messages': data})

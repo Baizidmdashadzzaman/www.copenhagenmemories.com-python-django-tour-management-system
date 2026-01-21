@@ -1,0 +1,52 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Delete Tour Review{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Reviews /</span> Delete Tour Review
+    </h4>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-heading"><i class="ti tabler-alert-triangle"></i> Confirm Deletion</h4>
+                        <p>Are you sure you want to delete this tour review? This action cannot be undone.</p>
+                    </div>
+
+                    <div class="card mb-4 bg-light">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ review.title|default:"No Title" }}</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Customer:</strong> {{ review.customer.user.get_full_name|default:review.customer.user.username }}</p>
+                                    <p><strong>Tour:</strong> {{ review.tour.title }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Rating:</strong> <span class="badge bg-label-warning">{{ review.overall_rating }}/5</span></p>
+                                    <p><strong>Status:</strong> <span class="badge bg-label-{% if review.status == 'approved' %}success{% elif review.status == 'pending' %}warning{% else %}danger{% endif %}">{{ review.get_status_display }}</span></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <p class="mb-0"><strong>Review:</strong></p>
+                            <p class="text-muted">{{ review.review }}</p>
+                        </div>
+                    </div>
+
+                    <form method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger me-2">
+                            <i class="ti tabler-trash me-2"></i>Delete Review
+                        </button>
+                        <a href="{% url 'tour_review_list' %}" class="btn btn-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

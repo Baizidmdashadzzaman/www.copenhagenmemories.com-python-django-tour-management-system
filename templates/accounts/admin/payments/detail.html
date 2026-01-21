@@ -13,6 +13,9 @@
             <a href="{% url 'payment_status_update' payment.pk %}" class="btn btn-warning">
                 <i class="icon-base ti tabler-refresh me-1"></i> Update Status
             </a>
+            <a href="{% url 'payment_delete' payment.pk %}" class="btn btn-danger">
+                <i class="icon-base ti tabler-trash me-1"></i> Delete Payment
+            </a>
             <a href="{% url 'payment_list' %}" class="btn btn-secondary">
                 <i class="icon-base ti tabler-arrow-left me-1"></i> Back to List
             </a>

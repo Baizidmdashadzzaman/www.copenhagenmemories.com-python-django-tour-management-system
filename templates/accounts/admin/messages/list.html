@@ -146,6 +146,12 @@
                                                 title="Send Message">
                                                 <i class="icon-base ti tabler-send icon-22px"></i>
                                             </a>
+                                            <a href="{% url 'message_delete' msg.id %}"
+                                                class="btn btn-sm btn-icon btn-text-danger rounded-pill waves-effect waves-light"
+                                                title="Delete Conversation"
+                                                onclick="return confirm('Are you sure you want to delete this conversation? This will delete this primary message.')">
+                                                <i class="icon-base ti tabler-trash icon-22px"></i>
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>

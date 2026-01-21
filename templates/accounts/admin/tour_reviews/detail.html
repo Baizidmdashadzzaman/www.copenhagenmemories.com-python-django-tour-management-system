@@ -13,6 +13,9 @@
             <a href="{% url 'tour_review_status_update' review.pk %}" class="btn btn-warning">
                 <i class="icon-base ti tabler-refresh me-1"></i> Update Status
             </a>
+            <a href="{% url 'tour_review_delete' review.pk %}" class="btn btn-danger">
+                <i class="icon-base ti tabler-trash me-1"></i> Delete Review
+            </a>
             <a href="{% url 'tour_review_list' %}" class="btn btn-secondary">
                 <i class="icon-base ti tabler-arrow-left me-1"></i> Back to List
             </a>

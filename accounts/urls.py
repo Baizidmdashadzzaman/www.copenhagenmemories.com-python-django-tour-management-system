@@ -213,17 +213,20 @@ urlpatterns = [
     path('admin/bookings/<int:pk>/invoice/', booking_views.booking_invoice, name='booking_invoice'),
     path('admin/bookings/<int:pk>/add-payment/', booking_views.booking_add_payment, name='booking_add_payment'),
     path('admin/bookings/<int:pk>/send-invoice/', booking_views.booking_send_invoice, name='booking_send_invoice'),
+    path('admin/bookings/<int:pk>/delete/', booking_views.booking_delete, name='booking_delete'),
 
     # Payment CRUD
     path('admin/payments/', payment_views.payment_list, name='payment_list'),
     path('admin/payments/<int:pk>/', payment_views.payment_detail, name='payment_detail'),
     path('admin/payments/<int:pk>/status/', payment_views.payment_status_update, name='payment_status_update'),
+    path('admin/payments/<int:pk>/delete/', payment_views.payment_delete, name='payment_delete'),
 
     # Tour Review CRUD
     path('admin/tour-reviews/', review_views.tour_review_list, name='tour_review_list'),
     path('admin/tour-reviews/<int:pk>/', review_views.tour_review_detail, name='tour_review_detail'),
     path('admin/tour-reviews/<int:pk>/status/', review_views.tour_review_status_update, name='tour_review_status_update'),
     path('admin/tour-reviews/<int:pk>/feature/', review_views.tour_review_feature_toggle, name='tour_review_feature_toggle'),
+    path('admin/tour-reviews/<int:pk>/delete/', review_views.tour_review_delete, name='tour_review_delete'),
 
     # Coupon CRUD
     path('admin/coupons/', coupon_views.coupon_list, name='coupon_list'),
