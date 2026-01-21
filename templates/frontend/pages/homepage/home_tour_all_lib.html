@@ -1,0 +1,143 @@
+{% load static %}
+{% load translate_tags %}
+
+<section class="section all-tours-section">
+    <div class="container">
+        <div class="section-header text-center">
+            <div class="d-flex align-items-center justify-content-center mb-2">
+                <span class="text-bar"></span>
+                <p class="mb-0 fw-medium">{% translate "Explore Our Tours" %}</p>
+                <span class="text-bar"></span>
+            </div>
+            <h2>{% translate "All Available Tours" %}<span class="text-primary">.</span></h2>
+            <p class="mt-2 text-muted">{% translate "Discover the best experiences Copenhagen has to offer with our carefully curated tours." %}</p>
+        </div>
+
+        <div class="row">
+            {% if all_tours %}
+                {% for tour in all_tours %}
+                <div class="col-lg-4 col-md-6 mb-4 d-flex">
+                    <div class="place-item flex-fill shadow-sm border-0">
+                        <div class="place-img">
+                            {% with tour_images=tour.images.all %}
+                                {% if tour_images %}
+                                    <div class="img-slider image-slide owl-carousel nav-center">
+                                        {% for tour_image in tour_images|slice:":5" %}
+                                        <div class="slide-images">
+                                            <a href="{% url 'tour_detail' tour.id %}">
+                                                <img src="{{ tour_image.image.url }}" class="img-fluid" alt="{% if current_lang == 'dk' and tour_image.caption_dk %}{{ tour_image.caption_dk }}{% else %}{{ tour_image.caption|default:tour.title }}{% endif %}"
+                                                style="height: 250px; object-fit: cover;">
+                                            </a>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                {% elif tour.main_image %}
+                                    <div class="img-slider image-slide owl-carousel nav-center">
+                                        <div class="slide-images">
+                                            <a href="{% url 'tour_detail' tour.id %}">
+                                                <img src="{{ tour.main_image.url }}" class="img-fluid" alt="{% if current_lang == 'dk' and tour.title_dk %}{{ tour.title_dk }}{% else %}{{ tour.title }}{% endif %}"
+                                                style="height: 250px; object-fit: cover;">
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="img-slider image-slide owl-carousel nav-center">
+                                        <div class="slide-images">
+                                            <a href="{% url 'tour_detail' tour.id %}">
+                                                <img src="{% static 'frontend/assets/img/hotels/hotel-01.jpg' %}" class="img-fluid" alt="{{ tour.title }}" style="height: 250px; object-fit: cover;">
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endwith %}
+
+                            <div class="fav-item">
+                                {% if tour.is_featured %}
+                                    <span class="badge bg-info d-inline-flex align-items-center">
+                                        <i class="isax isax-ranking me-1"></i>{% translate "Featured" %}
+                                    </span>
+                                {% elif tour.is_bestseller %}
+                                    <span class="badge bg-success d-inline-flex align-items-center">
+                                        <i class="isax isax-star me-1"></i>{% translate "Bestseller" %}
+                                    </span>
+                                {% endif %}
+                                <a href="javascript:void(0);" class="fav-icon">
+                                    <i class="isax isax-heart5"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="place-content">
+                            <div class="d-flex align-items-center mb-1">
+                                {% if tour.calculated_average_rating > 0 %}
+                                    <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">{{ tour.calculated_average_rating|floatformat:1 }}</span>
+                                    <p class="fs-14">({{ tour.calculated_total_reviews }} {% translate "Reviews" %})</p>
+                                {% else %}
+                                    <p class="fs-14 text-muted">{% translate "No reviews yet" %}</p>
+                                {% endif %}
+                            </div>
+
+                            <h5 class="mb-1 text-truncate">
+                                <a href="{% url 'tour_detail' tour.id %}">
+                                    {% if current_lang == 'dk' and tour.title_dk %}
+                                        {{ tour.title_dk }}
+                                    {% else %}
+                                        {{ tour.title }}
+                                    {% endif %}
+                                </a>
+                            </h5>
+
+                            <p class="d-flex align-items-center mb-2 text-truncate">
+                                <i class="isax isax-location5 me-2"></i>
+                                {% if tour.city %}
+                                    {% if current_lang == 'dk' and tour.city.name_dk %}
+                                        {{ tour.city.name_dk }}
+                                    {% else %}
+                                        {{ tour.city.name }}
+                                    {% endif %}
+                                    {% if tour.city.country %}
+                                        , {{ tour.city.country.name }}
+                                    {% endif %}
+                                {% elif tour.destination_region %}
+                                    {% if current_lang == 'dk' and tour.destination_region.name_dk %}
+                                        {{ tour.destination_region.name_dk }}
+                                    {% else %}
+                                        {{ tour.destination_region.name }}
+                                    {% endif %}
+                                {% else %}
+                                    {% translate "Location not specified" %}
+                                {% endif %}
+                            </p>
+
+                            <div class="d-flex align-items-center justify-content-between border-top pt-3 mt-auto">
+                                <div>
+                                    <h5 class="text-primary text-nowrap mb-0">
+                                        {{ tour.base_price }} {{ tour.currency }}
+                                        <span class="fs-14 fw-normal text-muted">/ {% translate "Person" %}</span>
+                                    </h5>
+                                    {% if tour.discount_percentage > 0 %}
+                                        <p class="fs-12 text-muted text-decoration-line-through mb-0">
+                                            {{ tour.original_price|floatformat:2 }} {{ tour.currency }}
+                                        </p>
+                                    {% endif %}
+                                </div>
+                                <a href="{% url 'tour_detail' tour.id %}" class="link-primary fw-medium">{% translate "Book Now" %}<i class="isax isax-arrow-right-3 ms-1"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12 text-center py-5">
+                    <p class="text-muted">{% translate "No tours available at the moment." %}</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'tour_list_fronted' %}" class="btn btn-outline-primary px-4">
+                {% translate "View All Tours" %}<i class="isax isax-arrow-right-3 ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>

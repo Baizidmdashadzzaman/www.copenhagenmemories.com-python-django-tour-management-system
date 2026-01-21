@@ -1684,12 +1684,18 @@ Template Name: DreamsTour - Bootstrap Template
 		setCountdown()
 	}
 
-  if($('.read-more').length > 0) {
+	if($('.read-more').length > 0) {
 		$(".more-text").hide();
-		$(".more-link").on("click", function() {
-			$(this).addClass("less");
-	 		$(this).text($(this).text() === "Show Less" ? "Show More" : "Show Less");
-	 		$(".more-text").slideToggle(900);
+		$(".more-button, .more-link").on("click", function() {
+			$(this).toggleClass("less");
+            var isLess = $(this).hasClass("less");
+            
+            // Get translations from data attributes if available, else fallback to English
+            var showMoreText = $(this).data('show-more') || "Show More";
+            var showLessText = $(this).data('show-less') || "Show Less";
+            
+	 		$(this).text(isLess ? showLessText : showMoreText);
+	 		$(this).siblings(".more-text").slideToggle(900);
 		});	  	
 	}
 

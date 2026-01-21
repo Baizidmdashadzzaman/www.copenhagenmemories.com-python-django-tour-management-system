@@ -31,20 +31,17 @@
                         <td>{% if step.duration_minutes %}{{ step.duration_minutes }} min{% else %}-{% endif %}</td>
                         <td>{{ step.location|default:"-" }}</td>
                         <td>
-                            <div class="dropdown">
-                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                    data-bs-toggle="dropdown">
-                                    <i class="ti tabler-dots-vertical"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="{% url 'tour_itinerary_edit' tour.id step.id %}">
-                                        <i class="ti tabler-pencil me-1"></i> Edit
-                                    </a>
-                                    <a class="dropdown-item text-danger"
-                                        href="{% url 'tour_itinerary_delete' tour.id step.id %}">
-                                        <i class="ti tabler-trash me-1"></i> Delete
-                                    </a>
-                                </div>
+                            <div class="d-inline-block text-nowrap">
+                                <a href="{% url 'tour_itinerary_edit' tour.id step.id %}"
+                                    class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light me-1"
+                                    title="Edit">
+                                    <i class="icon-base ti tabler-edit icon-22px"></i>
+                                </a>
+                                <a href="{% url 'tour_itinerary_delete' tour.id step.id %}"
+                                    class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light"
+                                    title="Delete">
+                                    <i class="icon-base ti tabler-trash icon-22px"></i>
+                                </a>
                             </div>
                         </td>
                     </tr>

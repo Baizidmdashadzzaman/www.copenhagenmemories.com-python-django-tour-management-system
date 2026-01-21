@@ -133,6 +133,13 @@ def home(request):
     ).order_by('rank', '-created_at')
     sliders = Slider.objects.filter(status='active').order_by('-created_at')
     
+    all_tours = Tour.objects.filter(status='active').annotate(
+        calculated_average_rating=Coalesce(Avg('reviews__overall_rating'), Value(0.0)),
+        calculated_total_reviews=Count('reviews')
+    ).select_related(
+        'supplier', 'category', 'destination_region', 'city', 'city__country'
+    ).prefetch_related('images').order_by('-created_at')[:12]
+    
     context = {
         'reviews': reviews,
         'featured_blogs': featured_blogs,
@@ -144,6 +151,7 @@ def home(request):
         'countries': countries,
         'feature_sections': feature_sections,
         'sliders': sliders,
+        'all_tours': all_tours,
     }
     return render(request, 'frontend/pages/home.html', context)
 

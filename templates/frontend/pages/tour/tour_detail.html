@@ -1,6 +1,12 @@
 {% extends 'frontend/layout/base.html' %}
 
-{% block title %}{{ tour.title }} - Tour Detail{% endblock %}
+{% block title %}
+    {% if current_lang == 'dk' and tour.title_dk %}
+        {{ tour.title_dk }}
+    {% else %}
+        {{ tour.title }}
+    {% endif %} - Tour Detail
+{% endblock %}
 
 {% block content %}
 {% load static %}
@@ -10,12 +16,24 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title mb-2">{% translate "Tour Details" %}</h2>
+                <h2 class="breadcrumb-title mb-2">
+                    {% if current_lang == 'dk' and tour.title_dk %}
+                        {{ tour.title_dk }}
+                    {% else %}
+                        {{ tour.title }}
+                    {% endif %}
+                </h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center mb-0">
                         <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="isax isax-home5"></i></a></li>
                         <li class="breadcrumb-item"><a href="{% url 'tour_list' %}">{% translate "Tours" %}</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">{{ tour.title }}</li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            {% if current_lang == 'dk' and tour.title_dk %}
+                                {{ tour.title_dk }}
+                            {% else %}
+                                {{ tour.title }}
+                            {% endif %}
+                        </li>
                     </ol>
                 </nav>
             </div>
@@ -64,7 +82,11 @@
                         <div class="d-flex align-items-center justify-content-between mb-2">
                             <div class="mb-2">
                                 <h4 class="mb-1 d-flex align-items-center flex-wrap mb-2">
-                                    {{ tour.title }}
+                                    {% if current_lang == 'dk' and tour.title_dk %}
+                                        {{ tour.title_dk }}
+                                    {% else %}
+                                        {{ tour.title }}
+                                    {% endif %}
                                     {% if tour.is_featured %}
                                     <span class="badge badge-xs bg-success rounded-pill ms-2"><i class="isax isax-ticket-star me-1"></i>{% translate "Featured" %}</span>
                                     {% endif %}
@@ -105,16 +127,24 @@
                     <div class="bg-light-200 card-bg-light mb-4">
                         <h5 class="fs-18 mb-3">{% translate "Description" %}</h5>
                         <div class="mb-2">
-                            <p>{{ tour.description|truncatewords:50 }}</p>
+                            <p>
+                                {% if current_lang == 'dk' and tour.description_dk %}
+                                    {{ tour.description_dk|safe }}
+                                {% else %}
+                                    {{ tour.description|safe }}
+                                {% endif %}
+                            </p>
                         </div>
-                        {% if tour.description|wordcount > 50 %}
+                        <!-- {% if tour.description|wordcount > 50 %}
                         <div class="read-more">
                             <div class="more-text">
-                                <p>{{ tour.description }}</p>
+                                <p>{{ tour.description|safe }}</p>
                             </div>
                             <a href="#" class="fs-14 fw-medium more-link text-decoration-underline mb-2">{% translate "Show More" %}</a>
                         </div>
-                        {% endif %}
+                        {% else %}
+                        <p>{{ tour.description|safe }}</p>
+                        {% endif %} -->
                     </div>
                     <!-- /Description -->
 
@@ -128,7 +158,13 @@
                                 <span class="avatar avatar-md bg-primary-transparent rounded-circle me-2">
 									<i class="isax isax-send-sqaure-2 fs-16"></i>
 								</span>
-                                <p>{{ highlight.highlight }}</p>
+                                <p>
+                                    {% if current_lang == 'dk' and highlight.highlight_dk %}
+                                        {{ highlight.highlight_dk }}
+                                    {% else %}
+                                        {{ highlight.highlight }}
+                                    {% endif %}
+                                </p>
                             </div>
                             {% endfor %}
                         </div>
@@ -149,14 +185,37 @@
                                         <div class="flow-content">
                                             <div class="d-flex align-items-center justify-content-between mb-2">
                                                 <div>
-                                                    <h6 class="fw-medium mb-1">{{ step.title }}</h6>
+                                                    <h6 class="fw-medium mb-1">
+                                                        {% if current_lang == 'dk' and step.title_dk %}
+                                                            {{ step.title_dk }}
+                                                        {% else %}
+                                                            {{ step.title }}
+                                                        {% endif %}
+                                                    </h6>
                                                     {% if step.duration_minutes %}
                                                     <p>{% translate "Duration" %}: {{ step.duration_minutes }} minutes</p>
                                                     {% endif %}
                                                 </div>
                                             </div>
                                             {% if step.description %}
-                                            <p>{{ step.description }}</p>
+                                            <div class="read-more">
+                                                <div class="more-text">
+                                                    <p>
+                                                        {% if current_lang == 'dk' and step.description_dk %}
+                                                            {{ step.description_dk }}
+                                                        {% else %}
+                                                            {{ step.description }}
+                                                        {% endif %}
+                                                    </p>
+                                                </div>
+                                                <a href="javascript:void(0);" 
+                                                   class="fs-14 fw-medium more-link text-decoration-underline mb-2"
+                                                   data-show-more="{% translate 'Show More' %}"
+                                                   data-show-less="{% translate 'Show Less' %}">
+                                                    {% translate "Show More" %}
+                                                </a>
+                                            </div>
+                                            
                                             {% endif %}
                                         </div>
                                     </div>
@@ -173,24 +232,62 @@
                     <div class="bg-light-200 card-bg-light mb-4">
                         <h5 class="fs-18 mb-3">{% translate "Includes & Excludes" %}</h5>
                         <div class="row gy-2">
-                            <div class="col-md-6">
-                                {% for item in included_items %}
-                                <p class="d-flex align-items-center mb-2">
-                                    <i class="isax isax-tick-square5 text-success me-2"></i> {{ item.item }}
-                                </p>
-                                {% endfor %}
-                            </div>
-                            <div class="col-md-6">
-                                {% for item in excluded_items %}
-                                <p class="d-flex align-items-center mb-2">
-                                    <i class="isax isax-close-square5 text-danger me-2"></i> {{ item.item }}
-                                </p>
-                                {% endfor %}
-                            </div>
+                             <div class="col-md-6">
+                                 {% for item in included_items %}
+                                 <p class="d-flex align-items-center mb-2">
+                                     <i class="isax isax-tick-square5 text-success me-2"></i> 
+                                     {% if current_lang == 'dk' and item.item_dk %}
+                                         {{ item.item_dk }}
+                                     {% else %}
+                                         {{ item.item }}
+                                     {% endif %}
+                                 </p>
+                                 {% endfor %}
+                             </div>
+                             <div class="col-md-6">
+                                 {% for item in excluded_items %}
+                                 <p class="d-flex align-items-center mb-2">
+                                     <i class="isax isax-close-square5 text-danger me-2"></i> 
+                                     {% if current_lang == 'dk' and item.item_dk %}
+                                         {{ item.item_dk }}
+                                     {% else %}
+                                         {{ item.item }}
+                                     {% endif %}
+                                 </p>
+                                 {% endfor %}
+                             </div>
                         </div>
                     </div>
                     {% endif %}
                     <!-- /Includes & Excludes -->
+                    
+                    <!-- Requirements -->
+                    {% if requirements %}
+                    <div class="bg-light-200 card-bg-light mb-4">
+                        <h5 class="fs-18 mb-3">{% translate "Requirements" %}</h5>
+                        <div class="requirements-list">
+                            {% for req in requirements %}
+                            <div class="d-flex align-items-start mb-2">
+                                <i class="isax isax-info-circle text-warning fs-20 me-2 mt-1"></i>
+                                <div>
+                                    <p class="mb-0">
+                                        {% if current_lang == 'dk' and req.requirement_dk %}
+                                            {{ req.requirement_dk }}
+                                        {% else %}
+                                            {{ req.requirement }}
+                                        {% endif %}
+                                        
+                                        {% if req.is_mandatory %}
+                                        <span class="badge bg-danger-transparent rounded-pill ms-2 fs-10">{% translate "Mandatory" %}</span>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    <!-- /Requirements -->
 
                     <!-- Gallery -->
                     {% if images %}
@@ -225,7 +322,13 @@
                             {% if tour.meeting_point %}
                             <div class="mt-3">
                                 <h6 class="fw-medium">{% translate "Meeting Point" %} :</h6>
-                                <p>{{ tour.meeting_point }}</p>
+                                <p>
+                                    {% if current_lang == 'dk' and tour.meeting_point_dk %}
+                                        {{ tour.meeting_point_dk }}
+                                    {% else %}
+                                        {{ tour.meeting_point }}
+                                    {% endif %}
+                                </p>
                             </div>
                             {% endif %}
                         </div>
@@ -241,12 +344,22 @@
                             <div class="accordion-item {% if forloop.first %}show{% endif %} mb-2">
                                 <div class="accordion-header">
                                     <button class="accordion-button fw-medium {% if not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapse-{{ forloop.counter }}" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}" aria-controls="faq-collapse-{{ forloop.counter }}">
-                                        {{ faq.question }}
+                                        {% if current_lang == 'dk' and faq.question_dk %}
+                                            {{ faq.question_dk }}
+                                        {% else %}
+                                            {{ faq.question }}
+                                        {% endif %}
                                     </button>
                                 </div>
                                 <div id="faq-collapse-{{ forloop.counter }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" data-bs-parent="#accordionFaq">
                                     <div class="accordion-body">
-                                        <p class="mb-0">{{ faq.answer }}</p>
+                                        <p class="mb-0">
+                                            {% if current_lang == 'dk' and faq.answer_dk %}
+                                                {{ faq.answer_dk }}
+                                            {% else %}
+                                                {{ faq.answer }}
+                                            {% endif %}
+                                        </p>
                                     </div>
                                 </div>
                             </div>

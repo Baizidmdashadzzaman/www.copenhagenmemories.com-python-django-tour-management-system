@@ -4,6 +4,8 @@
 {% block page_title %}{{ title }}{% endblock %}
 
 {% block admin_content %}
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
 <div class="">
     <h4 class="py-3 mb-4">
         <span class="text-muted fw-light">Tour Management /</span> {{ title }}
@@ -35,15 +37,205 @@
 
                     <h6>1. Basic Details</h6>
                     <div class="row g-6">
-                        {% for field in form %}
-                            {% if field.name not in 'id' %}
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                {{ field }}
-                                {% if field.help_text %}<div class="form-text">{{ field.help_text|safe }}</div>{% endif %}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+                            {{ form.title }}
+                            {% if form.title.help_text %}<div class="form-text">{{ form.title.help_text|safe }}</div>{% endif %}
+                            {% for error in form.title.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.title_dk.id_for_label }}">{{ form.title_dk.label }}</label>
+                            {{ form.title_dk }}
+                            {% if form.title_dk.help_text %}<div class="form-text">{{ form.title_dk.help_text|safe }}</div>{% endif %}
+                            {% for error in form.title_dk.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" for="{{ form.supplier.id_for_label }}">{{ form.supplier.label }}</label>
+                            {{ form.supplier }}
+                            {% for error in form.supplier.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" for="{{ form.category.id_for_label }}">{{ form.category.label }}</label>
+                            {{ form.category }}
+                            {% for error in form.category.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" for="{{ form.destination_region.id_for_label }}">{{ form.destination_region.label }}</label>
+                            {{ form.destination_region }}
+                            {% for error in form.destination_region.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" for="{{ form.city.id_for_label }}">{{ form.city.label }}</label>
+                            {{ form.city }}
+                            {% for error in form.city.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                    </div>
+
+                    <h6 class="mt-4">2. Descriptions</h6>
+                    <div class="row g-6">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.short_description.id_for_label }}">{{ form.short_description.label }}</label>
+                            {{ form.short_description }}
+                            {% for error in form.short_description.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.short_description_dk.id_for_label }}">{{ form.short_description_dk.label }}</label>
+                            {{ form.short_description_dk }}
+                            {% for error in form.short_description_dk.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-12 mb-3" style="padding-bottom: 80px;">
+                            <label class="form-label" for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                            <div id="editor-content" style="min-height: 200px;">{{ form.description.value|default:''|safe }}</div>
+                            <div class="d-none">
+                                {{ form.description }}
+                            </div>
+                            {% for error in form.description.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-12 mb-3" style="padding-bottom: 80px;">
+                            <label class="form-label" for="{{ form.description_dk.id_for_label }}">{{ form.description_dk.label }}</label>
+                            <div id="editor-content-dk" style="min-height: 200px;">{{ form.description_dk.value|default:''|safe }}</div>
+                            <div class="d-none">
+                                {{ form.description_dk }}
+                            </div>
+                            {% for error in form.description_dk.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                    </div>
+
+                    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            var toolbarOptions = [
+                                [{ 'header': [1, 2, 3, false] }],
+                                ['bold', 'italic', 'underline', 'strike'],
+                                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                [{ 'indent': '-1' }, { 'indent': '+1' }],
+                                ['link', 'image', 'video'],
+                                ['clean']
+                            ];
+
+                            // Description English
+                            var quillContent = new Quill('#editor-content', {
+                                theme: 'snow',
+                                modules: { toolbar: toolbarOptions }
+                            });
+                            var hiddenContentInput = document.querySelector('#id_description');
+                            
+                            quillContent.on('text-change', function () {
+                                hiddenContentInput.value = quillContent.root.innerHTML;
+                            });
+
+                            // Description Danish
+                            var quillContentDk = new Quill('#editor-content-dk', {
+                                theme: 'snow',
+                                modules: { toolbar: toolbarOptions }
+                            });
+                            var hiddenContentDkInput = document.querySelector('#id_description_dk');
+
+                            quillContentDk.on('text-change', function () {
+                                hiddenContentDkInput.value = quillContentDk.root.innerHTML;
+                            });
+
+                            // Ensure the hidden input is updated on form submission
+                            var form = document.querySelector('form');
+                            if (form) {
+                                form.addEventListener('submit', function () {
+                                    hiddenContentInput.value = quillContent.root.innerHTML;
+                                    hiddenContentDkInput.value = quillContentDk.root.innerHTML;
+                                });
+                            }
+                        });
+                    </script>
+
+                    <h6 class="mt-4">3. Media & Location</h6>
+                    <div class="row g-6">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.main_image.id_for_label }}">{{ form.main_image.label }}</label>
+                            {{ form.main_image }}
+                            {% if tour.main_image %}
+                            <div class="mt-2">
+                                <img src="{{ tour.main_image.url }}" alt="Main Image" class="rounded" style="height: 100px;">
                             </div>
                             {% endif %}
-                        {% endfor %}
+                            {% for error in form.main_image.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.video_url.id_for_label }}">{{ form.video_url.label }}</label>
+                            {{ form.video_url }}
+                            {% for error in form.video_url.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label" for="{{ form.map_location.id_for_label }}">{{ form.map_location.label }}</label>
+                            {{ form.map_location }}
+                            <div class="form-text">Paste the Google Maps Embed iframe src URL.</div>
+                            {% for error in form.map_location.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                    </div>
+
+                    <h6 class="mt-4">4. Logistics & Requirements</h6>
+                    <div class="row g-6">
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" for="{{ form.duration_hours.id_for_label }}">{{ form.duration_hours.label }}</label>
+                            {{ form.duration_hours }}
+                            {% for error in form.duration_hours.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" for="{{ form.duration_text.id_for_label }}">{{ form.duration_text.label }}</label>
+                            {{ form.duration_text }}
+                            {% for error in form.duration_text.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" for="{{ form.min_participants.id_for_label }}">{{ form.min_participants.label }}</label>
+                            {{ form.min_participants }}
+                            {% for error in form.min_participants.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" for="{{ form.max_participants.id_for_label }}">{{ form.max_participants.label }}</label>
+                            {{ form.max_participants }}
+                            {% for error in form.max_participants.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.age_restriction.id_for_label }}">{{ form.age_restriction.label }}</label>
+                            {{ form.age_restriction }}
+                            {% for error in form.age_restriction.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.difficulty_level.id_for_label }}">{{ form.difficulty_level.label }}</label>
+                            {{ form.difficulty_level }}
+                            {% for error in form.difficulty_level.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                    </div>
+
+                    <h6 class="mt-4">5. Pricing & Status</h6>
+                    <div class="row g-6">
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" for="{{ form.base_price.id_for_label }}">{{ form.base_price.label }}</label>
+                            {{ form.base_price }}
+                            {% for error in form.base_price.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" for="{{ form.currency.id_for_label }}">{{ form.currency.label }}</label>
+                            {{ form.currency }}
+                            {% for error in form.currency.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" for="{{ form.discount_percentage.id_for_label }}">{{ form.discount_percentage.label }}</label>
+                            {{ form.discount_percentage }}
+                            {% for error in form.discount_percentage.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" for="{{ form.status.id_for_label }}">{{ form.status.label }}</label>
+                            {{ form.status }}
+                            {% for error in form.status.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-check mt-3">
+                                {{ form.is_featured }}
+                                <label class="form-check-label" for="{{ form.is_featured.id_for_label }}">
+                                    {{ form.is_featured.label }}
+                                </label>
+                            </div>
+                            {% for error in form.is_featured.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
                     </div>
 
                     <div class="pt-6 mt-3">

@@ -67,13 +67,13 @@
                     
                     <h6>Description</h6>
                     <div class="mb-4">
-                        {{ tour.description|linebreaks }}
+                        {{ tour.description|safe }}
                     </div>
 
                     {% if tour.description_dk %}
                     <h6>Description (Danish)</h6>
                     <div class="mb-4 text-muted">
-                        {{ tour.description_dk|linebreaks }}
+                        {{ tour.description_dk|safe }}
                     </div>
                     {% endif %}
                 </div>
