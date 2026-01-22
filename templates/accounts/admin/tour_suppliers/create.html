@@ -1,18 +1,18 @@
 {% extends 'accounts/admin/layout.html' %}
 {% load static %}
 
-{% block page_title %}Create Tour Supplier{% endblock %}
+{% block page_title %}Create Tour Guide{% endblock %}
 
 {% block admin_content %}
 <div class="">
     <h4 class="py-3 mb-4">
-        <span class="text-muted fw-light">Partners /</span> Create New Supplier
+        <span class="text-muted fw-light">Tour Guide /</span> Create New Guide
     </h4>
 
     <div class="row">
         <div class="col-xl-12">
             <div class="card mb-6">
-                <h5 class="card-header">Supplier Information</h5>
+                <h5 class="card-header">Guide Information</h5>
                 <form class="card-body" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
