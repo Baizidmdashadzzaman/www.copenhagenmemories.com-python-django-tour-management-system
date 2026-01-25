@@ -1,0 +1,139 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block admin_content %}
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Management /</span> {{ title }}
+    </h4>
+
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card mb-6">
+                <h5 class="card-header">{{ title }}</h5>
+                <form class="card-body" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <h6 class="alert-heading mb-1">Please correct the errors below</h6>
+                        <ul class="mb-0">
+                            {% for field in form %}
+                            {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                            {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+
+                    <div class="row g-6">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+                            {{ form.name }}
+                            {% for error in form.name.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                            {{ form.email }}
+                            {% for error in form.email.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
+                            {{ form.phone }}
+                            {% for error in form.phone.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.image.id_for_label }}">{{ form.image.label }}</label>
+                            {{ form.image }}
+                            {% if team_member.image %}
+                            <div class="mt-2 text-center">
+                                <img src="{{ team_member.image.url }}" alt="Team Member" class="rounded rounded-circle" style="height: 100px; width: 100px; object-fit: cover;">
+                            </div>
+                            {% endif %}
+                            {% for error in form.image.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label" for="{{ form.address.id_for_label }}">{{ form.address.label }}</label>
+                            {{ form.address }}
+                            {% for error in form.address.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-12 mb-3" style="padding-bottom: 50px;">
+                            <label class="form-label">Full Details</label>
+                            <div id="editor-full-details" style="min-height: 250px;">{{ form.full_details.value|default:''|safe }}</div>
+                            <div class="d-none">
+                                {{ form.full_details }}
+                            </div>
+                            {% for error in form.full_details.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="pt-6 mt-3">
+                        <button type="submit" class="btn btn-primary me-4 waves-effect waves-light">
+                             Save
+                        </button>
+                        <a href="{% url 'team_member_list' %}" class="btn btn-label-secondary waves-effect">
+                             Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var toolbarOptions = [
+            [{ 'header': [1, 2, 3, false] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            [{ 'indent': '-1' }, { 'indent': '+1' }],
+            ['link', 'image', 'video'],
+            ['clean']
+        ];
+
+        var quillDetails = new Quill('#editor-full-details', {
+            theme: 'snow',
+            modules: { toolbar: toolbarOptions }
+        });
+        var hiddenDetailsInput = document.querySelector('#full_details_quill');
+        
+        quillDetails.on('text-change', function () {
+            hiddenDetailsInput.value = quillDetails.root.innerHTML;
+        });
+
+        var form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', function () {
+                hiddenDetailsInput.value = quillDetails.root.innerHTML;
+            });
+        }
+    });
+</script>
+
+<style>
+    .card .card-body input,
+    .card .card-body select,
+    .card .card-body textarea,
+    .card .card-body .form-control,
+    .card .card-body .form-select {
+        padding: 0.6rem 0.9rem;
+        border-radius: 0.5rem;
+    }
+    
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}

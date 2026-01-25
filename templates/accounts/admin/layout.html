@@ -365,7 +365,14 @@
                                             <div data-i18n="Customers">Customers</div>
                                         </a>
                                     </li>
+                                    <li class="menu-item {% if 'team-members' in request.path %}active{% endif %}">
+                                        <a href="{% url 'team_member_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-user-check"></i>
+                                            <div data-i18n="Team Members">Team Members</div>
+                                        </a>
+                                    </li>
                                     <li class="menu-item {% if 'message' in request.path %}active{% endif %}">
+
                                         <a href="{% url 'message_list' %}" class="menu-link">
                                             <i class="menu-icon icon-base ti tabler-message"></i>
                                             <div data-i18n="Messages">Messages</div>

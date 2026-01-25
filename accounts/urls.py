@@ -21,7 +21,9 @@ from accounts.admin_panel import views_messages as message_views
 from accounts.admin_panel import views_feature_section as feature_section_views
 from accounts.admin_panel import views_website_menu as website_menu_views
 from accounts.admin_panel import views_faq as faq_views
+from accounts.admin_panel import views_team as team_member_views
 from accounts import views_frontend
+
 from accounts.supplier_panel import views as supplier_views
 
 urlpatterns = [
@@ -288,5 +290,12 @@ urlpatterns = [
     path('admin/faqs/create/', faq_views.faq_create, name='faq_create'),
     path('admin/faqs/<int:pk>/edit/', faq_views.faq_edit, name='faq_edit'),
     path('admin/faqs/<int:pk>/delete/', faq_views.faq_delete, name='faq_delete'),
+
+    # Team Member CRUD
+    path('admin/team-members/', team_member_views.team_member_list, name='team_member_list'),
+    path('admin/team-members/create/', team_member_views.team_member_create, name='team_member_create'),
+    path('admin/team-members/<int:pk>/edit/', team_member_views.team_member_edit, name='team_member_edit'),
+    path('admin/team-members/<int:pk>/delete/', team_member_views.team_member_delete, name='team_member_delete'),
 ]
+
 

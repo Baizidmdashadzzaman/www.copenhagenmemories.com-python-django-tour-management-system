@@ -4,7 +4,7 @@ from django.db.models import Q, Avg, Count, Value
 from django.db.models.functions import Coalesce
 from accounts.models import Tour, Category, DestinationRegion, City, TourReview
 
-from accounts.models import BlogPost, ContactUs, SiteSetting, CustomerReviewStatic, FAQ, TourSupplier, Country, FeatureSection, Slider,Page, Tour
+from accounts.models import BlogPost, ContactUs, SiteSetting, CustomerReviewStatic, FAQ, TourSupplier, Country, FeatureSection, Slider,Page, Tour, TeamMember
 from django.db.models import Prefetch
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import translation, timezone
@@ -132,6 +132,7 @@ def home(request):
         ).prefetch_related('images')),
     ).order_by('rank', '-created_at')
     sliders = Slider.objects.filter(status='active').order_by('-created_at')
+    team_members = TeamMember.objects.all().order_by('-created_at')
     
     all_tours = Tour.objects.filter(status='active').annotate(
         calculated_average_rating=Coalesce(Avg('reviews__overall_rating'), Value(0.0)),
@@ -152,7 +153,9 @@ def home(request):
         'feature_sections': feature_sections,
         'sliders': sliders,
         'all_tours': all_tours,
+        'team_members': team_members,
     }
+
     return render(request, 'frontend/pages/home.html', context)
 
 def sitemap(request):

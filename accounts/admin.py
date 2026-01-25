@@ -5,8 +5,15 @@ from .models import (
     TourIncluded, TourExcluded, TourItinerary, TourRequirement, TourFAQ, TourPricing,
     TourSchedule, TourBlackoutDate, Booking, BookingParticipant, Payment, TourReview,
     ReviewHelpful, Wishlist, Coupon, CouponUsage, Notification, BlogPost, TourView, SearchLog,
-    CustomerMessage, FeatureSection, FeatureSectionTour, WebsiteMenu, WebsiteSubMenu, FAQ
+    CustomerMessage, FeatureSection, FeatureSectionTour, WebsiteMenu, WebsiteSubMenu, FAQ, TeamMember
 )
+
+@admin.register(TeamMember)
+class TeamMemberAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'phone', 'created_at', 'updated_at')
+    search_fields = ('name', 'email', 'phone', 'address')
+    readonly_fields = ('created_at', 'updated_at')
+
 
 
 # Register your models here.

@@ -1,0 +1,49 @@
+{% load static %}
+{% load translate_tags %}
+
+<section class="section all-tours-section">
+    <div class="container">
+        <div class="section-header text-center">
+            <div class="d-flex align-items-center justify-content-center mb-2">
+                <span class="text-bar"></span>
+                <p class="mb-0 fw-medium">{% translate "Tour guides" %}</p>
+                <span class="text-bar"></span>
+            </div>
+            <h2>{% translate "Our Popular Tour guides" %}<span class="text-primary">.</span></h2>
+            <p class="mt-2 text-muted">{% translate "Meet our team of passionate and knowledgeable tour guides who are dedicated to helping you plan your perfect Copenhagen experience." %}</p>
+        </div>
+
+        <div class="row">
+            {% for member in team_members %}
+            <div class="col-lg-4 col-md-6 mb-4 d-flex">
+                <div class="expert-item mb-4" style="width: 100%;">
+                    <div class="expert-img">
+                        <div class="bg-orange-100 position-relative">
+                            {% if member.image %}
+                            <img src="{{ member.image.url }}" alt="{{ member.name }}" style="height: 350px; width: 100%; object-fit: cover; border-radius: 10px;">
+                            {% else %}
+                            <img src="{% static 'frontend/assets/img/expert/expert-02.png' %}" alt="{{ member.name }}" style="height: 350px; width: 100%; object-fit: cover; border-radius: 10px;">
+                            {% endif %}
+                            <span class="bg-orange circle-shape"></span>
+                        </div>
+                    </div>
+                    <div class="expert-content">
+                        <div class="d-flex align-items-center mb-1">
+                            <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">5.0</span>
+                        </div>
+                        <h5 class="mb-1"><a>{{ member.name }}</a></h5>
+                        <p class="d-flex align-items-center"><i class="ti ti-map-pin me-2"></i>{{ member.address }}</p>
+
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted">{% translate "No experts found." %}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        
+    </div>
+</section>
