@@ -41,7 +41,7 @@
     <div class="container">
         <div class="row">
             <!-- Souvenir Image -->
-            <div class="col-lg-6 mb-4">
+            <div class="col-lg-6 mb-4 h-100" >
                 <div class="souvenir-image-holder border rounded overflow-hidden">
                     {% if souvenir.image %}
                         <img src="{{ souvenir.image.url }}" alt="{% if current_lang == 'dk' and souvenir.title_dk %}{{ souvenir.title_dk }}{% else %}{{ souvenir.title }}{% endif %}" class="img-fluid w-100" style="object-fit: cover; min-height: 400px;">
@@ -52,7 +52,7 @@
             </div>
 
             <!-- Souvenir Details -->
-            <div class="col-lg-6">
+            <div class="col-lg-6 h-100">
                 <div class="souvenir-details-content p-4 border rounded bg-white">
                     <h2 class="mb-3">
                         {% if current_lang == 'dk' and souvenir.title_dk %}
@@ -75,17 +75,6 @@
                         {% else %}
                             <span class="text-danger"><i class="isax isax-close-circle me-2"></i>{% translate "Out of Stock" %}</span>
                         {% endif %}
-                    </div>
-
-                    <div class="description mb-5">
-                        <h5 class="fw-bold mb-3">{% translate "Description" %}</h5>
-                        <div class="text-muted">
-                            {% if current_lang == 'dk' and souvenir.description_dk %}
-                                {{ souvenir.description_dk|safe }}
-                            {% else %}
-                                {{ souvenir.description|safe|default:_("No description available.") }}
-                            {% endif %}
-                        </div>
                     </div>
 
                     <form action="{% url 'add_to_cart' souvenir.id %}" method="post" class="action-buttons">
@@ -115,6 +104,17 @@
                 </div>
             </div>
         </div>
+
+        <div class="description mb-5">
+                        <h5 class="fw-bold mb-3">{% translate "Description" %}</h5>
+                        <div class="text-muted">
+                            {% if current_lang == 'dk' and souvenir.description_dk %}
+                                {{ souvenir.description_dk|safe }}
+                            {% else %}
+                                {{ souvenir.description|safe|default:_("No description available.") }}
+                            {% endif %}
+                        </div>
+                    </div>
 
         <!-- Related Souvenirs -->
         {% if related_souvenirs %}
