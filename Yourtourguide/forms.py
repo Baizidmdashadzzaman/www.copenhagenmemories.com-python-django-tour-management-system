@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from accounts.models import Booking, BookingParticipant, Tour, Customer, TourPricing, TourSchedule, TourReview
+from accounts.models import Booking, BookingParticipant, Tour, Customer, TourPricing, TourSchedule, TourReview, SouvenirOrder
 from decimal import Decimal
 import json
 
@@ -227,5 +227,23 @@ class ParticipantForm(forms.Form):
         }),
         required=False
     )
+
+
+class SouvenirOrderForm(forms.ModelForm):
+    class Meta:
+        model = SouvenirOrder
+        fields = [
+            'first_name', 'last_name', 'email', 'phone',
+            'address', 'city', 'postal_code'
+        ]
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name', 'required': True}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name', 'required': True}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address', 'required': True}),
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number', 'required': True}),
+            'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Shipping Address', 'required': True}),
+            'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'City', 'required': True}),
+            'postal_code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Postal Code', 'required': True}),
+        }
 
 

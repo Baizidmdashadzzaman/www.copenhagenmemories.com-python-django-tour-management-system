@@ -1,0 +1,153 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Invoice - #{{ order.order_number }}{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="py-3 mb-0">
+            <span class="text-muted fw-light">Souvenir Orders /</span> Invoice #{{ order.order_number }}
+        </h4>
+        <div>
+            <a href="{% url 'souvenir_order_detail' order.pk %}" class="btn btn-secondary">
+                <i class="icon-base ti tabler-arrow-left me-1"></i> Back to Details
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-12">
+              <div class="row invoice-preview">
+                <!-- Invoice -->
+                <div class="col-xl-9 col-md-8 col-12 mb-md-0 mb-6">
+                  <div class="card invoice-preview-card p-sm-12 p-6">
+                    <div class="card-body invoice-preview-header rounded">
+                      <div class="d-flex justify-content-between flex-xl-row flex-md-column flex-sm-row flex-column align-items-xl-center align-items-md-start align-items-sm-center align-items-start">
+                        <div class="mb-xl-0 mb-6 text-heading">
+                          <div class="d-flex svg-illustration mb-6 gap-2 align-items-center">
+                            <span class="app-brand-text fw-bold fs-4 ms-50">Copenhagen Memories</span>
+                          </div>
+                          <p class="mb-2">Copenhagen, Denmark</p>
+                          <p class="mb-0">info@copenhagenmemories.com</p>
+                        </div>
+                        <div>
+                          <h5 class="mb-6">Invoice #{{ order.order_number }}</h5>
+                          <div class="mb-1 text-heading">
+                            <span>Order Date:</span>
+                            <span class="fw-medium">{{ order.created_at|date:"M d, Y" }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-body px-0">
+                      <div class="row">
+                        <div class="col-xl-6 col-md-12 col-sm-5 col-12 mb-xl-0 mb-md-6 mb-sm-0 mb-6">
+                          <h6>Invoice To:</h6>
+                          <p class="mb-1">{{ order.first_name }} {{ order.last_name }}</p>
+                          <p class="mb-1">{{ order.address }}</p>
+                          <p class="mb-1">{{ order.city }}, {{ order.postal_code }}</p>
+                          <p class="mb-1">{{ order.phone }}</p>
+                          <p class="mb-0">{{ order.email }}</p>
+                        </div>
+                        <div class="col-xl-6 col-md-12 col-sm-7 col-12">
+                          <h6>Order Summary:</h6>
+                          <table>
+                            <tbody>
+                              <tr>
+                                <td class="pe-4">Total Amount:</td>
+                                <td class="fw-medium">DKK {{ order.total_amount|floatformat:2 }}</td>
+                              </tr>
+                              <tr>
+                                <td class="pe-4">Status:</td>
+                                <td>
+                                  <span class="badge bg-label-{% if order.status == 'delivered' %}success{% elif order.status == 'pending' %}warning{% elif order.status == 'cancelled' %}danger{% else %}info{% endif %}">
+                                    {{ order.get_status_display }}
+                                  </span>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="table-responsive border border-bottom-0 border-top-0 rounded">
+                      <table class="table m-0">
+                        <thead>
+                          <tr>
+                            <th>Item</th>
+                            <th>Description</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for item in order.items.all %}
+                          <tr>
+                            <td class="text-nowrap text-heading">{{ item.souvenir.title }}</td>
+                            <td class="text-nowrap">{{ item.souvenir.description|truncatewords:10|striptags }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>DKK {{ item.price|floatformat:2 }}</td>
+                            <td>DKK {{ item.price|floatformat:2 }}</td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="table-responsive">
+                      <table class="table m-0 table-borderless">
+                        <tbody>
+                          <tr>
+                            <td class="align-top pe-6 ps-0 py-6 text-body">
+                              <span>Thank you for your purchase!</span>
+                            </td>
+                            <td class="px-0 py-6 w-px-100">
+                              <p class="mb-2">Total:</p>
+                            </td>
+                            <td class="text-end px-0 py-6 w-px-100 fw-medium text-heading">
+                              <p class="fw-medium mb-0">DKK {{ order.total_amount|floatformat:2 }}</p>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <hr class="mt-0 mb-6">
+                    <div class="card-body p-0">
+                      <div class="row">
+                        <div class="col-12">
+                          <span class="fw-medium text-heading">Note:</span>
+                          <span>Thank you for choosing Copenhagen Memories. We hope you enjoy your souvenirs!</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /Invoice -->
+
+                <!-- Invoice Actions -->
+                <div class="col-xl-3 col-md-4 col-12 invoice-actions">
+                  <div class="card">
+                    <div class="card-body">
+                      <button class="btn btn-label-secondary d-grid w-100 mb-4 waves-effect text-nowrap" onclick="window.print()">
+                        <span class="d-flex align-items-center justify-content-center text-nowrap">
+                        <i class="icon-base ti tabler-printer icon-xs me-2"></i>Print
+                        </span>
+                      </button>
+                      <div class="d-flex mb-4">
+                        <a class="btn btn-label-secondary d-grid w-100 waves-effect text-nowrap" href="{% url 'souvenir_order_detail' order.pk %}">
+                            <span class="d-flex align-items-center justify-content-center text-nowrap">
+                          <i class="icon-base ti tabler-eye icon-xs me-2"></i>View Details
+                          </span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /Invoice Actions -->
+              </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

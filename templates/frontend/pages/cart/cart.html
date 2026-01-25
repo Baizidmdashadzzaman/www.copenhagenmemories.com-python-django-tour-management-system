@@ -81,6 +81,60 @@
                         </div>
                     </div>
                 </div>
+                <div class="card shadow-sm border-0 mb-4 mt-5">
+                    <div class="card-body p-4">
+                        <h4 class="fw-bold mb-4">{% translate "Customer Details" %}</h4>
+                        
+                        {% if order_form.errors %}
+                        <div class="alert alert-danger">
+                            {% translate "Please correct the errors below." %}
+                        </div>
+                        {% endif %}
+
+                        <form action="{% url 'cart_view' %}" method="post" id="checkout-form">
+                            {% csrf_token %}
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">{% translate "First Name" %} *</label>
+                                    {{ order_form.first_name }}
+                                    {% if order_form.first_name.errors %}<div class="text-danger small">{{ order_form.first_name.errors.0 }}</div>{% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{% translate "Last Name" %} *</label>
+                                    {{ order_form.last_name }}
+                                    {% if order_form.last_name.errors %}<div class="text-danger small">{{ order_form.last_name.errors.0 }}</div>{% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{% translate "Email Address" %} *</label>
+                                    {{ order_form.email }}
+                                    {% if order_form.email.errors %}<div class="text-danger small">{{ order_form.email.errors.0 }}</div>{% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{% translate "Phone Number" %} *</label>
+                                    {{ order_form.phone }}
+                                    {% if order_form.phone.errors %}<div class="text-danger small">{{ order_form.phone.errors.0 }}</div>{% endif %}
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">{% translate "Shipping Address" %} *</label>
+                                    {{ order_form.address }}
+                                    {% if order_form.address.errors %}<div class="text-danger small">{{ order_form.address.errors.0 }}</div>{% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{% translate "City" %} *</label>
+                                    {{ order_form.city }}
+                                    {% if order_form.city.errors %}<div class="text-danger small">{{ order_form.city.errors.0 }}</div>{% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">{% translate "Postal Code" %} *</label>
+                                    {{ order_form.postal_code }}
+                                    {% if order_form.postal_code.errors %}<div class="text-danger small">{{ order_form.postal_code.errors.0 }}</div>{% endif %}
+                                </div>
+                            </div>
+                            <input type="hidden" name="submit_order" value="1">
+                            <button type="submit" id="hidden_order_submit" class="d-none"></button>
+                        </form>
+                    </div>
+                </div>
                 <div class="d-flex justify-content-between align-items-center">
                     <a href="{% url 'souvenirs_list_frontend' %}" class="btn btn-outline-primary">
                         <i class="isax isax-arrow-left-2 me-2"></i> {% translate "Continue Shopping" %}
@@ -89,7 +143,7 @@
             </div>
 
             <div class="col-lg-4">
-                <div class="card shadow-sm border-0 sticky-top" >
+                <div class="card shadow-sm border-0 sticky-top">
                     <div class="card-body p-4">
                         <h5 class="fw-bold mb-4">{% translate "Order Summary" %}</h5>
                         <div class="d-flex justify-content-between mb-3 pb-3 border-bottom">
@@ -100,8 +154,8 @@
                             <span class="fw-bold">{% translate "Total" %}</span>
                             <span class="fw-bold text-primary">DKK {{ total_price }}</span>
                         </div>
-                        <button class="btn btn-primary btn-lg w-100 mb-3" onclick="alert('Checkout functionality coming soon!')">
-                            {% translate "Proceed to Checkout" %}
+                        <button class="btn btn-primary btn-lg w-100 mb-3" onclick="document.getElementById('hidden_order_submit').click()">
+                            {% translate "Place Order" %}
                         </button>
                         <p class="text-center small text-muted">
                             <i class="isax isax-shield-tick me-1"></i> {% translate "Secure Checkout" %}

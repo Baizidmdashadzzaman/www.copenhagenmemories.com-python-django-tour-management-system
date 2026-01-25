@@ -3,9 +3,85 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
-from accounts.models import Souvenir
+from accounts.models import Souvenir, SouvenirOrder, SouvenirOrderItem
 from .decorators import permission_required_with_message
 from .forms_additions import SouvenirForm
+
+# ... (existing souvenir views)
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def souvenir_order_list(request):
+    search_query = request.GET.get('search', '')
+    status = request.GET.get('status', '')
+    
+    orders = SouvenirOrder.objects.all()
+    
+    if search_query:
+        orders = orders.filter(
+            Q(order_number__icontains=search_query) |
+            Q(first_name__icontains=search_query) |
+            Q(last_name__icontains=search_query) |
+            Q(email__icontains=search_query) |
+            Q(phone__icontains=search_query)
+        )
+    
+    if status:
+        orders = orders.filter(status=status)
+    
+    orders = orders.order_by('-created_at')
+    paginator = Paginator(orders, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'accounts/admin/souvenir_orders/list.html', {
+        'page_obj': page_obj,
+        'search_query': search_query,
+        'status': status,
+        'status_choices': SouvenirOrder._meta.get_field('status').choices
+    })
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def souvenir_order_detail(request, pk):
+    order = get_object_or_404(SouvenirOrder, pk=pk)
+    return render(request, 'accounts/admin/souvenir_orders/detail.html', {
+        'order': order,
+        'title': f'Order {order.order_number}'
+    })
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def souvenir_order_invoice(request, pk):
+    order = get_object_or_404(SouvenirOrder, pk=pk)
+    return render(request, 'accounts/admin/souvenir_orders/invoice.html', {
+        'order': order,
+        'title': f'Invoice #{order.order_number}'
+    })
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def souvenir_order_status_update(request, pk):
+    order = get_object_or_404(SouvenirOrder, pk=pk)
+    if request.method == 'POST':
+        new_status = request.POST.get('status')
+        if new_status in dict(SouvenirOrder.ORDER_STATUS_CHOICES):
+            order.status = new_status
+            order.save()
+            messages.success(request, f'Order status updated to {order.get_status_display()}.')
+        else:
+            messages.error(request, 'Invalid status.')
+    return redirect('souvenir_order_detail', pk=pk)
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def souvenir_order_delete(request, pk):
+    order = get_object_or_404(SouvenirOrder, pk=pk)
+    if request.method == 'POST':
+        order.delete()
+        messages.success(request, 'Order deleted successfully!')
+        return redirect('souvenir_order_list')
+    return render(request, 'accounts/admin/souvenir_orders/delete_confirm.html', {'order': order})
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)

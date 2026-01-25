@@ -1,0 +1,79 @@
+{% extends 'frontend/layout/base.html' %}
+{% load static %}
+{% load translate_tags %}
+
+{% block title %}{% translate "Order Confirmation" %} - {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+<div class="breadcrumb-bar breadcrumb-bg-02 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-12">
+                <h2 class="breadcrumb-title mb-2">{% translate "Order Confirmation" %}</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">
+                            <i class="isax isax-home5"></i></a>
+                        </li>
+                        <li class="breadcrumb-item">{% translate "Souvenirs" %}</li>
+                        <li class="breadcrumb-item active" aria-current="page">{% translate "Confirmation" %}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-0 text-center p-5 mb-5">
+                    <div class="mb-4">
+                        <i class="isax isax-tick-circle text-success" style="font-size: 5rem;"></i>
+                    </div>
+                    <h2 class="fw-bold mb-3">{% translate "Thank You for Your Order!" %}</h2>
+                    <p class="text-muted fs-5 mb-4">
+                        {% translate "Your order has been placed successfully. Order Number:" %} 
+                        <span class="text-primary fw-bold">{{ order.order_number }}</span>
+                    </p>
+                    <p class="text-muted mb-5">
+                        {% translate "We have sent a confirmation email to" %} <strong>{{ order.email }}</strong> 
+                        {% translate "with all the details of your order." %}
+                    </p>
+                    
+                    <div class="row text-start border rounded p-4 mb-5">
+                        <div class="col-md-6 mb-4 mb-md-0">
+                            <h6 class="fw-bold text-uppercase mb-3">{% translate "Shipping Details" %}</h6>
+                            <p class="mb-1"><strong>{{ order.first_name }} {{ order.last_name }}</strong></p>
+                            <p class="mb-1">{{ order.address }}</p>
+                            <p class="mb-1">{{ order.city }}, {{ order.postal_code }}</p>
+                            <p class="mb-0">{{ order.phone }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="fw-bold text-uppercase mb-3">{% translate "Order Summary" %}</h6>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>{% translate "Total Items" %}</span>
+                                <span>{{ order.items.count }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span class="fw-bold ">{% translate "Grand Total" %}</span>
+                                <span class="fw-bold text-primary">DKK {{ order.total_amount }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-wrap justify-content-center gap-3">
+                        <a href="{% url 'souvenirs_list_frontend' %}" class="btn btn-primary btn-lg px-5">
+                            {% translate "Continue Shopping" %}
+                        </a>
+                        <!-- <button class="btn btn-outline-secondary btn-lg px-5" onclick="window.print()">
+                            <i class="isax isax-printer me-2"></i> {% translate "Print Receipt" %}
+                        </button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,8 +1,11 @@
+import random
+import string
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib import messages
-from accounts.models import Souvenir
+from accounts.models import Souvenir, SouvenirOrder, SouvenirOrderItem, Customer
+from .forms import SouvenirOrderForm
 
 def souvenirs_list(request):
     search_query = request.GET.get('search', '')
@@ -80,9 +83,60 @@ def cart_view(request):
             'subtotal': subtotal
         })
         
+    order_form = SouvenirOrderForm()
+    
+    # Pre-fill if user is logged in
+    if request.user.is_authenticated and hasattr(request.user, 'customer_profile'):
+        customer = request.user.customer_profile
+        order_form = SouvenirOrderForm(initial={
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name,
+            'email': request.user.email,
+            'phone': customer.phone,
+            'address': customer.address,
+        })
+
+    if request.method == 'POST' and 'submit_order' in request.POST:
+        order_form = SouvenirOrderForm(request.POST)
+        if order_form.is_valid():
+            if not cart:
+                messages.error(request, "Your cart is empty.")
+                return redirect('cart_view')
+                
+            order = order_form.save(commit=False)
+            
+            # Generate order number
+            order.order_number = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+            order.total_amount = total_price
+            
+            if request.user.is_authenticated and hasattr(request.user, 'customer_profile'):
+                order.customer = request.user.customer_profile
+                
+            order.save()
+            
+            # Create order items
+            for item_id, item_data in cart.items():
+                souvenir = Souvenir.objects.get(id=item_id)
+                SouvenirOrderItem.objects.create(
+                    order=order,
+                    souvenir=souvenir,
+                    price=item_data['price'],
+                    quantity=item_data['quantity']
+                )
+                
+                # Update stock
+                souvenir.stock -= item_data['quantity']
+                souvenir.save()
+                
+            # Clear cart
+            request.session['cart'] = {}
+            messages.success(request, "Order placed successfully!")
+            return render(request, 'frontend/pages/cart/order_confirmation.html', {'order': order})
+
     context = {
         'cart_items': cart_items,
-        'total_price': total_price
+        'total_price': total_price,
+        'order_form': order_form
     }
     return render(request, 'frontend/pages/cart/cart.html', context)
 

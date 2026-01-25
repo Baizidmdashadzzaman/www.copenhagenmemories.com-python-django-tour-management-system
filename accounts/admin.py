@@ -5,8 +5,21 @@ from .models import (
     TourIncluded, TourExcluded, TourItinerary, TourRequirement, TourFAQ, TourPricing,
     TourSchedule, TourBlackoutDate, Booking, BookingParticipant, Payment, TourReview,
     ReviewHelpful, Wishlist, Coupon, CouponUsage, Notification, BlogPost, TourView, SearchLog,
-    CustomerMessage, FeatureSection, FeatureSectionTour, WebsiteMenu, WebsiteSubMenu, FAQ, TeamMember, Souvenir
+    CustomerMessage, FeatureSection, FeatureSectionTour, WebsiteMenu, WebsiteSubMenu, FAQ, TeamMember, Souvenir, SouvenirOrder, SouvenirOrderItem
 )
+
+@admin.register(SouvenirOrder)
+class SouvenirOrderAdmin(admin.ModelAdmin):
+    class SouvenirOrderItemInline(admin.TabularInline):
+        model = SouvenirOrderItem
+        extra = 0
+        readonly_fields = ('souvenir', 'price', 'quantity')
+
+    list_display = ('order_number', 'first_name', 'last_name', 'email', 'total_amount', 'status', 'created_at')
+    list_filter = ('status', 'created_at')
+    search_fields = ('order_number', 'first_name', 'last_name', 'email', 'phone')
+    readonly_fields = ('order_number', 'total_amount', 'created_at', 'updated_at')
+    inlines = [SouvenirOrderItemInline]
 
 @admin.register(Souvenir)
 class SouvenirAdmin(admin.ModelAdmin):

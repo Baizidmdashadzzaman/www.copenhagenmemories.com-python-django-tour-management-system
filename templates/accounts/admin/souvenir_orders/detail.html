@@ -1,0 +1,155 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Order Detail - #{{ order.order_number }}{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
+        <div class="d-flex flex-column justify-content-center">
+            <h4 class="mb-1">Order #{{ order.order_number }}</h4>
+            <p class="mb-0">{{ order.created_at|date:"M d, Y, H:i" }}</p>
+        </div>
+        <div class="d-flex align-content-center flex-wrap gap-2">
+            <a href="{% url 'souvenir_order_invoice' order.pk %}" class="btn btn-label-primary">View Invoice</a>
+            <button class="btn btn-label-danger delete-order" data-bs-toggle="modal" data-bs-target="#deleteOrderModal">Delete Order</button>
+        </div>
+    </div>
+
+    <!-- Order Details -->
+    <div class="row">
+        <div class="col-12 col-lg-8">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title m-0">Order Details</h5>
+                </div>
+                <div class="card-datatable table-responsive">
+                    <table class="table border-top">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Qty</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in order.items.all %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex justify-content-start align-items-center">
+                                        <div class="avatar-wrapper me-3">
+                                            <div class="avatar avatar-sm">
+                                                {% if item.souvenir.image %}
+                                                <img src="{{ item.souvenir.image.url }}" alt="Product" class="rounded-circle">
+                                                {% else %}
+                                                <span class="avatar-initial rounded-circle bg-label-secondary"><i class="ti tabler-package icon-18px"></i></span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column">
+                                            <h6 class="text-nowrap mb-0">{{ item.souvenir.title }}</h6>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>DKK {{ item.price|floatformat:2 }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>DKK {{ item.price|floatformat:2 }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-end align-items-center m-4 mb-2">
+                        <div class="order-calculations">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="w-px-100 text-end me-3">Subtotal:</span>
+                                <span class="fw-semibold">DKK {{ order.total_amount|floatformat:2 }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <h6 class="w-px-100 text-end me-3 mb-0">Total:</h6>
+                                <h6 class="mb-0">DKK {{ order.total_amount|floatformat:2 }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title m-0">Customer Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h6 class="mb-1">First Name:</h6>
+                            <p>{{ order.first_name }}</p>
+                            <h6 class="mb-1">Last Name:</h6>
+                            <p>{{ order.last_name }}</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="mb-1">Email:</h6>
+                            <p>{{ order.email }}</p>
+                            <h6 class="mb-1">Phone:</h6>
+                            <p>{{ order.phone }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title m-0">Order Status</h5>
+                </div>
+                <div class="card-body">
+                    <form action="{% url 'souvenir_order_status_update' order.pk %}" method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <select name="status" class="form-select">
+                                {% for val, label in order.ORDER_STATUS_CHOICES %}
+                                <option value="{{ val }}" {% if order.status == val %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Update Status</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title m-0">Shipping Address</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">{{ order.address }}</p>
+                    <p class="mb-0">{{ order.city }}</p>
+                    <p class="mb-0">{{ order.postal_code }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteOrderModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete order <strong>#{{ order.order_number }}</strong>? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form action="{% url 'souvenir_order_delete' order.pk %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

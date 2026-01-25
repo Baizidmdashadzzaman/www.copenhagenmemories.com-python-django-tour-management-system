@@ -459,6 +459,12 @@
                                             <div data-i18n="Souvenirs">Souvenirs</div>
                                         </a>
                                     </li>
+                                    <li class="menu-item {% if 'souvenir-orders' in request.path %}active{% endif %}">
+                                        <a href="{% url 'souvenir_order_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-package"></i>
+                                            <div data-i18n="Orders">Orders</div>
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
 
