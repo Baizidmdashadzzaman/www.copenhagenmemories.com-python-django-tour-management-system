@@ -5,7 +5,45 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from accounts.models import Souvenir, SouvenirOrder, SouvenirOrderItem
 from .decorators import permission_required_with_message
-from .forms_additions import SouvenirForm
+from .forms_additions import SouvenirForm, SouvenirOrderAdminForm, SouvenirOrderItemFormSet
+
+# ... (existing souvenir views)
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def souvenir_order_edit(request, pk):
+    order = get_object_or_404(SouvenirOrder, pk=pk)
+    if request.method == 'POST':
+        form = SouvenirOrderAdminForm(request.POST, instance=order)
+        formset = SouvenirOrderItemFormSet(request.POST, instance=order, prefix='items')
+        if form.is_valid() and formset.is_valid():
+            # Calculate total amount automatically
+            total = 0
+            # Save formset with commit=False to get access to instances if needed, 
+            # though here we mainly care about cleaned_data for calculation
+            for item_form in formset:
+                if not item_form.cleaned_data.get('DELETE', False):
+                    price = item_form.cleaned_data.get('price', 0)
+                    qty = item_form.cleaned_data.get('quantity', 0)
+                    total += price * qty
+            
+            order = form.save(commit=False)
+            order.total_amount = total
+            order.save()
+            
+            formset.save()
+            messages.success(request, 'Order updated successfully!')
+            return redirect('souvenir_order_detail', pk=pk)
+    else:
+        form = SouvenirOrderAdminForm(instance=order)
+        formset = SouvenirOrderItemFormSet(instance=order, prefix='items')
+    
+    return render(request, 'accounts/admin/souvenir_orders/form.html', {
+        'form': form,
+        'formset': formset,
+        'order': order,
+        'title': f'Edit Order #{order.order_number}'
+    })
 
 # ... (existing souvenir views)
 

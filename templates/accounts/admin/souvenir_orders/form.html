@@ -1,0 +1,227 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Souvenir Orders /</span> {{ title }}
+    </h4>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+            <!-- Order Info -->
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title m-0">Customer & Shipping Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">First Name</label>
+                                {{ form.first_name }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Last Name</label>
+                                {{ form.last_name }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email</label>
+                                {{ form.email }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Phone</label>
+                                {{ form.phone }}
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Address</label>
+                                {{ form.address }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">City</label>
+                                {{ form.city }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Postal Code</label>
+                                {{ form.postal_code }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Items -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title m-0">Order Items</h5>
+                        <button type="button" class="btn btn-primary btn-sm" id="add-item-btn">
+                            <i class="ti tabler-plus me-1"></i> Add Item
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        {{ formset.management_form }}
+                        <div class="table-responsive">
+                            <table class="table table-bordered align-middle" id="order-items-table">
+                                <thead>
+                                    <tr>
+                                        <th>Souvenir</th>
+                                        <th>Price (DKK)</th>
+                                        <th>Quantity</th>
+                                        <th class="text-center">Delete?</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item_form in formset %}
+                                    <tr class="formset-row">
+                                        {% for hidden in item_form.hidden_fields %}
+                                            {{ hidden }}
+                                        {% endfor %}
+                                        <td>
+                                            {{ item_form.souvenir }}
+                                            {% if item_form.souvenir.errors %}
+                                                <div class="text-danger small">{{ item_form.souvenir.errors }}</div>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {{ item_form.price }}
+                                            {% if item_form.price.errors %}
+                                                <div class="text-danger small">{{ item_form.price.errors }}</div>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {{ item_form.quantity }}
+                                            {% if item_form.quantity.errors %}
+                                                <div class="text-danger small">{{ item_form.quantity.errors }}</div>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-center">
+                                            {% if formset.can_delete %}
+                                                <div class="form-check d-flex justify-content-center">
+                                                    {{ item_form.DELETE }}
+                                                </div>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar Actions -->
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title m-0">Order Status & Total</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            {{ form.status }}
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Total Amount (DKK)</label>
+                            {{ form.total_amount }}
+                            <small class="text-muted">Note: Total is calculated automatically from items.</small>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <a href="{% url 'souvenir_order_detail' order.pk %}" class="btn btn-label-secondary">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Empty Row Template for JS -->
+<table class="d-none">
+    <tr id="empty-row">
+        <td>
+            {{ formset.empty_form.souvenir }}
+        </td>
+        <td>
+            {{ formset.empty_form.price }}
+        </td>
+        <td>
+            {{ formset.empty_form.quantity }}
+        </td>
+        <td class="text-center">
+            <div class="form-check d-flex justify-content-center">
+                {{ formset.empty_form.DELETE }}
+            </div>
+        </td>
+    </tr>
+</table>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tableBody = document.querySelector('#order-items-table tbody');
+    const addItemBtn = document.getElementById('add-item-btn');
+    const totalInput = document.querySelector('.total-amount-input');
+    const totalForms = document.getElementById('id_items-TOTAL_FORMS');
+    const emptyRow = document.getElementById('empty-row');
+
+    function calculateTotal() {
+        let total = 0;
+        const rows = document.querySelectorAll('.formset-row');
+        
+        rows.forEach(row => {
+            const deleteCheckbox = row.querySelector('input[name$="-DELETE"]');
+            if (deleteCheckbox && deleteCheckbox.checked) return;
+
+            const priceInput = row.querySelector('.item-price');
+            const qtyInput = row.querySelector('.item-qty');
+            
+            if (priceInput && qtyInput) {
+                const price = parseFloat(priceInput.value) || 0;
+                const qty = parseInt(qtyInput.value) || 0;
+                total += price * qty;
+            }
+        });
+        
+        totalInput.value = total.toFixed(2);
+    }
+
+    // Event Delegation for price and quantity changes
+    tableBody.addEventListener('input', function(e) {
+        if (e.target.classList.contains('item-price') || e.target.classList.contains('item-qty')) {
+            calculateTotal();
+        }
+    });
+
+    tableBody.addEventListener('change', function(e) {
+        if (e.target.name && e.target.name.endsWith('-DELETE')) {
+            calculateTotal();
+        }
+    });
+
+    // Add new row
+    addItemBtn.addEventListener('click', function() {
+        const formNum = parseInt(totalForms.value);
+        const newRow = emptyRow.cloneNode(true);
+        newRow.removeAttribute('id');
+        newRow.classList.add('formset-row');
+        
+        // Update form index
+        newRow.innerHTML = newRow.innerHTML.replace(/__prefix__/g, formNum);
+        
+        tableBody.appendChild(newRow);
+        totalForms.value = formNum + 1;
+        
+        calculateTotal();
+    });
+
+    // Initial calculation
+    calculateTotal();
+});
+</script>
+{% endblock %}

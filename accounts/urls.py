@@ -307,6 +307,7 @@ urlpatterns = [
     # Souvenir Order CRUD
     path('admin/souvenir-orders/', souvenir_views.souvenir_order_list, name='souvenir_order_list'),
     path('admin/souvenir-orders/<int:pk>/', souvenir_views.souvenir_order_detail, name='souvenir_order_detail'),
+    path('admin/souvenir-orders/<int:pk>/edit/', souvenir_views.souvenir_order_edit, name='souvenir_order_edit'),
     path('admin/souvenir-orders/<int:pk>/invoice/', souvenir_views.souvenir_order_invoice, name='souvenir_order_invoice'),
     path('admin/souvenir-orders/<int:pk>/status/', souvenir_views.souvenir_order_status_update, name='souvenir_order_status_update'),
     path('admin/souvenir-orders/<int:pk>/delete/', souvenir_views.souvenir_order_delete, name='souvenir_order_delete'),

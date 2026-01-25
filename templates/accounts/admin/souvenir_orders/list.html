@@ -126,6 +126,11 @@
                                                 title="View Detail">
                                                 <i class="icon-base ti tabler-eye icon-22px"></i>
                                             </a>
+                                            <a href="{% url 'souvenir_order_edit' order.pk %}"
+                                                class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light me-1"
+                                                title="Edit">
+                                                <i class="icon-base ti tabler-edit icon-22px"></i>
+                                            </a>
                                             <a href="{% url 'souvenir_order_delete' order.pk %}"
                                                 class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light"
                                                 title="Delete">

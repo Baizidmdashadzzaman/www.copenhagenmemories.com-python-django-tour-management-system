@@ -1,5 +1,5 @@
 from django import forms
-from accounts.models import BlogPost, Category, City, Tour, Coupon, Booking, Payment, TourReview, TourImage, TourHighlight, TourIncluded, TourExcluded, TourItinerary, TourRequirement, TourFAQ, TourPricing, TourSchedule, TourBlackoutDate, BookingParticipant, Souvenir
+from accounts.models import BlogPost, Category, City, Tour, Coupon, Booking, Payment, TourReview, TourImage, TourHighlight, TourIncluded, TourExcluded, TourItinerary, TourRequirement, TourFAQ, TourPricing, TourSchedule, TourBlackoutDate, BookingParticipant, Souvenir, SouvenirOrder, SouvenirOrderItem
 
 class SouvenirForm(forms.ModelForm):
     class Meta:
@@ -342,3 +342,37 @@ class TourBlackoutDateForm(forms.ModelForm):
             'end_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'reason': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Reason'}),
         }
+
+
+class SouvenirOrderAdminForm(forms.ModelForm):
+    class Meta:
+        model = SouvenirOrder
+        fields = ['first_name', 'last_name', 'email', 'phone', 'address', 'city', 'postal_code', 'status', 'total_amount']
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'city': forms.TextInput(attrs={'class': 'form-control'}),
+            'postal_code': forms.TextInput(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'form-select'}),
+            'total_amount': forms.NumberInput(attrs={'class': 'form-control total-amount-input', 'step': '0.01', 'readonly': 'readonly'}),
+        }
+
+class SouvenirOrderItemForm(forms.ModelForm):
+    class Meta:
+        model = SouvenirOrderItem
+        fields = ['souvenir', 'price', 'quantity']
+        widgets = {
+            'souvenir': forms.Select(attrs={'class': 'form-select souvenir-select'}),
+            'price': forms.NumberInput(attrs={'class': 'form-control item-price', 'step': '0.01'}),
+            'quantity': forms.NumberInput(attrs={'class': 'form-control item-qty', 'min': 1}),
+        }
+
+SouvenirOrderItemFormSet = forms.inlineformset_factory(
+    SouvenirOrder, SouvenirOrderItem,
+    form=SouvenirOrderItemForm,
+    extra=1,
+    can_delete=True
+)
