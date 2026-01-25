@@ -4,7 +4,7 @@ from django.db.models import Q, Avg, Count, Value
 from django.db.models.functions import Coalesce
 from accounts.models import Tour, Category, DestinationRegion, City, TourReview
 
-from accounts.models import BlogPost, ContactUs, SiteSetting, CustomerReviewStatic, FAQ, TourSupplier, Country, FeatureSection, Slider,Page, Tour, TeamMember
+from accounts.models import BlogPost, ContactUs, SiteSetting, CustomerReviewStatic, FAQ, TourSupplier, Country, FeatureSection, Slider,Page, Tour, TeamMember, Souvenir
 from django.db.models import Prefetch
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import translation, timezone

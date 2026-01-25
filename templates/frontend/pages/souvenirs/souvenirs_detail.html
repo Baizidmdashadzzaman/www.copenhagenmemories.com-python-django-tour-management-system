@@ -1,0 +1,186 @@
+{% extends 'frontend/layout/base.html' %}
+{% load static %}
+{% load translate_tags %}
+
+{% block title %}
+    {% if current_lang == 'dk' and souvenir.title_dk %}
+        {{ souvenir.title_dk }}
+    {% else %}
+        {{ souvenir.title }}
+    {% endif %} - {{ site_settings.site_name }}
+{% endblock %}
+
+{% block content %}
+
+<div class="breadcrumb-bar breadcrumb-bg-02 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-12">
+                <h2 class="breadcrumb-title mb-2">
+                    {% if current_lang == 'dk' and souvenir.title_dk %}
+                        {{ souvenir.title_dk }}
+                    {% else %}
+                        {{ souvenir.title }}
+                    {% endif %}
+                </h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">
+                            <i class="isax isax-home5"></i></a>
+                        </li>
+                        <li class="breadcrumb-item"><a href="{% url 'souvenirs_list_frontend' %}">{% translate "Souvenirs" %}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{% translate "Souvenir Detail" %}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="container">
+        <div class="row">
+            <!-- Souvenir Image -->
+            <div class="col-lg-6 mb-4">
+                <div class="souvenir-image-holder border rounded overflow-hidden">
+                    {% if souvenir.image %}
+                        <img src="{{ souvenir.image.url }}" alt="{% if current_lang == 'dk' and souvenir.title_dk %}{{ souvenir.title_dk }}{% else %}{{ souvenir.title }}{% endif %}" class="img-fluid w-100" style="object-fit: cover; min-height: 400px;">
+                    {% else %}
+                        <img src="{% static 'frontend/assets/img/tours/tour-01.jpg' %}" alt="placeholder" class="img-fluid w-100">
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Souvenir Details -->
+            <div class="col-lg-6">
+                <div class="souvenir-details-content p-4 border rounded bg-white">
+                    <h2 class="mb-3">
+                        {% if current_lang == 'dk' and souvenir.title_dk %}
+                            {{ souvenir.title_dk }}
+                        {% else %}
+                            {{ souvenir.title }}
+                        {% endif %}
+                    </h2>
+                    <div class="d-flex align-items-center mb-4">
+                        <h3 class="text-primary fw-bold mb-0 me-3">DKK {{ souvenir.price }}</h3>
+                        {% if souvenir.before_discount_price_statue == 'active' and souvenir.before_discount_price %}
+                            <h5 class="text-muted text-decoration-line-through mb-0">DKK {{ souvenir.before_discount_price }}</h5>
+                            <span class="badge bg-danger ms-2">{{ souvenir.before_discount_price_text }}</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="stock-status mb-4">
+                        {% if souvenir.stock > 0 %}
+                            <span class="text-success"><i class="isax isax-tick-circle me-2"></i>{% translate "In Stock" %} ({{ souvenir.stock }} {% translate "available" %})</span>
+                        {% else %}
+                            <span class="text-danger"><i class="isax isax-close-circle me-2"></i>{% translate "Out of Stock" %}</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="description mb-5">
+                        <h5 class="fw-bold mb-3">{% translate "Description" %}</h5>
+                        <div class="text-muted">
+                            {% if current_lang == 'dk' and souvenir.description_dk %}
+                                {{ souvenir.description_dk|safe }}
+                            {% else %}
+                                {{ souvenir.description|safe|default:_("No description available.") }}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <form action="{% url 'add_to_cart' souvenir.id %}" method="post" class="action-buttons">
+                        {% csrf_token %}
+                        {% if souvenir.stock > 0 %}
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="decrementQty()">-</button>
+                                        <input type="number" name="quantity" id="souvenir_qty" class="form-control text-center" value="1" min="1" max="{{ souvenir.stock }}">
+                                        <button class="btn btn-outline-secondary" type="button" onclick="incrementQty()">+</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                                        <i class="isax isax-shopping-cart me-2"></i> {% translate "Add to Cart" %}
+                                    </button>
+                                </div>
+                            </div>
+                        {% else %}
+                            <button type="button" class="btn btn-secondary btn-lg w-100 mb-3 disabled">
+                                {% translate "Out of Stock" %}
+                            </button>
+                        {% endif %}
+                        <!-- <p class="text-center small text-muted">{% translate "Note: Online purchase will be available soon." %}</p> -->
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Souvenirs -->
+        {% if related_souvenirs %}
+        <div class="row mt-5 pt-5 border-top">
+            <div class="col-12 mb-4 text-center">
+                <h3 class="fw-bold">{% translate "You Might Also Like" %}</h3>
+            </div>
+            {% for related in related_souvenirs %}
+            <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+                <div class="tour-item">
+                    <div class="tour-img">
+                        <a href="{% url 'souvenir_detail_frontend' related.id %}">
+                            {% if related.image %}
+                                <img src="{{ related.image.url }}" alt="{% if current_lang == 'dk' and related.title_dk %}{{ related.title_dk }}{% else %}{{ related.title }}{% endif %}" class="img-fluid" style="height: 200px; width: 100%; object-fit: cover;">
+                            {% else %}
+                                <img src="{% static 'frontend/assets/img/tours/tour-01.jpg' %}" alt="placeholder" class="img-fluid">
+                            {% endif %}
+                        </a>
+                    </div>
+                    <div class="tour-content p-3 border rounded-bottom">
+                        <h6 class="mb-2">
+                            <a href="{% url 'souvenir_detail_frontend' related.id %}">
+                                {% if current_lang == 'dk' and related.title_dk %}
+                                    {{ related.title_dk }}
+                                {% else %}
+                                    {{ related.title }}
+                                {% endif %}
+                            </a>
+                        </h6>
+                        <p class="text-primary fw-bold mb-0">DKK {{ related.price }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function incrementQty() {
+        var qtyInput = document.getElementById('souvenir_qty');
+        var currentQty = parseInt(qtyInput.value);
+        var maxQty = parseInt(qtyInput.getAttribute('max'));
+        if (currentQty < maxQty) {
+            qtyInput.value = currentQty + 1;
+        }
+    }
+
+    function decrementQty() {
+        var qtyInput = document.getElementById('souvenir_qty');
+        var currentQty = parseInt(qtyInput.value);
+        if (currentQty > 1) {
+            qtyInput.value = currentQty - 1;
+        }
+    }
+</script>
+<style>
+    .souvenir-image-holder img {
+        transition: transform 0.5s ease;
+    }
+    .souvenir-image-holder:hover img {
+        transform: scale(1.05);
+    }
+</style>
+{% endblock %}

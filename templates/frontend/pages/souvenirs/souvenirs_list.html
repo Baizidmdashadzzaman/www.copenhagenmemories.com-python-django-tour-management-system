@@ -1,0 +1,177 @@
+{% extends 'frontend/layout/base.html' %}
+{% load static %}
+{% load translate_tags %}
+
+{% block title %}{% translate "Souvenirs" %} - {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+
+<div class="breadcrumb-bar breadcrumb-bg-02 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-12">
+                <h2 class="breadcrumb-title mb-2">{% translate "Souvenirs" %}</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">
+                            <i class="isax isax-home5"></i></a>
+                        </li>
+                        <li class="breadcrumb-item">{% translate "Souvenirs" %}</li>
+                        <li class="breadcrumb-item active" aria-current="page">{% translate "Souvenir Grid" %}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="container">
+        <!-- Search Section -->
+        <div class="row mb-5 justify-content-center">
+            <div class="col-lg-8">
+                <div class="search-box wow fadeInUp" data-wow-delay="0.2s">
+                    <form action="{% url 'souvenirs_list_frontend' %}" method="get" class="input-group">
+                        <input type="text" name="search" class="form-control form-control-lg border-primary" 
+                               placeholder="{% translate 'Search souvenirs...' %}" value="{{ search_query|default:'' }}">
+                        <button class="btn btn-primary btn-lg" type="submit">
+                            <i class="isax isax-search-normal me-2"></i> {% translate "Search" %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            {% for souvenir in souvenirs %}
+            <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+                <div class="tour-item wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="tour-img">
+                        <a href="{% url 'souvenir_detail_frontend' souvenir.pk %}">
+                            {% if souvenir.image %}
+                                <img src="{{ souvenir.image.url }}" alt="{% if current_lang == 'dk' and souvenir.title_dk %}{{ souvenir.title_dk }}{% else %}{{ souvenir.title }}{% endif %}" class="img-fluid" style="height: 250px; width: 100%; object-fit: cover;">
+                            {% else %}
+                                <img src="{% static 'frontend/assets/img/tours/tour-01.jpg' %}" alt="img" class="img-fluid" style="height: 250px; width: 100%; object-fit: cover;">
+                            {% endif %}
+                        </a>
+                        {% if souvenir.before_discount_price_statue == 'active' and souvenir.before_discount_price %}
+                            <span class="badge bg-danger fs-14 fw-medium">{{ souvenir.before_discount_price_text}}</span>
+                        {% endif %}
+                    </div>
+                    <div class="tour-content p-3 border rounded-bottom">
+                        <h5 class="mb-2">
+                            <a href="{% url 'souvenir_detail_frontend' souvenir.id %}">
+                                {% if current_lang == 'dk' and souvenir.title_dk %}
+                                    {{ souvenir.title_dk }}
+                                {% else %}
+                                    {{ souvenir.title }}
+                                {% endif %}
+                            </a>
+                        </h5>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="price">
+                                <h6 class="text-primary fw-bold mb-0">DKK {{ souvenir.price }}</h6>
+                                {% if souvenir.before_discount_price_statue == 'active' and souvenir.before_discount_price %}
+                                    <small class="text-muted text-decoration-line-through">DKK {{ souvenir.before_discount_price }}</small>
+                                {% endif %}
+                            </div>
+                            <div class="stock">
+                                {% if souvenir.stock > 0 %}
+                                    <span class="badge bg-soft-success text-success">{% translate "In Stock" %} ({{ souvenir.stock }})</span>
+                                {% else %}
+                                    <span class="badge bg-soft-danger text-danger">{% translate "Out of Stock" %}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <a href="{% url 'souvenir_detail_frontend' souvenir.id %}" class="btn btn-outline-primary w-100">
+                                {% translate "View Details" %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <div class="mb-4">
+                    <i class="isax isax-shopping-cart text-muted" style="font-size: 5rem;"></i>
+                </div>
+                <h3>{% translate "No souvenirs found." %}</h3>
+                {% if search_query %}
+                    <p class="text-muted">{% translate "We couldn't find anything matching your search." %}</p>
+                    <a href="{% url 'souvenirs_list_frontend' %}" class="btn btn-primary mt-3">{% translate "Clear Search" %}</a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if souvenirs.has_other_pages %}
+        <div class="row mt-4">
+            <div class="col-12">
+                <nav class="pagination-nav">
+                    <ul class="pagination justify-content-center">
+                        {% if souvenirs.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ souvenirs.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" aria-label="Previous">
+                                <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        {% for i in souvenirs.paginator.page_range %}
+                            {% if souvenirs.number == i %}
+                            <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+                            {% else %}
+                            <li class="page-item"><a class="page-link" href="?page={{ i }}{% if search_query %}&search={{ search_query }}{% endif %}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if souvenirs.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ souvenirs.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" aria-label="Next">
+                                <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<style>
+    .tour-item:hover {
+        transform: translateY(-5px);
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .badge.bg-soft-success {
+        background-color: rgba(40, 167, 69, 0.1);
+    }
+    .badge.bg-soft-danger {
+        background-color: rgba(220, 53, 69, 0.1);
+    }
+    .search-box .form-control:focus {
+        box-shadow: none;
+        border-color: #007bff;
+    }
+</style>
+{% endblock %}

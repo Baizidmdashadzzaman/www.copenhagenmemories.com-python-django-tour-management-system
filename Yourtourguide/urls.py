@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from . import views
 from . import ai_views
+from . import souvenir_views
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -48,6 +49,15 @@ urlpatterns = [
     path('system-developer/', views.system_developer, name='system_developer'),
     path('send-test-email/', views.send_test_email, name='send_test_email'),
     
+    # Souvenirs Frontend
+    path('souvenirs/', souvenir_views.souvenirs_list, name='souvenirs_list_frontend'),
+    path('souvenir-detail/<int:souvenir_id>/', souvenir_views.souvenir_detail, name='souvenir_detail_frontend'),
+    
+    # Cart
+    path('cart/', souvenir_views.cart_view, name='cart_view'),
+    path('add-to-cart/<int:souvenir_id>/', souvenir_views.add_to_cart, name='add_to_cart'),
+    path('update-cart/<int:souvenir_id>/', souvenir_views.update_cart, name='update_cart'),
+    path('remove-from-cart/<int:souvenir_id>/', souvenir_views.remove_from_cart, name='remove_from_cart'),
 ]
 
 # Serve media and static files in development

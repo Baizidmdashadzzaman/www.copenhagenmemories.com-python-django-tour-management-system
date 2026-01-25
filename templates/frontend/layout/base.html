@@ -73,7 +73,7 @@
                                         <i class="ti ti-x"></i>
                                     </div>
                                 </div>
-                                <div class="wishlist-info d-flex justify-content-between align-items-center">
+                                <div class="wishlist-info d-flex justify-content-between align-items-center mb-2">
                                     <h6 class="fs-16 fw-medium">
                                         {% translate "Wishlist" %}
                                     </h6>
@@ -87,6 +87,21 @@
                                                     {% else %}
                                                         0
                                                     {% endif %}
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="wishlist-info d-flex justify-content-between align-items-center">
+                                    <h6 class="fs-16 fw-medium">
+                                        {% translate "Shopping Cart" %}
+                                    </h6>
+                                    <div class="d-flex align-items-center">
+                                        <div class="fav-dropdown">
+                                            <a href="{% url 'cart_view' %}" class="position-relative">
+                                                <i class="isax isax-shopping-cart"></i><span
+                                                    class="count-icon bg-secondary text-gray-9">
+                                                    {{ request.session.cart|length|default:0 }}
                                                 </span>
                                             </a>
                                         </div>
@@ -211,6 +226,14 @@
                                         {% else %}
                                             0
                                         {% endif %}
+                                    </span>
+                                </a>
+                            </div>
+                            <div class="fav-dropdown me-3">
+                                <a href="{% url 'cart_view' %}" class="position-relative">
+                                    <i class="isax isax-shopping-cart"></i><span
+                                        class="count-icon bg-secondary text-gray-9">
+                                        {{ request.session.cart|length|default:0 }}
                                     </span>
                                 </a>
                             </div>
