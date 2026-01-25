@@ -705,7 +705,7 @@ def tour_detail(request, tour_id):
                         messages.success(request, f'Booking {booking_number} created successfully!')
 
                         # Redirect to booking confirmation page
-                        return redirect('booking_confirmation', booking_id=booking.pk)
+                        return redirect('booking_confirmation', booking_number=booking.booking_number)
 
                     else:
                         booking_error = "Please correct the errors below."
@@ -844,7 +844,7 @@ def tour_detail(request, tour_id):
     return render(request, 'frontend/pages/tour/tour_detail.html', context)
 
 
-def booking_confirmation(request, booking_id):
+def booking_confirmation(request, booking_number):
     """Booking confirmation page"""
     from accounts.models import Booking
 
@@ -853,7 +853,7 @@ def booking_confirmation(request, booking_id):
         Booking.objects.select_related(
             'customer__user', 'tour__supplier', 'tour__category', 'tour__destination_region', 'tour__city', 'schedule'
         ).prefetch_related('participants'),
-        pk=booking_id
+        booking_number=booking_number
     )
 
     # Check if user has permission to view this booking
