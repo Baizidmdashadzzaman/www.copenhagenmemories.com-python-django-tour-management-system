@@ -213,6 +213,21 @@
                             {% for error in form.base_price.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
                         </div>
                         <div class="col-md-3 mb-3">
+                            <label class="form-label" for="{{ form.before_discount_price.id_for_label }}">{{ form.before_discount_price.label }}</label>
+                            {{ form.before_discount_price }}
+                            {% for error in form.before_discount_price.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" for="{{ form.before_discount_price_statue.id_for_label }}">{{ form.before_discount_price_statue.label }}</label>
+                            {{ form.before_discount_price_statue }}
+                            {% for error in form.before_discount_price_statue.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" for="{{ form.before_discount_price_text.id_for_label }}">{{ form.before_discount_price_text.label }}</label>
+                            {{ form.before_discount_price_text }}
+                            {% for error in form.before_discount_price_text.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-3 mb-3">
                             <label class="form-label" for="{{ form.currency.id_for_label }}">{{ form.currency.label }}</label>
                             {{ form.currency }}
                             {% for error in form.currency.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}

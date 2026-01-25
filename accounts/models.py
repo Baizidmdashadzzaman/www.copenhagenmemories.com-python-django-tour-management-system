@@ -353,6 +353,12 @@ class Tour(models.Model):
     ], default='easy')
     
     base_price = models.DecimalField(max_digits=10, decimal_places=2)
+    before_discount_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    before_discount_price_statue = models.CharField(max_length=20, choices=[
+        ('active', 'Active'),
+        ('inactive', 'Inactive')
+    ], default='inactive')
+    before_discount_price_text = models.CharField(max_length=200, blank=True)
     currency = models.CharField(max_length=3, default='DKK')
     discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     

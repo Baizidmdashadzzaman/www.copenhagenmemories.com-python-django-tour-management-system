@@ -151,19 +151,16 @@
                                 
                                 <div class="d-flex align-items-center justify-content-between border-top pt-3">
                                     <div>
-                                        {% if tour.discount_percentage > 0 %}
-                                            <h5 class="text-primary text-nowrap me-2">
-                                                {{ tour.base_price }} {{ tour.currency }}
-                                                <span class="fs-14 fw-normal text-default">/ {% translate "Person" %}</span>
-                                            </h5>
-                                            <p class="fs-12 text-muted text-decoration-line-through">
-                                                {{ tour.original_price|floatformat:2 }} {{ tour.currency }}
-                                            </p>
-                                        {% else %}
-                                            <h5 class="text-primary text-nowrap me-2">
-                                                {{ tour.base_price }} {{ tour.currency }}
-                                                <span class="fs-14 fw-normal text-default">/ {% translate "Person" %}</span>
-                                            </h5>
+                                        <h5 class="text-primary text-nowrap me-2">
+                                            {{ tour.base_price }} {{ tour.currency }}
+                                            <span class="fs-14 fw-normal text-default">/ {% translate "Person" %}</span>
+                                        </h5>
+                                        {% if tour.before_discount_price_statue == 'active' %}
+                                            {% if tour.before_discount_price %}
+                                                <p class="fs-12 text-muted text-decoration-line-through">
+                                                    {{ tour.before_discount_price|floatformat:0 }} {{ tour.currency }}
+                                                </p>
+                                            {% endif %}
                                         {% endif %}
                                     </div>
                                     

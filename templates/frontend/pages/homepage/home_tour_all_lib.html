@@ -115,11 +115,18 @@
                                         {{ tour.base_price }} {{ tour.currency }}
                                         <span class="fs-14 fw-normal text-muted">/ {% translate "Person" %}</span>
                                     </h5>
-                                    {% if tour.discount_percentage > 0 %}
+                                    {% if tour.before_discount_price_statue == 'active' %}
+                                                    {% if tour.before_discount_price %}
+                                                    <span class="ms-1 fs-18 fw-semibold text-gray-3 text-decoration-line-through">
+                                                        DKK {{ tour.before_discount_price|floatformat:0 }}
+                                                    </span>
+                                                    {% endif %}
+                                                {% endif %}
+                                    <!-- {% if tour.discount_percentage > 0 %}
                                         <p class="fs-12 text-muted text-decoration-line-through mb-0">
                                             {{ tour.original_price|floatformat:2 }} {{ tour.currency }}
                                         </p>
-                                    {% endif %}
+                                    {% endif %} -->
                                 </div>
                                 <a href="{% url 'tour_detail' tour.id %}" class="link-primary fw-medium">{% translate "Book Now" %}<i class="isax isax-arrow-right-3 ms-1"></i></a>
                             </div>

@@ -513,11 +513,16 @@
                             <div class="mb-3">
                                 <p class="fs-13 fw-medium mb-1">{% translate "Starts From" %}</p>
                                 <h5 class="text-primary mb-1">DKK {{ tour.base_price|floatformat:0 }} <span class="fs-14 text-default fw-normal">/ {% translate "Person" %}</span></h5>
-                                {% if tour.discount_percentage > 0 %}
-                                <p class="text-muted text-decoration-line-through mb-0">DKK {{ tour.original_price|floatformat:0 }}</p>
-                                <span class="badge bg-success">{{ tour.discount_percentage }}% OFF</span>
+                                {% if tour.before_discount_price_statue == 'active' %}
+                                    {% if tour.before_discount_price %}
+                                        <p class="text-muted text-decoration-line-through mb-0">DKK {{ tour.before_discount_price|floatformat:0 }}</p>
+                                    {% endif %}
+                                    {% if tour.before_discount_price_text %}
+                                        <span class="badge bg-success">{{ tour.before_discount_price_text }}</span>
+                                    {% elif tour.discount_percentage > 0 %}
+                                        <span class="badge bg-success">{{ tour.discount_percentage }}% OFF</span>
+                                    {% endif %}
                                 {% endif %}
-                                
                             </div>
                             <div class="form-item border rounded p-3 mb-3 w-100">
                                 <div id="tourConvertedPrices" class="pt-2  border-light-subtle" style="display:none;"></div>

@@ -46,7 +46,12 @@ class CityForm(forms.ModelForm):
 class TourForm(forms.ModelForm):
     class Meta:
         model = Tour
-        fields = ['title', 'title_dk', 'supplier', 'category', 'destination_region', 'city', 'short_description', 'short_description_dk', 'description', 'description_dk', 'map_location', 'main_image', 'video_url', 'duration_hours', 'duration_text', 'min_participants', 'max_participants', 'age_restriction', 'difficulty_level', 'base_price', 'currency', 'discount_percentage', 'status', 'is_featured']
+        fields = ['title', 'title_dk', 'supplier', 'category', 'destination_region', 'city', 'short_description', 'short_description_dk', 'description', 'description_dk', 'map_location', 'main_image', 'video_url', 'duration_hours', 'duration_text', 'min_participants', 'max_participants', 'age_restriction', 'difficulty_level', 'base_price', 'currency', 'discount_percentage', 'before_discount_price', 'before_discount_price_statue', 'before_discount_price_text', 'status', 'is_featured']
+        labels = {
+            'before_discount_price': 'Original Price (Before Discount)',
+            'before_discount_price_statue': 'Original Price Status',
+            'before_discount_price_text': 'Discount Text',
+        }
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter tour title'}),
             'title_dk': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Danish tour title'}),
@@ -70,6 +75,9 @@ class TourForm(forms.ModelForm):
             'base_price': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
             'currency': forms.TextInput(attrs={'class': 'form-control'}),
             'discount_percentage': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
+            'before_discount_price': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'placeholder': 'Price before discount'}),
+            'before_discount_price_statue': forms.Select(attrs={'class': 'form-select'}),
+            'before_discount_price_text': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g. Save 20%'}),
             'status': forms.Select(attrs={'class': 'form-select'}),
             'is_featured': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
