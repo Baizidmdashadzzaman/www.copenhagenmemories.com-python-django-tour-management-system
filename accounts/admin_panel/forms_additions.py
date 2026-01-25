@@ -1,5 +1,23 @@
 from django import forms
-from accounts.models import BlogPost, Category, City, Tour, Coupon, Booking, Payment, TourReview, TourImage, TourHighlight, TourIncluded, TourExcluded, TourItinerary, TourRequirement, TourFAQ, TourPricing, TourSchedule, TourBlackoutDate, BookingParticipant
+from accounts.models import BlogPost, Category, City, Tour, Coupon, Booking, Payment, TourReview, TourImage, TourHighlight, TourIncluded, TourExcluded, TourItinerary, TourRequirement, TourFAQ, TourPricing, TourSchedule, TourBlackoutDate, BookingParticipant, Souvenir
+
+class SouvenirForm(forms.ModelForm):
+    class Meta:
+        model = Souvenir
+        fields = ['title', 'title_dk', 'image', 'description', 'description_dk', 'price', 'before_discount_price', 'before_discount_price_statue', 'before_discount_price_text', 'status', 'stock']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter souvenir title'}),
+            'title_dk': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Danish title'}),
+            'image': forms.FileInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'description_dk': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'price': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
+            'before_discount_price': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
+            'before_discount_price_statue': forms.Select(attrs={'class': 'form-select'}),
+            'before_discount_price_text': forms.TextInput(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'form-select'}),
+            'stock': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
 
 class BlogPostForm(forms.ModelForm):
     class Meta:

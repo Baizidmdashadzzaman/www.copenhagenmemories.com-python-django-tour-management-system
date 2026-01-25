@@ -996,3 +996,34 @@ class FAQ(models.Model):
 
     def __str__(self):
         return self.qus_en[:50]
+
+class Souvenir(models.Model):
+    STATUS_CHOICES = (
+        ('active', 'Active'),
+        ('inactive', 'Inactive'),
+        ('draft', 'Draft'),
+    )
+    BEFORE_DISCOUNT_STATUS_CHOICES = (
+        ('active', 'Active'),
+        ('inactive', 'Inactive'),
+    )
+
+    title = models.CharField(max_length=255)
+    title_dk = models.CharField(max_length=255, blank=True)
+    image = models.ImageField(upload_to='souvenirs/', blank=True, null=True)
+    description = models.TextField(blank=True)
+    description_dk = models.TextField(blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    before_discount_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    before_discount_price_statue = models.CharField(max_length=20, choices=BEFORE_DISCOUNT_STATUS_CHOICES, default='inactive')
+    before_discount_price_text = models.CharField(max_length=255, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
+    stock = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.title

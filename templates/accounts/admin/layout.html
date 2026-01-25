@@ -445,6 +445,23 @@
                                 </ul>
                             </li>
 
+
+                            <li
+                                class="menu-item {% if 'admin/ecommerce' in request.path or 'admin/souvenirs' in request.path %}active open{% endif %}">
+                                <a href="javascript:void(0)" class="menu-link menu-toggle">
+                                    <i class="menu-icon icon-base ti tabler-shopping-cart"></i>
+                                    <div data-i18n="Ecommerce">Ecommerce</div>
+                                </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item {% if 'souvenirs' in request.path %}active{% endif %}">
+                                        <a href="{% url 'souvenir_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-gift"></i>
+                                            <div data-i18n="Souvenirs">Souvenirs</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
                             
 
                             <li class="menu-item">

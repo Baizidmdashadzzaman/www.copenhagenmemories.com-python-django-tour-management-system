@@ -22,6 +22,7 @@ from accounts.admin_panel import views_feature_section as feature_section_views
 from accounts.admin_panel import views_website_menu as website_menu_views
 from accounts.admin_panel import views_faq as faq_views
 from accounts.admin_panel import views_team as team_member_views
+from accounts.admin_panel import views_souvenirs as souvenir_views
 from accounts import views_frontend
 
 from accounts.supplier_panel import views as supplier_views
@@ -296,6 +297,12 @@ urlpatterns = [
     path('admin/team-members/create/', team_member_views.team_member_create, name='team_member_create'),
     path('admin/team-members/<int:pk>/edit/', team_member_views.team_member_edit, name='team_member_edit'),
     path('admin/team-members/<int:pk>/delete/', team_member_views.team_member_delete, name='team_member_delete'),
+
+    # Souvenir CRUD
+    path('admin/souvenirs/', souvenir_views.souvenir_list, name='souvenir_list'),
+    path('admin/souvenirs/create/', souvenir_views.souvenir_create, name='souvenir_create'),
+    path('admin/souvenirs/<int:pk>/edit/', souvenir_views.souvenir_edit, name='souvenir_edit'),
+    path('admin/souvenirs/<int:pk>/delete/', souvenir_views.souvenir_delete, name='souvenir_delete'),
 ]
 
 

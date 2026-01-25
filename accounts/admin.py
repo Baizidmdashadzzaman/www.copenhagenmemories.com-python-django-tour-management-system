@@ -5,8 +5,15 @@ from .models import (
     TourIncluded, TourExcluded, TourItinerary, TourRequirement, TourFAQ, TourPricing,
     TourSchedule, TourBlackoutDate, Booking, BookingParticipant, Payment, TourReview,
     ReviewHelpful, Wishlist, Coupon, CouponUsage, Notification, BlogPost, TourView, SearchLog,
-    CustomerMessage, FeatureSection, FeatureSectionTour, WebsiteMenu, WebsiteSubMenu, FAQ, TeamMember
+    CustomerMessage, FeatureSection, FeatureSectionTour, WebsiteMenu, WebsiteSubMenu, FAQ, TeamMember, Souvenir
 )
+
+@admin.register(Souvenir)
+class SouvenirAdmin(admin.ModelAdmin):
+    list_display = ('title', 'price', 'stock', 'status', 'created_at')
+    list_filter = ('status', 'created_at')
+    search_fields = ('title', 'title_dk', 'description')
+    readonly_fields = ('created_at', 'updated_at')
 
 @admin.register(TeamMember)
 class TeamMemberAdmin(admin.ModelAdmin):

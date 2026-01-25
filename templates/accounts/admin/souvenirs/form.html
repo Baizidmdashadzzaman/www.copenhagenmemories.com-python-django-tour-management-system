@@ -1,0 +1,154 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block admin_content %}
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+<div class="row">
+    <div class="col-12">
+        <h4 class="py-3 mb-4">
+            <span class="text-muted fw-light">Souvenir Management /</span> {{ title }}
+        </h4>
+
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">{{ title }}</h5>
+                <a href="{% url 'souvenir_list' %}" class="btn btn-outline-secondary btn-sm">
+                    <i class="icon-base ti tabler-arrow-left me-1"></i> Back to List
+                </a>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="row g-6">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+                            {{ form.title }}
+                            {% for error in form.title.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.title_dk.id_for_label }}">{{ form.title_dk.label }}</label>
+                            {{ form.title_dk }}
+                            {% for error in form.title_dk.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label" for="{{ form.image.id_for_label }}">{{ form.image.label }}</label>
+                            {{ form.image }}
+                            {% if souvenir.image %}
+                            <div class="mt-2 text-center">
+                                <img src="{{ souvenir.image.url }}" alt="current image" class="img-fluid rounded" style="max-height: 200px;">
+                                <p class="text-muted small">Current Image</p>
+                            </div>
+                            {% endif %}
+                            {% for error in form.image.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+
+                        <div class="col-md-12 mb-3" style="padding-bottom: 80px;">
+                            <label class="form-label" for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                            <div id="editor-description" style="min-height: 200px;">{{ form.description.value|default:''|safe }}</div>
+                            <div class="d-none">
+                                {{ form.description }}
+                            </div>
+                            {% for error in form.description.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-12 mb-3" style="padding-bottom: 80px;">
+                            <label class="form-label" for="{{ form.description_dk.id_for_label }}">{{ form.description_dk.label }}</label>
+                            <div id="editor-description-dk" style="min-height: 200px;">{{ form.description_dk.value|default:''|safe }}</div>
+                            <div class="d-none">
+                                {{ form.description_dk }}
+                            </div>
+                            {% for error in form.description_dk.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+
+                        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                var toolbarOptions = [
+                                    [{ 'header': [1, 2, 3, false] }],
+                                    ['bold', 'italic', 'underline', 'strike'],
+                                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                    [{ 'indent': '-1' }, { 'indent': '+1' }],
+                                    ['link', 'image', 'video'],
+                                    ['clean']
+                                ];
+
+                                // Description
+                                var quillDescription = new Quill('#editor-description', {
+                                    theme: 'snow',
+                                    modules: { toolbar: toolbarOptions }
+                                });
+                                var hiddenDescriptionInput = document.querySelector('#id_description');
+                                
+                                quillDescription.on('text-change', function () {
+                                    hiddenDescriptionInput.value = quillDescription.root.innerHTML;
+                                });
+
+                                // Description Danish
+                                var quillDescriptionDk = new Quill('#editor-description-dk', {
+                                    theme: 'snow',
+                                    modules: { toolbar: toolbarOptions }
+                                });
+                                var hiddenDescriptionDkInput = document.querySelector('#id_description_dk');
+
+                                quillDescriptionDk.on('text-change', function () {
+                                    hiddenDescriptionDkInput.value = quillDescriptionDk.root.innerHTML;
+                                });
+
+                                // Ensure the hidden input is updated on form submission
+                                var form = document.querySelector('form');
+                                if (form) {
+                                    form.addEventListener('submit', function () {
+                                        hiddenDescriptionInput.value = quillDescription.root.innerHTML;
+                                        hiddenDescriptionDkInput.value = quillDescriptionDk.root.innerHTML;
+                                    });
+                                }
+                            });
+                        </script>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="{{ form.price.id_for_label }}">{{ form.price.label }}</label>
+                            {{ form.price }}
+                            {% for error in form.price.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="{{ form.stock.id_for_label }}">{{ form.stock.label }}</label>
+                            {{ form.stock }}
+                            {% for error in form.stock.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="{{ form.status.id_for_label }}">{{ form.status.label }}</label>
+                            {{ form.status }}
+                            {% for error in form.status.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="{{ form.before_discount_price.id_for_label }}">{{ form.before_discount_price.label }}</label>
+                            {{ form.before_discount_price }}
+                            {% for error in form.before_discount_price.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="{{ form.before_discount_price_statue.id_for_label }}">{{ form.before_discount_price_statue.label }}</label>
+                            {{ form.before_discount_price_statue }}
+                            {% for error in form.before_discount_price_statue.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="{{ form.before_discount_price_text.id_for_label }}">{{ form.before_discount_price_text.label }}</label>
+                            {{ form.before_discount_price_text }}
+                            {% for error in form.before_discount_price_text.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="pt-4 mt-3">
+                        <button type="submit" class="btn btn-primary me-sm-3 me-1">Submit</button>
+                        <a href="{% url 'souvenir_list' %}" class="btn btn-label-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
