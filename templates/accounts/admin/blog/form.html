@@ -1,6 +1,92 @@
 {% extends 'accounts/admin/layout.html' %}
 {% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'admin/assets/vendor/libs/quill/typography.css' %}" />
+<link rel="stylesheet" href="{% static 'admin/assets/vendor/libs/quill/katex.css' %}" />
+<link rel="stylesheet" href="{% static 'admin/assets/vendor/libs/quill/editor.css' %}" />
+<style>
+    .ql-container {
+        min-height: 300px;
+        font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+        font-size: 1rem !important;
+    }
+    .ql-editor {
+        min-height: 300px;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'admin/assets/vendor/libs/quill/katex.js' %}"></script>
+<script src="{% static 'admin/assets/vendor/libs/quill/quill.js' %}"></script>
+<script>
+    (function () {
+        const toolbarOptions = [
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote', 'code-block'],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            [{ 'script': 'sub' }, { 'script': 'super' }],
+            [{ 'indent': '-1' }, { 'indent': '+1' }],
+            [{ 'direction': 'rtl' }],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'align': [] }],
+            ['link', 'image', 'video'],
+            ['clean']
+        ];
+
+        // Initialize Content Editor
+        const contentTexarea = document.querySelector('#{{ form.content.id_for_label }}');
+        const contentQuillEl = document.querySelector('#content_quill');
+        
+        if (contentQuillEl && contentTexarea) {
+            // Remove required attribute to prevent browser validation on hidden field
+            contentTexarea.removeAttribute('required');
+
+            const contentQuill = new Quill(contentQuillEl, {
+                modules: {
+                    toolbar: toolbarOptions
+                },
+                theme: 'snow'
+            });
+
+            // Set initial content
+            contentQuill.root.innerHTML = contentTexarea.value;
+
+            // Update textarea on change
+            contentQuill.on('text-change', function () {
+                contentTexarea.value = contentQuill.root.innerHTML === '<p><br></p>' ? '' : contentQuill.root.innerHTML;
+            });
+        }
+
+        // Initialize Danish Content Editor
+        const contentDkTexarea = document.querySelector('#{{ form.content_dk.id_for_label }}');
+        const contentDkQuillEl = document.querySelector('#content_dk_quill');
+        
+        if (contentDkQuillEl && contentDkTexarea) {
+            // Remove required attribute to prevent browser validation on hidden field
+            contentDkTexarea.removeAttribute('required');
+
+            const contentDkQuill = new Quill(contentDkQuillEl, {
+                modules: {
+                    toolbar: toolbarOptions
+                },
+                theme: 'snow'
+            });
+
+            // Set initial content
+            contentDkQuill.root.innerHTML = contentDkTexarea.value;
+
+            // Update textarea on change
+            contentDkQuill.on('text-change', function () {
+                contentDkTexarea.value = contentDkQuill.root.innerHTML === '<p><br></p>' ? '' : contentDkQuill.root.innerHTML;
+            });
+        }
+    })();
+</script>
+{% endblock %}
+
 {% block page_title %}{{ title }}{% endblock %}
 
 {% block admin_content %}
@@ -86,7 +172,10 @@
                         <div class="col-md-12 mb-3">
                             <label class="form-label" for="{{ form.content.id_for_label }}">Content <span
                                     class="text-danger">*</span></label>
-                            {{ form.content }}
+                            <div id="content_quill" class="form-control p-0"></div>
+                            <div style="display:none;">
+                                {{ form.content }}
+                            </div>
                             {% if form.content.errors %}
                             <div class="text-danger">{{ form.content.errors }}</div>
                             {% endif %}
@@ -94,7 +183,10 @@
 
                         <div class="col-md-12 mb-3">
                             <label class="form-label" for="{{ form.content_dk.id_for_label }}">Danish Content</label>
-                            {{ form.content_dk }}
+                            <div id="content_dk_quill" class="form-control p-0"></div>
+                            <div style="display:none;">
+                                {{ form.content_dk }}
+                            </div>
                             {% if form.content_dk.errors %}
                             <div class="text-danger">{{ form.content_dk.errors }}</div>
                             {% endif %}
