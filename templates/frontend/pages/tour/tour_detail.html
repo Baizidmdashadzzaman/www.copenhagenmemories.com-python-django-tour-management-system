@@ -54,12 +54,12 @@
                                 <div class="slider-for nav-center" id="large-img">
                                     {% if tour.main_image %}
                                     <div class="service-img">
-                                        <img src="{{ tour.main_image.url }}" class="img-fluid" alt="{{ tour.title }}" style="width: 100%;">
+                                        <img src="{{ tour.main_image.url }}" class="img-fluid" alt="{{ tour.title }}" style="width: 640px;height: 400px;">
                                     </div>
                                     {% endif %}
                                     {% for image in images %}
                                     <div class="service-img">
-                                        <img src="{{ image.image.url }}" class="img-fluid" alt="{{ image.caption|default:tour.title }}" style="width: 100%;">
+                                        <img src="{{ image.image.url }}" class="img-fluid" alt="{{ image.caption|default:tour.title }}" style="width: 640px;height: 400px;">
                                     </div>
                                     {% endfor %}
                                     {% if not tour.main_image and not images %}
@@ -71,10 +71,10 @@
                                 <a href="{% if tour.main_image %}{{ tour.main_image.url }}{% elif images %}{{ images.0.image.url }}{% endif %}" data-fancybox="gallery" class="btn btn-white btn-xs view-btn"><i class="isax isax-image me-1"></i>{% translate "See All" %}</a>
                                 <div class="slider-nav nav-center" id="small-img">
                                     {% if tour.main_image %}
-                                    <div><img src="{{ tour.main_image.url }}" class="img-fluid" alt="{{ tour.title }}"></div>
+                                    <div><img src="{{ tour.main_image.url }}" style="width: 640px;" class="img-fluid" alt="{{ tour.title }}"></div>
                                     {% endif %}
                                     {% for image in images|slice:":5" %}
-                                    <div><img src="{{ image.image.url }}" class="img-fluid" alt="{{ image.caption|default:tour.title }}"></div>
+                                    <div><img src="{{ image.image.url }}" style="width: 640px;" class="img-fluid" alt="{{ image.caption|default:tour.title }}"></div>
                                     {% endfor %}
                                 </div>
                             </div>
@@ -122,6 +122,18 @@
                         </div>
                     </div>
                     <!-- /Slider -->
+
+                    <div class="bg-light-200 card-bg-light mb-4">
+                        <div class="mb-2">
+                            <p>
+                                {% if current_lang == 'dk' and tour.short_description_dk %}
+                                    {{ tour.short_description_dk }}
+                                {% else %}
+                                    {{ tour.short_description }}
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
 
                     <!-- Description -->
                     <div class="bg-light-200 card-bg-light mb-4">
