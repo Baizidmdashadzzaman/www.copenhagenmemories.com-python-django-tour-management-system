@@ -74,7 +74,7 @@
                                     <div><img src="{{ tour.main_image.url }}" style="width: 640px;" class="img-fluid" alt="{{ tour.title }}"></div>
                                     {% endif %}
                                     {% for image in images|slice:":5" %}
-                                    <div><img src="{{ image.image.url }}" style="width: 640px;" class="img-fluid" alt="{{ image.caption|default:tour.title }}"></div>
+                                    <div><img src="{{ image.image.url }}" style="width: 640px;" class="img-fluid" alt="{{ image.caption|default:tour.title }}" style="width: 640px;height: 400px;"></div>
                                     {% endfor %}
                                 </div>
                             </div>
