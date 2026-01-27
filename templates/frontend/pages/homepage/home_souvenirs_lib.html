@@ -1,0 +1,70 @@
+{% load translate_tags %}
+{% load static %}
+<section class="section souvenir-section" style="padding-top: 100px;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-6 col-lg-10 text-center wow fadeInUp" data-wow-delay="0.2s">
+                <div class="section-header text-center">
+                    <h2 class="mb-2">{% translate "Explore" %} <span class="text-primary text-decoration-underline">{% translate "Souvenirs" %}</span></h2>
+                    <p class="sub-title">{% translate "Discover amazing souvenirs and experiences to remember your trip" %}</p>
+                </div>
+            </div>
+        </div>
+        <div class="owl-carousel destination-slider nav-center">
+
+            {% for souvenir in souvenirs %}
+            <div class="mb-4 wow fadeInUp" data-wow-delay="0.2s">
+                <div class="tour-item">
+                    <div class="tour-img">
+                        <a href="{% url 'souvenir_detail_frontend' souvenir.pk %}">
+                            {% if souvenir.image %}
+                                <img src="{{ souvenir.image.url }}" alt="{% if current_lang == 'dk' and souvenir.title_dk %}{{ souvenir.title_dk }}{% else %}{{ souvenir.title }}{% endif %}" style="width: 100%; height: 250px; object-fit: cover;">
+                            {% else %}
+                                <img src="{% static 'frontend/assets/img/tours/tour-01.jpg' %}" alt="img" style="width: 100%; height: 250px; object-fit: cover;">
+                            {% endif %}
+                        </a>
+                        {% if souvenir.before_discount_price_statue == 'active' and souvenir.before_discount_price %}
+                            <span class="badge bg-danger fs-14 fw-medium" style="position: absolute; top: 10px; left: 10px;">{{ souvenir.before_discount_price_text }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="tour-content p-3 border rounded-bottom bg-white" style="margin-top: -1px;">
+                        <h5 class="mb-2">
+                            <a href="{% url 'souvenir_detail_frontend' souvenir.id %}">
+                                {% if current_lang == 'dk' and souvenir.title_dk %}
+                                    {{ souvenir.title_dk }}
+                                {% else %}
+                                    {{ souvenir.title }}
+                                {% endif %}
+                            </a>
+                        </h5>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="price">
+                                <h6 class="text-primary fw-bold mb-0">DKK {{ souvenir.price }}</h6>
+                                {% if souvenir.before_discount_price_statue == 'active' and souvenir.before_discount_price %}
+                                    <small class="text-muted text-decoration-line-through">DKK {{ souvenir.before_discount_price }}</small>
+                                {% endif %}
+                            </div>
+                            <div class="stock">
+                                {% if souvenir.stock > 0 %}
+                                    <span class="badge bg-soft-success text-success">{% translate "In Stock" %}</span>
+                                {% else %}
+                                    <span class="badge bg-soft-danger text-danger">{% translate "Out of Stock" %}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <a href="{% url 'souvenir_detail_frontend' souvenir.id %}" class="btn btn-outline-primary btn-sm w-100">
+                                {% translate "View Details" %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+        </div>
+        <div class="text-center view-all wow fadeInUp">
+            <a href="{% url 'souvenirs_list_frontend' %}" class="btn btn-dark d-inline-flex align-items-center">{% translate "View All Souvenirs" %}<i class="isax isax-arrow-right-3 ms-2"></i></a>
+        </div>
+    </div>
+</section>

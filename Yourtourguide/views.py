@@ -141,6 +141,8 @@ def home(request):
         'supplier', 'category', 'destination_region', 'city', 'city__country'
     ).prefetch_related('images').order_by('-created_at')[:12]
     
+    souvenirs = Souvenir.objects.filter(status='active').order_by('-created_at')[:8]
+    
     context = {
         'reviews': reviews,
         'featured_blogs': featured_blogs,
@@ -154,6 +156,7 @@ def home(request):
         'sliders': sliders,
         'all_tours': all_tours,
         'team_members': team_members,
+        'souvenirs': souvenirs,
     }
 
     return render(request, 'frontend/pages/home.html', context)
