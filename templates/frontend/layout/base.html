@@ -118,9 +118,9 @@
                                                     class="dropdown-toggle bg-white border d-flex align-items-center"
                                                     data-bs-toggle="dropdown" aria-expanded="false">
                                                         {% if current_lang == 'dk' %}
-                                                        <img src="{% static 'frontend/assets/img/flags/dk.png' %}" alt="flag">DKK
+                                                        <img src="{% static 'frontend/assets/img/flags/dk.png' %}" alt="flag">DK
                                                         {% else %}
-                                                        <img src="{% static 'frontend/assets/img/flags/us.png' %}" alt="flag">ENG
+                                                        <img src="{% static 'frontend/assets/img/flags/us.png' %}" alt="flag">EN
                                                         {% endif %}
                                                 </a>
                                                 <ul class="dropdown-menu p-2">
@@ -128,14 +128,14 @@
                                                         <a class="dropdown-item rounded d-flex align-items-center"
                                                            href="{% url 'set_language' 'en' %}">
                                                             <img src="{% static 'frontend/assets/img/flags/us.png' %}"
-                                                                class="me-2" alt="ENG">ENG
+                                                                class="me-2" alt="ENG">EN
                                                         </a>
                                                     </li>
                                                     <li>
                                                         <a class="dropdown-item rounded d-flex align-items-center"
                                                             href="{% url 'set_language' 'dk' %}">
                                                             <img src="{% static 'frontend/assets/img/flags/dk.png' %}"
-                                                                class="me-2" alt="flag">DKK
+                                                                class="me-2" alt="flag">DK
                                                         </a>
                                                     </li>
                                                 </ul>
@@ -144,10 +144,10 @@
                                                 
                                                 <a href="#" class="dropdown-toggle bg-white border d-block"
                                                     data-bs-toggle="dropdown" aria-expanded="false">
-                                                    DKK
+                                                    DK
                                                 </a>
                                                 <ul class="dropdown-menu p-2">
-                                                    <li><a class="dropdown-item rounded" href="#">DKK</a></li>
+                                                    <li><a class="dropdown-item rounded" href="#">DK</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -168,11 +168,22 @@
                 <div class="header-nav">
                     <div class="main-menu-wrapper">
                         <div class="navbar-logo">
+                            <!-- 
                             <a class="logo-white header-logo" href="{% url 'home' %}">
                                 <img src="{{ site_settings.site_logo_dark.url }}" class="logo" alt="Logo" style="max-width: 90px;">
                             </a>
                             <a class="logo-dark header-logo" href="{% url 'home' %}">
                                 <img src="{{ site_settings.site_logo.url }}" class="logo" alt="Logo" style="max-width: 90px;">
+                            </a>
+                            -->
+                            <a class="navbar-brand d-flex align-items-center" href="#">
+                                <div class="bg-light rounded-circle border border-danger d-flex align-items-center justify-content-center me-3 shadow-sm" style="width: 48px; height: 48px;">
+                                    <img src="{{ site_settings.site_logo.url }}" class="logo" alt="Logo" style="max-width: 90px;">
+                                </div>
+                                <div style="padding-left: 10px;">
+                                    <span class="d-block fw-bold brand-text-red  small tracking-tight mb-0" style="font-size: 1.2rem; line-height: 1;color: #D4483B">Local Guided</span>
+                                    <span class="d-block fw-bold text-dark" style="font-size: 0.9rem; line-height: 1;letter-spacing: 0.12em;">Tour Company</span>
+                                </div>
                             </a>
                         </div>
                         <nav id="mobile-menu">
@@ -337,6 +348,12 @@
                             <p class="mb-3" style="max-width: 150px;">
                                 {{ site_settings.site_description }}
                             </p>
+                            <a class="navbar-brand d-flex align-items-center" href="#">
+                                <div style="padding-left: 10px;">
+                                    <span class="d-block fw-bold brand-text-red  small tracking-tight mb-0" style="font-size: 1.2rem; line-height: 1;color: #D4483B">Local Guided</span>
+                                    <span class="d-block fw-bold text-dark" style="font-size: 0.9rem; line-height: 1;letter-spacing: 0.12em;">Tour Company</span>
+                                </div>
+                            </a>
                             <!-- <span class="d-block mb-2">
                                 {% translate "Available on" %}
                             </span>

@@ -14,14 +14,14 @@
             <a class="dropdown-item rounded d-flex align-items-center {% if current_lang == 'en' %}active{% endif %}" 
                href="{% url 'set_language' 'en' %}">
                 <img src="{% static 'frontend/assets/img/flags/us.png' %}" class="me-2"
-                    alt="flag">{% translate "ENG" %}
+                    alt="flag">{% translate "EN" %}
             </a>
         </li>
         <li>
             <a class="dropdown-item rounded d-flex align-items-center {% if current_lang == 'dk' %}active{% endif %}" 
                href="{% url 'set_language' 'dk' %}">
                 <img src="{% static 'frontend/assets/img/flags/dk.png' %}"
-                    class="me-2" alt="flag">{% translate "DKK" %}
+                    class="me-2" alt="flag">{% translate "DK" %}
             </a>
         </li>
     </ul>
