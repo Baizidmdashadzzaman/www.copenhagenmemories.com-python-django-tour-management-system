@@ -1,9 +1,21 @@
 {% extends 'frontend/layout/base.html' %}
+{% load static %}
+{% block seo_tags %}
+      <meta property="og:title" content="{{ page.title }}" />
+      <meta property="og:site_name" content=Copenhagenmemories />
+      <meta property="og:description" content="{{ page.content|striptags|truncatewords:20 }}" />
+      <meta property="og:type" content="article" />
+      <meta property="og:url" content="https://www.copenhagenmemories.com/page-view/{{ page.id }}/{{page.slug}}" />
+	  <meta property="og:image" content="https://www.copenhagenmemories.com{% if page.image %}{{ page.image.url }}{% else %}{% static 'frontend/assets/img/blog/blog-default.jpg' %}{% endif %}" />
+      <meta property="og:image:width" content={600} />
+      <meta property="og:image:height" content={315} />
+      <meta name="fb:app_id" property="fb:app_id" content />
+{% endblock %}
 
-{% block title %}Page view{% endblock %}
+{% block title %}{{ page.title }}{% endblock %}
 
 {% block content %}
-{% load static %}
+
 {% load translate_tags %}
 
 <div class="breadcrumb-bar breadcrumb-bg-02 text-center">

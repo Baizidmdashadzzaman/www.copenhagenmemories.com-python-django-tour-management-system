@@ -9,9 +9,9 @@
     <title>{{ site_settings.site_name }} - {% block title %}Travel and Tour Booking{% endblock %}</title>
 
     <meta name="description"
-        content="{% if site_settings.site_metadescription %}{{ site_settings.site_metadescription }}{% else %}DreamsTour - A premium Bootstrap 5 template crafted for travel and tour booking. Tailored for travel agencies and booking platforms, it features flight, hotel, and tour reservations, and holiday packages.{% endif %}">
+        content="{% if site_settings.site_metadescription %}{{ site_settings.site_metadescription }}{% else %}.{% endif %}">
     <meta name="keywords"
-        content="{% if site_settings.site_metakey %}{{ site_settings.site_metakey }}{% else %}travel booking template, tour booking, Bootstrap 5 travel template, DreamsTour, hotel booking, flights booking, holiday packages, tour agency website, travel agency template, travel HTML template, booking system, responsive travel template, Bootstrap travel website{% endif %}">
+        content="{% if site_settings.site_metakey %}{{ site_settings.site_metakey }}{% else %}{% endif %}">
     <meta name="author" content="baizid.md.ashadzzaman@gmail.com">
     <meta name="robots" content="index, follow">
     
@@ -45,6 +45,19 @@
     <script>
         Turbolinks.start()
     </script> -->
+    
+    {% block seo_tags %}
+      <meta property="og:title" content="Copenhagenmemories" />
+      <meta property="og:site_name" content=Copenhagenmemories />
+      <meta property="og:description" content="{{ site_settings.site_metadescription }}" />
+      <meta property="og:type" content="article" />
+      <meta property="og:url" content="https://www.copenhagenmemories.com/" />
+	  <meta property="og:image" content="https://www.copenhagenmemories.com{{ site_settings.site_logo.url }}" />
+      <meta property="og:image:width" content={600} />
+      <meta property="og:image:height" content={315} />
+      <meta name="fb:app_id" property="fb:app_id" content />
+    {% endblock %}
+
 </head>
 
 <body>
@@ -67,7 +80,7 @@
                                         <img src="{{ site_settings.site_logo_dark.url }}" alt="logo-img" style="max-width: 90px;">
                                     </a>
                                     <a href="{% url 'home' %}" class="white-logo-responsive">
-                                        <img src="{{ site_settingsa.site_logo.url }}" alt="logo-img" style="max-width: 90px;">
+                                        <img src="{{ site_settings.site_logo.url }}" alt="logo-img" style="max-width: 90px;">
                                     </a>
                                     <div class="offcanvas-close">
                                         <i class="ti ti-x"></i>
@@ -167,7 +180,7 @@
                 <div class="offcanvas-overlay"></div>
                 <div class="header-nav">
                     <div class="main-menu-wrapper">
-                        <div class="navbar-logo">
+                        <div class="navbar-logo" style="padding-left: 15px;">
                             <!-- 
                             <a class="logo-white header-logo" href="{% url 'home' %}">
                                 <img src="{{ site_settings.site_logo_dark.url }}" class="logo" alt="Logo" style="max-width: 90px;">
@@ -341,19 +354,29 @@
                 <div class="row">
                     <div class="col-lg-3">
                         <div class="footer-widget">
-                            <span class="d-block mb-2 footer-logo-light"><img
-                                    src="{{ site_settings.site_logo_dark.url }}" alt="Img" style="max-width: 150px;"></span>
-                            <span class="mb-2 footer-logo-dark"><img src="{{ site_settings.site_logo.url }}"
-                                    alt="Img"></span>
-                            <p class="mb-3" style="max-width: 150px;">
-                                {{ site_settings.site_description }}
-                            </p>
-                            <a class="navbar-brand d-flex align-items-center" href="#">
+
+                            <a style="padding-left: 15px;" class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+                                <div class="bg-light  d-flex align-items-center justify-content-center me-3 shadow-sm" style="width: 48px; height: 48px;">
+                                    <img src="{{ site_settings.site_logo.url }}" class="logo" alt="Logo" style="max-width: 90px;">
+                                </div>
                                 <div style="padding-left: 10px;">
                                     <span class="d-block fw-bold brand-text-red  small tracking-tight mb-0" style="font-size: 1.2rem; line-height: 1;color: #D4483B">Local Guided</span>
                                     <span class="d-block fw-bold text-dark" style="font-size: 0.9rem; line-height: 1;letter-spacing: 0.12em;">Tour Company</span>
                                 </div>
                             </a>
+                            <p class="mb-3" style="max-width: 150px;">
+                                {{ site_settings.site_description }}
+                            </p>
+                            <p>
+                            <b>Copenhagen Memories ApS</b>, <br>Niels Brocks Gade 9, 1574 København                 
+                              <br> <b>CVR: 44540452</b>
+                            </p>
+                            <!-- <a class="navbar-brand d-flex align-items-center" href="#">
+                                <div style="padding-left: 10px;">
+                                    <span class="d-block fw-bold brand-text-red  small tracking-tight mb-0" style="font-size: 1.2rem; line-height: 1;color: #D4483B">Local Guided</span>
+                                    <span class="d-block fw-bold text-dark" style="font-size: 0.9rem; line-height: 1;letter-spacing: 0.12em;">Tour Company</span>
+                                </div>
+                            </a> -->
                             <!-- <span class="d-block mb-2">
                                 {% translate "Available on" %}
                             </span>
