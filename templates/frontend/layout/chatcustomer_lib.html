@@ -1,6 +1,6 @@
 {% load translate_tags %}
 <style>
-.float{
+.customer-chat-float{
 	position:fixed;
 	width:50px;
 	height:50px;
@@ -11,216 +11,226 @@
 	border-radius:50px;
 	text-align:center;
   font-size:30px;
-	/* box-shadow: 2px 2px 3px #999; */
   z-index:9999;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.float:hover{
-    transform: scale(1.1);
-    transition: 0.2s ease;
-}
-
-.my-float{
-	margin-top:16px;
-}
-
-@media only screen and (max-width:960px){
- .dek-menu{
- display:block;
-}
-}
-
-.open-button {
-  padding: 16px 20px;
-  border: none;
+  transition: transform 0.2s ease;
   cursor: pointer;
-  opacity: 0.8;
-  position: fixed;
-  bottom: 23px;
-  right: 28px;
-  width: 280px;
-  z-index: 9999;
-  color:black;
 }
 
-.chat-popup {
+.customer-chat-float:hover{
+    transform: scale(1.1);
+}
+
+.customer-chat-popup {
   display: none;
   position: fixed;
   bottom: 0;
   right: 15px;
-  border: 3px solid #f1f1f1;
+  border: 1px solid #ddd;
+  border-bottom: none;
+  border-radius: 10px 10px 0 0;
   z-index: 10000;
-}
-
-.form-container {
-  width: 350px;
-  padding: 10px;
   background-color: white;
+  width: 350px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
-.form-container textarea {
-  width: 100%;
-  padding: 15px;
-  margin: 5px 0 22px 0;
-  border: none;
-  background: #f1f1f1;
-  resize: none;
-  min-height: 200px;
-}
-
-.form-container textarea:focus {
-  background-color: #ddd;
-  outline: none;
-}
-
-.form-container .btn {
-  color: white;
-  padding: 16px 20px;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  margin-bottom:10px;
-}
-
-.form-container .cancel {
-
-}
-.dek-menu{
-    display: none;
-}
-.GheuR {
-  position: relative;
-  display: flex;
-  -moz-box-pack: center;
-  justify-content: center;
-  display: none;
-}
-.spinner {
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  border: 3px solid rgb(17, 152, 235);
-  border-top-color: rgb(9, 229, 171);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-.chat-body {
-  background-color: #ffe8e8;
+.customer-chat-container {
   padding: 10px;
-  border-radius: 10px;
-}
-
-.answer {
   display: flex;
   flex-direction: column;
-  margin: 10px 0;
-  max-width: 100%;
+}
+
+.customer-chat-body-content {
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+  height: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  border: 1px solid #eee;
+}
+
+.customer-chat-msg {
+  display: flex;
+  flex-direction: column;
+  margin: 5px 0;
+  max-width: 85%;
   word-wrap: break-word;
 }
 
-.answer.left {
+.customer-chat-msg.left {
   align-self: flex-start;
   background-color: #e4e6eb;
   border-radius: 15px 15px 15px 0;
-  padding: 10px;
+  padding: 8px 12px;
   color: #000;
 }
 
-.answer.right {
+.customer-chat-msg.right {
   align-self: flex-end;
-  background-color: #f5793d;
+  background-color: #D4483B;
   border-radius: 15px 15px 0 15px;
-  padding: 10px;
-  color: #000;
+  padding: 8px 12px;
+  color: #fff;
 }
 
-.answer .text {
+.customer-chat-msg .text {
   font-size: 14px;
+  line-height: 1.4;
 }
 
-.answer .time {
-  text-align: right;
+.customer-chat-msg .time {
   font-size: 10px;
-  margin-top: 5px;
-  color: #666;
+  margin-top: 4px;
+  opacity: 0.7;
+}
+
+.customer-chat-msg.left .time {
+    text-align: left;
+    color: #666;
+}
+
+.customer-chat-msg.right .time {
+    text-align: right;
+    color: #eee;
+}
+
+#customerMessageInput {
+    border-radius: 20px;
+    padding-left: 15px;
+}
+
+.customer-chat-header {
+    background-color: #D4483B;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.customer-chat-header h5 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.customer-chat-close {
+    cursor: pointer;
+    font-size: 20px;
 }
 </style>
 
+<div class="customer-chat-float" onclick="openCustomerChat()">
+    <i class="isax isax-message"></i>
+</div>
 
-
-<a href="javascript:void(0);" class="float" onclick="openForm()">
-    <i class="isax isax-message" ></i>
-</a>
-
-<div class="chat-popup" id="myForm" style="border-radius: 10px;">
-   <form class="form-container" id="chatForm">
-   {% csrf_token %}
-   <!-- <h3>{% translate "Chat with us" %}</h3><hr> -->
-   <div class="chat-body" id="chatBox" style="height: 450px; overflow-y: scroll;">
+<div class="customer-chat-popup" id="customerChatPopup">
+   <div class="customer-chat-header">
+       <h5>{% translate "Chat with us" %}</h5>
+       <span class="customer-chat-close" onclick="closeCustomerChat()">&times;</span>
    </div>
+   <div class="customer-chat-container">
+       <div class="customer-chat-body-content" id="customerChatBox">
+           <!-- Messages will be loaded here -->
+       </div>
 
-   {% if not user.is_authenticated or user.is_staff %}
-   <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-block btn-primary rounded text-white text-decoration-none d-block text-center" style="padding: 8px 8px;">
-      {% translate "Please login to send" %}
-   </a>
-   {% else %}
-   <div style="position: relative;">
-     <input type="text" id="messageInput" placeholder="Enter your message ..." required class="form-control my-1">
+       <form id="customerChatForm">
+           {% csrf_token %}
+           <div class="input-group mb-2">
+               <input type="text" id="customerMessageInput" placeholder="{% translate 'Type a message...' %}" required class="form-control">
+               <button type="submit" class="btn btn-primary" style="border-radius: 0 20px 20px 0;">
+                   <i class="isax isax-send-1"></i>
+               </button>
+           </div>
+       </form>
    </div>
-   <button type="submit" class="btn btn-block btn-primary rounded" style="padding: 8px 8px;">
-      {% translate "Send message" %}
-   </button>
-   {% endif %}
-
-   </form>
+</div>
 
 <script>
-  let chatPollInterval;
+  let customerChatPollInterval;
 
-  function formatDate(dateString) {
-      const date = new Date(dateString);
-      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  function setCustomerCookie(name, value, days) {
+      var expires = "";
+      if (days) {
+          var date = new Date();
+          date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+          expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = name + "=" + (value || "") + expires + "; path=/";
   }
 
-  function appendMessage(text, side = 'left', timeStr = '') {
+  function getCustomerCookie(name) {
+      var nameEQ = name + "=";
+      var ca = document.cookie.split(';');
+      for (var i = 0; i < ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+          if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+      }
+      return null;
+  }
+
+  // Initialize unique_customer_id if not present
+  if (!getCustomerCookie('unique_customer_id')) {
+      const uniqueId = 'cust_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+      setCustomerCookie('unique_customer_id', uniqueId, 30); // 30 days
+  }
+
+  function formatCustomerChatDate(dateString) {
+      try {
+          const date = new Date(dateString);
+          if (isNaN(date.getTime())) return "";
+          return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      } catch (e) {
+          return "";
+      }
+  }
+
+  function appendCustomerChatMessage(text, side = 'left', timeStr = '') {
         const messageHtml = `
-            <div class="answer ${side}">
-                <div class="text"><span style="font-size:14px">${text}</span></div>
-                <div class="time"><span style="font-size:10px">${timeStr}</span></div>
+            <div class="customer-chat-msg ${side}">
+                <div class="text">${text}</div>
+                <div class="time">${timeStr}</div>
             </div>
         `;
-        $('#chatBox').append(messageHtml);
-        $('#chatBox').scrollTop($('#chatBox')[0].scrollHeight);
+        $('#customerChatBox').append(messageHtml);
+        const chatBox = $('#customerChatBox')[0];
+        if (chatBox) {
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
     }
 
-  function loadChatMessages() {
+  function loadCustomerChatMessages() {
       $.ajax({
           url: '{% url "customer_chat_messages" %}',
           type: 'GET',
           success: function(res) {
               if(res.status === 'success') {
-                  $('#chatBox').html(''); 
+                  const chatBox = $('#customerChatBox');
+                  const isAtBottom = chatBox[0] ? (chatBox[0].scrollHeight - chatBox.scrollTop() === chatBox[0].clientHeight) : true;
                   
-                  if(res.messages.length === 0) {
-                      $('#chatBox').append('<div class="text-center p-3 text-muted">No messages yet. Start a conversation!</div>');
-                  }
-
-                  res.messages.forEach(msg => {
-                      // If admin_id is present, it's from admin (left). Else from customer (right).
-                      const side = (msg.admin_id) ? 'left' : 'right';
-                      let content = msg.message;
-                      // File handling removed as it's not yet implemented in backend
-                      // if(msg.file) content += `<br><a href="..." target="_blank">View</a>`;
+                  chatBox.html(''); 
+                  
+                  if(res.messages && res.messages.length === 0) {
+                      chatBox.append('<div class="text-center p-3 text-muted" style="font-size: 13px;">No messages yet. Start a conversation!</div>');
+                  } else if (res.messages) {
+                      res.messages.forEach(msg => {
+                          const side = (msg.admin_id) ? 'left' : 'right';
+                          const time = formatCustomerChatDate(msg.created_at);
+                          appendCustomerChatMessage(msg.message, side, time);
+                      });
                       
-                      const time = formatDate(msg.created_at);
-                      appendMessage(content, side, time);
-                  });
+                      if (isAtBottom && chatBox[0]) {
+                          chatBox.scrollTop(chatBox[0].scrollHeight);
+                      }
+                  }
               }
           },
           error: function(err) {
@@ -229,15 +239,15 @@
       });
   }
 
-  $('#chatForm').on('submit', function(e) {
+  $('#customerChatForm').on('submit', function(e) {
       e.preventDefault();
-      const message = $('#messageInput').val().trim();
+      const input = $('#customerMessageInput');
+      const message = input.val().trim();
       if (message === '') return;
       
-      const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      const csrfToken = $('#customerChatForm [name=csrfmiddlewaretoken]').val();
       
-      // Clear input
-      $('#messageInput').val('');
+      input.val('');
       
       $.ajax({
           url: '{% url "customer_chat_send" %}',
@@ -248,41 +258,26 @@
           },
           success: function(res) {
               if(res.status === 'success') {
-                  loadChatMessages(); 
+                  loadCustomerChatMessages(); 
               } else {
                   alert("Error: " + (res.message || "Unknown error"));
               }
           },
           error: function() {
-              alert('Failed to send message over the network.');
+              alert('Failed to send message.');
           }
       });
   });
 
-    const isLoggedIn = JSON.parse("{{ user.is_authenticated|yesno:'true,false' }}");
+  function openCustomerChat() {
+      document.getElementById("customerChatPopup").style.display = "block";
+      loadCustomerChatMessages();
+      if(customerChatPollInterval) clearInterval(customerChatPollInterval);
+      customerChatPollInterval = setInterval(loadCustomerChatMessages, 5000);
+  }
 
-    function openForm() {
-      document.getElementById("myForm").style.display = "block";
-      
-      if(isLoggedIn) {
-          loadChatMessages();
-          // Clear any existing interval to prevent duplicates
-          if(chatPollInterval) clearInterval(chatPollInterval);
-          chatPollInterval = setInterval(loadChatMessages, 5000);
-      }
-    }
-
-    function closeForm() {
-      document.getElementById("myForm").style.display = "none";
-      if(chatPollInterval) clearInterval(chatPollInterval);
-    }
-  
+  function closeCustomerChat() {
+      document.getElementById("customerChatPopup").style.display = "none";
+      if(customerChatPollInterval) clearInterval(customerChatPollInterval);
+  }
 </script>
-
-    <div class="text-center" style="background-color: white">
-    <button type="button" class="btn cancel book-btn w-100" onclick="closeForm()" style="position: relative; width: 95%;padding: 0px;">
-        <span style="font-size: 16px; font-weight: bold;">{% translate "Close" %}</span>
-    </button>
-    </div>
-    </div>
-</div>

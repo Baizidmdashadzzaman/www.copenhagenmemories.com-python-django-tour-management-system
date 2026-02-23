@@ -122,7 +122,7 @@ def home(request):
     destination_regions = DestinationRegion.objects.filter(is_active=True).annotate(tour_count=Count('tours', filter=Q(tours__status='active'))).order_by('name')
     countries = Country.objects.filter(is_active=True).annotate(tour_count=Count('cities__tours', filter=Q(cities__tours__status='active'))).order_by('name')
     feature_sections = FeatureSection.objects.filter(status='active').prefetch_related(
-        Prefetch('section_tours__tour', queryset=Tour.objects.annotate(
+        Prefetch('section_tours__tour', queryset=Tour.objects.filter(status='active').annotate(
             calculated_average_rating=Coalesce(Avg('reviews__overall_rating'), Value(0.0)),
             calculated_total_reviews=Count('reviews')
         ).select_related(

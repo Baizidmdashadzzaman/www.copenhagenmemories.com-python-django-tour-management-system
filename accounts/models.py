@@ -850,7 +850,8 @@ class CustomerMessage(models.Model):
         ('customer', 'Customer'),
     )
     
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='messages')
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='messages', null=True, blank=True)
+    unique_customer_id = models.CharField(max_length=100, null=True, blank=True, db_index=True)
     sender_type = models.CharField(max_length=20, choices=SENDER_CHOICES)
     sender_admin = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='sent_messages')
     subject = models.CharField(max_length=300)
@@ -867,7 +868,9 @@ class CustomerMessage(models.Model):
         verbose_name_plural = 'Customer Messages'
     
     def __str__(self):
-        return f"{self.customer.user.username} - {self.subject}"
+        if self.customer:
+            return f"{self.customer.user.username} - {self.subject}"
+        return f"Guest {self.unique_customer_id} - {self.subject}"
     
     def get_thread_messages(self):
         """Get all messages in this conversation thread"""

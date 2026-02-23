@@ -225,17 +225,20 @@ def toggle_wishlist(request):
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
 
 
-@login_required
 def get_chat_messages(request):
     from accounts.models import CustomerMessage
     from django.http import JsonResponse
     
-    if not hasattr(request.user, 'customer_profile'):
-        return JsonResponse({'status': 'error', 'message': 'Not a customer'}, status=403)
-        
-    customer = request.user.customer_profile
-    messages_list = CustomerMessage.objects.filter(customer=customer).order_by('created_at')
+    unique_customer_id = request.COOKIES.get('unique_customer_id')
     
+    if request.user.is_authenticated and hasattr(request.user, 'customer_profile'):
+        customer = request.user.customer_profile
+        messages_list = CustomerMessage.objects.filter(customer=customer).order_by('created_at')
+    elif unique_customer_id:
+        messages_list = CustomerMessage.objects.filter(unique_customer_id=unique_customer_id, customer__isnull=True).order_by('created_at')
+    else:
+        return JsonResponse({'status': 'success', 'messages': []})
+        
     data = []
     for msg in messages_list:
         data.append({
@@ -247,23 +250,27 @@ def get_chat_messages(request):
         
     return JsonResponse({'status': 'success', 'messages': data})
 
-@login_required
 def send_chat_message(request):
     from accounts.models import CustomerMessage
     from django.http import JsonResponse
-    
-    if not hasattr(request.user, 'customer_profile'):
-        return JsonResponse({'status': 'error', 'message': 'Not a customer'}, status=403)
     
     if request.method == 'POST':
         message_text = request.POST.get('message')
         if not message_text:
             return JsonResponse({'status': 'error', 'message': 'Message is empty'}, status=400)
             
-        customer = request.user.customer_profile
+        unique_customer_id = request.COOKIES.get('unique_customer_id')
         
+        customer = None
+        if request.user.is_authenticated and hasattr(request.user, 'customer_profile'):
+            customer = request.user.customer_profile
+        
+        if not customer and not unique_customer_id:
+            return JsonResponse({'status': 'error', 'message': 'User session not identified'}, status=400)
+            
         CustomerMessage.objects.create(
             customer=customer,
+            unique_customer_id=unique_customer_id if not customer else None,
             sender_type='customer',
             subject='Chat Message',
             message=message_text,

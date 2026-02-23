@@ -99,18 +99,30 @@
                                     <td>
                                         <div class="d-flex justify-content-start align-items-center product-name">
                                             <div class="avatar-wrapper me-3">
-                                                <div class="avatar rounded-circle bg-label-primary">
-                                                    <span class="avatar-initial rounded-circle bg-label-primary">
-                                                        {{ msg.customer.user.username|slice:":2"|upper }}
+                                                <div class="avatar rounded-circle bg-label-{% if msg.customer %}primary{% else %}secondary{% endif %}">
+                                                    <span class="avatar-initial rounded-circle bg-label-{% if msg.customer %}primary{% else %}secondary{% endif %}">
+                                                        {% if msg.customer %}
+                                                            {{ msg.customer.user.username|slice:":2"|upper }}
+                                                        {% else %}
+                                                            G
+                                                        {% endif %}
                                                     </span>
                                                 </div>
                                             </div>
                                             <div class="d-flex flex-column">
                                                 <h6 class="text-nowrap mb-0">
-                                                    {{ msg.customer.user.get_full_name|default:msg.customer.user.username }}
+                                                    {% if msg.customer %}
+                                                        {{ msg.customer.user.get_full_name|default:msg.customer.user.username }}
+                                                    {% else %}
+                                                        Guest: {{ msg.unique_customer_id|truncatechars:15 }}
+                                                    {% endif %}
                                                 </h6>
                                                 <small class="text-truncate text-muted">
-                                                    @{{ msg.customer.user.username }}
+                                                    {% if msg.customer %}
+                                                        @{{ msg.customer.user.username }}
+                                                    {% else %}
+                                                        Anonymous
+                                                    {% endif %}
                                                 </small>
                                             </div>
                                         </div>
@@ -136,6 +148,7 @@
                                     </td>
                                     <td>
                                         <div class="d-inline-block text-nowrap">
+                                            {% if msg.customer %}
                                             <a href="{% url 'message_thread' msg.customer.id %}"
                                                 class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light me-1"
                                                 title="View Thread">
@@ -146,6 +159,13 @@
                                                 title="Send Message">
                                                 <i class="icon-base ti tabler-send icon-22px"></i>
                                             </a>
+                                            {% else %}
+                                            <a href="{% url 'guest_message_thread' msg.unique_customer_id %}"
+                                                class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light me-1"
+                                                title="View Guest Thread">
+                                                <i class="icon-base ti tabler-message icon-22px"></i>
+                                            </a>
+                                            {% endif %}
                                             <a href="{% url 'message_delete' msg.id %}"
                                                 class="btn btn-sm btn-icon btn-text-danger rounded-pill waves-effect waves-light"
                                                 title="Delete Conversation"

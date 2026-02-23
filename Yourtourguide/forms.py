@@ -160,6 +160,14 @@ class FrontendBookingForm(forms.ModelForm):
             participants = json.loads(participants_data)
             if not participants:
                 raise ValidationError("At least one participant is required.")
+            
+            num_participants = len(participants)
+            if self.tour:
+                if self.tour.min_participants and num_participants < self.tour.min_participants:
+                    raise ValidationError(f"This tour requires a minimum of {self.tour.min_participants} people.")
+                if self.tour.max_participants and num_participants > self.tour.max_participants:
+                    raise ValidationError(f"This tour allows a maximum of {self.tour.max_participants} people.")
+                    
         except (json.JSONDecodeError, TypeError):
             raise ValidationError("Invalid participant data.")
 

@@ -260,6 +260,7 @@ urlpatterns = [
     # Customer Messages
     path('admin/messages/', message_views.message_list, name='message_list'),
     path('admin/messages/customer/<int:customer_id>/', message_views.message_thread, name='message_thread'),
+    path('admin/messages/guest/<str:guest_id>/', message_views.guest_message_thread, name='guest_message_thread'),
     path('admin/messages/send/<int:customer_id>/', message_views.message_send, name='message_send'),
     path('admin/messages/<int:message_id>/mark-read/', message_views.message_mark_read, name='message_mark_read'),
     path('admin/messages/<int:message_id>/delete/', message_views.message_delete, name='message_delete'),
