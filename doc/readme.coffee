@@ -6,7 +6,7 @@
  5.⁠ ⁠When opened in Safari, iphone, the logo display become half.(DONE)
  6.⁠ ⁠Menu buttons needs to be in order like this: HOME, TOURS, RENT A BIKE, SOUVENIRS SHOP, BLOGS, ABOUT US (no submenu is necessary for about us)
  7.⁠ ⁠Update phone: +4566772790(DONE)
- 8.⁠ ⁠Please create the email in the server and set mail forwarding to our gmail address (copenhagenmemories@gmail.com). Also, set that we can send email from our gmail as the company mail address. Update email in the site and in the inquiry form settings with the email: contact@copenhagenmemories.com 
+ 8.⁠ ⁠Please create the email in the server and set mail forwarding to our gmail address (copenhagenmemories@gmail.com). Also, set that we can send email from our gmail as the company mail address. Update email in the site and in the inquiry form settings with the email: contact@copenhagenmemories.com (DONE)
  9.⁠ ⁠Setting up payment gateway
 10.⁠ ⁠Update information in ABOUT US page
 11.⁠ ⁠Blog post format needs to be revised, a. put our own name as writer, b. Title image okay, but the other images in the blog needs to be more stylish with format like left text - right image, right text - left image format.    
