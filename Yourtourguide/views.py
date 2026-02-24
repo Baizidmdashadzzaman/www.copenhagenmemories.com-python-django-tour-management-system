@@ -228,9 +228,32 @@ def contactus(request):
                     subject=subject,
                     message=message
                 )
+
+                # Send email notification
+                email_subject = f"New Contact Us Submission: {subject or 'No Subject'}"
+                email_body = f"""
+                You have a new contact form submission:
+
+                Name: {name}
+                Email: {email}
+                Phone: {phone}
+                Subject: {subject}
+
+                Message:
+                {message}
+                """
+                
+                send_mail(
+                    email_subject,
+                    email_body,
+                    settings.DEFAULT_FROM_EMAIL,
+                    ['copenhagenmemories@gmail.com'],
+                    fail_silently=False,
+                )
+
                 messages.success(request, 'Thank you for contacting us! We will get back to you soon.')
             except Exception as e:
-                messages.error(request, 'An error occurred. Please try again later.')
+                messages.error(request, f'An error occurred: {str(e)}')
         else:
             messages.error(request, 'Please fill in all required fields.')
     

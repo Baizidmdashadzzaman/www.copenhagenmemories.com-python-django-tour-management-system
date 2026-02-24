@@ -2,10 +2,10 @@
 1.1. Name spelling mistake is also in the footer of the site(DONE)
  2.⁠ ⁠AI Chat box is not working, when I am writing a message it is showing an error message. Also, please enable the message chatbox without login.(DONE)
  3.⁠ ⁠Each booking can have minimum and max number of people. So, when they select book button the minimum number and max needs to be confirmed from the database before taking the payment. 
- 4.⁠ ⁠Tours displayed the site can be enabled and disabled. When a tour is disabled, it will not show in the site. 
+ 4.⁠ ⁠Tours displayed the site can be enabled and disabled. When a tour is disabled, it will not show in the site.(DONE) 
  5.⁠ ⁠When opened in Safari, iphone, the logo display become half.(DONE)
  6.⁠ ⁠Menu buttons needs to be in order like this: HOME, TOURS, RENT A BIKE, SOUVENIRS SHOP, BLOGS, ABOUT US (no submenu is necessary for about us)
- 7.⁠ ⁠Update phone: +4566772790
+ 7.⁠ ⁠Update phone: +4566772790(DONE)
  8.⁠ ⁠Please create the email in the server and set mail forwarding to our gmail address (copenhagenmemories@gmail.com). Also, set that we can send email from our gmail as the company mail address. Update email in the site and in the inquiry form settings with the email: contact@copenhagenmemories.com 
  9.⁠ ⁠Setting up payment gateway
 10.⁠ ⁠Update information in ABOUT US page
