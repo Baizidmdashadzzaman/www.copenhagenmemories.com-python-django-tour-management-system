@@ -252,8 +252,15 @@
                                             <div data-i18n="Setting">Setting</div>
                                         </a>
                                     </li>
+                                    <li class="menu-item">
+                                        <a href="{% url 'logout' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-power"></i>
+                                            <div data-i18n="Logout">Logout</div>
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
+
 
                             <li
                                 class="menu-item {% if 'groups' in request.path or 'admins' in request.path %}active open{% endif %}">
@@ -440,6 +447,23 @@
                                         <a href="{% url 'tour_review_list' %}" class="menu-link">
                                             <i class="menu-icon icon-base ti tabler-star"></i>
                                             <div data-i18n="Reviews">Reviews</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+
+                            <li
+                                class="menu-item {% if 'admin/ecommerce' in request.path or 'admin/souvenirs' in request.path %}active open{% endif %}">
+                                <a href="javascript:void(0)" class="menu-link menu-toggle">
+                                    <i class="menu-icon icon-base ti tabler-bike"></i>
+                                    <div data-i18n="Rent Bike">Rent Bike</div>
+                                </a>
+                                <ul class="menu-sub">
+                                    <li class="menu-item {% if 'souvenirs' in request.path %}active{% endif %}">
+                                        <a href="{% url 'souvenir_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-motorbike"></i>
+                                            <div data-i18n="Bike">Bike</div>
                                         </a>
                                     </li>
                                 </ul>
