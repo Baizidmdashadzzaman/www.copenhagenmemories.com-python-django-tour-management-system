@@ -1,0 +1,38 @@
+{% extends 'frontend/layout/base.html' %}
+{% load static %}
+{% load translate_tags %}
+
+{% block title %}{% translate "Rent a Bike" %} - {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+
+<div class="breadcrumb-bar breadcrumb-bg-02 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-12">
+                <h2 class="breadcrumb-title mb-2">{% translate "Rent a Bike" %}</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">
+                            <i class="isax isax-home5"></i></a>
+                        </li>
+                        <li class="breadcrumb-item">{% translate "Rent a Bike" %}</li>
+                        <li class="breadcrumb-item active" aria-current="page">{% translate "List" %}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="container">
+         <center><h3>Comming soon</h3></center>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

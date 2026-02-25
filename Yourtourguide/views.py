@@ -13,6 +13,11 @@ from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.utils.crypto import get_random_string
 
+
+
+def rent_bike(request):
+    return render(request, 'frontend/pages/rent-bike/rent_bike_list.html')
+
 def send_test_email(request):
     send_mail(
         subject='Test Email from Django',

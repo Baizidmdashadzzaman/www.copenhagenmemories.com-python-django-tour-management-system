@@ -42,6 +42,7 @@ urlpatterns = [
     path('page-view/<int:page_id>/<str:page_slug>/', views.page_view, name='page_view_fronted'),
     path('tour-feature-section/<int:feature_id>/', views.tour_feature_section, name='tour_feature_section_fronted'),
     path('ai-chat/', ai_views.ai_chat_proxy, name='ai_chat_proxy'),
+    path('rent-bike/', views.rent_bike, name='rent_bike'),
 
     path('todo/', include('todo.urls')),
     path('accounts/', include('accounts.urls')),
