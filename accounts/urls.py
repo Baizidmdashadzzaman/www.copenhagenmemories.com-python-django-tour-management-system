@@ -77,6 +77,13 @@ urlpatterns = [
     path('admin/countries/create/', admin_views.country_create, name='country_create'),
     path('admin/countries/<int:pk>/edit/', admin_views.country_edit, name='country_edit'),
     path('admin/countries/<int:pk>/delete/', admin_views.country_delete, name='country_delete'),
+
+    # Bike Addon CRUD
+    path('admin/bike-addons/', admin_views.bike_addon_list, name='bike_addon_list'),
+    path('admin/bike-addons/create/', admin_views.bike_addon_create, name='bike_addon_create'),
+    path('admin/bike-addons/<int:pk>/edit/', admin_views.bike_addon_edit, name='bike_addon_edit'),
+    path('admin/bike-addons/<int:pk>/delete/', admin_views.bike_addon_delete, name='bike_addon_delete'),
+
     
     # Customer CRUD
     path('admin/customers/', admin_views.customer_list, name='customer_list'),

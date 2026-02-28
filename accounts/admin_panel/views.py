@@ -80,6 +80,13 @@ from .views_blog import (
     blog_status_update,
     blog_feature_toggle
 )
+from .views_bike_addons import (
+    bike_addon_list,
+    bike_addon_create,
+    bike_addon_edit,
+    bike_addon_delete
+)
+
 def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request, data=request.POST)

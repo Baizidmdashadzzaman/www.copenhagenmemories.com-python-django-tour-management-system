@@ -1,6 +1,20 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Customer, CustomerMessage, TourSupplier, Tour
+from .models import Customer, CustomerMessage, TourSupplier, Tour, BikeAddon
+
+class BikeAddonForm(forms.ModelForm):
+    class Meta:
+        model = BikeAddon
+        fields = ['image', 'title', 'title_dk', 'description', 'description_dk', 'status']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Title'}),
+            'title_dk': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Title (Danish)'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Enter Description'}),
+            'description_dk': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Enter Description (Danish)'}),
+            'status': forms.Select(attrs={'class': 'form-select'}),
+            'image': forms.FileInput(attrs={'class': 'form-control'}),
+        }
+
 from django.contrib.auth.forms import AuthenticationForm
 
 class CustomerRegistrationForm(forms.ModelForm):

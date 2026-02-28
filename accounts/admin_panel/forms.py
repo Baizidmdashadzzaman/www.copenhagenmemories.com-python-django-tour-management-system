@@ -1,5 +1,19 @@
 from django import forms
-from accounts.models import DestinationRegion, SiteSetting, Country, Customer, TourSupplier, Category, Slider, Newsletter, ContactUs, CustomerReviewStatic, Page, BlogPost, CustomerMessage, FeatureSection, WebsiteMenu, WebsiteSubMenu, FAQ, TeamMember
+from accounts.models import DestinationRegion, SiteSetting, Country, Customer, TourSupplier, Category, Slider, Newsletter, ContactUs, CustomerReviewStatic, Page, BlogPost, CustomerMessage, FeatureSection, WebsiteMenu, WebsiteSubMenu, FAQ, TeamMember, BikeAddon
+
+class BikeAddonForm(forms.ModelForm):
+    class Meta:
+        model = BikeAddon
+        fields = ['image', 'title', 'title_dk', 'description', 'description_dk', 'status']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter title'}),
+            'title_dk': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter title in Danish'}),
+            'image': forms.FileInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Enter description'}),
+            'description_dk': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Enter description in Danish'}),
+            'status': forms.Select(attrs={'class': 'form-select'}),
+        }
+
 
 from django.contrib.auth.models import User, Group
 

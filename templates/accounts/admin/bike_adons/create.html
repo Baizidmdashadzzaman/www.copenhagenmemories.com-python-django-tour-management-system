@@ -1,0 +1,98 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Create Bike Addon{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Bike /</span> Create New Bike Addon
+    </h4>
+
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card mb-6">
+                <h5 class="card-header">Bike Addon Information</h5>
+                <form class="card-body" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <h6 class="alert-heading mb-1">Please correct the errors below</h6>
+                        <ul class="mb-0">
+                            {% for field in form %}
+                            {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                            {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+
+                    <h6>1. Basic Details</h6>
+                    <div class="row g-6">
+                        <div class="col-md-6">
+                            <label class="form-label" for="id_title">Title <span class="text-danger">*</span></label>
+                            {{ form.title }}
+                            <div class="form-text">Name of the bike addon</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label" for="id_title_dk">Title (Danish)</label>
+                            {{ form.title_dk }}
+                            <div class="form-text">Name of the bike addon in Danish</div>
+                        </div>
+                    </div>
+
+                    <hr class="my-6 mx-n6">
+
+                    <h6>2. Description</h6>
+                    <div class="row g-6">
+                        <div class="col-md-6">
+                            <label class="form-label" for="id_description">Description</label>
+                            {{ form.description }}
+                            <div class="form-text">Brief description of the addon</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label" for="id_description_dk">Description (Danish)</label>
+                            {{ form.description_dk }}
+                            <div class="form-text">Brief description of the addon in Danish</div>
+                        </div>
+                    </div>
+
+                    <hr class="my-6 mx-n6">
+
+                    <h6>3. Media & Status</h6>
+                    <div class="row g-6">
+                        <div class="col-md-6">
+                            <label class="form-label" for="id_image">Image</label>
+                            {{ form.image }}
+                            <div class="form-text">Upload an image for the addon</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label" for="id_status">Status</label>
+                            {{ form.status }}
+                            <div class="form-text">Set the status of this addon</div>
+                        </div>
+                    </div>
+
+                    <div class="pt-6 mt-4">
+                        <button type="submit" class="btn btn-primary me-4 waves-effect waves-light">
+                            <i class="icon-base ti tabler-check icon-22px"></i> Create
+                        </button>
+                        <a href="{% url 'bike_addon_list' %}" class="btn btn-label-secondary waves-effect">
+                            <i class="icon-base ti tabler-ban icon-22px"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

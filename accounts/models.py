@@ -1065,3 +1065,27 @@ class SouvenirOrderItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} x {self.souvenir.title if self.souvenir else 'Unknown'}"
+
+class BikeAddon(models.Model):
+    STATUS_CHOICES = (
+        ('active', 'Active'),
+        ('inactive', 'Inactive'),
+    )
+
+    image = models.ImageField(upload_to='bike_addons/', blank=True, null=True)
+    title = models.CharField(max_length=200)
+    title_dk = models.CharField(max_length=200, blank=True)
+    description = models.TextField(blank=True)
+    description_dk = models.TextField(blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Bike Addon"
+        verbose_name_plural = "Bike Addons"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.title
+

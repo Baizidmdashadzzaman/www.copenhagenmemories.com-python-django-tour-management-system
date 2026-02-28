@@ -454,14 +454,14 @@
 
 
                             <li
-                                class="menu-item {% if 'admin/ecommerce' in request.path or 'admin/souvenirs' in request.path %}active open{% endif %}">
+                                class="menu-item {% if 'bike-addons' in request.path or 'souvenirs' in request.path %}active open{% endif %}">
                                 <a href="javascript:void(0)" class="menu-link menu-toggle">
                                     <i class="menu-icon icon-base ti tabler-bike"></i>
                                     <div data-i18n="Rent Bike">Rent Bike</div>
                                 </a>
                                 <ul class="menu-sub">
-                                    <li class="menu-item {% if 'souvenirs' in request.path %}active{% endif %}">
-                                        <a href="{% url 'souvenir_list' %}" class="menu-link">
+                                    <li class="menu-item {% if 'bike-addons' in request.path %}active{% endif %}">
+                                        <a href="{% url 'bike_addon_list' %}" class="menu-link">
                                             <i class="menu-icon icon-base ti tabler-car-turbine"></i>
                                             <div data-i18n="Bike adons">Bike adons</div>
                                         </a>
@@ -475,7 +475,7 @@
                                     <li class="menu-item {% if 'souvenirs' in request.path %}active{% endif %}">
                                         <a href="{% url 'souvenir_list' %}" class="menu-link">
                                             <i class="menu-icon icon-base ti tabler-bike"></i>
-                                            <div data-i18n="Rent Bikes">Rent Bikes</div>
+                                            <div data-i18n="Bike Rents">Bike Rents</div>
                                         </a>
                                     </li>
                                 </ul>
