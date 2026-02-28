@@ -84,6 +84,13 @@ urlpatterns = [
     path('admin/bike-addons/<int:pk>/edit/', admin_views.bike_addon_edit, name='bike_addon_edit'),
     path('admin/bike-addons/<int:pk>/delete/', admin_views.bike_addon_delete, name='bike_addon_delete'),
 
+    # Bike CRUD
+    path('admin/bikes/', admin_views.bike_list, name='bike_list'),
+    path('admin/bikes/create/', admin_views.bike_create, name='bike_create'),
+    path('admin/bikes/<int:pk>/edit/', admin_views.bike_edit, name='bike_edit'),
+    path('admin/bikes/<int:pk>/delete/', admin_views.bike_delete, name='bike_delete'),
+
+
     
     # Customer CRUD
     path('admin/customers/', admin_views.customer_list, name='customer_list'),

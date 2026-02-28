@@ -1089,3 +1089,39 @@ class BikeAddon(models.Model):
     def __str__(self):
         return self.title
 
+class Bike(models.Model):
+    image = models.ImageField(upload_to='bikes/', blank=True, null=True)
+    slug = models.SlugField(max_length=255, unique=True, blank=True)
+    title = models.CharField(max_length=255)
+    title_dk = models.CharField(max_length=255, blank=True)
+    shortdescription = models.TextField(blank=True)
+    shortdescription_dk = models.TextField(blank=True)
+    description = models.TextField(blank=True)
+    description_dk = models.TextField(blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    show_discount = models.BooleanField(default=False)
+    price_before_disount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    height_info = models.CharField(max_length=100, blank=True)
+    width_info = models.CharField(max_length=100, blank=True)
+    gear_info = models.CharField(max_length=100, blank=True)
+    is_unisex = models.BooleanField(default=True)
+    is_helmet_recommended = models.BooleanField(default=True)
+    is_electric = models.BooleanField(default=False)
+    top_speed_info = models.CharField(max_length=100, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Bike"
+        verbose_name_plural = "Bikes"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+

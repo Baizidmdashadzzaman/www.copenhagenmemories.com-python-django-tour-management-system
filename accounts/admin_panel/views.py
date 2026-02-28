@@ -86,6 +86,13 @@ from .views_bike_addons import (
     bike_addon_edit,
     bike_addon_delete
 )
+from .views_bikes import (
+    bike_list,
+    bike_create,
+    bike_edit,
+    bike_delete
+)
+
 
 def login_view(request):
     if request.method == 'POST':

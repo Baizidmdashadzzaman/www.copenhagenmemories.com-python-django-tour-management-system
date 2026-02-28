@@ -16,3 +16,30 @@
 15.⁠ ⁠Add our company address and CVR number in the site footer. You can see an example in VRgame.dk site. Our CVR: 46168062, Company name: Copenhagen Memories ApS, Niels Brocks Gade 9, 1574 København (DONE)
 16.⁠ ⁠Update the bike tour option to 'Rent a bike' and design the offer accordingly. The page should have a design like this: https://www.citybikeadventures.com/rent-a-bike
 17.⁠ ⁠Adding addition addon option during  a booking, for example a bike rental checkout page will show additional insurance purchase option.
+
+
+
+in account admin add Bike model that will have this field 
+'image',
+'slug',
+'title',
+'title_dk',
+'shortdescription',
+'shortdescription_dk',
+'description',
+'description_dk',
+'price',
+'show_discount'(yes,no)->default no,
+'price_before_disount',
+'height_info',
+'width_info',
+'gear_info',
+'is_unisex'(yes,no),
+'is_helmet_recommended'(yes,no),
+'is_electric'(yes,no)->default no,
+'top_speed_info'. 
+also in templates\accounts\admin\bikes create crud so that admin can 
+manages add edit delete seacrh paginate Bikes information.
+Follow design like this templates\accounts\admin\countries
+
+

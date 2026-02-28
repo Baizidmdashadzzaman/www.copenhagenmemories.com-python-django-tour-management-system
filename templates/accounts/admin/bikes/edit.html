@@ -1,0 +1,226 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Edit Bike{% endblock %}
+
+{% block admin_content %}
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Bike /</span> Edit Bike
+    </h4>
+
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card mb-6">
+                <h5 class="card-header">Edit: {{ bike.title }}</h5>
+                <form class="card-body" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <h6 class="alert-heading mb-1">Please correct the errors below</h6>
+                        <ul class="mb-0">
+                            {% for field in form %}
+                            {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                            {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+
+                    <h6>1. Basic Details</h6>
+                    <div class="row g-6">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="id_title">Title <span class="text-danger">*</span></label>
+                            {{ form.title }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="id_title_dk">Title (Danish)</label>
+                            {{ form.title_dk }}
+                        </div>
+                    </div>
+
+                    <div class="row g-6">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="id_shortdescription">Short Description</label>
+                            {{ form.shortdescription }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="id_shortdescription_dk">Short Description (Danish)</label>
+                            {{ form.shortdescription_dk }}
+                        </div>
+                    </div>
+
+                    <div class="row g-6">
+                        <div class="col-md-12 mb-3" style="padding-bottom: 80px;">
+                            <label class="form-label" for="id_description">Full Description</label>
+                            <div id="editor-description" style="min-height: 200px;">{{ form.description.value|default:''|safe }}</div>
+                            <div class="d-none">
+                                {{ form.description }}
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3" style="padding-bottom: 80px;">
+                            <label class="form-label" for="id_description_dk">Full Description (Danish)</label>
+                            <div id="editor-description-dk" style="min-height: 200px;">{{ form.description_dk.value|default:''|safe }}</div>
+                            <div class="d-none">
+                                {{ form.description_dk }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            var toolbarOptions = [
+                                [{ 'header': [1, 2, 3, false] }],
+                                ['bold', 'italic', 'underline', 'strike'],
+                                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                                [{ 'indent': '-1' }, { 'indent': '+1' }],
+                                ['link', 'image', 'video'],
+                                ['clean']
+                            ];
+
+                            // Description English
+                            var quillDesc = new Quill('#editor-description', {
+                                theme: 'snow',
+                                modules: { toolbar: toolbarOptions }
+                            });
+                            var hiddenDescInput = document.querySelector('#id_description');
+                            
+                            quillDesc.on('text-change', function () {
+                                hiddenDescInput.value = quillDesc.root.innerHTML;
+                            });
+
+                            // Description Danish
+                            var quillDescDk = new Quill('#editor-description-dk', {
+                                theme: 'snow',
+                                modules: { toolbar: toolbarOptions }
+                            });
+                            var hiddenDescDkInput = document.querySelector('#id_description_dk');
+
+                            quillDescDk.on('text-change', function () {
+                                hiddenDescDkInput.value = quillDescDk.root.innerHTML;
+                            });
+
+                            // Ensure the hidden input is updated on form submission
+                            var form = document.querySelector('form');
+                            if (form) {
+                                form.addEventListener('submit', function () {
+                                    hiddenDescInput.value = quillDesc.root.innerHTML;
+                                    hiddenDescDkInput.value = quillDescDk.root.innerHTML;
+                                });
+                            }
+                        });
+                    </script>
+
+
+                    <hr class="my-6 mx-n6">
+
+                    <h6>2. Pricing & Offers</h6>
+                    <div class="row g-6 align-items-center">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="id_price">Price <span class="text-danger">*</span></label>
+                            {{ form.price }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" for="id_price_before_disount">Price Before Discount (Optional)</label>
+                            {{ form.price_before_disount }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="form-check mt-md-6">
+                                {{ form.show_discount }}
+                                <label class="form-check-label" for="id_show_discount">
+                                    Show Discount Badge?
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-6 mx-n6">
+
+                    <h6>3. Technical Information</h6>
+                    <div class="row g-6">
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" for="id_height_info">Height Info</label>
+                            {{ form.height_info }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" for="id_width_info">Width Info</label>
+                            {{ form.width_info }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" for="id_gear_info">Gear Info</label>
+                            {{ form.gear_info }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" for="id_top_speed_info">Top Speed Info</label>
+                            {{ form.top_speed_info }}
+                        </div>
+                    </div>
+
+                    <div class="row g-6 mt-2">
+                        <div class="col-md-3">
+                            <div class="form-check">
+                                {{ form.is_unisex }}
+                                <label class="form-check-label" for="id_is_unisex">Is Unisex?</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-check">
+                                {{ form.is_helmet_recommended }}
+                                <label class="form-check-label" for="id_is_helmet_recommended">Helmet Recommended?</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-check">
+                                {{ form.is_electric }}
+                                <label class="form-check-label" for="id_is_electric">Is Electric?</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-6 mx-n6">
+
+                    <h6>4. Media</h6>
+                    <div class="row g-6">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="id_image">Bike Image</label>
+                            {{ form.image }}
+                            <!-- {% if bike.image %}
+                            <div class="mt-2 text-center" style="width: 150px;">
+                                <img src="{{ bike.image.url }}" alt="Current Image" class="rounded shadow-sm img-fluid" style="width: 150px;">
+                                <small class="text-muted d-block mt-1">Current Image</small>
+                            </div>
+                            {% endif %} -->
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {% if bike.image %}
+                            <div class="mt-2 text-center">
+                                <img src="{{ bike.image.url }}" alt="Current Image" class="rounded shadow-sm img-fluid" style="width: 300px;">
+                                <small class="text-muted d-block mt-1">Current Image</small>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="pt-6 mt-4">
+                        <button type="submit" class="btn btn-primary me-4 waves-effect waves-light">
+                            <i class="icon-base ti tabler-check icon-22px"></i> Update Bike
+                        </button>
+                        <a href="{% url 'bike_list' %}" class="btn btn-label-secondary waves-effect">
+                            <i class="icon-base ti tabler-ban icon-22px"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

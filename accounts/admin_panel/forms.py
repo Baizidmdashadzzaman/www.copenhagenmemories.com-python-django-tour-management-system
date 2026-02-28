@@ -1,5 +1,5 @@
 from django import forms
-from accounts.models import DestinationRegion, SiteSetting, Country, Customer, TourSupplier, Category, Slider, Newsletter, ContactUs, CustomerReviewStatic, Page, BlogPost, CustomerMessage, FeatureSection, WebsiteMenu, WebsiteSubMenu, FAQ, TeamMember, BikeAddon
+from accounts.models import DestinationRegion, SiteSetting, Country, Customer, TourSupplier, Category, Slider, Newsletter, ContactUs, CustomerReviewStatic, Page, BlogPost, CustomerMessage, FeatureSection, WebsiteMenu, WebsiteSubMenu, FAQ, TeamMember, BikeAddon, Bike
 
 class BikeAddonForm(forms.ModelForm):
     class Meta:
@@ -13,6 +13,32 @@ class BikeAddonForm(forms.ModelForm):
             'description_dk': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Enter description in Danish'}),
             'status': forms.Select(attrs={'class': 'form-select'}),
         }
+
+class BikeForm(forms.ModelForm):
+    class Meta:
+        model = Bike
+        fields = '__all__'
+        exclude = ['slug', 'created_at', 'updated_at']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter title'}),
+            'title_dk': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter title in Danish'}),
+            'image': forms.FileInput(attrs={'class': 'form-control'}),
+            'shortdescription': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+            'shortdescription_dk': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'description_dk': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'price': forms.NumberInput(attrs={'class': 'form-control'}),
+            'price_before_disount': forms.NumberInput(attrs={'class': 'form-control'}),
+            'show_discount': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'height_info': forms.TextInput(attrs={'class': 'form-control'}),
+            'width_info': forms.TextInput(attrs={'class': 'form-control'}),
+            'gear_info': forms.TextInput(attrs={'class': 'form-control'}),
+            'is_unisex': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'is_helmet_recommended': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'is_electric': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'top_speed_info': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
 
 
 from django.contrib.auth.models import User, Group
