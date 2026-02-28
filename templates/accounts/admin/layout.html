@@ -462,8 +462,20 @@
                                 <ul class="menu-sub">
                                     <li class="menu-item {% if 'souvenirs' in request.path %}active{% endif %}">
                                         <a href="{% url 'souvenir_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-car-turbine"></i>
+                                            <div data-i18n="Bike adons">Bike adons</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item {% if 'souvenirs' in request.path %}active{% endif %}">
+                                        <a href="{% url 'souvenir_list' %}" class="menu-link">
                                             <i class="menu-icon icon-base ti tabler-motorbike"></i>
-                                            <div data-i18n="Bike">Bike</div>
+                                            <div data-i18n="Bikes">Bikes</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item {% if 'souvenirs' in request.path %}active{% endif %}">
+                                        <a href="{% url 'souvenir_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-bike"></i>
+                                            <div data-i18n="Rent Bikes">Rent Bikes</div>
                                         </a>
                                     </li>
                                 </ul>
