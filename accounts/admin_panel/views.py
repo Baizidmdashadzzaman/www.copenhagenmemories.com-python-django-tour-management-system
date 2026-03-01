@@ -100,7 +100,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             if user.is_staff:
-                login(request, user)
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                 return redirect('admin_dashboard')
             else:
                 messages.error(request, "Access denied. This portal is for administrators only.")
@@ -113,7 +113,7 @@ def register_admin(request):
         form = AdminRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('admin_dashboard')
     else:
         form = AdminRegistrationForm()

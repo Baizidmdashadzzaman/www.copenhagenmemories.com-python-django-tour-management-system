@@ -10,7 +10,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             if not user.is_staff:
-                login(request, user)
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                 return redirect('customer_dashboard')
             else:
                 messages.error(request, "Access denied. Administrators should use the Admin Portal.")
@@ -23,7 +23,7 @@ def register_customer(request):
         form = CustomerRegistrationForm(request.POST)
         if form.is_valid():
             customer = form.save()
-            login(request, customer.user)
+            login(request, customer.user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('customer_dashboard')
     else:
         form = CustomerRegistrationForm()
