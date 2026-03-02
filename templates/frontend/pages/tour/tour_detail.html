@@ -522,6 +522,12 @@
                                     <p class="flex-fill">{{ tour.get_difficulty_level_display }}</p>
                                 </div>
                                 {% endif %}
+                                {% if tour.min_participants %}
+                                <div class="d-flex align-items-center justify-content-between details-info">
+                                    <h6 class="fw-medium">{% translate "Min Participants" %}</h6>
+                                    <p class="flex-fill">{{ tour.min_participants }}</p>
+                                </div>
+                                {% endif %}
                                 {% if tour.max_participants %}
                                 <div class="d-flex align-items-center justify-content-between details-info">
                                     <h6 class="fw-medium">{% translate "Max Participants" %}</h6>
@@ -920,6 +926,8 @@
     }
 window.tourBasePrice = parseFloat("{{ tour.base_price|stringformat:'f'|default:0 }}");
 window.tourCurrency = "{{ tour.currency|default:'DKK' }}";
+window.tourMinParticipants = {% if tour.min_participants %}{{ tour.min_participants }}{% else %}null{% endif %};
+window.tourMaxParticipants = {% if tour.max_participants %}{{ tour.max_participants }}{% else %}null{% endif %};
 </script>
 
 <script>
@@ -944,6 +952,19 @@ document.addEventListener('DOMContentLoaded', function() {
         if (participants.length === 0) {
             e.preventDefault();
             alert('Please add at least one participant.');
+            return;
+        }
+
+        // Tour participants validation
+        if (window.tourMinParticipants && participants.length < window.tourMinParticipants) {
+            e.preventDefault();
+            alert(`This tour requires at least ${window.tourMinParticipants} participants. Currently you have added ${participants.length}.`);
+            return;
+        }
+
+        if (window.tourMaxParticipants && participants.length > window.tourMaxParticipants) {
+            e.preventDefault();
+            alert(`This tour allows a maximum of ${window.tourMaxParticipants} participants. Currently you have added ${participants.length}.`);
             return;
         }
 
