@@ -144,6 +144,7 @@ urlpatterns = [
     path('admin/admins/create/', admin_user_views.admin_create, name='admin_create'),
     path('admin/admins/<int:pk>/edit/', admin_user_views.admin_edit, name='admin_edit'),
     path('admin/admins/<int:pk>/delete/', admin_user_views.admin_delete, name='admin_delete'),
+    path('admin/user-profile/', admin_user_views.user_profile, name='user_profile'),
 
     # Customer Review CRUD
     path('admin/reviews/', review_views.review_list, name='review_list'),

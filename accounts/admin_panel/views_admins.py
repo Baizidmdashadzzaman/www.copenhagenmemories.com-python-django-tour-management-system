@@ -78,3 +78,9 @@ def admin_delete(request, pk):
             messages.success(request, 'Admin user deleted successfully!')
         return redirect('admin_list')
     return render(request, 'accounts/admin/admins/confirm_delete.html', {'user': user})
+
+
+@login_required
+@user_passes_test(is_admin)
+def user_profile(request):
+    return render(request, 'accounts/admin/admins/user_profile.html')

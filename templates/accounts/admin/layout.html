@@ -197,7 +197,7 @@
                                     <div class="dropdown-divider my-1 mx-n2"></div>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="#">
+                                    <a class="dropdown-item" href="{% url 'user_profile' %}">
                                         <i class="icon-base ti tabler-user me-3 icon-md"></i><span
                                             class="align-middle">My Profile</span>
                                     </a>
@@ -466,7 +466,7 @@
                                             <div data-i18n="Bike adons">Bike adons</div>
                                         </a>
                                     </li>
-                                    <!-- <li class="menu-item {% if 'admin/bikes' in request.path %}active{% endif %}">
+                                    <li class="menu-item {% if 'admin/bikes' in request.path %}active{% endif %}">
                                         <a href="{% url 'bike_list' %}" class="menu-link">
                                             <i class="menu-icon icon-base ti tabler-motorbike"></i>
                                             <div data-i18n="Bikes">Bikes</div>
@@ -477,7 +477,7 @@
                                             <i class="menu-icon icon-base ti tabler-bike"></i>
                                             <div data-i18n="Bike Rents">Bike Rents</div>
                                         </a>
-                                    </li> -->
+                                    </li>
                                 </ul>
                             </li>
 
