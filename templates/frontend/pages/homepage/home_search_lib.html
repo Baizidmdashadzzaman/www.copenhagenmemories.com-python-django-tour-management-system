@@ -34,10 +34,10 @@
                                             <div class="d-lg-flex">
                                                 <div class="d-flex form-info flex-wrap">
                                                     <div class="form-item">
-                                                        <label class="form-label fs-14 text-default mb-1" for="search_query">{% translate "Where would you like to go?" %}</label>
+                                                        <label class="form-label fs-14 text-default mb-1" for="search_query">{% translate "Search by tours" %}</label>
                                                                 <div class="input-group">
                                                             <span class="input-group-text bg-white border-end-0 ps-3"><i class="isax isax-location"></i></span>
-                                                            <input id="search_query" name="search" type="text" class="form-control border-start-0" placeholder="Search by city, region or tour" value="{{ request.GET.search|default_if_none:'' }}">
+                                                            <input id="search_query" name="search" type="text" class="form-control border-start-0" placeholder="Search by tours" value="{{ request.GET.search|default_if_none:'' }}">
                                                         </div>
                                                     </div>
                                                     <div class="form-item">
