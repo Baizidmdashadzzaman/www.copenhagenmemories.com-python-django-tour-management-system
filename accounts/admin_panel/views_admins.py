@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .forms import AdminUserForm
+from .forms import AdminUserForm, AdminProfileForm
 from django.core.paginator import Paginator
 from django.db.models import Q
 from .decorators import permission_required_with_message
@@ -83,4 +84,13 @@ def admin_delete(request, pk):
 @login_required
 @user_passes_test(is_admin)
 def user_profile(request):
-    return render(request, 'accounts/admin/admins/user_profile.html')
+    if request.method == 'POST':
+        form = AdminProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated successfully!')
+            return redirect('user_profile')
+    else:
+        form = AdminProfileForm(instance=request.user)
+    
+    return render(request, 'accounts/admin/admins/user_profile.html', {'form': form})
