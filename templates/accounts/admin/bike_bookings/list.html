@@ -1,0 +1,226 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Bike Bookings{% endblock %}
+
+{% block admin_content %}
+
+
+
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Bike /</span> Bike Bookings
+    </h4>
+
+    {% if messages %}
+    <div class="row">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Bike Bookings List Table -->
+    <div class="card">
+        <div class="card-header border-bottom">
+            <h5 class="card-title mb-3">Bike Bookings List</h5>
+        </div>
+
+        <div class="card-datatable table-responsive">
+            <div id="DataTables_Table_0_wrapper" class="dt-container dt-bootstrap5 dt-empty-footer">
+
+                <!-- Search and Add Button Toolbar -->
+                <div class="row m-3 my-0 justify-content-between">
+                    <div class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0"
+                        style="padding-top:15px">
+                        <form method="get" class="dt-search mb-0 mb-md-6 d-flex">
+                            <div class="input-group">
+                                <input type="search" class="form-control" id="dt-search-0"
+                                    name="search" placeholder="Search by Booking #, Name, Email or Phone" value="{{ search_query }}">
+                                {% if search_query %}
+                                <a href="{% url 'bike_booking_list' %}" class="btn btn-outline-secondary" type="button">
+                                    <i class="icon-base ti tabler-x icon-22px"></i>
+                                </a>
+                                {% endif %}
+
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="icon-base ti tabler-search icon-22px"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div
+                        class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto gap-md-2 gap-0 mt-0">
+                        <div class="dt-buttons btn-group flex-wrap mb-md-0 mb-6">
+                            <a href="{% url 'bike_booking_create' %}" class="btn add-new btn-primary" tabindex="0"
+                                aria-controls="DataTables_Table_0" type="button">
+                                <span>
+                                    <i class="icon-base ti tabler-plus me-0 me-sm-1 icon-16px"></i>
+                                    <span class="d-none d-sm-inline-block">Add Bike Addon</span>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="justify-content-between dt-layout-table">
+                    <div class="d-md-flex justify-content-between align-items-center dt-layout-full table-responsive">
+                        <table class="datatables-products table dataTable dtr-column" id="DataTables_Table_0"
+                            aria-describedby="DataTables_Table_0_info">
+                            <thead class="border-top">
+                                <tr>
+                                    <th>Booking #</th>
+                                    <th>Customer</th>
+                                    <th>Bike</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Created At</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for booking in page_obj %}
+                    <tr>
+                        <td><strong>{{ booking.booking_number }}</strong></td>
+                        <td>
+                            <div class="d-flex flex-column">
+                                <span class="fw-semibold">{{ booking.name }}</span>
+                                <small class="text-muted">{{ booking.email }}</small>
+                            </div>
+                        </td>
+                        <td>{{ booking.bike.title }}</td>
+                        <td>{{ booking.total }}</td>
+                        <td>
+                            {% if booking.status == 'confirmed' %}
+                            <span class="badge bg-label-success">Confirmed</span>
+                            {% elif booking.status == 'pending' %}
+                            <span class="badge bg-label-warning">Pending</span>
+                            {% elif booking.status == 'cancelled' %}
+                            <span class="badge bg-label-danger">Cancelled</span>
+                            {% elif booking.status == 'completed' %}
+                            <span class="badge bg-label-info">Completed</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ booking.created_at|date:"d M Y" }}</td>
+                        <td>
+                                        <div class="d-inline-block text-nowrap">
+                                            <a href="{% url 'bike_booking_edit' booking.pk %}" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light me-1">
+                                                <i class="icon-base ti tabler-edit icon-22px"></i>
+                                            </a>
+                                            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#deleteModal{{ booking.pk }}" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light">
+                                                <i class="icon-base ti tabler-trash icon-22px"></i>
+                                            </a>
+                                        </div>
+
+                                        <div class="modal fade" id="deleteModal{{ booking.pk }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Delete Booking</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to delete booking <strong>{{ booking.booking_number }}</strong>?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
+                                            <form action="{% url 'bike_booking_delete' booking.pk %}" method="POST" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                                    </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-4">No bookings found.</td>
+                    </tr>
+                    {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="row mx-3 justify-content-between">
+                    <div
+                        class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
+                        <div class="dt-info" aria-live="polite" id="DataTables_Table_0_info" role="status">
+                            Showing {{ page_obj.start_index|default:0 }} to {{ page_obj.end_index|default:0 }} of
+                            {{ page_obj.paginator.count|default:0 }} entries
+                        </div>
+                    </div>
+                    <div
+                        class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto gap-md-2 gap-0 mt-0">
+                        <div class="dt-paging">
+                            <nav aria-label="pagination">
+                                {% if page_obj.has_other_pages %}
+                                <ul class="pagination">
+                                    {% if page_obj.has_previous %}
+                                    <li class="page-item prev">
+                                        <a class="page-link"
+                                            href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                                            <i class="icon-base ti tabler-caret-left icon-22px"></i>
+                                        </a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item prev disabled">
+                                        <a class="page-link" href="javascript:void(0);">
+                                            <i class="icon-base ti tabler-caret-left icon-22px"></i>
+                                        </a>
+                                    </li>
+                                    {% endif %}
+
+                                    {% for i in page_obj.paginator.page_range %}
+                                    {% if page_obj.number == i %}
+                                    <li class="page-item active">
+                                        <a class="page-link" href="javascript:void(0);">{{ i }}</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                            href="?page={{ i }}{% if search_query %}&search={{ search_query }}{% endif %}">{{
+                                            i }}</a>
+                                    </li>
+                                    {% endif %}
+                                    {% endfor %}
+
+                                    {% if page_obj.has_next %}
+                                    <li class="page-item next">
+                                        <a class="page-link"
+                                            href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                                            <i class="icon-base ti tabler-caret-right icon-22px"></i>
+                                        </a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item next disabled">
+                                        <a class="page-link" href="javascript:void(0);">
+                                            <i class="icon-base ti tabler-caret-right icon-22px"></i>
+                                        </a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                                {% endif %}
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

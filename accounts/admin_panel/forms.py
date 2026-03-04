@@ -1,5 +1,29 @@
 from django import forms
-from accounts.models import DestinationRegion, SiteSetting, Country, Customer, TourSupplier, Category, Slider, Newsletter, ContactUs, CustomerReviewStatic, Page, BlogPost, CustomerMessage, FeatureSection, WebsiteMenu, WebsiteSubMenu, FAQ, TeamMember, BikeAddon, Bike
+from accounts.models import DestinationRegion, SiteSetting, Country, Customer, TourSupplier, Category, Slider, Newsletter, ContactUs, CustomerReviewStatic, Page, BlogPost, CustomerMessage, FeatureSection, WebsiteMenu, WebsiteSubMenu, FAQ, TeamMember, BikeAddon, Bike, BikeBooking
+
+# ... (rest of the file remains same until end)
+
+class BikeBookingForm(forms.ModelForm):
+    class Meta:
+        model = BikeBooking
+        fields = [
+            'customer', 'name', 'email', 'phone', 'address', 
+            'other_info', 'bike', 'subtotal', 'discount', 'total', 'paid', 'status'
+        ]
+        widgets = {
+            'customer': forms.Select(attrs={'class': 'form-select select2', 'id': 'id_customer'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Customer Name'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Customer Email'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Customer Phone'}),
+            'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Customer Address'}),
+            'other_info': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Additional Info'}),
+            'bike': forms.Select(attrs={'class': 'form-select select2', 'id': 'id_bike'}),
+            'subtotal': forms.NumberInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
+            'discount': forms.NumberInput(attrs={'class': 'form-control'}),
+            'total': forms.NumberInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
+            'paid': forms.NumberInput(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'form-select'}),
+        }
 
 class BikeAddonForm(forms.ModelForm):
     class Meta:

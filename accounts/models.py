@@ -1139,4 +1139,53 @@ class BikeAddonPrice(models.Model):
         return f"{self.bike.title} - {self.addon.title} ({self.price})"
 
 
+class BikeBooking(models.Model):
+    STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('confirmed', 'Confirmed'),
+        ('cancelled', 'Cancelled'),
+        ('completed', 'Completed'),
+    )
+
+    booking_number = models.CharField(max_length=20, unique=True, blank=True)
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
+    name = models.CharField(max_length=255)
+    email = models.EmailField()
+    phone = models.CharField(max_length=20)
+    address = models.TextField(blank=True)
+    other_info = models.TextField(blank=True)
+    bike = models.ForeignKey(Bike, on_delete=models.PROTECT)
+    
+    subtotal = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    discount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    total = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    paid = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Bike Booking"
+        verbose_name_plural = "Bike Bookings"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.booking_number} - {self.name}"
+
+    def save(self, *args, **kwargs):
+        if not self.booking_number:
+            import uuid
+            self.booking_number = f"BB-{uuid.uuid4().hex[:8].upper()}"
+        super().save(*args, **kwargs)
+
+class BikeBookingAddon(models.Model):
+    booking = models.ForeignKey(BikeBooking, related_name='booking_addons', on_delete=models.CASCADE)
+    addon = models.ForeignKey(BikeAddon, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.addon.title} ({self.price})"
+
+
 

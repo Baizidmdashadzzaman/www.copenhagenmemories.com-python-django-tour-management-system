@@ -472,9 +472,9 @@
                                             <div data-i18n="Bikes">Bikes</div>
                                         </a>
                                     </li>
-                                    <li class="menu-item {% if 'souvenirs' in request.path %}active{% endif %}">
-                                        <a href="{% url 'souvenir_list' %}" class="menu-link">
-                                            <i class="menu-icon icon-base ti tabler-bike"></i>
+                                    <li class="menu-item {% if 'bike-bookings' in request.path %}active{% endif %}">
+                                        <a href="{% url 'bike_booking_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-calendar-event"></i>
                                             <div data-i18n="Bike Bookings">Bike Bookings</div>
                                         </a>
                                     </li>

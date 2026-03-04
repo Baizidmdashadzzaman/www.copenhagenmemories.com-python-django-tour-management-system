@@ -13,6 +13,7 @@ from accounts.admin_panel import views_reviews as review_views
 from accounts.admin_panel import views_pages as page_views
 from accounts.admin_panel import views_tours as tour_views
 from accounts.admin_panel import views_bookings as booking_views
+from accounts.admin_panel import views_bike_bookings as bike_booking_views
 from accounts.admin_panel import views_payments as payment_views
 from accounts.admin_panel import views_coupons as coupon_views
 from accounts.admin_panel import views_cities as city_views
@@ -89,6 +90,14 @@ urlpatterns = [
     path('admin/bikes/create/', admin_views.bike_create, name='bike_create'),
     path('admin/bikes/<int:pk>/edit/', admin_views.bike_edit, name='bike_edit'),
     path('admin/bikes/<int:pk>/delete/', admin_views.bike_delete, name='bike_delete'),
+    
+    # Bike Booking CRUD
+    path('admin/bike-bookings/', bike_booking_views.bike_booking_list, name='bike_booking_list'),
+    path('admin/bike-bookings/create/', bike_booking_views.bike_booking_create, name='bike_booking_create'),
+    path('admin/bike-bookings/<int:pk>/edit/', bike_booking_views.bike_booking_edit, name='bike_booking_edit'),
+    path('admin/bike-bookings/<int:pk>/delete/', bike_booking_views.bike_booking_delete, name='bike_booking_delete'),
+    path('admin/api/bike-addons/<int:bike_id>/', bike_booking_views.get_bike_addons_api, name='get_bike_addons_api'),
+    path('admin/api/customer-info/<int:customer_id>/', bike_booking_views.get_customer_info_api, name='get_customer_info_api'),
 
 
     

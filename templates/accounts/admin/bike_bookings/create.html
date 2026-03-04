@@ -1,0 +1,330 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Create Bike Booking{% endblock %}
+
+{% block admin_content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold py-3 mb-0">
+            <span class="text-muted fw-light">Bikes /</span> Add New Bike Booking
+        </h4>
+        <a href="{% url 'bike_booking_list' %}" class="btn btn-label-secondary">
+            <i class="ti tabler-arrow-left me-1"></i> Back to List
+        </a>
+    </div>
+
+    <form method="POST" id="bikeBookingForm">
+        {% csrf_token %}
+        <div class="row">
+            <!-- Left Side: Basic Info -->
+            <div class="col-md-8">
+                <div class="card mb-4 border-top shadow-sm ">
+                    <h5 class="card-header border-bottom mb-3  py-3">1. Customer Information</h5>
+                    <div class="card-body pt-2">
+                        <div class="row g-3">
+                            <div class="col-md-12 mb-2">
+                                <label class="form-label fw-bold" for="id_customer">Select Registered Customer (Optional)</label>
+                                {{ form.customer }}
+                                <small class="text-muted d-block mt-1">Select a customer to auto-fill their information.</small>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label" for="id_name">Full Name</label>
+                                {{ form.name }}
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label" for="id_email">Email</label>
+                                {{ form.email }}
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label" for="id_phone">Phone</label>
+                                {{ form.phone }}
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label" for="id_address">Address</label>
+                                {{ form.address }}
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label" for="id_other_info">Other Information / Special Requirements</label>
+                                {{ form.other_info }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4 border-top  shadow-sm">
+                    <h5 class="card-header border-bottom mb-3 py-3">2. Bike Selection & Addons</h5>
+                    <div class="card-body pt-2">
+                        <div class="row g-3">
+                            <div class="col-md-12 mb-4">
+                                <label class="form-label fw-bold h6" for="id_bike">Select Bike</label>
+                                {{ form.bike }}
+                            </div>
+                            <div class="col-md-12" id="addons-container" style="display: none;">
+                                <div class="divider text-start mb-4">
+                                    <div class="divider-text fw-bold text-primary">
+                                        <i class="ti tabler-package me-1"></i>
+                                        Available Addons for <span id="selected-bike-name"></span>
+                                    </div>
+                                </div>
+                                <div id="addons-list" class="row">
+                                    <!-- Addons will be loaded here via AJAX -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Totals & Status -->
+            <div class="col-md-4">
+                <div class="card mb-4 sticky-top shadow-sm" style="top: 85px; z-index: 1;">
+                    <h5 class="card-header border-bottom mb-3 py-3">3. Pricing Summary</h5>
+                    <div class="card-body pt-2">
+                        <div class="mb-3">
+                            <label class="form-label">Bike Price</label>
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text badge-label-secondary">DKK</span>
+                                <input type="text" id="bike-base-price" class="form-control" readonly value="0.00">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Subtotal (Bike + Addons)</label>
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text badge-label-secondary">DKK</span>
+                                {{ form.subtotal }}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-danger">Discount</label>
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text badge-label-secondary text-danger">DKK</span>
+                                {{ form.discount }}
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold text-success h5">Grand Total</label>
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text  text-success ">DKK</span>
+                                {{ form.total }}
+                            </div>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="mb-3">
+                            <label class="form-label text-muted" for="id_paid">Amount Paid</label>
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text badge-label-secondary">DKK</span>
+                                {{ form.paid }}
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" for="id_status">Status</label>
+                            {{ form.status }}
+                        </div>
+                        
+                        <div class="pt-3">
+                            <button type="submit" class="btn btn-primary w-100 mb-3 shadow-sm py-2">
+                                <i class="ti tabler-check me-1 icon-18px"></i> Save Booking
+                            </button>
+                            <a href="{% url 'bike_booking_list' %}" class="btn btn-label-secondary w-100 py-2">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'admin/assets/vendor/libs/select2/select2.js' %}"></script>
+<script>
+$(document).ready(function() {
+    // Initialize Select2
+    function initSelect2() {
+        $('.select2').each(function() {
+            $(this).select2({
+                placeholder: 'Select an option',
+                allowClear: true,
+                width: '100%',
+                dropdownParent: $(this).parent()
+            });
+        });
+    }
+    initSelect2();
+
+    const bikeSelect = $('#id_bike');
+    const customerSelect = $('#id_customer');
+    const addonsContainer = $('#addons-container');
+    const addonsList = $('#addons-list');
+    const bikeBasePriceInput = $('#bike-base-price');
+    const subtotalInput = $('#id_subtotal');
+    const discountInput = $('#id_discount');
+    const totalInput = $('#id_total');
+    const bikeNameSpan = $('#selected-bike-name');
+
+    // Handle Customer Selection
+    customerSelect.on('change', function() {
+        const customerId = $(this).val();
+        if (customerId) {
+            const url = "{% url 'get_customer_info_api' 0 %}".replace('0', customerId);
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(data) {
+                    $('#id_name').val(data.name);
+                    $('#id_email').val(data.email);
+                    $('#id_phone').val(data.phone);
+                    $('#id_address').val(data.address);
+                },
+                error: function(err) {
+                    console.error("Error fetching customer info:", err);
+                }
+            });
+        }
+    });
+
+    // Function to handle bike selection logic
+    function handleBikeChange() {
+        const bikeId = bikeSelect.val();
+        if (bikeId) {
+            bikeNameSpan.text(bikeSelect.find("option:selected").text());
+            const url = "{% url 'get_bike_addons_api' 0 %}".replace('0', bikeId);
+            
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(data) {
+                    bikeBasePriceInput.val(parseFloat(data.bike_price).toFixed(2));
+                    addonsList.empty();
+                    
+                    if (data.addons && data.addons.length > 0) {
+                        data.addons.forEach(addon => {
+                            const addonHtml = `
+                                <div class="col-md-6 mb-3">
+                                    <div class="addon-item p-3 border rounded shadow-none position-relative transition-all" id="addon-card-${addon.id}">
+                                        <div class="form-check m-0">
+                                            <input class="form-check-input addon-checkbox stretched-link" type="checkbox" 
+                                                   name="selected_addons" value="${addon.id}" id="addon-${addon.id}" 
+                                                   data-price="${addon.price}">
+                                            <div class="d-flex justify-content-between align-items-center w-100 pe-2">
+                                                <label class="form-check-label fw-semibold mb-0 cursor-pointer" for="addon-${addon.id}">
+                                                    ${addon.title}
+                                                </label>
+                                                <span class="text-primary fw-bold small">DKK ${parseFloat(addon.price).toFixed(2)}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            addonsList.append(addonHtml);
+                        });
+                        addonsContainer.fadeIn();
+                    } else {
+                        addonsList.append('<div class="col-12 text-muted small px-3">No addons available for this bike.</div>');
+                        addonsContainer.fadeIn();
+                    }
+                    calculateTotals();
+                },
+                error: function(err) {
+                    console.error("Error fetching bike addons:", err);
+                    addonsContainer.fadeOut();
+                    bikeBasePriceInput.val('0.00');
+                    calculateTotals();
+                }
+            });
+        } else {
+            addonsContainer.fadeOut();
+            bikeBasePriceInput.val('0.00');
+            calculateTotals();
+        }
+    }
+
+    // Bind change event to bike select (works for both native and select2)
+    bikeSelect.on('change', function() {
+        handleBikeChange();
+    });
+
+    // Calculate Totals
+    function calculateTotals() {
+        let bikePrice = parseFloat(bikeBasePriceInput.val()) || 0;
+        let addonsTotal = 0;
+        
+        $('.addon-checkbox:checked').each(function() {
+            addonsTotal += parseFloat($(this).data('price')) || 0;
+            $(this).closest('.addon-item').addClass('selected bg-label-primary border-primary');
+        });
+
+        let subtotal = bikePrice + addonsTotal;
+        let discount = parseFloat(discountInput.val()) || 0;
+        let total = subtotal - discount;
+
+        subtotalInput.val(subtotal.toFixed(2));
+        totalInput.val(Math.max(0, total).toFixed(2));
+    }
+
+    // Trigger calculation on addon checkbox changes
+    $(document).on('change', '.addon-checkbox', function() {
+        const item = $(this).closest('.addon-item');
+        if($(this).is(':checked')) {
+            item.addClass('selected bg-label-primary border-primary');
+        } else {
+            item.removeClass('selected bg-label-primary border-primary');
+        }
+        calculateTotals();
+    });
+
+    // Trigger calculation on discount input
+    discountInput.on('input', function() {
+        calculateTotals();
+    });
+
+    // Initial check if bike is already selected (useful for refresh/validation errors)
+    if (bikeSelect.val()) {
+        handleBikeChange();
+    }
+});
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'admin/assets/vendor/libs/select2/select2.css' %}" />
+<style>
+/* Select2 overrides */
+.select2-container--default .select2-selection--single {
+    height: 38px !important;
+    border: 1px solid #dbdade !important;
+    border-radius: 0.375rem !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 38px !important;
+    padding-left: 12px !important;
+    color: #444050 !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 36px !important;
+}
+
+.addon-item:hover {
+    border-color: #7367f0 !important;
+    background-color: rgba(115, 103, 240, 0.05);
+}
+.transition-all {
+    transition: all 0.2s ease-in-out;
+}
+.cursor-pointer {
+    cursor: pointer;
+}
+.sticky-top {
+    position: sticky;
+    top: 20px;
+}
+.addon-item {
+    cursor: pointer;
+}
+.addon-item.selected {
+    border-color: #7367f0 !important;
+    background-color: rgba(115, 103, 240, 0.08);
+}
+</style>
+{% endblock %}
