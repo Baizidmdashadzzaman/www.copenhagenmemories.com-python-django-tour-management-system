@@ -1124,4 +1124,19 @@ class Bike(models.Model):
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
+class BikeAddonPrice(models.Model):
+    bike = models.ForeignKey(Bike, on_delete=models.CASCADE, related_name='bike_addons')
+    addon = models.ForeignKey(BikeAddon, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Bike Addon Price"
+        verbose_name_plural = "Bike Addon Prices"
+
+    def __str__(self):
+        return f"{self.bike.title} - {self.addon.title} ({self.price})"
+
+
 
