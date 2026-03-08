@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
-from accounts.models import Booking, BookingParticipant, Tour, Customer, TourSchedule
+from django.http import JsonResponse
+from accounts.models import Booking, BookingParticipant, Tour, Customer, TourSchedule, TourPricing
 from .decorators import permission_required_with_message
 from .forms_additions import BookingForm
 
@@ -73,16 +74,40 @@ def booking_create(request):
 @permission_required_with_message('accounts.change_booking')
 def booking_edit(request, pk):
     booking = get_object_or_404(Booking, pk=pk)
+    participants = booking.participants.all() if hasattr(booking, 'participants') else []
+    
+    # Pre-populate participants for the dynamic JS list
+    import json
+    from django.core.serializers.json import DjangoJSONEncoder
+    participants_list = []
+    for p in participants:
+        participants_list.append({
+            'participant_type': p.participant_type,
+            'first_name': p.first_name,
+            'last_name': p.last_name,
+            'age': p.age,
+            'email': p.email,
+            'phone': p.phone,
+            'special_requirements': p.special_requirements,
+            'price': float(p.price)
+        })
+    participants_json = json.dumps(participants_list, cls=DjangoJSONEncoder)
+
     if request.method == 'POST':
         form = BookingForm(request.POST, instance=booking)
         if form.is_valid():
             booking = form.save()
+            # Note: The BookingForm.save() should ideally handle participants_data from request.POST
             messages.success(request, 'Booking updated successfully!')
             return redirect('booking_detail', pk=booking.pk)
     else:
         form = BookingForm(instance=booking)
     
-    return render(request, 'accounts/admin/bookings/edit.html', {'form': form, 'booking': booking})
+    return render(request, 'accounts/admin/bookings/edit.html', {
+        'form': form, 
+        'booking': booking,
+        'participants_json': participants_json
+    })
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
@@ -122,8 +147,12 @@ def booking_delete(request, pk):
 @user_passes_test(lambda u: u.is_staff)
 @permission_required_with_message('accounts.view_booking')
 def booking_invoice(request, pk):
-    booking = get_object_or_404(Booking, pk=pk)
-    return render(request, 'accounts/admin/bookings/invoice.html', {'booking': booking})
+    booking = get_object_or_404(Booking.objects.select_related('customer__user', 'tour'), pk=pk)
+    participants = booking.participants.all() if hasattr(booking, 'participants') else []
+    return render(request, 'accounts/admin/bookings/invoice.html', {
+        'booking': booking,
+        'participants': participants
+    })
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
@@ -139,3 +168,29 @@ def booking_send_invoice(request, pk):
     # This is a placeholder for sending invoice via email
     messages.success(request, 'Invoice sent successfully!')
     return redirect('booking_detail', pk=pk)
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def get_tour_pricing_api(request, tour_id):
+    tour = get_object_or_404(Tour, id=tour_id)
+    pricing_options = TourPricing.objects.filter(tour=tour, is_active=True)
+    
+    pricing_data = []
+    if pricing_options.exists():
+        for pricing in pricing_options:
+            pricing_data.append({
+                'type': pricing.participant_type,
+                'price': float(pricing.price),
+                'description': pricing.description
+            })
+    else:
+        # Fallback to base_price if no specific pricing options are defined
+        pricing_data.append({
+            'type': 'adult',
+            'price': float(tour.base_price),
+            'description': 'Base Price'
+        })
+    
+    return JsonResponse({
+        'base_price': float(tour.base_price),
+        'pricing': pricing_data
+    })

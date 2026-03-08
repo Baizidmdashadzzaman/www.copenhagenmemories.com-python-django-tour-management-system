@@ -229,7 +229,57 @@
 {% block extra_js %}
 <script>
 let participantCount = 0;
-let tourPricing = {};
+let currentTourPricing = [];
+let basePrice = 0;
+
+// Handle tour selection change
+const tourSelect = document.getElementById('{{ form.tour.id_for_label }}');
+tourSelect.addEventListener('change', function() {
+    const tourId = this.value;
+    if (tourId) {
+        fetchTourPricing(tourId);
+    } else {
+        currentTourPricing = [];
+        basePrice = 0;
+        updateAllParticipantPrices();
+    }
+});
+
+function fetchTourPricing(tourId) {
+    fetch(`/accounts/admin/api/tour-pricing/${tourId}/`)
+        .then(response => response.json())
+        .then(data => {
+            currentTourPricing = data.pricing;
+            basePrice = data.base_price;
+            updateAllParticipantPrices();
+            // Update all existing participant type dropdowns
+            const typeSelects = document.querySelectorAll('.participant-type');
+            typeSelects.forEach(select => {
+                const currentType = select.value;
+                updateTypeDropdown(select, currentType);
+            });
+        })
+        .catch(error => console.error('Error fetching tour pricing:', error));
+}
+
+function updateTypeDropdown(select, selectedValue = '') {
+    let optionsHtml = '';
+    if (currentTourPricing.length > 0) {
+        currentTourPricing.forEach(p => {
+            optionsHtml += `<option value="${p.type}" ${p.type === selectedValue ? 'selected' : ''}>${p.type.charAt(0).toUpperCase() + p.type.slice(1)} (${p.price})</option>`;
+        });
+    } else {
+        optionsHtml = '<option value="adult">Adult</option>';
+    }
+    select.innerHTML = optionsHtml;
+}
+
+function updateAllParticipantPrices() {
+    const participantItems = document.querySelectorAll('.participant-item');
+    participantItems.forEach(item => {
+        updateParticipantPrice(item.id);
+    });
+}
 
 // Add participant form
 document.getElementById('addParticipant').addEventListener('click', function() {
@@ -240,6 +290,21 @@ function addParticipantForm(data = {}) {
     participantCount++;
     const participantId = `participant-${participantCount}`;
     
+    // Create the type options based on current tour pricing
+    let typeOptions = '';
+    if (currentTourPricing.length > 0) {
+        currentTourPricing.forEach(p => {
+            typeOptions += `<option value="${p.type}" ${data.participant_type === p.type ? 'selected' : ''}>${p.type.charAt(0).toUpperCase() + p.type.slice(1)} (${p.price})</option>`;
+        });
+    } else {
+        typeOptions = `
+            <option value="adult" ${data.participant_type === 'adult' ? 'selected' : ''}>Adult</option>
+            <option value="child" ${data.participant_type === 'child' ? 'selected' : ''}>Child</option>
+            <option value="infant" ${data.participant_type === 'infant' ? 'selected' : ''}>Infant</option>
+            <option value="senior" ${data.participant_type === 'senior' ? 'selected' : ''}>Senior</option>
+        `;
+    }
+
     const participantHtml = `
         <div class="participant-item border rounded p-3 mb-3" id="${participantId}">
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -252,10 +317,7 @@ function addParticipantForm(data = {}) {
                 <div class="col-md-6 mb-2">
                     <label class="form-label">Type *</label>
                     <select class="form-select participant-type" name="type_${participantCount}" required>
-                        <option value="adult" ${data.participant_type === 'adult' ? 'selected' : ''}>Adult</option>
-                        <option value="child" ${data.participant_type === 'child' ? 'selected' : ''}>Child</option>
-                        <option value="infant" ${data.participant_type === 'infant' ? 'selected' : ''}>Infant</option>
-                        <option value="senior" ${data.participant_type === 'senior' ? 'selected' : ''}>Senior</option>
+                        ${typeOptions}
                     </select>
                 </div>
                 <div class="col-md-6 mb-2">
@@ -319,21 +381,20 @@ function updateParticipantPrice(participantId) {
     const type = participantDiv.querySelector('.participant-type').value;
     const priceInput = participantDiv.querySelector('.participant-price');
     
-    // Get price from tour pricing (you can fetch this via AJAX from tour selection)
-    const basePrice = 100; // Default price, should be fetched from selected tour
-    let price = basePrice;
+    let price = basePrice || 0;
     
-    // Apply pricing based on type
-    switch(type) {
-        case 'child':
-            price = basePrice * 0.7; // 70% of adult price
-            break;
-        case 'infant':
-            price = 0; // Free for infants
-            break;
-        case 'senior':
-            price = basePrice * 0.8; // 80% of adult price
-            break;
+    // Try to find specific price for this type
+    const pricingOption = currentTourPricing.find(p => p.type === type);
+    if (pricingOption) {
+        price = pricingOption.price;
+    } else if (basePrice > 0) {
+        // Fallback rules if specific pricing not found but basePrice exists
+        switch(type) {
+            case 'child': price = basePrice * 0.7; break;
+            case 'infant': price = 0; break;
+            case 'senior': price = basePrice * 0.8; break;
+            default: price = basePrice;
+        }
     }
     
     priceInput.value = price.toFixed(2);
@@ -373,7 +434,7 @@ document.getElementById('bookingForm').addEventListener('submit', function(e) {
     participantDivs.forEach((div, index) => {
         const participantNum = index + 1;
         participants.push({
-            type: div.querySelector(`[name="type_${participantNum}"]`).value,
+            type: div.querySelector('.participant-type').value,
             first_name: div.querySelector(`[name="first_name_${participantNum}"]`).value,
             last_name: div.querySelector(`[name="last_name_${participantNum}"]`).value,
             age: div.querySelector(`[name="age_${participantNum}"]`).value,
@@ -391,7 +452,11 @@ document.getElementById('bookingForm').addEventListener('submit', function(e) {
 document.getElementById('{{ form.discount_amount.id_for_label }}').addEventListener('input', updatePricing);
 document.getElementById('{{ form.tax_amount.id_for_label }}').addEventListener('input', updatePricing);
 
-// Initialize with one participant
+// Initialize
+const initialTourId = tourSelect.value;
+if (initialTourId) {
+    fetchTourPricing(initialTourId);
+}
 addParticipantForm();
 </script>
 {% endblock %}

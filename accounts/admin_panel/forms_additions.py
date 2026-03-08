@@ -182,6 +182,39 @@ class BookingForm(forms.ModelForm):
                 status='available'
             )
 
+    def save(self, commit=True):
+        import json
+        from accounts.models import BookingParticipant
+        booking = super().save(commit=False)
+        
+        # Get participants data from self.data (request.POST)
+        participants_data_str = self.data.get('participants_data')
+        
+        if commit:
+            booking.save()
+            if participants_data_str:
+                try:
+                    participants_data = json.loads(participants_data_str)
+                    # Clear existing participants and recreate (simple sync approach)
+                    booking.participants.all().delete()
+                    for p_data in participants_data:
+                        BookingParticipant.objects.create(
+                            booking=booking,
+                            participant_type=p_data.get('type'),
+                            first_name=p_data.get('first_name'),
+                            last_name=p_data.get('last_name'),
+                            age=int(p_data.get('age')) if p_data.get('age') else None,
+                            email=p_data.get('email', ''),
+                            phone=p_data.get('phone', ''),
+                            special_requirements=p_data.get('special_requirements', ''),
+                            price=p_data.get('price', 0)
+                        )
+                except (json.JSONDecodeError, ValueError, TypeError) as e:
+                    # In a production app, you might want to handle this more gracefully
+                    pass
+            
+        return booking
+
 
 class PaymentForm(forms.ModelForm):
     class Meta:

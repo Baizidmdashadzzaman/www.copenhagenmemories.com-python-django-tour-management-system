@@ -551,7 +551,7 @@ class TourBlackoutDate(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 class Booking(models.Model):
-    booking_number = models.CharField(max_length=50, unique=True)
+    booking_number = models.CharField(max_length=50, unique=True, blank=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='bookings')
     tour = models.ForeignKey(Tour, on_delete=models.CASCADE, related_name='bookings')
     schedule = models.ForeignKey(TourSchedule, on_delete=models.SET_NULL, null=True, blank=True, related_name='bookings')
@@ -608,6 +608,20 @@ class Booking(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.booking_number} - {self.contact_name}"
+
+    def save(self, *args, **kwargs):
+        if not self.booking_number:
+            import random
+            import string
+            while True:
+                booking_number = 'BK' + ''.join(random.choices(string.digits, k=8))
+                if not Booking.objects.filter(booking_number=booking_number).exists():
+                    self.booking_number = booking_number
+                    break
+        super().save(*args, **kwargs)
 
 class BookingParticipant(models.Model):
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE, related_name='participants')
