@@ -253,6 +253,26 @@
                         </div>
                     </div>
 
+                    <h6 class="mt-4">6. SEO Details</h6>
+                    <div class="row g-6">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label" for="{{ form.meta_title.id_for_label }}">{{ form.meta_title.label }}</label>
+                            {{ form.meta_title }}
+                            {% for error in form.meta_title.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.meta_description.id_for_label }}">{{ form.meta_description.label }}</label>
+                            {{ form.meta_description }}
+                            {% for error in form.meta_description.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.meta_keywords.id_for_label }}">{{ form.meta_keywords.label }}</label>
+                            {{ form.meta_keywords }}
+                            <div class="form-text">Comma-separated keywords for search engines.</div>
+                            {% for error in form.meta_keywords.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                    </div>
+
                     <div class="pt-6 mt-3">
                         <button type="submit" class="btn btn-primary me-4 waves-effect waves-light">
                             <i class="icon-base ti tabler-check icon-22px"></i> Save

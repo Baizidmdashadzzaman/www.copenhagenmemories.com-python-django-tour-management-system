@@ -79,6 +79,29 @@
                 </div>
             </div>
 
+            <!-- SEO Details -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">SEO Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <h6 class="mb-1">Meta Title</h6>
+                            <p class="mb-0 text-muted">{{ tour.meta_title|default:"Not set" }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <h6 class="mb-1">Meta Description</h6>
+                            <p class="mb-0 text-muted small">{{ tour.meta_description|default:"Not set" }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <h6 class="mb-1">Meta Keywords</h6>
+                            <p class="mb-0 text-muted small">{{ tour.meta_keywords|default:"Not set" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Itinerary -->
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
