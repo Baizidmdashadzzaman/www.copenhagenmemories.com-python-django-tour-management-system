@@ -34,7 +34,10 @@
                             <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">5.0</span>
                         </div>
                         <h5 class="mb-1"><a>{{ member.name }}</a></h5>
-                        <p class="d-flex align-items-center"><i class="ti ti-map-pin me-2"></i>{{ member.address }}</p>
+                        <p class="d-flex align-items-center"><i class="ti ti-map-pin me-2"></i>
+                            <!-- {{ member.address }} -->
+                            {{ member.full_details|safe }}
+                        </p>
 
                     </div>
                 </div>
