@@ -91,6 +91,7 @@ class SiteSetting(models.Model):
     linkdin_link = models.CharField(blank=True)
     pintrest_link = models.CharField(blank=True)
     site_logo_dark = models.ImageField(upload_to='settings/', blank=True, null=True)
+    meetoursuides_description = models.TextField(blank=True)
 
     class Meta:
         verbose_name = 'Site Setting'

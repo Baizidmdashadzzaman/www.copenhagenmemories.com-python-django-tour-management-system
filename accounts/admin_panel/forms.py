@@ -189,7 +189,8 @@ class SiteSettingForm(forms.ModelForm):
         fields = [
             'site_name', 'site_logo', 'site_favicon', 'site_email', 
             'site_address', 'site_description', 'site_metakey', 'site_metadescription','site_phone',
-            'site_map','app_google','ios_app','fb_link','x_link','insta_link','linkdin_link','pintrest_link','site_logo_dark'
+            'site_map','app_google','ios_app','fb_link','x_link','insta_link','linkdin_link','pintrest_link','site_logo_dark',
+            'meetoursuides_description'
         ]
         widgets = {
             'site_name': forms.TextInput(attrs={'placeholder': 'Enter site name'}),
@@ -207,6 +208,7 @@ class SiteSettingForm(forms.ModelForm):
             'insta_link': forms.TextInput(attrs={'placeholder': 'Enter insta link'}),
             'linkdin_link': forms.TextInput(attrs={'placeholder': 'Enter linkdin link'}),
             'pintrest_link': forms.TextInput(attrs={'placeholder': 'Enter pintrest link'}),
+            'meetoursuides_description': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter meet our guides description'}),
         }
 
 class TourSupplierForm(forms.ModelForm):
