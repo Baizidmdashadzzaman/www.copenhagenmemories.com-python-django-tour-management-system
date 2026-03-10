@@ -61,11 +61,11 @@
                             {% endif %}
                             {% for error in form.image.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
                         </div>
-                        <div class="col-md-12 mb-3">
+                        <!-- <div class="col-md-12 mb-3">
                             <label class="form-label" for="{{ form.address.id_for_label }}">{{ form.address.label }}</label>
                             {{ form.address }}
                             {% for error in form.address.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
-                        </div>
+                        </div> -->
                         <div class="col-md-12 mb-3" style="padding-bottom: 50px;">
                             <label class="form-label">Full Details</label>
                             <div id="editor-full-details" style="min-height: 250px;">{{ form.full_details.value|default:''|safe }}</div>
