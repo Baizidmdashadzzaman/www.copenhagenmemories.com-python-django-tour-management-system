@@ -53,9 +53,9 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td>DKK {{ item.price|floatformat:2 }}</td>
+                                <td>USD {{ item.price|floatformat:2 }}</td>
                                 <td>{{ item.quantity }}</td>
-                                <td>DKK {{ item.price|floatformat:2 }}</td>
+                                <td>USD {{ item.price|floatformat:2 }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -64,11 +64,11 @@
                         <div class="order-calculations">
                             <div class="d-flex justify-content-between mb-2">
                                 <span class="w-px-100 text-end me-3">Subtotal:</span>
-                                <span class="fw-semibold">DKK {{ order.total_amount|floatformat:2 }}</span>
+                                <span class="fw-semibold">USD {{ order.total_amount|floatformat:2 }}</span>
                             </div>
                             <div class="d-flex justify-content-between">
                                 <h6 class="w-px-100 text-end me-3 mb-0">Total:</h6>
-                                <h6 class="mb-0">DKK {{ order.total_amount|floatformat:2 }}</h6>
+                                <h6 class="mb-0">USD {{ order.total_amount|floatformat:2 }}</h6>
                             </div>
                         </div>
                     </div>

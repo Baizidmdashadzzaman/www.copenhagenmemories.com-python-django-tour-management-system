@@ -83,28 +83,28 @@
                         <div class="mb-3">
                             <label class="form-label">Bike Price</label>
                             <div class="input-group input-group-merge">
-                                <span class="input-group-text badge-label-secondary">DKK</span>
+                                <span class="input-group-text badge-label-secondary">USD</span>
                                 <input type="text" id="bike-base-price" class="form-control" readonly value="0.00">
                             </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Subtotal (Bike + Addons)</label>
                             <div class="input-group input-group-merge">
-                                <span class="input-group-text badge-label-secondary">DKK</span>
+                                <span class="input-group-text badge-label-secondary">USD</span>
                                 {{ form.subtotal }}
                             </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label text-danger">Discount</label>
                             <div class="input-group input-group-merge">
-                                <span class="input-group-text badge-label-secondary text-danger">DKK</span>
+                                <span class="input-group-text badge-label-secondary text-danger">USD</span>
                                 {{ form.discount }}
                             </div>
                         </div>
                         <div class="mb-4">
                             <label class="form-label fw-bold text-success h5">Grand Total</label>
                             <div class="input-group input-group-merge">
-                                <span class="input-group-text  text-success ">DKK</span>
+                                <span class="input-group-text  text-success ">USD</span>
                                 {{ form.total }}
                             </div>
                         </div>
@@ -114,7 +114,7 @@
                         <div class="mb-3">
                             <label class="form-label text-muted" for="id_paid">Amount Paid</label>
                             <div class="input-group input-group-merge">
-                                <span class="input-group-text badge-label-secondary">DKK</span>
+                                <span class="input-group-text badge-label-secondary">USD</span>
                                 {{ form.paid }}
                             </div>
                         </div>
@@ -211,7 +211,7 @@ $(document).ready(function() {
                                                 <label class="form-check-label fw-semibold mb-0 cursor-pointer" for="addon-${addon.id}">
                                                     ${addon.title}
                                                 </label>
-                                                <span class="text-primary fw-bold small">DKK ${parseFloat(addon.price).toFixed(2)}</span>
+                                                <span class="text-primary fw-bold small">USD ${parseFloat(addon.price).toFixed(2)}</span>
                                             </div>
                                         </div>
                                     </div>

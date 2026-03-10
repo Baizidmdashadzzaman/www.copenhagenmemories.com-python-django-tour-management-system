@@ -56,7 +56,7 @@
                             <tbody>
                               <tr>
                                 <td class="pe-4">Total Amount:</td>
-                                <td class="fw-medium">DKK {{ order.total_amount|floatformat:2 }}</td>
+                                <td class="fw-medium">USD {{ order.total_amount|floatformat:2 }}</td>
                               </tr>
                               <tr>
                                 <td class="pe-4">Status:</td>
@@ -88,8 +88,8 @@
                             <td class="text-nowrap text-heading">{{ item.souvenir.title }}</td>
                             <td class="text-nowrap">{{ item.souvenir.description|truncatewords:10|striptags }}</td>
                             <td>{{ item.quantity }}</td>
-                            <td>DKK {{ item.price|floatformat:2 }}</td>
-                            <td>DKK {{ item.price|floatformat:2 }}</td>
+                            <td>USD {{ item.price|floatformat:2 }}</td>
+                            <td>USD {{ item.price|floatformat:2 }}</td>
                           </tr>
                           {% endfor %}
                         </tbody>
@@ -106,7 +106,7 @@
                               <p class="mb-2">Total:</p>
                             </td>
                             <td class="text-end px-0 py-6 w-px-100 fw-medium text-heading">
-                              <p class="fw-medium mb-0">DKK {{ order.total_amount|floatformat:2 }}</p>
+                              <p class="fw-medium mb-0">USD {{ order.total_amount|floatformat:2 }}</p>
                             </td>
                           </tr>
                         </tbody>

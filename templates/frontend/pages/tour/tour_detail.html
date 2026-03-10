@@ -545,10 +545,10 @@
                         <div class="card-body">
                             <div class="mb-3">
                                 <p class="fs-13 fw-medium mb-1">{% translate "Starts From" %}</p>
-                                <h5 class="text-primary mb-1">DKK {{ tour.base_price|floatformat:0 }} <span class="fs-14 text-default fw-normal">/ {% translate "Person" %}</span></h5>
+                                <h5 class="text-primary mb-1">USD {{ tour.base_price|floatformat:0 }} <span class="fs-14 text-default fw-normal">/ {% translate "Person" %}</span></h5>
                                 {% if tour.before_discount_price_statue == 'active' %}
                                     {% if tour.before_discount_price %}
-                                        <p class="text-muted text-decoration-line-through mb-0">DKK {{ tour.before_discount_price|floatformat:0 }}</p>
+                                        <p class="text-muted text-decoration-line-through mb-0">USD {{ tour.before_discount_price|floatformat:0 }}</p>
                                     {% endif %}
                                     {% if tour.before_discount_price_text %}
                                         <span class="badge bg-success">{{ tour.before_discount_price_text }}</span>

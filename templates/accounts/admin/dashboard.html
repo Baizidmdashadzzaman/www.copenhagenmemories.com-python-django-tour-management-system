@@ -49,10 +49,10 @@
                     <div class="card-info">
                         <p class="card-text mb-1">Total Revenue</p>
                         <div class="d-flex align-items-center mb-1">
-                            <h4 class="mb-0 me-2">{{ total_revenue|floatformat:2 }} DKK</h4>
+                            <h4 class="mb-0 me-2">{{ total_revenue|floatformat:2 }} USD</h4>
                         </div>
                         <small class="text-success">
-                            <i class="ti tabler-trending-up"></i> +{{ revenue_this_month|floatformat:2 }} DKK this month
+                            <i class="ti tabler-trending-up"></i> +{{ revenue_this_month|floatformat:2 }} USD this month
                         </small>
                     </div>
                     <div class="card-icon">
@@ -62,7 +62,7 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-between">
-                    <small class="text-muted">Pending: {{ pending_payments|floatformat:2 }} DKK</small>
+                    <small class="text-muted">Pending: {{ pending_payments|floatformat:2 }} USD</small>
                 </div>
             </div>
         </div>
@@ -384,7 +384,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     tension: 0.4,
                     yAxisID: 'y',
                 }, {
-                    label: 'Revenue (DKK)',
+                    label: 'Revenue (USD)',
                     data: monthlyRevenueData,
                     borderColor: 'rgb(3, 195, 236)',
                     backgroundColor: 'rgba(3, 195, 236, 0.1)',
@@ -414,7 +414,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         position: 'right',
                         title: {
                             display: true,
-                            text: 'Revenue (DKK)'
+                            text: 'Revenue (USD)'
                         },
                         grid: {
                             drawOnChartArea: false,

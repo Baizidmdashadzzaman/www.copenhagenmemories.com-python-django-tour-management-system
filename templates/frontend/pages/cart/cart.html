@@ -59,7 +59,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="py-4">DKK {{ item.price }}</td>
+                                        <td class="py-4">USD {{ item.price }}</td>
                                         <td class="py-4">
                                             <form action="{% url 'update_cart' item.id %}" method="post" class="d-flex align-items-center" style="max-width: 120px;">
                                                 {% csrf_token %}
@@ -68,7 +68,7 @@
                                                 </div>
                                             </form>
                                         </td>
-                                        <td class="py-4 fw-bold">DKK {{ item.subtotal }}</td>
+                                        <td class="py-4 fw-bold">USD {{ item.subtotal }}</td>
                                         <td class="px-4 py-4 text-end">
                                             <a href="{% url 'remove_from_cart' item.id %}" class="text-danger">
                                                 <i class="isax isax-trash"></i>
@@ -148,11 +148,11 @@
                         <h5 class="fw-bold mb-4">{% translate "Order Summary" %}</h5>
                         <div class="d-flex justify-content-between mb-3 pb-3 border-bottom">
                             <span>{% translate "Subtotal" %}</span>
-                            <span class="fw-bold">DKK {{ total_price }}</span>
+                            <span class="fw-bold">USD {{ total_price }}</span>
                         </div>
                         <div class="d-flex justify-content-between mb-4">
                             <span class="fw-bold">{% translate "Total" %}</span>
-                            <span class="fw-bold text-primary">DKK {{ total_price }}</span>
+                            <span class="fw-bold text-primary">USD {{ total_price }}</span>
                         </div>
                         <button class="btn btn-primary btn-lg w-100 mb-3" onclick="document.getElementById('hidden_order_submit').click()">
                             {% translate "Place Order" %}

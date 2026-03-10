@@ -39,9 +39,9 @@
                         </h5>
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="price">
-                                <h6 class="text-primary fw-bold mb-0">DKK {{ souvenir.price }}</h6>
+                                <h6 class="text-primary fw-bold mb-0">USD {{ souvenir.price }}</h6>
                                 {% if souvenir.before_discount_price_statue == 'active' and souvenir.before_discount_price %}
-                                    <small class="text-muted text-decoration-line-through">DKK {{ souvenir.before_discount_price }}</small>
+                                    <small class="text-muted text-decoration-line-through">USD {{ souvenir.before_discount_price }}</small>
                                 {% endif %}
                             </div>
                             <div class="stock">
