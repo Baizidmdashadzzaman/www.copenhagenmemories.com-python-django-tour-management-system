@@ -8,7 +8,7 @@ class BikeBookingForm(forms.ModelForm):
         model = BikeBooking
         fields = [
             'customer', 'name', 'email', 'phone', 'address', 
-            'other_info', 'bike', 'subtotal', 'discount', 'total', 'paid', 'status'
+            'other_info', 'bike', 'start_date', 'end_date', 'subtotal', 'discount', 'total', 'paid', 'status'
         ]
         widgets = {
             'customer': forms.Select(attrs={'class': 'form-select select2', 'id': 'id_customer'}),
@@ -18,12 +18,23 @@ class BikeBookingForm(forms.ModelForm):
             'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Customer Address'}),
             'other_info': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Additional Info'}),
             'bike': forms.Select(attrs={'class': 'form-select select2', 'id': 'id_bike'}),
+            'start_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}, format='%Y-%m-%d'),
+            'end_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}, format='%Y-%m-%d'),
             'subtotal': forms.NumberInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
             'discount': forms.NumberInput(attrs={'class': 'form-control'}),
             'total': forms.NumberInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
             'paid': forms.NumberInput(attrs={'class': 'form-control'}),
             'status': forms.Select(attrs={'class': 'form-select'}),
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get('start_date')
+        end_date = cleaned_data.get('end_date')
+
+        if start_date and end_date and end_date < start_date:
+            raise forms.ValidationError("End date cannot be earlier than start date.")
+        return cleaned_data
 
 class BikeAddonForm(forms.ModelForm):
     class Meta:

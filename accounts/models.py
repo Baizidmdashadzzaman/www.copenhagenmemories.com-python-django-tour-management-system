@@ -1170,6 +1170,8 @@ class BikeBooking(models.Model):
     address = models.TextField(blank=True)
     other_info = models.TextField(blank=True)
     bike = models.ForeignKey(Bike, on_delete=models.PROTECT)
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
     
     subtotal = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     discount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)

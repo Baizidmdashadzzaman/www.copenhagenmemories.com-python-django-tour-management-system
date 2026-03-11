@@ -79,6 +79,7 @@
                                     <th>Booking #</th>
                                     <th>Customer</th>
                                     <th>Bike</th>
+                                    <th>Rental Dates</th>
                                     <th>Total</th>
                                     <th>Status</th>
                                     <th>Created At</th>
@@ -96,6 +97,16 @@
                             </div>
                         </td>
                         <td>{{ booking.bike.title }}</td>
+                        <td>
+                            {% if booking.start_date and booking.end_date %}
+                            <div class="small">
+                                <div><i class="ti tabler-calendar-event me-1"></i>{{ booking.start_date|date:"d M" }}</div>
+                                <div><i class="ti tabler-calendar-off me-1"></i>{{ booking.end_date|date:"d M Y" }}</div>
+                            </div>
+                            {% else %}
+                            <span class="text-muted">N/A</span>
+                            {% endif %}
+                        </td>
                         <td>{{ booking.total }}</td>
                         <td>
                             {% if booking.status == 'confirmed' %}

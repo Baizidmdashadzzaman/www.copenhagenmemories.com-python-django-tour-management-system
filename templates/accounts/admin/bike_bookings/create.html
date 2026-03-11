@@ -23,9 +23,17 @@
                     <h5 class="card-header border-bottom mb-3 py-3">1. Bike Selection & Addons</h5>
                     <div class="card-body pt-2">
                         <div class="row g-3">
-                            <div class="col-md-12 mb-4">
+                            <div class="col-md-12 mb-2">
                                 <label class="form-label fw-bold h6" for="id_bike">Select Bike</label>
                                 {{ form.bike }}
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-bold" for="id_start_date">Start Date</label>
+                                {{ form.start_date }}
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-bold" for="id_end_date">End Date</label>
+                                {{ form.end_date }}
                             </div>
                             <div class="col-md-12" id="addons-container" style="display: none;">
                                 <div class="divider text-start mb-4">
@@ -90,7 +98,7 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Subtotal (Bike + Addons)</label>
+                            <label class="form-label">Subtotal <span id="days-count-badge" class="badge bg-label-info ms-1" style="display:none;"></span></label>
                             <div class="input-group input-group-merge">
                                 <span class="input-group-text badge-label-secondary">USD</span>
                                 {{ form.subtotal }}
@@ -164,6 +172,9 @@ $(document).ready(function() {
     const discountInput = $('#id_discount');
     const totalInput = $('#id_total');
     const bikeNameSpan = $('#selected-bike-name');
+    const startDateInput = $('#id_start_date');
+    const endDateInput = $('#id_end_date');
+    const daysBadge = $('#days-count-badge');
 
     // Handle Customer Selection
     customerSelect.on('change', function() {
@@ -276,7 +287,26 @@ $(document).ready(function() {
             $(`#quantity-${addonId}`).prop('disabled', true);
         });
 
-        let subtotal = bikePrice + addonsTotal;
+        // Calculate days
+        let days = 1;
+        const startVal = startDateInput.val();
+        const endVal = endDateInput.val();
+        
+        if (startVal && endVal) {
+            const start = new Date(startVal);
+            const end = new Date(endVal);
+            if (end >= start) {
+                const diffTime = Math.abs(end - start);
+                days = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                daysBadge.text(`${days} days`).show();
+            } else {
+                daysBadge.hide();
+            }
+        } else {
+            daysBadge.hide();
+        }
+
+        let subtotal = (bikePrice + addonsTotal) * days;
         let discount = parseFloat(discountInput.val()) || 0;
         let total = subtotal - discount;
 
@@ -288,6 +318,10 @@ $(document).ready(function() {
     $(document).on('change', '.addon-checkbox', function() {
         calculateTotals();
     });
+
+    // Trigger calculation on date changes
+    startDateInput.on('change', calculateTotals);
+    endDateInput.on('change', calculateTotals);
 
     // Trigger calculation on quantity changes
     $(document).on('input', '.addon-quantity', function() {
