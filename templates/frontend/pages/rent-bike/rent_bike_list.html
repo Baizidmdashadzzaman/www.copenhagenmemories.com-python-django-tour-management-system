@@ -83,6 +83,31 @@
                             </div>
                         </div>
                         {% endif %}
+                        {% if bike.is_unisex %}
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <h6 class="h5 text-primary"><i class="isax isax-speedometer5 me-2"></i>{% translate "Unisex" %}</h6>
+                                <p>Yes</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if bike.is_helmet_recommended %}
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <h6 class="h5 text-primary"><i class="isax isax-setting me-2"></i>{% translate "Helmet-recommended" %}</h6>
+                                <p>Yes</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if bike.is_electric %}
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <h6 class="h5 text-primary"><i class="isax isax-flash5 me-2"></i>{% translate "Electric" %}</h6>
+                                <p>Yes</p>
+                            </div>
+                        </div>
+                        {% endif %}
+
                     </div>
                     <div class="d-flex align-items-center flex-wrap gap-3">
                         <div class="price-tag me-4">
