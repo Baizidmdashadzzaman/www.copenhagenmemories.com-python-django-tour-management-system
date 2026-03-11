@@ -1260,7 +1260,7 @@ function checkParticipantsCount() {
         const container = document.getElementById('tourConvertedPrices');
         
         if (basePrice && basePrice > 0 && container) {
-            const targets = ['EUR', 'USD', 'GBP', 'CAD', 'AUD'];
+            const targets = ['EUR', 'DKK', 'GBP', 'CAD', 'AUD','BDT'];
             
             // Show loading state
             container.style.display = 'block';
@@ -1269,8 +1269,8 @@ function checkParticipantsCount() {
             fetch('https://cdn.moneyconvert.net/api/latest.json')
                 .then(r => r.json())
                 .then(data => {
-                    if(data && data.rates && data.rates.DKK) {
-                        const dkkRate = data.rates.DKK;
+                    if(data && data.rates && data.rates.USD) {
+                        const dkkRate = data.rates.USD;
                         let html = '<p class="fs-12 fw-medium text-muted mb-1">Approximate Prices:</p><ul class="list-unstyled mb-0 fs-13">';
                         
                         targets.forEach(curr => {
