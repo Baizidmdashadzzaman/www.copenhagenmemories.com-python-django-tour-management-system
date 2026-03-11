@@ -25,11 +25,98 @@
     </div>
 </div>
 
-<div class="content">
-    <div class="container">
-         <center><h3>Comming soon</h3></center>
-    </div>
-</div>
+
+
+<section class="section about-section-four bg-light-200">
+        <div class="container">
+
+            <!-- Bike div start -->
+            {% for bike in bikes %}
+            <div class="row align-items-center {% if not forloop.last %}mb-5{% endif %}" style="padding-bottom: 50px;">
+                <div class="col-lg-5 wow fadeInDown" data-wow-delay="0.2s">
+                    <div class="section-header section-header-four mb-4">
+                        <h2 class="mb-2">
+                            {% if request.session.lang == 'dk' and bike.title_dk %}
+                                {{ bike.title_dk }}
+                            {% else %}
+                                {{ bike.title }}
+                            {% endif %}
+                        </h2>
+                        <div class="sub-title">
+                            {% if request.session.lang == 'dk' and bike.description_dk %}
+                                {{ bike.description_dk|safe }}
+                            {% else %}
+                                {{ bike.description|safe }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        {% if bike.height_info %}
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <h6 class="h5 text-primary"><i class="isax isax-ranking-15 me-2"></i>{% translate "Height" %}</h6>
+                                <p>{{ bike.height_info }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if bike.gear_info %}
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <h6 class="h5 text-primary"><i class="isax isax-setting-25 me-2"></i>{% translate "Gears" %}</h6>
+                                <p>{{ bike.gear_info }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if bike.is_electric %}
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <h6 class="h5 text-primary"><i class="isax isax-flash5 me-2"></i>{% translate "Electric" %}</h6>
+                                <p>{% translate "Yes" %}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if bike.top_speed_info %}
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <h6 class="h5 text-primary"><i class="isax isax-speedometer5 me-2"></i>{% translate "Top Speed" %}</h6>
+                                <p>{{ bike.top_speed_info }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="d-flex align-items-center flex-wrap gap-3">
+                        <div class="price-tag me-4">
+                            <span class="fw-bold text-dark">{{ bike.price }} {{ site_settings.currency_symbol|default:"USD" }}</span>
+                            <span class="text-muted">/ {% translate "for 24 hours" %}</span>
+                        </div>
+                        <a href="javascript:void(0);" onclick="alert('Comming soon,we will notify you when it is ready')" class="btn btn-primary d-inline-flex align-items-center">
+                            <i class="isax isax-calendar-2 me-2"></i>{% translate "Book Now" %}
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-7 d-flex ps-lg-0 wow zoomIn" data-wow-delay="0.2s">
+                    <div class="flight-about d-lg-flex align-items-center flex-fill">
+                        {% if bike.image %}
+                            <img src="{{ bike.image.url }}" alt="{{ bike.title }}" class="img-fluid rounded-4 shadow-sm">
+                        {% else %}
+                            <img src="{% static 'frontend/assets/img/flight/bike-1.png' %}" alt="placeholder">
+                        {% endif %}
+                        <div class="flight-bg">
+                            <img src="{% static 'frontend/assets/img/bg/flight-bg.png' %}" alt="img">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <!-- Bike div end -->
+
+        </div>
+        <div class="flight-bg">
+            <img src="{% static 'frontend/assets/img/bg/flight-bg-01.png' %}" alt="img" class="flight-bg-01">
+            <img src="{% static 'frontend/assets/img/bg/flight-bg-02.png' %}" alt="img" class="flight-bg-02">
+        </div>
+</section>
+
 
 {% endblock %}
 

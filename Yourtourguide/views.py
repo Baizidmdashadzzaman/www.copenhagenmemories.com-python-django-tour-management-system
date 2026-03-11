@@ -4,7 +4,7 @@ from django.db.models import Q, Avg, Count, Value
 from django.db.models.functions import Coalesce
 from accounts.models import Tour, Category, DestinationRegion, City, TourReview
 
-from accounts.models import BlogPost, ContactUs, SiteSetting, CustomerReviewStatic, FAQ, TourSupplier, Country, FeatureSection, Slider,Page, Tour, TeamMember, Souvenir
+from accounts.models import BlogPost, ContactUs, SiteSetting, CustomerReviewStatic, FAQ, TourSupplier, Country, FeatureSection, Slider,Page, Tour, TeamMember, Souvenir, Bike
 from django.db.models import Prefetch
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import translation, timezone
@@ -16,7 +16,11 @@ from django.utils.crypto import get_random_string
 
 
 def rent_bike(request):
-    return render(request, 'frontend/pages/rent-bike/rent_bike_list.html')
+    bikes = Bike.objects.all()
+    context = {
+        'bikes': bikes,
+    }
+    return render(request, 'frontend/pages/rent-bike/rent_bike_list.html', context)
 
 def send_test_email(request):
     send_mail(
