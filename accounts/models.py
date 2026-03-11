@@ -1198,9 +1198,10 @@ class BikeBookingAddon(models.Model):
     booking = models.ForeignKey(BikeBooking, related_name='booking_addons', on_delete=models.CASCADE)
     addon = models.ForeignKey(BikeAddon, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
-        return f"{self.addon.title} ({self.price})"
+        return f"{self.quantity} x {self.addon.title} ({self.price})"
 
 
 

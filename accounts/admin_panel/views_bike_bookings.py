@@ -49,10 +49,18 @@ def bike_booking_create(request):
                     bike_addon_price = BikeAddonPrice.objects.filter(bike=booking.bike, addon=addon).first()
                     price = bike_addon_price.price if bike_addon_price else 0
                     
+                    # Get quantity from POST data
+                    quantity = request.POST.get(f'addon_quantity_{addon_id}', 1)
+                    try:
+                        quantity = int(quantity)
+                    except (ValueError, TypeError):
+                        quantity = 1
+                    
                     BikeBookingAddon.objects.create(
                         booking=booking,
                         addon=addon,
-                        price=price
+                        price=price,
+                        quantity=quantity
                     )
                 except Exception as e:
                     print(f"Error adding addon {addon_id} to booking: {e}")
@@ -91,10 +99,18 @@ def bike_booking_edit(request, pk):
                     bike_addon_price = BikeAddonPrice.objects.filter(bike=booking.bike, addon=addon).first()
                     price = bike_addon_price.price if bike_addon_price else 0
                     
+                    # Get quantity from POST data
+                    quantity = request.POST.get(f'addon_quantity_{addon_id}', 1)
+                    try:
+                        quantity = int(quantity)
+                    except (ValueError, TypeError):
+                        quantity = 1
+                    
                     BikeBookingAddon.objects.create(
                         booking=booking,
                         addon=addon,
-                        price=price
+                        price=price,
+                        quantity=quantity
                     )
                 except Exception as e:
                     print(f"Error updating addon {addon_id}: {e}")
@@ -111,13 +127,17 @@ def bike_booking_edit(request, pk):
     # We also need the addons for the CURRENTLY selected bike to show in the list
     bike_addons = BikeAddonPrice.objects.filter(bike=booking.bike)
     
+    # Get current addon quantities for the template
+    addon_quantities = {ab.addon_id: ab.quantity for ab in booking.booking_addons.all()}
+    
     return render(request, 'accounts/admin/bike_bookings/edit.html', {
         'form': form,
         'booking': booking,
         'customers': customers,
         'bikes': bikes,
         'bike_addons': bike_addons,
-        'current_selected_addon_ids': current_selected_addon_ids
+        'current_selected_addon_ids': current_selected_addon_ids,
+        'addon_quantities': addon_quantities
     })
 
 @login_required
