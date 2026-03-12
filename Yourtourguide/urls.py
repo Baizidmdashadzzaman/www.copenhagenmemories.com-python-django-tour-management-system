@@ -21,11 +21,29 @@ from . import ai_views
 from . import souvenir_views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.sitemaps.views import sitemap as sitemap_xml
+from accounts.sitemaps import (
+    StaticViewSitemap, TourSitemap, BlogPostSitemap, 
+    PageSitemap, CategorySitemap, CitySitemap, 
+    CountrySitemap, DestinationRegionSitemap
+)
+
+sitemaps = {
+    'static': StaticViewSitemap,
+    'tours': TourSitemap,
+    'blogs': BlogPostSitemap,
+    'pages': PageSitemap,
+    'categories': CategorySitemap,
+    'cities': CitySitemap,
+    'countries': CountrySitemap,
+    'regions': DestinationRegionSitemap,
+}
 
 urlpatterns = [
     path('', views.home, name='home'),
     path('set-language/<str:lang_code>/', views.set_language, name='set_language'),
     path('sitemap/', views.sitemap, name='sitemap'),
+    path('sitemap.xml', sitemap_xml, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('contact-us/', views.contactus, name='contactus'),
     path('find-tour/', views.find_tour_page, name='find_tour'),
     path('tour-list/', views.tour_list, name='tour_list_fronted'),
