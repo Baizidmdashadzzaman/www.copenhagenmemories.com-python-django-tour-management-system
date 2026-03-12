@@ -728,13 +728,13 @@
                                 </div>
                                 <div class="col-md-6">
                                     <!-- Tour Time  -->
-                                    {% if schedules %}
+                                    
                                     <div class="form-item border rounded p-3 mb-3 w-100">
                                         <label class="form-label fs-14 text-default mb-2 fw-medium">{% translate "Select Time Slot (Optional)" %}</label>
                                         {{ booking_form.tour_time }}
                                         <p class="fs-12 text-muted mb-0">{% translate "Available time slots for selected date" %}</p>
                                     </div>
-                                    {% endif %}
+                                    {% if schedules %} {% endif %}
                                 </div>
                             </div>
 
