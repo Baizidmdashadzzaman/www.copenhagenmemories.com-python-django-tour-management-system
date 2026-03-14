@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import TemplateView
 from . import views
 from . import ai_views
 from . import souvenir_views
@@ -61,6 +62,7 @@ urlpatterns = [
     path('tour-feature-section/<int:feature_id>/', views.tour_feature_section, name='tour_feature_section_fronted'),
     path('ai-chat/', ai_views.ai_chat_proxy, name='ai_chat_proxy'),
     path('rent-bike/', views.rent_bike, name='rent_bike'),
+    path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type='text/plain')),
 
     path('todo/', include('todo.urls')),
     path('accounts/', include('accounts.urls')),
