@@ -16,7 +16,7 @@ from django.utils.crypto import get_random_string
 
 
 def rent_bike(request):
-    bikes = Bike.objects.all()
+    bikes = Bike.objects.all().order_by('id')
     context = {
         'bikes': bikes,
     }

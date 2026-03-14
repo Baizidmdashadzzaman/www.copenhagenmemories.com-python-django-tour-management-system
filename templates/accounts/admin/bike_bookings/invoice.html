@@ -4,8 +4,9 @@
 {% block page_title %}Invoice - #{{ booking.booking_number }}{% endblock %}
 
 {% block admin_content %}
+
 <div class="">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 no-print">
         <h4 class="py-3 mb-0">
             <span class="text-muted fw-light">Bike Bookings /</span> Invoice #{{ booking.booking_number }}
         </h4>
@@ -167,7 +168,7 @@
                 <!-- /Invoice -->
 
                 <!-- Invoice Actions -->
-                <div class="col-xl-3 col-md-4 col-12 invoice-actions">
+                <div class="col-xl-3 col-md-4 col-12 invoice-actions no-print">
                   <div class="card bg-transparent border-0 shadow-none">
                     <div class="card-body p-0">
                       <button class="btn btn-label-secondary d-grid w-100 mb-4 waves-effect text-nowrap" onclick="window.print()">

@@ -99,14 +99,6 @@
                             </div>
                         </div>
                         {% endif %}
-                        {% if bike.is_electric %}
-                        <div class="col-sm-6">
-                            <div class="mb-3">
-                                <h6 class="h5 text-primary" style="font-size: medium;"><i class="isax isax-flash5 me-2"></i>{% translate "Electric" %}</h6>
-                                <p>Yes</p>
-                            </div>
-                        </div>
-                        {% endif %}
 
                     </div>
                     <div class="d-flex align-items-center flex-wrap gap-3">
@@ -122,9 +114,9 @@
                 <div class="col-lg-7 d-flex ps-lg-0 wow zoomIn" data-wow-delay="0.2s">
                     <div class="flight-about d-lg-flex align-items-center flex-fill">
                         {% if bike.image %}
-                            <img src="{{ bike.image.url }}" alt="{{ bike.title }}" class="img-fluid rounded-4">
+                            <img src="{{ bike.image.url }}" alt="{{ bike.title }}" class="img-fluid rounded-4" style="width: 100%;">
                         {% else %}
-                            <img src="{% static 'frontend/assets/img/flight/bike-1.png' %}" alt="placeholder">
+                            <img src="{% static 'frontend/assets/img/flight/bike-1.png' %}" alt="placeholder" style="width: 100%;">
                         {% endif %}
                         <div class="flight-bg">
                             <img src="{% static 'frontend/assets/img/bg/flight-bg.png' %}" alt="img">

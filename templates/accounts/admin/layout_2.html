@@ -50,7 +50,15 @@
     <link rel="stylesheet" href="{% static 'admin/assets/vendor/css/pages/page-auth.css' %}" />
 
     <link rel="stylesheet" href="{% static 'admin/assets/vendor/css/pages/app-invoice.css' %}" />
-
+    <style>
+        @media print
+        {    
+            .no-print, .no-print *
+            {
+                display: none !important;
+            }
+        }
+    </style>
     {% block extra_css %}{% endblock %}
 </head>
 
