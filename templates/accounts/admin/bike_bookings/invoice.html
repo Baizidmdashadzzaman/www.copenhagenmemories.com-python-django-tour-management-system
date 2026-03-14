@@ -1,0 +1,193 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Invoice - #{{ booking.booking_number }}{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="py-3 mb-0">
+            <span class="text-muted fw-light">Bike Bookings /</span> Invoice #{{ booking.booking_number }}
+        </h4>
+        <div>
+            <a href="{% url 'bike_booking_list' %}" class="btn btn-secondary">
+                <i class="icon-base ti tabler-arrow-left me-1"></i> Back to List
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="">
+              <div class="row invoice-preview">
+                <!-- Invoice -->
+                <div class="col-xl-9 col-md-8 col-12 mb-md-0 mb-6">
+                  <div class="card invoice-preview-card p-sm-12 p-6">
+                    <div class="card-body invoice-preview-header rounded">
+                      <div class="d-flex justify-content-between flex-xl-row flex-md-column flex-sm-row flex-column align-items-xl-center align-items-md-start align-items-sm-center align-items-start">
+                        <div class="mb-xl-0 mb-6 text-heading">
+                          <div class="d-flex svg-illustration mb-6 gap-2 align-items-center">
+                            <span class="app-brand-logo demo">
+                              <span class="text-primary">
+                                <img src="{% static 'frontend/cph_memories-v2-removebg-preview.png' %}" alt="" width="100px">
+                              </span>
+                            </span>
+                            <span class="app-brand-text fw-bold fs-4 ms-50">Compenhagenmemories</span>
+                          </div>
+                          <p class="mb-2">
+                            Copenhagen Memories ApS,
+                            Niels Brocks Gade 9, 1574 København
+                            CVR: <b>44540452</b>
+                          </p>
+                          <p class="mb-2">Support: <b>+4566772790</b></p>
+                          <p class="mb-0">Mail: <b>contact@copenhagenmemories.com</b></p>
+                        </div>
+                        <div>
+                          <h5 class="mb-6">Invoice #{{ booking.booking_number }}</h5>
+                          <div class="mb-1 text-heading">
+                            <span>Booking Date:</span>
+                            <span class="fw-medium">{{ booking.created_at|date:"M d, Y" }}</span>
+                          </div>
+                          <div class="text-heading">
+                            <span>Rental Period:</span>
+                            <span class="fw-medium">{{ booking.start_date|date:"M d, Y" }} - {{ booking.end_date|date:"M d, Y" }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-body px-0">
+                      <div class="row">
+                        <div class="col-xl-6 col-md-12 col-sm-5 col-12 mb-xl-0 mb-md-6 mb-sm-0 mb-6">
+                          <h6>Invoice To:</h6>
+                          <p class="mb-1">{{ booking.name }}</p>
+                          <p class="mb-1">{{ booking.phone|default:"-" }}</p>
+                          <p class="mb-0">{{ booking.email }}</p>
+                        </div>
+                        <div class="col-xl-6 col-md-12 col-sm-7 col-12">
+                          <h6>Booking Summary:</h6>
+                          <table>
+                            <tbody>
+                              <tr>
+                                <td class="pe-4">Total Amount:</td>
+                                <td class="fw-medium">{{ booking.total }} USD</td>
+                              </tr>
+                              <tr>
+                                <td class="pe-4">Amount Paid:</td>
+                                <td class="fw-medium">{{ booking.paid }} USD</td>
+                              </tr>
+                              <tr>
+                                <td class="pe-4">Booking Status:</td>
+                                <td>
+                                  <span class="badge bg-label-{% if booking.status == 'confirmed' %}success{% elif booking.status == 'pending' %}warning{% elif booking.status == 'cancelled' %}danger{% else %}info{% endif %}">
+                                    {{ booking.get_status_display }}
+                                  </span>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="table-responsive border border-bottom-0 border-top-0 rounded">
+                      <table class="table m-0">
+                        <thead>
+                          <tr>
+                            <th>Item</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Subtotal</th>
+                            <th>Total</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <!-- The Bike itself -->
+                          <tr>
+                            <td class="text-nowrap text-heading"><strong>Bike Rental</strong></td>
+                            <td class="text-nowrap">{{ booking.bike.title }}</td>
+                            <td>{{ booking.bike_quantity }}</td>
+                            <td>{{ booking.bike.price }} USD / day</td>
+                            <td>{{ booking.bike_total_price }} USD / day</td>
+                            <td>{{ booking.bike_total_price_with_days }} USD</td>
+                          </tr>
+                          <!-- Addons -->
+                          {% for addon in booking.booking_addons.all %}
+                          <tr>
+                            <td class="text-nowrap text-heading">Addon</td>
+                            <td class="text-nowrap">{{ addon.addon.title }}</td>
+                            <td>{{ addon.quantity }}</td>
+                            <td>{{ addon.price }} USD / unit</td>
+                            <td>{{ addon.total_price }} USD</td>
+                            <td>{{ addon.total_price_with_days }} USD</td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="table-responsive">
+                      <table class="table m-0 table-borderless">
+                        <tbody>
+                          <tr>
+                            <td class="align-top pe-6 ps-0 py-6 text-body">
+                              <p class="mb-1">
+                                <span class="me-2 h6">Bike:</span>
+                                <span>{{ booking.bike.title }}</span>
+                              </p>
+                              <span>Thank you for booking with us!</span>
+                            </td>
+                            <td class="px-0 py-6 w-px-100">
+                              <p class="mb-2">Subtotal:</p>
+                              <p class="mb-2 border-bottom pb-2">Discount:</p>
+                              <p class="mb-0">Total:</p>
+                            </td>
+                            <td class="text-end px-0 py-6 w-px-100 fw-medium text-heading">
+                              <p class="fw-medium mb-2">{{ booking.subtotal }} USD</p>
+                              <p class="fw-medium mb-2 text-danger border-bottom pb-2">-{{ booking.discount }} USD</p>
+                              <p class="fw-medium mb-0">{{ booking.total }} USD</p>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <hr class="mt-0 mb-6">
+                    <div class="card-body p-0">
+                      <div class="row">
+                        <div class="col-12">
+                          <span class="fw-medium text-heading">Note:</span>
+                          {% if booking.other_info %}
+                          <span>{{ booking.other_info }}</span>
+                          {% else %}
+                          <span>Thank you for choosing Copenhagen Memories. We hope you enjoy your bike ride!</span>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /Invoice -->
+
+                <!-- Invoice Actions -->
+                <div class="col-xl-3 col-md-4 col-12 invoice-actions">
+                  <div class="card bg-transparent border-0 shadow-none">
+                    <div class="card-body p-0">
+                      <button class="btn btn-label-secondary d-grid w-100 mb-4 waves-effect text-nowrap" onclick="window.print()">
+                        <span class="d-flex align-items-center justify-content-center text-nowrap">
+                        <i class="icon-base ti tabler-printer icon-xs me-2"></i>Print
+                        </span>
+                      </button>
+                      <div class="d-flex mb-4">
+                        <a href="{% url 'bike_booking_edit' booking.pk %}" class="btn btn-primary d-grid w-100 waves-effect">
+                            <span class="d-flex align-items-center justify-content-center text-nowrap">
+                          <i class="icon-base ti tabler-edit icon-xs me-2"></i>Edit Booking
+                          </span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /Invoice Actions -->
+              </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -28,19 +28,18 @@
                           <div class="d-flex svg-illustration mb-6 gap-2 align-items-center">
                             <span class="app-brand-logo demo">
                               <span class="text-primary">
-                                <svg width="32" height="22" viewBox="0 0 32 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                  <path fill-rule="evenodd" clip-rule="evenodd" d="M0.00172773 0V6.85398C0.00172773 6.85398 -0.133178 9.01207 1.98092 10.8388L13.6912 21.9964L19.7809 21.9181L18.8042 9.88248L16.4951 7.17289L9.23799 0H0.00172773Z" fill="currentColor"></path>
-                                  <path opacity="0.06" fill-rule="evenodd" clip-rule="evenodd" d="M7.69824 16.4364L12.5199 3.23696L16.5541 7.25596L7.69824 16.4364Z" fill="#161616"></path>
-                                  <path opacity="0.06" fill-rule="evenodd" clip-rule="evenodd" d="M8.07751 15.9175L13.9419 4.63989L16.5849 7.28475L8.07751 15.9175Z" fill="#161616"></path>
-                                  <path fill-rule="evenodd" clip-rule="evenodd" d="M7.77295 16.3566L23.6563 0H32V6.88383C32 6.88383 31.8262 9.17836 30.6591 10.4057L19.7824 22H13.6938L7.77295 16.3566Z" fill="currentColor"></path>
-                                </svg>
+                                <img src="{% static 'frontend/cph_memories-v2-removebg-preview.png' %}" alt="" width="100px">
                               </span>
                             </span>
-                            <span class="app-brand-text fw-bold fs-4 ms-50">YourTourGuide</span>
+                            <span class="app-brand-text fw-bold fs-4 ms-50">Compenhagenmemories</span>
                           </div>
-                          <p class="mb-2">Copenhagen, Denmark</p>
-                          <p class="mb-2">Scandic Region</p>
-                          <p class="mb-0">info@yourtourguide.com</p>
+                          <p class="mb-2">
+                            Copenhagen Memories ApS,
+                            Niels Brocks Gade 9, 1574 København
+                            CVR: <b>44540452</b>
+                          </p>
+                          <p class="mb-2">Support: <b>+4566772790</b></p>
+                          <p class="mb-0">Mail: <b>contact@copenhagenmemories.com</b></p>
                         </div>
                         <div>
                           <h5 class="mb-6">Invoice #{{ booking.booking_number }}</h5>
@@ -240,7 +239,7 @@
                       <label for="invoice-message" class="form-label">Message</label>
                       <textarea class="form-control" name="invoice-message" id="invoice-message" cols="3" rows="8">Dear {{ booking.contact_name }},
 
-Thank you for your booking with YourTourGuide!
+Thank you for your booking with Compenhagenmemories!
 
 We have generated an invoice for your booking #{{ booking.booking_number }} for {{ booking.tour.title }}.
 Total Amount: {{ booking.total_amount }} {{ booking.currency }}
@@ -249,7 +248,7 @@ Tour Date: {{ booking.tour_date|date:"M d, Y" }}
 We look forward to providing you with an excellent tour experience!
 
 Best regards,
-YourTourGuide Team</textarea>
+Compenhagenmemories Team</textarea>
                     </div>
                     <div class="mb-6">
                       <span class="badge bg-label-primary">

@@ -24,9 +24,13 @@
                     <h5 class="card-header border-bottom mb-3 py-3">1. Bike Selection & Addons</h5>
                     <div class="card-body pt-2">
                         <div class="row g-3">
-                            <div class="col-md-12 mb-2">
+                            <div class="col-md-9 mb-2">
                                 <label class="form-label fw-bold h6" for="id_bike">Change Bike (Current: {{ booking.bike.title }})</label>
                                 {{ form.bike }}
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <label class="form-label fw-bold h6" for="id_bike_quantity">Quantity</label>
+                                {{ form.bike_quantity }}
                             </div>
                             <div class="col-md-6 mb-4">
                                 <label class="form-label fw-bold" for="id_start_date">Start Date</label>
@@ -35,6 +39,14 @@
                             <div class="col-md-6 mb-4">
                                 <label class="form-label fw-bold" for="id_end_date">End Date</label>
                                 {{ form.end_date }}
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label" for="id_start_time">Start Time (Optional)</label>
+                                {{ form.start_time }}
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label" for="id_end_time">End Time (Optional)</label>
+                                {{ form.end_time }}
                             </div>
                             <div class="col-md-12 {% if not bike_addons %}d-none{% endif %}" id="addons-container" {% if not bike_addons %}style="display: none;"{% endif %}>
                                 <div class="divider text-start mb-4">
@@ -293,6 +305,7 @@ $(document).ready(function() {
     // Calculate Totals
     function calculateTotals() {
         let bikePrice = parseFloat(bikeBasePriceInput.val()) || 0;
+        let bikeQuantity = parseInt($('#id_bike_quantity').val()) || 1;
         let addonsTotal = 0;
         
         $('.addon-checkbox:checked').each(function() {
@@ -331,7 +344,7 @@ $(document).ready(function() {
             daysBadge.hide();
         }
 
-        let subtotal = (bikePrice + addonsTotal) * days;
+        let subtotal = ((bikePrice * bikeQuantity) + addonsTotal) * days;
         let discount = parseFloat(discountInput.val()) || 0;
         let total = subtotal - discount;
 
@@ -354,6 +367,8 @@ $(document).ready(function() {
     });
 
     // Trigger calculation on discount input
+    $('#id_bike_quantity').on('input change', calculateTotals);
+
     discountInput.on('input', function() {
         calculateTotals();
     });

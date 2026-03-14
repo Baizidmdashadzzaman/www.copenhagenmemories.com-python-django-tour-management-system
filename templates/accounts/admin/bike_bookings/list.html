@@ -62,7 +62,7 @@
                                 aria-controls="DataTables_Table_0" type="button">
                                 <span>
                                     <i class="icon-base ti tabler-plus me-0 me-sm-1 icon-16px"></i>
-                                    <span class="d-none d-sm-inline-block">Add Bike Addon</span>
+                                    <span class="d-none d-sm-inline-block">Add Bike Booking</span>
                                 </span>
                             </a>
                         </div>
@@ -122,10 +122,13 @@
                         <td>{{ booking.created_at|date:"d M Y" }}</td>
                         <td>
                                         <div class="d-inline-block text-nowrap">
-                                            <a href="{% url 'bike_booking_edit' booking.pk %}" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light me-1">
+                                            <a href="{% url 'bike_booking_invoice' booking.pk %}" target="_blank" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light me-1" title="Print Invoice">
+                                                <i class="icon-base ti tabler-printer icon-22px"></i>
+                                            </a>
+                                            <a href="{% url 'bike_booking_edit' booking.pk %}" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light me-1" title="Edit Booking">
                                                 <i class="icon-base ti tabler-edit icon-22px"></i>
                                             </a>
-                                            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#deleteModal{{ booking.pk }}" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light">
+                                            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#deleteModal{{ booking.pk }}" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect waves-light" title="Delete Booking">
                                                 <i class="icon-base ti tabler-trash icon-22px"></i>
                                             </a>
                                         </div>

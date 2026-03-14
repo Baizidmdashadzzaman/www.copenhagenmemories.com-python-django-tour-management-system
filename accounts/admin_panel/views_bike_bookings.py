@@ -151,6 +151,15 @@ def bike_booking_delete(request, pk):
 
 @login_required
 @user_passes_test(lambda u: u.is_staff)
+@permission_required_with_message('accounts.view_bikebooking')
+def bike_booking_invoice(request, pk):
+    booking = get_object_or_404(BikeBooking, pk=pk)
+    return render(request, 'accounts/admin/bike_bookings/invoice.html', {
+        'booking': booking
+    })
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
 def get_bike_addons_api(request, bike_id):
     bike = get_object_or_404(Bike, id=bike_id)
     addons = BikeAddonPrice.objects.filter(bike=bike).select_related('addon')

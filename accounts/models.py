@@ -1170,8 +1170,11 @@ class BikeBooking(models.Model):
     address = models.TextField(blank=True)
     other_info = models.TextField(blank=True)
     bike = models.ForeignKey(Bike, on_delete=models.PROTECT)
+    bike_quantity = models.PositiveIntegerField(default=1)
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
+    start_time = models.TimeField(null=True, blank=True)
+    end_time = models.TimeField(null=True, blank=True)
     
     subtotal = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     discount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
@@ -1190,6 +1193,21 @@ class BikeBooking(models.Model):
     def __str__(self):
         return f"{self.booking_number} - {self.name}"
 
+    @property
+    def number_of_days(self):
+        if self.start_date and self.end_date:
+            days = (self.end_date - self.start_date).days + 1
+            return days if days > 0 else 1
+        return 1
+
+    @property
+    def bike_total_price(self):
+        return self.bike.price * self.bike_quantity
+        
+    @property
+    def bike_total_price_with_days(self):
+        return self.bike_total_price * self.number_of_days
+
     def save(self, *args, **kwargs):
         if not self.booking_number:
             import uuid
@@ -1204,6 +1222,14 @@ class BikeBookingAddon(models.Model):
 
     def __str__(self):
         return f"{self.quantity} x {self.addon.title} ({self.price})"
+
+    @property
+    def total_price(self):
+        return self.price * self.quantity
+        
+    @property
+    def total_price_with_days(self):
+        return self.total_price * self.booking.number_of_days
 
 
 

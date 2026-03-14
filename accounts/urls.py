@@ -95,6 +95,7 @@ urlpatterns = [
     path('admin/bike-bookings/', bike_booking_views.bike_booking_list, name='bike_booking_list'),
     path('admin/bike-bookings/create/', bike_booking_views.bike_booking_create, name='bike_booking_create'),
     path('admin/bike-bookings/<int:pk>/edit/', bike_booking_views.bike_booking_edit, name='bike_booking_edit'),
+    path('admin/bike-bookings/<int:pk>/invoice/', bike_booking_views.bike_booking_invoice, name='bike_booking_invoice'),
     path('admin/bike-bookings/<int:pk>/delete/', bike_booking_views.bike_booking_delete, name='bike_booking_delete'),
     path('admin/api/bike-addons/<int:bike_id>/', bike_booking_views.get_bike_addons_api, name='get_bike_addons_api'),
     path('admin/api/customer-info/<int:customer_id>/', bike_booking_views.get_customer_info_api, name='get_customer_info_api'),

@@ -8,7 +8,7 @@ class BikeBookingForm(forms.ModelForm):
         model = BikeBooking
         fields = [
             'customer', 'name', 'email', 'phone', 'address', 
-            'other_info', 'bike', 'start_date', 'end_date', 'subtotal', 'discount', 'total', 'paid', 'status'
+            'other_info', 'bike', 'bike_quantity', 'start_date', 'end_date', 'start_time', 'end_time', 'subtotal', 'discount', 'total', 'paid', 'status'
         ]
         widgets = {
             'customer': forms.Select(attrs={'class': 'form-select select2', 'id': 'id_customer'}),
@@ -18,8 +18,11 @@ class BikeBookingForm(forms.ModelForm):
             'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Customer Address'}),
             'other_info': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Additional Info'}),
             'bike': forms.Select(attrs={'class': 'form-select select2', 'id': 'id_bike'}),
+            'bike_quantity': forms.NumberInput(attrs={'class': 'form-control', 'id': 'id_bike_quantity', 'min': '1'}),
             'start_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}, format='%Y-%m-%d'),
             'end_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}, format='%Y-%m-%d'),
+            'start_time': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
+            'end_time': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
             'subtotal': forms.NumberInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
             'discount': forms.NumberInput(attrs={'class': 'form-control'}),
             'total': forms.NumberInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
