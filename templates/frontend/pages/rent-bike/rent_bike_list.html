@@ -158,7 +158,16 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="bookBikeModalLabel{{ bike.id }}">{% translate "Book Bike" %} - {{ bike.title }}</h5>
+                            <h5 class="modal-title" id="bookBikeModalLabel{{ bike.id }}">
+                                
+                                {% if bike.image %}
+                                    <img src="{{ bike.image.url }}" alt="{{ bike.title }}" class="img-fluid rounded-4" style="width: 100px;">
+                                {% else %}
+                                    <img src="{% static 'frontend/assets/img/flight/bike-1.png' %}" alt="placeholder" style="width: 100px;">
+                                {% endif %}
+                                {% translate "Book Bike" %} - {{ bike.title }}
+                                
+                            </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -182,7 +191,15 @@
                                         <label for="address" class="form-label">{% translate "Address" %}</label>
                                         <input type="text" class="form-control" name="address" {% if request.user.is_authenticated and request.user.customer_profile %}value="{{ request.user.customer_profile.address }}"{% endif %}>
                                     </div>
-                                    <div class="col-md-6 mb-3">
+                                   
+                                    <div class="col-md-12 mb-3">
+                                        <label for="other_info" class="form-label">{% translate "Other Information" %}</label>
+                                        <textarea class="form-control" name="other_info" rows="3"></textarea>
+                                    </div>
+
+                                    <div class="col-md-12 mb-3 border-bottom"></div>
+
+                                    <div class="col-md-6 mb-3 ">
                                         <label for="start_date" class="form-label">{% translate "Start Date" %} *</label>
                                         <input type="date" class="form-control" name="start_date" required>
                                     </div>
@@ -197,11 +214,6 @@
                                     <div class="col-md-6 mb-3">
                                         <label for="end_time" class="form-label">{% translate "End Time" %}</label>
                                         <input type="time" class="form-control" name="end_time">
-                                    </div>
-                                    
-                                    <div class="col-md-12 mb-3">
-                                        <label for="other_info" class="form-label">{% translate "Other Information" %}</label>
-                                        <textarea class="form-control" name="other_info" rows="3"></textarea>
                                     </div>
 
                                     <!-- <div class="col-md-12 mb-3">
