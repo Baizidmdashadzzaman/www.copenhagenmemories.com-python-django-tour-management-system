@@ -726,15 +726,26 @@
                                         {% endif %}
                                     </div>
                                 </div>
+                                <!-- {% if schedules %}
                                 <div class="col-md-6">
-                                    <!-- Tour Time  -->
-                                    
                                     <div class="form-item border rounded p-3 mb-3 w-100">
-                                        <label class="form-label fs-14 text-default mb-2 fw-medium">{% translate "Select Time Slot (Optional)" %}</label>
+                                        <label class="form-label fs-14 text-default mb-2 fw-medium">{% translate "Select Time (Optional)" %}</label>
                                         {{ booking_form.tour_time }}
-                                        <p class="fs-12 text-muted mb-0">{% translate "Available time slots for selected date" %}</p>
+                                        <p class="fs-12 text-muted mb-0">{% translate "Available time for selected date" %}</p>
                                     </div>
-                                    {% if schedules %} {% endif %}
+                                </div>
+                                {% endif %} -->
+                                <div class="col-md-6">
+                                    <div class="form-item border rounded p-3 mb-3 w-100">
+                                        <label class="form-label fs-14 text-default mb-2 fw-medium">{% translate "Select Time Slot" %}</label>
+                                        {{ booking_form.tour_time_slot }}
+                                        <p class="fs-12 text-muted mb-0">{% translate "Available time slots for selected date" %}</p>
+                                        {% if booking_form.tour_time_slot.errors %}
+                                        <div class="text-danger fs-12 mt-1">
+                                            {% for error in booking_form.tour_time_slot.errors %}{{ error }}{% endfor %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
 

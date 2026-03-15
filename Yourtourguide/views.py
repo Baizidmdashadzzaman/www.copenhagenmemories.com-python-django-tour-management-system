@@ -821,6 +821,7 @@ def tour_detail(request, tour_id):
                             schedule=booking_form.cleaned_data.get('schedule'),
                             tour_date=booking_form.cleaned_data['tour_date'],
                             tour_time=booking_form.cleaned_data.get('tour_time'),
+                            tour_time_slot=booking_form.cleaned_data.get('tour_time_slot'),
                             total_participants=len(participants),
                             participant_details=participant_details,
                             subtotal=subtotal,

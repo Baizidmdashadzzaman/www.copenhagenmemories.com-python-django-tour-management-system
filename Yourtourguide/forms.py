@@ -50,6 +50,15 @@ class FrontendBookingForm(forms.ModelForm):
         required=False
     )
 
+    tour_time_slot = forms.ChoiceField(
+        choices=Booking.TOUR_SLOT_CHOICES,
+        widget=forms.Select(attrs={
+            'class': 'form-select',
+            'required': True
+        }),
+        required=True
+    )
+
     contact_name = forms.CharField(
         widget=forms.TextInput(attrs={
             'class': 'form-control',
@@ -106,7 +115,7 @@ class FrontendBookingForm(forms.ModelForm):
     class Meta:
         model = Booking
         fields = [
-            'tour', 'schedule', 'tour_date', 'tour_time',
+            'tour', 'schedule', 'tour_date', 'tour_time', 'tour_time_slot',
             'contact_name', 'contact_email', 'contact_phone',
             'special_requirements', 'pickup_location', 'customer_notes'
         ]

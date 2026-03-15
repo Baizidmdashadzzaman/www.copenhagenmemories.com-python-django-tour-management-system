@@ -64,7 +64,7 @@
                                 <div class="mb-3">
                                     <h6 class="text-muted mb-1">{% translate "Tour Date" %}</h6>
                                     <p class="mb-0">{{ booking.tour_date|date:"M d, Y" }}
-                                    {% if booking.tour_time %} at {{ booking.tour_time|time:"H:i" }}{% endif %}</p>
+                                    {% if booking.tour_time_slot %}<br> Time Slot: {{ booking.tour_time_slot }}{% elif booking.tour_time %} at {{ booking.tour_time|time:"H:i" }}{% endif %}</p>
                                 </div>
                             </div>
                             <div class="col-md-6">
