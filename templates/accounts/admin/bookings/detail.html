@@ -47,6 +47,7 @@
                         <div class="col-md-6">
                             <p class="mb-1"><span class="fw-medium">Tour Date:</span> {{ booking.tour_date|date:"M d, Y" }}</p>
                             <p class="mb-1"><span class="fw-medium">Tour Time:</span> {{ booking.tour_time|default:"-" }}</p>
+                            <p class="mb-1"><span class="fw-medium">Tour Time Slot:</span> {{ booking.tour_time_slot|default:"-" }}</p>
                             <p class="mb-1"><span class="fw-medium">Participants:</span> {{ booking.total_participants }}</p>
                         </div>
                         <div class="col-md-6">

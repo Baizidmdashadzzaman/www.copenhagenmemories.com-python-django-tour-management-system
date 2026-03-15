@@ -51,6 +51,10 @@
                             <span>Tour Date:</span>
                             <span class="fw-medium">{{ booking.tour_date|date:"M d, Y" }}</span>
                           </div>
+                          <div class="text-heading">
+                            <span>Tour Time Slot:</span>
+                            <span class="fw-medium">{{ booking.tour_time_slot|default:"-" }}</span>
+                          </div>
                         </div>
                       </div>
                     </div>

@@ -146,13 +146,14 @@ class BookingForm(forms.ModelForm):
     
     class Meta:
         model = Booking
-        fields = ['customer', 'tour', 'schedule', 'tour_date', 'tour_time', 'total_participants', 
+        fields = ['customer', 'tour', 'schedule', 'tour_date', 'tour_time', 'tour_time_slot', 'total_participants', 
                   'contact_name', 'contact_email', 'contact_phone', 'special_requirements', 
                   'pickup_location', 'subtotal', 'discount_amount', 'tax_amount', 'total_amount',
                   'status', 'payment_status', 'customer_notes', 'admin_notes']
         widgets = {
             'tour_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'tour_time': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
+            'tour_time_slot': forms.Select(attrs={'class': 'form-select'}),
             'total_participants': forms.NumberInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
             'contact_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Contact name'}),
             'contact_email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Contact email'}),

@@ -83,6 +83,13 @@
                                 {% endif %}
                             </div>
                             <div class="col-md-6 mb-3">
+                                <label for="{{ form.tour_time_slot.id_for_label }}" class="form-label">Tour Slot</label>
+                                {{ form.tour_time_slot }}
+                                {% if form.tour_time_slot.errors %}
+                                <div class="text-danger">{{ form.tour_time_slot.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
                                 <label for="{{ form.contact_name.id_for_label }}" class="form-label">Contact Name *</label>
                                 {{ form.contact_name }}
                                 {% if form.contact_name.errors %}

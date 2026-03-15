@@ -560,6 +560,12 @@ class Booking(models.Model):
     booking_date = models.DateTimeField(auto_now_add=True)
     tour_date = models.DateField()
     tour_time = models.TimeField(blank=True, null=True)
+    TOUR_SLOT_CHOICES = [
+        ('9.30-12.00', '9.30-12.00'),
+        ('13.00-15.30', '13.00-15.30'),
+        ('19.30-22.00', '19.30-22.00'),
+    ]
+    tour_time_slot = models.CharField(max_length=50, blank=True, null=True, choices=TOUR_SLOT_CHOICES)
     
     total_participants = models.IntegerField()
     participant_details = models.JSONField(default=dict, blank=True)
