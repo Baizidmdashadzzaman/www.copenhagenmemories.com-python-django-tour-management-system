@@ -62,6 +62,7 @@ urlpatterns = [
     path('tour-feature-section/<int:feature_id>/', views.tour_feature_section, name='tour_feature_section_fronted'),
     path('ai-chat/', ai_views.ai_chat_proxy, name='ai_chat_proxy'),
     path('rent-bike/', views.rent_bike, name='rent_bike'),
+    path('rent-bike/confirmation/<str:booking_number>/', views.rent_bike_confirmation, name='rent_bike_confirmation'),
     path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type='text/plain')),
 
     path('todo/', include('todo.urls')),

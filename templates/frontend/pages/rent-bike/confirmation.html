@@ -1,0 +1,207 @@
+{% extends 'frontend/layout/base.html' %}
+
+{% block title %}Bike Booking Confirmation - {{ booking.booking_number }}{% endblock %}
+
+{% block content %}
+{% load static %}
+{% load translate_tags %}
+
+<div class="breadcrumb-bar breadcrumb-bg-02 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 col-12">
+                <h2 class="breadcrumb-title mb-2">{% translate "Bike Booking Confirmation" %}</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="isax isax-home5"></i></a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'rent_bike' %}">{% translate "Rent a Bike" %}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Booking #{{ booking.booking_number }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body text-center py-5">
+                        <div class="mb-4">
+                            <i class="isax isax-tick-circle text-success" style="font-size: 4rem;"></i>
+                        </div>
+                        <h3 class="text-success mb-3">{% translate "Bike Booking Confirmed!" %}</h3>
+                        <p class="text-muted mb-2">{% translate "Your bike rental booking has been successfully created." %}</p>
+                        <p class="fw-medium">{% translate "Booking Number:" %} <span class="text-primary">{{ booking.booking_number }}</span></p>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">{% translate "Booking Details" %}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <h6 class="text-muted mb-1">{% translate "Bike" %}</h6>
+                                    <p class="mb-0 fw-medium">{{ booking.bike.title }}</p>
+                                    <small class="text-muted">{% translate "Quantity" %}: {{ booking.bike_quantity }}</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <h6 class="text-muted mb-1">{% translate "Booking Date" %}</h6>
+                                    <p class="mb-0">{{ booking.created_at|date:"M d, Y" }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <h6 class="text-muted mb-1">{% translate "Rental Period" %}</h6>
+                                    <p class="mb-0">
+                                        {{ booking.start_date|date:"M d, Y" }} - {{ booking.end_date|date:"M d, Y" }}
+                                        <br><small class="text-muted">{{ booking.number_of_days }} {% translate "Days" %}</small>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <h6 class="text-muted mb-1">{% translate "Rental Times" %}</h6>
+                                    <p class="mb-0">
+                                        {% if booking.start_time %}{{ booking.start_time|time:"H:i" }}{% else %}-{% endif %} to 
+                                        {% if booking.end_time %}{{ booking.end_time|time:"H:i" }}{% else %}-{% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <h6 class="text-muted mb-1">{% translate "Contact" %}</h6>
+                                    <p class="mb-0">{{ booking.name }}</p>
+                                    <small class="text-muted">{{ booking.email }}<br>{{ booking.phone }}</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <h6 class="text-muted mb-1">{% translate "Status" %}</h6>
+                                    <span class="badge bg-warning">{{ booking.get_status_display }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if booking.address %}
+                        <div class="mt-3">
+                            <h6 class="text-muted mb-1">{% translate "Address" %}</h6>
+                            <p class="mb-0">{{ booking.address }}</p>
+                        </div>
+                        {% endif %}
+
+                        {% if booking.other_info %}
+                        <div class="mt-3">
+                            <h6 class="text-muted mb-1">{% translate "Other Information" %}</h6>
+                            <p class="mb-0">{{ booking.other_info }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if booking.booking_addons.all %}
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">{% translate "Selected Addons" %}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            {% for addon in booking.booking_addons.all %}
+                            <div class="col-md-6 mb-3">
+                                <div class="border rounded p-3">
+                                    <h6 class="mb-2">{{ addon.addon.title }}</h6>
+                                    <p class="mb-1"><small class="text-muted">{% translate "Quantity" %}:</small> {{ addon.quantity }}</p>
+                                    <p class="mb-1"><small class="text-muted">{% translate "Price per day" %}:</small> {{ site_settings.currency_symbol|default:"USD" }} {{ addon.price }}</p>
+                                    <p class="mb-0"><small class="text-muted">{% translate "Total" %}:</small> {{ site_settings.currency_symbol|default:"USD" }} {{ addon.total_price_with_days }}</p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">{% translate "Pricing Summary" %}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>{% translate "Bike Rental" %} ({{ booking.number_of_days }} {% translate "days" %}):</span>
+                                    <span>{{ site_settings.currency_symbol|default:"USD" }} {{ booking.bike_total_price_with_days }}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>{% translate "Addons" %}:</span>
+                                    <!-- A Django template hack to subtract (Total - Discount - BikeTotal) wouldn't be pretty. Let's just output it cleanly by using purely template math or just showing total addon price. Due to template math limits, we will calculate addon sum if possible, or omit it, but we use the formula: Subtotal - Bike Total -->
+                                    <span>{{ site_settings.currency_symbol|default:"USD" }} {{ booking.subtotal|add:"-"|add:booking.bike_total_price_with_days }}</span>
+                                </div>
+                                {% if booking.discount > 0 %}
+                                <div class="d-flex justify-content-between mb-2 text-success">
+                                    <span>{% translate "Discount" %}:</span>
+                                    <span>-{{ site_settings.currency_symbol|default:"USD" }} {{ booking.discount }}</span>
+                                </div>
+                                {% endif %}
+                                <hr>
+                                <div class="d-flex justify-content-between fw-bold">
+                                    <span>{% translate "Total" %}:</span>
+                                    <span>{{ site_settings.currency_symbol|default:"USD" }} {{ booking.total }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="alert alert-info border-0 bg-light-info">
+                                    <h6 class="alert-heading text-info">{% translate "Next Steps" %}</h6>
+                                    <p class="mb-0">{% translate "We will review your booking and contact you shortly." %}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <a href="{% url 'rent_bike' %}" class="btn btn-outline-primary w-100">
+                                    <i class="isax isax-arrow-left-3 me-2"></i>{% translate "Back to Rent a Bike" %}
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-primary w-100" onclick="window.print()">
+                                    <i class="isax isax-printer me-2"></i>{% translate "Print Booking" %}
+                                </button>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="{% url 'home' %}" class="btn btn-success w-100">
+                                    <i class="isax isax-home5 me-2"></i>{% translate "Back to Home" %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+@media print {
+    .breadcrumb-bar, .card-header, .btn {
+        display: none !important;
+    }
+    .card {
+        border: 1px solid #ddd !important;
+        box-shadow: none !important;
+    }
+}
+</style>
+
+{% endblock %}

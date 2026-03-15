@@ -5,6 +5,34 @@
 {% block title %}{% translate "Rent a Bike" %} - {{ site_settings.site_name }}{% endblock %}
 
 {% block content %}
+<style>
+.wave-text span {
+    display: inline-block;
+    font-size: 1rem;
+    animation: wave 2s ease-in-out infinite;
+}
+.wave-text span:nth-child(1) {
+    animation-delay: 0s;
+}
+.wave-text span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+.wave-text span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+.wave-text span:nth-child(4) {
+    animation-delay: 0.6s;
+}
+
+@keyframes wave {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+</style> 
 
 <div class="breadcrumb-bar breadcrumb-bg-02 text-center">
     <div class="container">
@@ -106,7 +134,7 @@
                             <span class="fw-bold text-dark">{{ bike.price }} {{ site_settings.currency_symbol|default:"USD" }}</span>
                             <span class="text-muted">/ {% translate "for 24 hours" %}</span>
                         </div>
-                        <a href="javascript:void(0);" onclick="alert('Comming soon,we will notify you when it is ready')" class="btn btn-primary d-inline-flex align-items-center">
+                        <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#bookBikeModal{{ bike.id }}" class="btn btn-primary d-inline-flex align-items-center">
                             <i class="isax isax-calendar-2 me-2"></i>{% translate "Book Now" %}
                         </a>
                     </div>
@@ -120,6 +148,128 @@
                         {% endif %}
                         <div class="flight-bg">
                             <img src="{% static 'frontend/assets/img/bg/flight-bg.png' %}" alt="img">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bike Booking Modal -->
+            <div class="modal fade" id="bookBikeModal{{ bike.id }}" tabindex="-1" aria-labelledby="bookBikeModalLabel{{ bike.id }}" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="bookBikeModalLabel{{ bike.id }}">{% translate "Book Bike" %} - {{ bike.title }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="POST" action="{% url 'rent_bike' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="bike_id" value="{{ bike.id }}">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="name" class="form-label">{% translate "Full Name" %} *</label>
+                                        <input type="text" class="form-control" name="name" required {% if request.user.is_authenticated %}value="{{ request.user.first_name }} {{ request.user.last_name }}"{% endif %}>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="email" class="form-label">{% translate "Email Address" %} *</label>
+                                        <input type="email" class="form-control" name="email" required {% if request.user.is_authenticated %}value="{{ request.user.email }}" readonly{% endif %}>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="phone" class="form-label">{% translate "Phone Number" %} *</label>
+                                        <input type="text" class="form-control" name="phone" required {% if request.user.is_authenticated and request.user.customer_profile %}value="{{ request.user.customer_profile.phone }}"{% endif %}>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="address" class="form-label">{% translate "Address" %}</label>
+                                        <input type="text" class="form-control" name="address" {% if request.user.is_authenticated and request.user.customer_profile %}value="{{ request.user.customer_profile.address }}"{% endif %}>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="start_date" class="form-label">{% translate "Start Date" %} *</label>
+                                        <input type="date" class="form-control" name="start_date" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="end_date" class="form-label">{% translate "End Date" %} *</label>
+                                        <input type="date" class="form-control" name="end_date" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="start_time" class="form-label">{% translate "Start Time" %}</label>
+                                        <input type="time" class="form-control" name="start_time">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="end_time" class="form-label">{% translate "End Time" %}</label>
+                                        <input type="time" class="form-control" name="end_time">
+                                    </div>
+                                    
+                                    <div class="col-md-12 mb-3">
+                                        <label for="other_info" class="form-label">{% translate "Other Information" %}</label>
+                                        <textarea class="form-control" name="other_info" rows="3"></textarea>
+                                    </div>
+
+                                    <!-- <div class="col-md-12 mb-3">
+                                        <label for="bike_quantity" class="form-label">{% translate "Bike Quantity" %} *</label>
+                                        <input type="number" class="form-control" name="bike_quantity" value="1" min="1" required>
+                                    </div> -->
+
+                                    <div class="col-md-12 mb-3">
+                                        <h6 class="mb-3 border-bottom pb-2">{% translate "Bike Quantity" %}</h6>
+                                        <div class="d-flex justify-content-between align-items-center mb-2 bg-primary p-2 rounded">
+                                            <div>
+                                                <strong>{{ bike.title }}</strong>
+                                                <div class="text-muted small"></div>
+                                            </div>
+                                            <div class="d-flex align-items-center ms-3" style="min-width: 150px; justify-content: flex-end;">
+                                                <span class="me-2 fw-medium text-nowrap">{{ bike.price }} {{ site_settings.currency_symbol|default:"USD" }}</span>
+                                                <input type="number" class="form-control form-control-sm text-center" name="bike_quantity" value="1" min="1" required>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {% if bike.bike_addons.all %}
+                                    <div class="col-md-12 mb-3">
+                                        <h6 class="mb-3 border-bottom pb-2">{% translate "Addons" %}</h6>
+                                        {% for ba in bike.bike_addons.all %}
+                                        <div class="d-flex justify-content-between align-items-center mb-2 bg-outline-primary p-2 rounded">
+                                            <div>
+                                                <strong style="display: ruby;">{% if request.session.lang == 'dk' and ba.addon.title_dk %}{{ ba.addon.title_dk }}{% else %}{{ ba.addon.title }}{% endif %}
+                                                    {% if ba.price == 0 %}
+                                                    <div class="wave-container">
+                                                        <h1 class="wave-text">
+                                                            <span>F</span><span>R</span><span>E</span><span>E</span>
+                                                        </h1>
+                                                    </div>
+                                                    {% endif %}
+                                                </strong>
+                                                <div class="text-muted small">{% if request.session.lang == 'dk' and ba.addon.description_dk %}{{ ba.addon.description_dk }}{% else %}{{ ba.addon.description }}{% endif %}</div>
+                                            </div>
+                                            
+                                            <div class="d-flex align-items-center ms-3" style="min-width: 150px; justify-content: flex-end;">
+                                                <span class="me-2 fw-medium text-nowrap">{{ ba.price }}</span>
+                                                <input type="number" class="form-control form-control-sm addon-quantity text-center" name="addon_quantity_{{ ba.id }}" value="0" min="0" style="width: 60px;" data-price="{{ ba.price }}">
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                    
+                                    <div class="col-md-12 mb-3">
+                                        <div class="card bg-light">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span>{% translate "Total Days" %}:</span>
+                                                    <span id="totalDays{{ bike.id }}" class="fw-bold">1</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between text-primary">
+                                                    <span>{% translate "Total Price" %}:</span>
+                                                    <span class="fw-bold"><span id="totalPrice{{ bike.id }}">{{ bike.price|floatformat:2 }}</span> {{ site_settings.currency_symbol|default:"USD" }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="bike_price" value="{{ bike.price }}">
+                                </div>
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-primary"><i class="isax isax-calendar-2 me-2"></i>{% translate "Confirm Booking" %}</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -138,5 +288,47 @@
 {% endblock %}
 
 {% block scripts %}
-
+<script>
+$(document).ready(function() {
+    function calculateTotal(bikeId) {
+        var modal = $('#bookBikeModal' + bikeId);
+        var bikePrice = parseFloat(modal.find('input[name="bike_price"]').val()) || 0;
+        var bikeQuantity = parseInt(modal.find('input[name="bike_quantity"]').val()) || 1;
+        
+        var startDateStr = modal.find('input[name="start_date"]').val();
+        var endDateStr = modal.find('input[name="end_date"]').val();
+        
+        var days = 1;
+        if (startDateStr && endDateStr) {
+            var start = new Date(startDateStr);
+            var end = new Date(endDateStr);
+            if (end >= start) {
+                var diffTime = Math.abs(end - start);
+                var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                days = diffDays;
+            }
+        }
+        
+        var totalBikePrice = bikePrice * bikeQuantity; // bike price * quantity
+        var totalBikePriceWithDays = totalBikePrice * days; 
+        
+        var totalAddonPriceWithDays = 0;
+        modal.find('.addon-quantity').each(function() {
+            var qty = parseInt($(this).val()) || 0;
+            var price = parseFloat($(this).data('price')) || 0;
+            totalAddonPriceWithDays += (qty * price * days);
+        });
+        
+        var finalTotal = totalBikePriceWithDays + totalAddonPriceWithDays;
+        modal.find('#totalPrice' + bikeId).text(finalTotal.toFixed(2));
+        modal.find('#totalDays' + bikeId).text(days);
+    }
+    
+    // bind change events
+    $('.modal form').on('change input', 'input[name="bike_quantity"], input[name="start_date"], input[name="end_date"], .addon-quantity', function() {
+        var bikeId = $(this).closest('form').find('input[name="bike_id"]').val();
+        calculateTotal(bikeId);
+    });
+});
+</script>
 {% endblock %}
