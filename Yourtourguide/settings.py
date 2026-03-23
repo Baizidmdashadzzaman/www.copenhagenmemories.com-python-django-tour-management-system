@@ -30,6 +30,9 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
+FLATPAY_KEY = os.getenv('FLATPAY_KEY', '')
+USE_PAYMENT_GATEWAY = os.getenv('USE_PAYMENT_GATEWAY', 'False').lower() in ('true', '1', 't')
+
 ALLOWED_HOSTS = [
     '88.222.221.225',
     '127.0.0.1',

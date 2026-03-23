@@ -1,5 +1,8 @@
 import random
 import string
+import requests
+from django.conf import settings
+from django.urls import reverse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -123,15 +126,51 @@ def cart_view(request):
                     price=item_data['price'],
                     quantity=item_data['quantity']
                 )
+
+            if getattr(settings, 'USE_PAYMENT_GATEWAY', False):
+                api_key = getattr(settings, 'FLATPAY_KEY', '')
+                url = 'https://checkout-api.frisbii.com/v1/session/charge'
                 
-                # Update stock
-                souvenir.stock -= item_data['quantity']
-                souvenir.save()
+                amount = int(float(total_price) * 100)
+                accept_url = request.build_absolute_uri(reverse('cart_payment_accept', args=[order.order_number]))
+                cancel_url = request.build_absolute_uri(reverse('cart_payment_cancel', args=[order.order_number]))
                 
-            # Clear cart
-            request.session['cart'] = {}
-            messages.success(request, "Order placed successfully!")
-            return render(request, 'frontend/pages/cart/order_confirmation.html', {'order': order})
+                data = {
+                    'order': {
+                        'handle': order.order_number,
+                        'amount': amount,
+                        'currency': 'DKK',
+                        'customer': {
+                            'email': order.email,
+                            'first_name': order.first_name,
+                            'last_name': order.last_name,
+                        }
+                    },
+                    'accept_url': accept_url,
+                    'cancel_url': cancel_url
+                }
+                
+                try:
+                    response = requests.post(url, auth=(api_key, ''), json=data)
+                    response_data = response.json()
+                    if 'url' in response_data:
+                        return redirect(response_data['url'])
+                    else:
+                        messages.error(request, f"Payment gateway error: {response_data.get('error', 'Unknown error')}")
+                        return redirect('cart_view')
+                except Exception as e:
+                    messages.error(request, f"Payment gateway error: {str(e)}")
+                    return redirect('cart_view')
+            else:
+                # Original flow
+                for item_id, item_data in cart.items():
+                    souvenir = Souvenir.objects.get(id=item_id)
+                    souvenir.stock -= item_data['quantity']
+                    souvenir.save()
+                    
+                request.session['cart'] = {}
+                messages.success(request, "Order placed successfully!")
+                return render(request, 'frontend/pages/cart/order_confirmation.html', {'order': order})
 
     context = {
         'cart_items': cart_items,
@@ -165,4 +204,41 @@ def remove_from_cart(request, souvenir_id):
         request.session['cart'] = cart
         messages.success(request, 'Item removed from cart.')
         
+    return redirect('cart_view')
+
+def cart_payment_accept(request, order_number):
+    order = get_object_or_404(SouvenirOrder, order_number=order_number)
+    
+    if getattr(settings, 'USE_PAYMENT_GATEWAY', False):
+        api_key = getattr(settings, 'FLATPAY_KEY', '')
+        url = f"https://api.frisbii.com/v1/charge/{order_number}"
+        try:
+            response = requests.get(url, auth=(api_key, ''), headers={'Accept': 'application/json'})
+            data = response.json()
+            if response.status_code == 200 and data.get('state') not in ['authorized', 'settled']:
+                messages.error(request, "Payment was not authorized.")
+                return redirect('cart_view')
+        except Exception as e:
+            pass
+
+    if order.status != 'confirmed':
+        order.status = 'confirmed'
+        order.save()
+        
+        for item in order.items.all():
+            souvenir = item.souvenir
+            if souvenir:
+                souvenir.stock -= item.quantity
+                souvenir.save()
+
+    request.session['cart'] = {}
+    messages.success(request, "Order placed successfully!")
+    return render(request, 'frontend/pages/cart/order_confirmation.html', {'order': order})
+
+def cart_payment_cancel(request, order_number):
+    order = get_object_or_404(SouvenirOrder, order_number=order_number)
+    if order.status != 'confirmed':
+        order.status = 'cancelled'
+        order.save()
+    messages.warning(request, "Payment was cancelled.")
     return redirect('cart_view')

@@ -77,6 +77,8 @@ urlpatterns = [
     
     # Cart
     path('cart/', souvenir_views.cart_view, name='cart_view'),
+    path('cart/payment/accept/<str:order_number>/', souvenir_views.cart_payment_accept, name='cart_payment_accept'),
+    path('cart/payment/cancel/<str:order_number>/', souvenir_views.cart_payment_cancel, name='cart_payment_cancel'),
     path('add-to-cart/<int:souvenir_id>/', souvenir_views.add_to_cart, name='add_to_cart'),
     path('update-cart/<int:souvenir_id>/', souvenir_views.update_cart, name='update_cart'),
     path('remove-from-cart/<int:souvenir_id>/', souvenir_views.remove_from_cart, name='remove_from_cart'),
