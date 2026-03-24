@@ -1,4 +1,5 @@
 from .models import SiteSetting, WebsiteMenu
+from datetime import datetime
 
 def site_settings(request):
     """
@@ -24,4 +25,11 @@ def current_language(request):
         current_lang = request.session.get('lang', 'en')
     return {
         'current_lang': current_lang
+    }
+
+def get_current_year(request):
+    current_datetime = datetime.now()
+    current_year = current_datetime.year    
+    return {
+        'current_year': current_year
     }

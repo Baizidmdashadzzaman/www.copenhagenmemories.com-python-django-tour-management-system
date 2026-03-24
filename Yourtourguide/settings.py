@@ -83,6 +83,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'accounts.context_processors.site_settings',
+                'accounts.context_processors.get_current_year',
                 'accounts.context_processors.current_language',
             ],
         },

@@ -94,6 +94,35 @@
 
     {% block extra_js %}{% endblock %}
 
+    <script>
+        const liveTimeWithMillisecond = () => {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const day = now.getDate().toString().padStart(2, '0');
+            let hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            const milliseconds = now.getMilliseconds().toString().padStart(3, '0');
+        
+            // 12-hour clock with AM/PM.
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // The hour '0' should be '12'
+            const formatted_hours = hours.toString().padStart(2, '0');
+            // const formatted_time = `${year}-${month}-${day} ${formatted_hours}:${minutes}:${seconds}.${milliseconds} ${ampm}`;
+
+            const formatted_time = `${formatted_hours}:${minutes}:${seconds} ${ampm}`;
+        
+            // for 24 hours
+            // const formatted_time = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
+        
+            document.getElementById('clock').textContent = formatted_time;
+        };
+        // update time every 10 millisecond
+        setInterval(liveTimeWithMillisecond, 10); 
+    </script>
+
 </body>
 
 </html>

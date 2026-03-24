@@ -30,7 +30,11 @@
                                 </svg>
                             </span>
                         </span>
-                        <span class="app-brand-text demo menu-text fw-bold text-heading">Compenhagenmemories</span>
+                        <span class="app-brand-text demo menu-text fw-bold text-heading">
+                            <!-- Compenhagenmemories -->
+                             <div id="clock"></div>
+
+                        </span>
                     </a>
 
                     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-xl-none">
@@ -234,7 +238,7 @@
                     <div class="container-xxl d-flex h-100">
                         <ul class="menu-inner">
                             <li
-                                class="menu-item {% if request.resolver_match.url_name == 'admin_dashboard' or 'settings' in request.path %}active{% endif %}">
+                                class="menu-item {% if request.resolver_match.url_name == 'admin_dashboard' or 'settings' in request.path or 'reports' in request.path %}active{% endif %}">
                                 <a href="{% url 'admin_dashboard' %}" class="menu-link menu-toggle">
                                     <i class="menu-icon icon-base ti tabler-device-laptop"></i>
                                     <div data-i18n="Dashboards">Dashboards</div>
@@ -252,10 +256,16 @@
                                             <div data-i18n="Setting">Setting</div>
                                         </a>
                                     </li>
-                                    <li class="menu-item {% if 'settings' in request.path %}active{% endif %}">
+                                    <li class="menu-item {% if 'reports' in request.path %}active{% endif %}">
                                         <a href="{% url 'reports_list' %}" class="menu-link">
                                             <i class="menu-icon icon-base ti tabler-book"></i>
                                             <div data-i18n="Reports">Reports</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item {% if 'home' in request.path %}active{% endif %}">
+                                        <a href="{% url 'home' %}" class="menu-link" target="_blank">
+                                            <i class="menu-icon icon-base ti tabler-device-desktop"></i>
+                                            <div data-i18n="Website">Website</div>
                                         </a>
                                     </li>
                                     <li class="menu-item">
@@ -561,4 +571,5 @@
     <div class="drag-target"></div>
 </div>
  
-    {% endblock %}
+{% endblock %}
+

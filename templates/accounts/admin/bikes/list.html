@@ -104,7 +104,7 @@
                                     <td>{{ forloop.counter }}</td>
                                     <td>
                                         {% if bike.image %}
-                                        <img src="{{ bike.image.url }}" alt="{{ bike.title }}" class="rounded shadow-sm" style="width: 50px; height: 50px; object-fit: cover;">
+                                        <img src="{{ bike.image.url }}" alt="{{ bike.title }}" class="rounded shadow-sm" style="width: 100%; height: 50px; ">
                                         {% else %}
                                         <span class="badge bg-label-secondary">No Image</span>
                                         {% endif %}
