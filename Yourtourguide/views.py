@@ -119,8 +119,46 @@ def rent_bike(request):
             booking.total = booking.subtotal
             booking.save()
             
-            messages.success(request, f'Your bike booking has been submitted successfully! Booking Number: {booking.booking_number}')
-            return redirect('rent_bike_confirmation', booking_number=booking.booking_number)
+            if getattr(settings, 'USE_PAYMENT_GATEWAY', False):
+                import requests
+                from django.urls import reverse
+                
+                api_key = getattr(settings, 'FLATPAY_KEY', '')
+                url = 'https://checkout-api.frisbii.com/v1/session/charge'
+                
+                amount = int(float(booking.total) * 100)
+                accept_url = request.build_absolute_uri(reverse('rent_bike_payment_accept', args=[booking.booking_number]))
+                cancel_url = request.build_absolute_uri(reverse('rent_bike_payment_cancel', args=[booking.booking_number]))
+                
+                data = {
+                    'order': {
+                        'handle': booking.booking_number,
+                        'amount': amount,
+                        'currency': 'DKK',
+                        'customer': {
+                            'email': booking.email,
+                            'first_name': booking.name.split()[0] if booking.name else 'Guest',
+                            'last_name': ' '.join(booking.name.split()[1:]) if booking.name and len(booking.name.split()) > 1 else 'Guest',
+                        }
+                    },
+                    'accept_url': accept_url,
+                    'cancel_url': cancel_url
+                }
+                
+                try:
+                    response = requests.post(url, auth=(api_key, ''), json=data)
+                    response_data = response.json()
+                    if 'url' in response_data:
+                        return redirect(response_data['url'])
+                    else:
+                        messages.error(request, f"Payment gateway error: {response_data.get('error', 'Unknown error')}")
+                        return redirect('rent_bike_confirmation', booking_number=booking.booking_number)
+                except Exception as e:
+                    messages.error(request, f"Payment gateway error: {str(e)}")
+                    return redirect('rent_bike_confirmation', booking_number=booking.booking_number)
+            else:
+                messages.success(request, f'Your bike booking has been submitted successfully! Booking Number: {booking.booking_number}')
+                return redirect('rent_bike_confirmation', booking_number=booking.booking_number)
         except Exception as e:
             messages.error(request, f'An error occurred while booking: {str(e)}')
 
@@ -137,6 +175,44 @@ def rent_bike_confirmation(request, booking_number):
         'booking': booking,
     }
     return render(request, 'frontend/pages/rent-bike/confirmation.html', context)
+
+def rent_bike_payment_accept(request, booking_number):
+    from accounts.models import BikeBooking
+    from django.contrib import messages
+    import requests
+    
+    booking = get_object_or_404(BikeBooking, booking_number=booking_number)
+    
+    if getattr(settings, 'USE_PAYMENT_GATEWAY', False):
+        api_key = getattr(settings, 'FLATPAY_KEY', '')
+        url = f"https://api.frisbii.com/v1/charge/{booking_number}"
+        try:
+            response = requests.get(url, auth=(api_key, ''), headers={'Accept': 'application/json'})
+            data = response.json()
+            if response.status_code == 200 and data.get('state') not in ['authorized', 'settled']:
+                messages.error(request, "Payment was not authorized.")
+                return redirect('rent_bike')
+        except Exception as e:
+            pass
+            
+    if booking.status != 'confirmed':
+        booking.status = 'confirmed'
+        booking.save()
+        
+    messages.success(request, f'Payment successful! Your bike booking confirmed. Booking Number: {booking.booking_number}')
+    return redirect('rent_bike_confirmation', booking_number=booking.booking_number)
+
+def rent_bike_payment_cancel(request, booking_number):
+    from accounts.models import BikeBooking
+    from django.contrib import messages
+    
+    booking = get_object_or_404(BikeBooking, booking_number=booking_number)
+    if booking.status != 'confirmed':
+        booking.status = 'cancelled'
+        booking.save()
+        
+    messages.warning(request, "Payment was cancelled.")
+    return redirect('rent_bike')
 
 def send_test_email(request):
     send_mail(
@@ -853,11 +929,49 @@ def tour_detail(request, tour_id):
                                 price=Decimal(participant.get('price', '0'))
                             )
 
-                        booking_success = True
-                        messages.success(request, f'Booking {booking_number} created successfully!')
+                        if getattr(settings, 'USE_PAYMENT_GATEWAY', False):
+                            import requests
+                            from django.urls import reverse
+                            
+                            api_key = getattr(settings, 'FLATPAY_KEY', '')
+                            url = 'https://checkout-api.frisbii.com/v1/session/charge'
+                            
+                            amount = int(float(total_amount) * 100)
+                            accept_url = request.build_absolute_uri(reverse('tour_payment_accept', args=[booking_number]))
+                            cancel_url = request.build_absolute_uri(reverse('tour_payment_cancel', args=[booking_number]))
+                            
+                            data = {
+                                'order': {
+                                    'handle': booking_number,
+                                    'amount': amount,
+                                    'currency': 'DKK',
+                                    'customer': {
+                                        'email': booking_form.cleaned_data['contact_email'],
+                                        'first_name': booking_form.cleaned_data['contact_name'].split()[0],
+                                        'last_name': ' '.join(booking_form.cleaned_data['contact_name'].split()[1:]) if len(booking_form.cleaned_data['contact_name'].split()) > 1 else 'Guest',
+                                    }
+                                },
+                                'accept_url': accept_url,
+                                'cancel_url': cancel_url
+                            }
+                            
+                            try:
+                                response = requests.post(url, auth=(api_key, ''), json=data)
+                                response_data = response.json()
+                                if 'url' in response_data:
+                                    return redirect(response_data['url'])
+                                else:
+                                    messages.error(request, f"Payment gateway error: {response_data.get('error', 'Unknown error')}")
+                                    return redirect('booking_confirmation', booking_number=booking_number)
+                            except Exception as e:
+                                messages.error(request, f"Payment gateway error: {str(e)}")
+                                return redirect('booking_confirmation', booking_number=booking_number)
+                        else:
+                            booking_success = True
+                            messages.success(request, f'Booking {booking_number} created successfully!')
 
-                        # Redirect to booking confirmation page
-                        return redirect('booking_confirmation', booking_number=booking.booking_number)
+                            # Redirect to booking confirmation page
+                            return redirect('booking_confirmation', booking_number=booking.booking_number)
 
                     else:
                         booking_error = "Please correct the errors below."
@@ -1085,3 +1199,43 @@ def testimonial(request):
         'page_obj': page_obj,
     }
     return render(request, 'frontend/pages/testimonial/testimonial.html', context)
+
+def tour_payment_accept(request, booking_number):
+    from accounts.models import Booking
+    from django.contrib import messages
+    import requests
+    
+    booking = get_object_or_404(Booking, booking_number=booking_number)
+    
+    if getattr(settings, 'USE_PAYMENT_GATEWAY', False):
+        api_key = getattr(settings, 'FLATPAY_KEY', '')
+        url = f"https://api.frisbii.com/v1/charge/{booking_number}"
+        try:
+            response = requests.get(url, auth=(api_key, ''), headers={'Accept': 'application/json'})
+            data = response.json()
+            if response.status_code == 200 and data.get('state') not in ['authorized', 'settled']:
+                messages.error(request, "Payment was not authorized.")
+                return redirect('tour_detail', tour_id=booking.tour.id)
+        except Exception as e:
+            pass
+            
+    if booking.payment_status != 'paid':
+        booking.payment_status = 'paid'
+        booking.status = 'confirmed'
+        booking.save()
+        
+    messages.success(request, f'Payment successful! Your tour booking confirmed. Booking Number: {booking.booking_number}')
+    return redirect('booking_confirmation', booking_number=booking.booking_number)
+
+def tour_payment_cancel(request, booking_number):
+    from accounts.models import Booking
+    from django.contrib import messages
+    
+    booking = get_object_or_404(Booking, booking_number=booking_number)
+    if booking.payment_status != 'paid':
+        booking.payment_status = 'failed'
+        booking.status = 'cancelled'
+        booking.save()
+        
+    messages.warning(request, "Payment was cancelled.")
+    return redirect('tour_detail', tour_id=booking.tour.id)

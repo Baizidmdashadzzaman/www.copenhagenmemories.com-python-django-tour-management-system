@@ -50,6 +50,8 @@ urlpatterns = [
     path('tour-list/', views.tour_list, name='tour_list_fronted'),
     path('tours/filter/', views.tour_list_type_filtered, name='tour_list_type_filtered'),
     path('tour-detail/<int:tour_id>/', views.tour_detail, name='tour_detail'),
+    path('tour-detail/payment/accept/<str:booking_number>/', views.tour_payment_accept, name='tour_payment_accept'),
+    path('tour-detail/payment/cancel/<str:booking_number>/', views.tour_payment_cancel, name='tour_payment_cancel'),
     path('tour-providers/', views.tour_providers, name='tour_providers_fronted'),
     path('booking-confirmation/<str:booking_number>/', views.booking_confirmation, name='booking_confirmation'),
     path('blog-list/', views.blog_list, name='blog_list_fronted'),
@@ -63,6 +65,8 @@ urlpatterns = [
     path('ai-chat/', ai_views.ai_chat_proxy, name='ai_chat_proxy'),
     path('rent-bike/', views.rent_bike, name='rent_bike'),
     path('rent-bike/confirmation/<str:booking_number>/', views.rent_bike_confirmation, name='rent_bike_confirmation'),
+    path('rent-bike/payment/accept/<str:booking_number>/', views.rent_bike_payment_accept, name='rent_bike_payment_accept'),
+    path('rent-bike/payment/cancel/<str:booking_number>/', views.rent_bike_payment_cancel, name='rent_bike_payment_cancel'),
     path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type='text/plain')),
 
     path('todo/', include('todo.urls')),
