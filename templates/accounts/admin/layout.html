@@ -253,7 +253,7 @@
                                         </a>
                                     </li>
                                     <li class="menu-item {% if 'settings' in request.path %}active{% endif %}">
-                                        <a href="{% url 'site_settings' %}" class="menu-link">
+                                        <a href="{% url 'reports_list' %}" class="menu-link">
                                             <i class="menu-icon icon-base ti tabler-book"></i>
                                             <div data-i18n="Reports">Reports</div>
                                         </a>
@@ -369,7 +369,7 @@
                                     <li class="menu-item {% if 'tour-suppliers' in request.path %}active{% endif %}">
                                         <a href="{% url 'tour_supplier_list' %}" class="menu-link">
                                             <i class="menu-icon icon-base ti tabler-user"></i>
-                                            <div data-i18n="Tour Guides">Tour Guides</div>
+                                            <div data-i18n="Tour Suppliers">Tour Suppliers</div>
                                         </a>
                                     </li>
                                     <li class="menu-item {% if 'customer' in request.path %}active{% endif %}">

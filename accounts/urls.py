@@ -114,6 +114,9 @@ urlpatterns = [
     # Site Settings
     path('admin/settings/', admin_views.site_settings, name='site_settings'),
 
+    # Reports
+    path('admin/reports/', admin_views.reports_list, name='reports_list'),
+    
     # Tour Supplier CRUD
     path('admin/tour-suppliers/', tour_supplier_views.tour_supplier_list, name='tour_supplier_list'),
     path('admin/tour-suppliers/create/', tour_supplier_views.tour_supplier_create, name='tour_supplier_create'),

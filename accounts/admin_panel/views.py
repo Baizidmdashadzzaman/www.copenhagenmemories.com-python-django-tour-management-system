@@ -93,6 +93,9 @@ from .views_bikes import (
     bike_delete
 )
 
+from .views_reports import (
+    reports_list
+)
 
 def login_view(request):
     if request.method == 'POST':
