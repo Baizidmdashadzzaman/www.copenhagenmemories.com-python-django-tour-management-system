@@ -162,7 +162,7 @@ def rent_bike(request):
         except Exception as e:
             messages.error(request, f'An error occurred while booking: {str(e)}')
 
-    bikes = Bike.objects.prefetch_related('bike_addons__addon').all().order_by('id')
+    bikes = Bike.objects.prefetch_related('bike_addons__addon').all().order_by('rank')
     context = {
         'bikes': bikes,
     }

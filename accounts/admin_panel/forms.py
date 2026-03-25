@@ -75,6 +75,7 @@ class BikeForm(forms.ModelForm):
             'is_helmet_recommended': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'is_electric': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'top_speed_info': forms.TextInput(attrs={'class': 'form-control'}),
+            'rank': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
 

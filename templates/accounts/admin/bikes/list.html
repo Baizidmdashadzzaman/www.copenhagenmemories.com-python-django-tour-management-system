@@ -74,7 +74,8 @@
                             aria-describedby="DataTables_Table_0_info">
                             <thead class="border-top">
                                 <tr>
-                                    <th class="control dt-orderable-none" rowspan="1" colspan="1" style="width: 50px;">#
+                                    <th class="control dt-orderable-none" rowspan="1" colspan="1" style="width: 50px;">
+                                        Rank
                                     </th>
                                     <th style="width: 100px;">Image</th>
                                     <th class="dt-orderable-asc dt-orderable-desc" rowspan="1" colspan="1"
@@ -101,7 +102,10 @@
                             <tbody>
                                 {% for bike in page_obj %}
                                 <tr>
-                                    <td>{{ forloop.counter }}</td>
+                                    <td>
+                                        <!-- {{ forloop.counter }} -->
+                                        {{ bike.rank }}
+                                    </td>
                                     <td>
                                         {% if bike.image %}
                                         <img src="{{ bike.image.url }}" alt="{{ bike.title }}" class="rounded shadow-sm" style="width: 100%; height: 50px; ">

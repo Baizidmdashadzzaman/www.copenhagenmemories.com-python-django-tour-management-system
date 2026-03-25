@@ -1133,11 +1133,12 @@ class Bike(models.Model):
     top_speed_info = models.CharField(max_length=100, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    rank = models.IntegerField(default=0)
 
     class Meta:
         verbose_name = "Bike"
         verbose_name_plural = "Bikes"
-        ordering = ['-created_at']
+        ordering = ['rank']
 
     def __str__(self):
         return self.title
