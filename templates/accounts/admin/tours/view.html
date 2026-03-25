@@ -47,6 +47,7 @@
                             <p class="mb-1"><span class="fw-medium">Category:</span> {{ tour.category.name }}</p>
                             <p class="mb-1"><span class="fw-medium">Location:</span> {{ tour.city.name }}, {{ tour.destination_region.name }}</p>
                             <p class="mb-1"><span class="fw-medium">Duration:</span> {{ tour.duration_hours }} hours</p>
+                            <p class="mb-1"><span class="fw-medium">Rank:</span> <span class="badge bg-label-primary">{{ tour.rank }}</span></p>
                         </div>
                         <div class="col-md-6">
                             <p class="mb-1"><span class="fw-medium">Price:</span> {{ tour.base_price }} {{ tour.currency }}</p>

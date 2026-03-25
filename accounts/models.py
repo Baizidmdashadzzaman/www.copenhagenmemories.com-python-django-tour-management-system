@@ -400,6 +400,8 @@ class Tour(models.Model):
     ], default='draft')
     is_featured = models.BooleanField(default=False)
     is_bestseller = models.BooleanField(default=False)
+
+    rank = models.IntegerField(default=0)
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

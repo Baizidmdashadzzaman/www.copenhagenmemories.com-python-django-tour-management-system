@@ -64,7 +64,7 @@ class CityForm(forms.ModelForm):
 class TourForm(forms.ModelForm):
     class Meta:
         model = Tour
-        fields = ['title', 'title_dk', 'supplier', 'category', 'destination_region', 'city', 'short_description', 'short_description_dk', 'description', 'description_dk', 'map_location', 'main_image', 'video_url', 'duration_hours', 'duration_text', 'min_participants', 'max_participants', 'age_restriction', 'difficulty_level', 'base_price', 'currency', 'discount_percentage', 'before_discount_price', 'before_discount_price_statue', 'before_discount_price_text', 'status', 'is_featured', 'meta_title', 'meta_description', 'meta_keywords']
+        fields = ['title', 'title_dk', 'supplier', 'category', 'destination_region', 'city', 'short_description', 'short_description_dk', 'description', 'description_dk', 'map_location', 'main_image', 'video_url', 'duration_hours', 'duration_text', 'min_participants', 'max_participants', 'age_restriction', 'difficulty_level', 'base_price', 'currency', 'discount_percentage', 'before_discount_price', 'before_discount_price_statue', 'before_discount_price_text', 'status', 'is_featured', 'meta_title', 'meta_description', 'meta_keywords', 'rank']
         labels = {
             'before_discount_price': 'Original Price (Before Discount)',
             'before_discount_price_statue': 'Original Price Status',
@@ -101,6 +101,7 @@ class TourForm(forms.ModelForm):
             'meta_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter meta title'}),
             'meta_description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Enter meta description'}),
             'meta_keywords': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Enter meta keywords'}),
+            'rank': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter rank'}),
         }
 
 

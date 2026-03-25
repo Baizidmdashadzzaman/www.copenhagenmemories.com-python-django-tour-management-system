@@ -82,7 +82,8 @@
                             aria-describedby="DataTables_Table_0_info">
                             <thead class="border-top">
                                 <tr>
-                                    <th class="control dt-orderable-none" rowspan="1" colspan="1" style="width: 50px;">#
+                                    <th class="control dt-orderable-none" rowspan="1" colspan="1" style="width: 50px;">
+                                        Rank
                                     </th>
                                     <th class="dt-orderable-asc dt-orderable-desc" rowspan="1" colspan="1">
                                         <span class="dt-column-title" role="button">Title</span>
@@ -125,7 +126,10 @@
                             <tbody>
                                 {% for tour in page_obj %}
                                 <tr>
-                                    <td>{{ forloop.counter }}</td>
+                                    <td>
+                                        <!-- {{ forloop.counter }} -->
+                                        {{tour.rank}}
+                                    </td>
                                     <td>
                                         <span class="fw-semibold">{{ tour.title|default:"No Title" }}</span>
                                     </td>

@@ -340,7 +340,7 @@ def home(request):
         calculated_total_reviews=Count('reviews')
     ).select_related(
         'supplier', 'category', 'destination_region', 'city', 'city__country'
-    ).prefetch_related('images').order_by('-created_at')[:12]
+    ).prefetch_related('images').order_by('rank')[:12]
     
     souvenirs = Souvenir.objects.filter(status='active').order_by('-created_at')[:8]
     
@@ -576,7 +576,7 @@ def _build_tour_list_context(request):
     elif sort_by == 'newest':
         tours = tours.order_by('-created_at')
     else:  # recommended - featured tours first, then by rating
-        tours = tours.order_by('-is_featured', '-calculated_average_rating', '-created_at')
+        tours = tours.order_by('rank', '-is_featured', '-calculated_average_rating', '-created_at')
 
     # Capture total before pagination
     total_tours = tours.count()
