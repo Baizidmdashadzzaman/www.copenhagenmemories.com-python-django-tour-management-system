@@ -777,11 +777,8 @@
                                         <label class="form-label fs-14 text-default mb-2 fw-medium">
                                             {% translate "Coupon Code (Optional)" %}
                                         </label>
-                                        <div class="input-group">
-                                            {{ booking_form.coupon_code }}
-                                            <button class="btn btn-outline-primary" type="button" id="applyCouponBtn">{% translate "Apply" %}</button>
-                                        </div>
-                                        <p class="fs-12 text-muted mb-0 mt-2" id="couponMessage">{% translate "Enter coupon code to get discount" %}</p>
+                                        {{ booking_form.coupon_code }}
+                                        <p class="fs-12 text-muted mb-0">{% translate "Enter coupon code to get discount" %}</p>
                                     </div>
                                 </div>
                             </div>
@@ -955,9 +952,6 @@ const basePrice = window.tourBasePrice;
 const currency = window.tourCurrency;
 
 let participantCount = 0;
-let currentDiscount = 0;
-let currentDiscountType = '';
-let appliedCouponCode = '';
 
 document.addEventListener('DOMContentLoaded', function() {
     // Add participant button
@@ -1006,76 +1000,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Update the hidden field with participant data
         document.getElementById('participantsData').value = JSON.stringify(participants);
     });
-
-    // Coupon validation logic
-    const applyCouponBtn = document.getElementById('applyCouponBtn');
-    if (applyCouponBtn) {
-        applyCouponBtn.addEventListener('click', function() {
-            const couponInput = document.querySelector('input[name="coupon_code"]');
-            if (!couponInput) return;
-            
-            const code = couponInput.value.trim();
-            const messageEl = document.getElementById('couponMessage');
-            
-            if (!code) {
-                currentDiscount = 0;
-                appliedCouponCode = '';
-                currentDiscountType = '';
-                messageEl.textContent = "{% translate 'Please enter a coupon code.' %}";
-                messageEl.className = 'fs-12 text-danger mb-0 mt-2';
-                updatePricing();
-                return;
-            }
-            
-            // disable button during fetch
-            applyCouponBtn.disabled = true;
-            
-            fetch(`/validate-coupon/?code=${encodeURIComponent(code)}&tour_id={{ tour.id }}`)
-                .then(response => response.json())
-                .then(data => {
-                    applyCouponBtn.disabled = false;
-                    if (data.valid) {
-                        currentDiscount = data.discount_value;
-                        currentDiscountType = data.discount_type;
-                        appliedCouponCode = code;
-                        
-                        let discountText = data.discount_type === 'percentage' ? `${data.discount_value}% off` : `${currency} ${data.discount_value} off`;
-                        messageEl.textContent = `{% translate 'Coupon applied successfully!' %} ${discountText}`;
-                        messageEl.className = 'fs-12 text-success mb-0 mt-2';
-                        updatePricing();
-                    } else {
-                        currentDiscount = 0;
-                        appliedCouponCode = '';
-                        currentDiscountType = '';
-                        messageEl.textContent = data.message || "{% translate 'Invalid or expired coupon code.' %}";
-                        messageEl.className = 'fs-12 text-danger mb-0 mt-2';
-                        updatePricing();
-                    }
-                })
-                .catch(error => {
-                    applyCouponBtn.disabled = false;
-                    console.error('Error applying coupon:', error);
-                    messageEl.textContent = "{% translate 'Error applying coupon. Please try again.' %}";
-                    messageEl.className = 'fs-12 text-danger mb-0 mt-2';
-                });
-        });
-    }
-
-    // Reset coupon if user types
-    const couponInput = document.querySelector('input[name="coupon_code"]');
-    if (couponInput) {
-        couponInput.addEventListener('input', function() {
-            const messageEl = document.getElementById('couponMessage');
-            if (this.value.trim().toUpperCase() !== appliedCouponCode.toUpperCase() && appliedCouponCode !== '') {
-                currentDiscount = 0;
-                appliedCouponCode = '';
-                currentDiscountType = '';
-                messageEl.textContent = "{% translate 'Unapplied previous coupon. Click Apply to use the new code.' %}";
-                messageEl.className = 'fs-12 text-warning mb-0 mt-2';
-                updatePricing();
-            }
-        });
-    }
 
     // Initialize with one participant
     addParticipantForm();
@@ -1277,27 +1201,15 @@ function updatePricing() {
         });
     });
 
-    // Handle discount amount calculation
-    let discountAmount = 0;
-    if (currentDiscountType === 'percentage') {
-        discountAmount = subtotal * (currentDiscount / 100);
-        // We could also check max_discount here if we pass it correctly
-    } else if (currentDiscountType === 'fixed_amount') {
-        discountAmount = Math.min(currentDiscount, subtotal);
-    }
-    
-    // Calculate subtotal after discount
-    const discountedSubtotal = subtotal - discountAmount;
-
-    // Calculate tax (25% for Denmark) on the discounted subtotal
+    // Calculate tax (25% for Denmark)
     const taxRate = 0.25;
-    const tax = discountedSubtotal * taxRate;
-    const total = discountedSubtotal + tax;
+    const tax = subtotal * taxRate;
+    const total = subtotal + tax;
 
-    showPriceSummary(breakdown, subtotal, discountAmount, tax, total);
+    showPriceSummary(breakdown, subtotal, tax, total);
 }
 
-function showPriceSummary(breakdown, subtotal, discountAmount, tax, total) {
+function showPriceSummary(breakdown, subtotal, tax, total) {
     const container = document.getElementById('priceSummary');
     const breakdownContainer = document.getElementById('priceBreakdown');
 
@@ -1311,24 +1223,16 @@ function showPriceSummary(breakdown, subtotal, discountAmount, tax, total) {
 
     html += `<hr class="my-2">
         <div class="d-flex justify-content-between mb-2">
-            <span>{% translate 'Subtotal' %}</span>
+            <span>Subtotal</span>
             <strong>${currency} ${subtotal.toFixed(2)}</strong>
-        </div>`;
-        
-    if (discountAmount > 0) {
-        html += `<div class="d-flex justify-content-between mb-2 text-success">
-            <span>{% translate 'Discount' %}</span>
-            <span>- ${currency} ${discountAmount.toFixed(2)}</span>
-        </div>`;
-    }
-
-    html += `<div class="d-flex justify-content-between mb-2">
-            <span>{% translate 'Tax' %} (25%)</span>
+        </div>
+        <div class="d-flex justify-content-between mb-2">
+            <span>Tax (25%)</span>
             <span>${currency} ${tax.toFixed(2)}</span>
         </div>
         <hr class="my-2">
         <div class="d-flex justify-content-between">
-            <strong>{% translate 'Total' %}</strong>
+            <strong>Total</strong>
             <strong class="text-primary">${currency} ${total.toFixed(2)}</strong>
         </div>
     </div>`;

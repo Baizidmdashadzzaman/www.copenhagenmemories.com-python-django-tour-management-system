@@ -676,6 +676,37 @@ def find_tour_page(request):
     return render(request, 'frontend/pages/tour/find_tour_page.html', context)
 
 
+def validate_coupon(request):
+    from django.http import JsonResponse
+    from django.utils import timezone
+    from accounts.models import Coupon
+    
+    code = request.GET.get('code', '').strip().upper()
+    
+    if not code:
+        return JsonResponse({'valid': False, 'message': 'Coupon code is required.'})
+        
+    try:
+        coupon = Coupon.objects.get(
+            code=code,
+            is_active=True,
+            valid_from__lte=timezone.now(),
+            valid_until__gte=timezone.now()
+        )
+        
+        if coupon.usage_limit and coupon.used_count >= coupon.usage_limit:
+            return JsonResponse({'valid': False, 'message': 'This coupon has reached its usage limit.'})
+            
+        return JsonResponse({
+            'valid': True,
+            'discount_type': coupon.discount_type,
+            'discount_value': float(coupon.discount_value),
+            'max_discount': float(coupon.max_discount_amount) if coupon.max_discount_amount else None
+        })
+        
+    except Coupon.DoesNotExist:
+        return JsonResponse({'valid': False, 'message': 'Invalid or expired coupon code.'})
+
 def tour_detail(request, tour_id):
     from .forms import FrontendBookingForm
     from accounts.models import Customer, Coupon, Booking, BookingParticipant
@@ -687,6 +718,7 @@ def tour_detail(request, tour_id):
     import string
     from django.db.models import Avg, Count, Value
     from django.db.models.functions import Coalesce
+    from django.utils import timezone
 
     # Get tour with all related data
     tour = get_object_or_404(
@@ -860,21 +892,22 @@ def tour_detail(request, tour_id):
                         # Handle coupon discount
                         discount_amount = Decimal('0.00')
                         coupon_code = booking_form.cleaned_data.get('coupon_code')
+                        applied_coupon = None
                         if coupon_code:
                             try:
-                                coupon = Coupon.objects.get(
+                                applied_coupon = Coupon.objects.get(
                                     code=coupon_code.upper(),
                                     is_active=True,
                                     valid_from__lte=timezone.now(),
                                     valid_until__gte=timezone.now()
                                 )
                                 # Apply coupon logic here
-                                if coupon.discount_type == 'percentage':
-                                    discount_amount = subtotal * (coupon.discount_value / 100)
-                                    if coupon.max_discount_amount and discount_amount > coupon.max_discount_amount:
-                                        discount_amount = coupon.max_discount_amount
+                                if applied_coupon.discount_type == 'percentage':
+                                    discount_amount = subtotal * (applied_coupon.discount_value / 100)
+                                    if applied_coupon.max_discount_amount and discount_amount > applied_coupon.max_discount_amount:
+                                        discount_amount = applied_coupon.max_discount_amount
                                 else:  # fixed amount
-                                    discount_amount = min(coupon.discount_value, subtotal)
+                                    discount_amount = min(applied_coupon.discount_value, subtotal)
                             except Coupon.DoesNotExist:
                                 pass
 
@@ -902,6 +935,7 @@ def tour_detail(request, tour_id):
                             participant_details=participant_details,
                             subtotal=subtotal,
                             discount_amount=discount_amount,
+                            coupon=applied_coupon,
                             tax_amount=tax_amount,
                             total_amount=total_amount,
                             currency=tour.currency,
@@ -914,6 +948,19 @@ def tour_detail(request, tour_id):
                             status='pending',
                             payment_status='pending'
                         )
+
+                        # Create CouponUsage record if a coupon was used
+                        if applied_coupon:
+                            from accounts.models import CouponUsage
+                            CouponUsage.objects.create(
+                                coupon=applied_coupon,
+                                customer=customer,
+                                booking=booking,
+                                discount_amount=discount_amount
+                            )
+                            # Increment used_count on the coupon
+                            applied_coupon.used_count += 1
+                            applied_coupon.save()
 
                         # Create participants
                         for participant in participants:

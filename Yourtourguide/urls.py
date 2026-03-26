@@ -50,6 +50,7 @@ urlpatterns = [
     path('tour-list/', views.tour_list, name='tour_list_fronted'),
     path('tours/filter/', views.tour_list_type_filtered, name='tour_list_type_filtered'),
     path('tour-detail/<int:tour_id>/', views.tour_detail, name='tour_detail'),
+    path('validate-coupon/', views.validate_coupon, name='validate_coupon'),
     path('tour-detail/payment/accept/<str:booking_number>/', views.tour_payment_accept, name='tour_payment_accept'),
     path('tour-detail/payment/cancel/<str:booking_number>/', views.tour_payment_cancel, name='tour_payment_cancel'),
     path('tour-providers/', views.tour_providers, name='tour_providers_fronted'),
