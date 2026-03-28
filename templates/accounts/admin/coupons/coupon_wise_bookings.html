@@ -1,0 +1,36 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}Coupon wise Bookings List{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Coupons /</span> Coupon wise Bookings
+    </h4>
+
+    {% if messages %}
+    <div class="row">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Coupons List Table -->
+    <div class="card">
+        <div class="card-header border-bottom">
+            <h5 class="card-title mb-3">Coupon wise Bookings List</h5>
+        </div>
+
+
+
+        </div>
+    </div>
+</div>
+{% endblock %}
