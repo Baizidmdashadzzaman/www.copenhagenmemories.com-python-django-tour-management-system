@@ -81,7 +81,7 @@
                             <td><span class="badge bg-label-primary">{{ booking.coupon.code }}</span></td>
                             <td><a href="{% url 'booking_detail' booking.pk %}"><strong>{{ booking.booking_number }}</strong></a></td>
                             <td>{{ booking.customer.user.get_full_name|default:booking.customer.user.username }}</td>
-                            <td style="max-width: 200px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                            <td style="max-width: 200px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;" title="{{ booking.tour.title }}">
                                 {{ booking.tour.title }}
                             </td>
                             <td>{{ booking.created_at|date:"M d, Y" }}</td>

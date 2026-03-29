@@ -241,8 +241,9 @@
                                     {% else %}
                                     <li class="page-item">
                                         <a class="page-link"
-                                            href="?page={{ i }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status %}&status={{ status }}{% endif %}{% if payment_status %}&payment_status={{ payment_status }}{% endif %}">{{
-                                            i }}</a>
+                                            href="?page={{ i }}{% if search_query %}&search={{ search_query }}{% endif %}{% if status %}&status={{ status }}{% endif %}{% if payment_status %}&payment_status={{ payment_status }}{% endif %}">
+                                            {{ i }}
+                                        </a>
                                     </li>
                                     {% endif %}
                                     {% endfor %}

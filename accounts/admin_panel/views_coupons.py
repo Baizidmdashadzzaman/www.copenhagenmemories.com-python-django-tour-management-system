@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
-from accounts.models import Coupon, CouponUsage
+from accounts.models import Coupon, CouponUsage,Booking
 from .decorators import permission_required_with_message
 from .forms_additions import CouponForm
 
@@ -119,7 +119,7 @@ def coupon_toggle_active(request, pk):
 @user_passes_test(lambda u: u.is_staff)
 @permission_required_with_message('accounts.view_coupon')
 def coupon_wise_bookings(request):
-    from accounts.models import Booking, Coupon
+    
     start_date = request.GET.get('start_date', '')
     end_date = request.GET.get('end_date', '')
     coupon_id = request.GET.get('coupon_id', '')
