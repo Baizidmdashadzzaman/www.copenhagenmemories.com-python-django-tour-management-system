@@ -113,3 +113,36 @@ def coupon_toggle_active(request, pk):
     coupon.save()
     messages.success(request, f'Coupon {"activated" if coupon.is_active else "deactivated"} successfully!')
     return redirect('coupon_detail', pk=coupon.pk)
+
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+@permission_required_with_message('accounts.view_coupon')
+def coupon_wise_bookings(request):
+    from accounts.models import Booking, Coupon
+    start_date = request.GET.get('start_date', '')
+    end_date = request.GET.get('end_date', '')
+    coupon_id = request.GET.get('coupon_id', '')
+    
+    # Get all coupons for the dropdown
+    all_coupons = Coupon.objects.all().order_by('-created_at')
+    
+    # Query all bookings that have a coupon applied
+    bookings = Booking.objects.filter(coupon__isnull=False).select_related('coupon', 'customer__user', 'tour')
+    
+    if start_date:
+        bookings = bookings.filter(created_at__date__gte=start_date)
+    if end_date:
+        bookings = bookings.filter(created_at__date__lte=end_date)
+    if coupon_id:
+        bookings = bookings.filter(coupon_id=coupon_id)
+        
+    bookings = bookings.order_by('-created_at')
+    
+    return render(request, 'accounts/admin/coupons/coupon_wise_bookings.html', {
+        'bookings': bookings,
+        'all_coupons': all_coupons,
+        'start_date': start_date,
+        'end_date': end_date,
+        'coupon_id': coupon_id
+    })

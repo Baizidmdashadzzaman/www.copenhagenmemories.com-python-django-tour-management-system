@@ -262,6 +262,7 @@ urlpatterns = [
 
     # Coupon CRUD
     path('admin/coupons/', coupon_views.coupon_list, name='coupon_list'),
+    path('admin/coupons/wise-bookings/', coupon_views.coupon_wise_bookings, name='coupon_wise_bookings'),
     path('admin/coupons/create/', coupon_views.coupon_create, name='coupon_create'),
     path('admin/coupons/<int:pk>/edit/', coupon_views.coupon_edit, name='coupon_edit'),
     path('admin/coupons/<int:pk>/delete/', coupon_views.coupon_delete, name='coupon_delete'),

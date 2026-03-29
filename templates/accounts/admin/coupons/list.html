@@ -60,7 +60,14 @@
 
                     <div
                         class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto gap-md-2 gap-0 mt-0">
-                        <div class="dt-buttons btn-group flex-wrap mb-md-0 mb-6">
+                        <div class="dt-buttons btn-group flex-wrap mb-md-0 mb-6 gap-2">
+                            <a href="{% url 'coupon_wise_bookings' %}" class="btn add-new btn-secondary" tabindex="0"
+                                type="button">
+                                <span>
+                                    <i class="icon-base ti tabler-chart-bar me-0 me-sm-1 icon-16px"></i>
+                                    <span class="d-none d-sm-inline-block">Coupon wise Bookings</span>
+                                </span>
+                            </a>
                             <a href="{% url 'coupon_create' %}" class="btn add-new btn-primary" tabindex="0"
                                 aria-controls="DataTables_Table_0" type="button">
                                 <span>
