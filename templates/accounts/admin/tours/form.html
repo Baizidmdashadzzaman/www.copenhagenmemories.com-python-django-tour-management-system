@@ -175,6 +175,26 @@
                             <div class="form-text">Paste the Google Maps Embed iframe src URL.</div>
                             {% for error in form.map_location.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.meeting_point.id_for_label }}">{{ form.meeting_point.label }}</label>
+                            {{ form.meeting_point }}
+                            {% for error in form.meeting_point.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.meeting_point_dk.id_for_label }}">{{ form.meeting_point_dk.label }}</label>
+                            {{ form.meeting_point_dk }}
+                            {% for error in form.meeting_point_dk.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.meeting_point_latitude.id_for_label }}">{{ form.meeting_point_latitude.label }}</label>
+                            {{ form.meeting_point_latitude }}
+                            {% for error in form.meeting_point_latitude.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.meeting_point_longitude.id_for_label }}">{{ form.meeting_point_longitude.label }}</label>
+                            {{ form.meeting_point_longitude }}
+                            {% for error in form.meeting_point_longitude.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
                     </div>
 
                     <h6 class="mt-4">4. Logistics & Requirements</h6>

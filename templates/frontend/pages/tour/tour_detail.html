@@ -538,6 +538,24 @@
                                     <p class="flex-fill">{{ tour.max_participants }}</p>
                                 </div>
                                 {% endif %}
+                                {% if tour.meeting_point %}
+                                <div class="d-flex align-items-center justify-content-between details-info">
+                                    <h6 class="fw-medium">{% translate "Meeting Point" %}</h6>
+                                    <p class="flex-fill">{{ tour.meeting_point }}</p>
+                                </div>
+                                {% endif %}
+                                {% if tour.meeting_point_latitude %}
+                                <div class="d-flex align-items-center justify-content-between details-info">
+                                    <h6 class="fw-medium">{% translate "Latitude" %}</h6>
+                                    <p class="flex-fill">{{ tour.meeting_point_latitude }}</p>
+                                </div>
+                                {% endif %}
+                                {% if tour.meeting_point_longitude %}
+                                <div class="d-flex align-items-center justify-content-between details-info">
+                                    <h6 class="fw-medium">{% translate "Longitude" %}</h6>
+                                    <p class="flex-fill">{{ tour.meeting_point_longitude }}</p>
+                                </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

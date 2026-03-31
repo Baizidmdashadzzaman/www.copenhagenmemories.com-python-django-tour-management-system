@@ -64,7 +64,7 @@ class CityForm(forms.ModelForm):
 class TourForm(forms.ModelForm):
     class Meta:
         model = Tour
-        fields = ['title', 'title_dk', 'supplier', 'category', 'destination_region', 'city', 'short_description', 'short_description_dk', 'description', 'description_dk', 'map_location', 'main_image', 'video_url', 'duration_hours', 'duration_text', 'min_participants', 'max_participants', 'age_restriction', 'difficulty_level', 'base_price', 'currency', 'discount_percentage', 'before_discount_price', 'before_discount_price_statue', 'before_discount_price_text', 'status', 'is_featured', 'meta_title', 'meta_description', 'meta_keywords', 'rank']
+        fields = ['title', 'title_dk', 'supplier', 'category', 'destination_region', 'city', 'short_description', 'short_description_dk', 'description', 'description_dk','meeting_point','meeting_point_dk','meeting_point_latitude', 'meeting_point_longitude', 'map_location', 'main_image', 'video_url', 'duration_hours', 'duration_text', 'min_participants', 'max_participants', 'age_restriction', 'difficulty_level', 'base_price', 'currency', 'discount_percentage', 'before_discount_price', 'before_discount_price_statue', 'before_discount_price_text', 'status', 'is_featured', 'meta_title', 'meta_description', 'meta_keywords', 'rank']
         labels = {
             'before_discount_price': 'Original Price (Before Discount)',
             'before_discount_price_statue': 'Original Price Status',
@@ -81,6 +81,10 @@ class TourForm(forms.ModelForm):
             'short_description_dk': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Enter Danish short description'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 6, 'placeholder': 'Enter full description'}),
             'description_dk': forms.Textarea(attrs={'class': 'form-control', 'rows': 6, 'placeholder': 'Enter Danish description'}),
+            'meeting_point': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter meeting point'}),
+            'meeting_point_dk': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Danish meeting point'}),
+            'meeting_point_latitude': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.00000001'}),
+            'meeting_point_longitude': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.00000001'}),
             'map_location': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Google Maps Embed URL'}),
             'main_image': forms.FileInput(attrs={'class': 'form-control'}),
             'video_url': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter video URL'}),
