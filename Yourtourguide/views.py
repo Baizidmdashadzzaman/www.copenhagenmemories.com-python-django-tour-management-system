@@ -1270,6 +1270,47 @@ def tour_payment_accept(request, booking_number):
         booking.payment_status = 'paid'
         booking.status = 'confirmed'
         booking.save()
+
+    # Send email to customer
+    message = f"""
+     Dear {booking.contact_name},
+     
+     Thank you for your booking with Copenhagen Memories. Here is your booking receipt.
+     
+     Please arrive 10–15 minutes before your tour starts so we can begin on time. As our tours are carefully scheduled, late arrival may affect your experience.
+     
+     For walking and bike tours, we recommend wearing comfortable shoes and weather-appropriate clothing. Copenhagen weather can change quickly, so bringing an extra layer or rain jacket is always a good idea. Please also inform the rest of your group.
+     
+     Meeting information:
+     Meeting point: {booking.tour.meeting_point}
+     
+     If you need help finding us, please contact us before the tour starts at +4566772790.
+     
+     Booking Receipt:
+     Booking Number: {booking.booking_number}
+     Tour Name: {booking.tour.title}
+     Date: {booking.tour_date}
+     Time: {booking.tour_time_slot if booking.tour_time_slot else booking.tour_time}
+     Participants: {booking.total_participants}
+     Total Amount: {booking.total_amount} USD
+    """
+
+    send_mail(
+        'Tour Booking Confirmation',
+        message,
+        settings.DEFAULT_FROM_EMAIL,
+        [booking.customer.email],
+        fail_silently=False,
+    )
+
+    # Send email to admin
+    send_mail(
+        'New Tour Booking',
+        f'A new tour booking has been made. Booking Number: {booking.booking_number}',
+        settings.DEFAULT_FROM_EMAIL,
+        ['info@copenhagenmemories.com'],
+        fail_silently=False,
+    )    
         
     messages.success(request, f'Payment successful! Your tour booking confirmed. Booking Number: {booking.booking_number}')
     return redirect('booking_confirmation', booking_number=booking.booking_number)
