@@ -134,7 +134,7 @@ def rent_bike(request):
                     'order': {
                         'handle': booking.booking_number,
                         'amount': amount,
-                        'currency': 'DKK',
+                        'currency': 'USD',
                         'customer': {
                             'email': booking.email,
                             'first_name': booking.name.split()[0] if booking.name else 'Guest',
@@ -991,7 +991,7 @@ def tour_detail(request, tour_id):
                                 'order': {
                                     'handle': booking_number,
                                     'amount': amount,
-                                    'currency': 'DKK',
+                                    'currency': 'USD',
                                     'customer': {
                                         'email': booking_form.cleaned_data['contact_email'],
                                         'first_name': booking_form.cleaned_data['contact_name'].split()[0],

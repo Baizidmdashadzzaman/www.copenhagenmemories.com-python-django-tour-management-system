@@ -139,7 +139,7 @@ def cart_view(request):
                     'order': {
                         'handle': order.order_number,
                         'amount': amount,
-                        'currency': 'DKK',
+                        'currency': 'USD',
                         'customer': {
                             'email': order.email,
                             'first_name': order.first_name,
