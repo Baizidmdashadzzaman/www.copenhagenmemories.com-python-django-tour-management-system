@@ -946,7 +946,8 @@ def tour_detail(request, tour_id):
                             pickup_location=booking_form.cleaned_data.get('pickup_location', ''),
                             customer_notes=booking_form.cleaned_data.get('customer_notes', ''),
                             status='pending',
-                            payment_status='pending'
+                            payment_status='pending',
+                            country=booking_form.cleaned_data.get('country', ''),
                         )
 
                         # Create CouponUsage record if a coupon was used

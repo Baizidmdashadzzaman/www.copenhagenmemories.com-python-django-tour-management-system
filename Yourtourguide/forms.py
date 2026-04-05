@@ -112,12 +112,21 @@ class FrontendBookingForm(forms.ModelForm):
         required=False
     )
 
+    country = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Country',
+            'required': False
+        }),
+        required=False
+    )
+
     class Meta:
         model = Booking
         fields = [
             'tour', 'schedule', 'tour_date', 'tour_time', 'tour_time_slot',
             'contact_name', 'contact_email', 'contact_phone',
-            'special_requirements', 'pickup_location', 'customer_notes'
+            'special_requirements', 'pickup_location', 'customer_notes','country'
         ]
 
     def __init__(self, *args, **kwargs):

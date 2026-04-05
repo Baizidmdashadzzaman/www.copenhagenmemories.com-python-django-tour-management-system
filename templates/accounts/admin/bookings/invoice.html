@@ -64,7 +64,7 @@
                           <h6>Invoice To:</h6>
                           <p class="mb-1">{{ booking.contact_name }}</p>
                           <p class="mb-1">{{ booking.customer.user.get_full_name|default:booking.customer.user.username }}</p>
-                          <p class="mb-1">{{ booking.contact_phone|default:"-" }}</p>
+                          <p class="mb-1"><b>({{ booking.country|default:"-" }})</b> {{ booking.contact_phone|default:"-" }}</p>
                           <p class="mb-0">{{ booking.contact_email }}</p>
                         </div>
                         <div class="col-xl-6 col-md-12 col-sm-7 col-12">
