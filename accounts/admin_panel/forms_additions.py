@@ -154,7 +154,7 @@ class BookingForm(forms.ModelForm):
         fields = ['customer', 'tour', 'schedule', 'tour_date', 'tour_time', 'tour_time_slot', 'total_participants', 
                   'contact_name', 'contact_email', 'contact_phone', 'special_requirements', 
                   'pickup_location', 'subtotal', 'discount_amount', 'tax_amount', 'total_amount',
-                  'status', 'payment_status', 'customer_notes', 'admin_notes']
+                  'status', 'payment_status', 'customer_notes', 'admin_notes', 'country']
         widgets = {
             'tour_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'tour_time': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
@@ -173,6 +173,7 @@ class BookingForm(forms.ModelForm):
             'payment_status': forms.Select(attrs={'class': 'form-select'}),
             'customer_notes': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Customer notes'}),
             'admin_notes': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Admin notes'}),
+            'country': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Country'}),
         }
     
     def __init__(self, *args, **kwargs):
