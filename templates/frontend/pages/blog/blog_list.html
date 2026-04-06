@@ -46,9 +46,11 @@
                                 <div class="d-inline-flex align-items-center border-end pe-3 me-3 mb-2">
                                     <a href="#" class="d-flex align-items-center">
                                         <span class="avatar avatar-sm me-2">
-											<img src="{% static 'frontend/assets/img/users/user-01.jpg' %}" class="rounded-circle border border-white" alt="img">
+											<!-- <img src="{% static 'frontend/assets/img/users/user-01.jpg' %}" class="rounded-circle border border-white" alt="img"> -->
 										</span>
-                                        <p>{{ blog.author.get_full_name|default:blog.author.username }}</p>
+                                        <p>
+                                            <!-- {{ blog.author.get_full_name|default:blog.author.username }} -->
+                                        </p>
                                     </a>
                                 </div>
                                 <p class="text-white mb-2"><i class="isax isax-calendar-2 me-2"></i>{{ blog.created_at|date:"d M Y" }}</p>

@@ -35,10 +35,10 @@
                     <h5 class="mb-3"><a href="{% url 'blog_detail_fronted' blog.id %}" class="two-line-ellipsis">{{ blog.title }}</a></h5>
                     <div class="d-flex align-items-center justify-content-between">
                         <a href="#" class="d-flex align-items-center overflow-hidden">
-                            <span class="avatar avatar-md flex-shrink-0 me-2">
+                            <!-- <span class="avatar avatar-md flex-shrink-0 me-2">
                                 <img src="{% static 'frontend/assets/img/users/user-01.jpg' %}" class="rounded-circle" alt="{{ blog.author.get_full_name }}">
                             </span>
-                            <p class="fs-14 text-truncate">{{ blog.author.get_full_name|default:blog.author.username }}</p>
+                            <p class="fs-14 text-truncate">{{ blog.author.get_full_name|default:blog.author.username }}</p> -->
                         </a>
                         <a href="{% url 'blog_detail_fronted' blog.id %}" class="rounded-arrow-next"><i
                                 class="isax isax-arrow-right-3"></i></a>
