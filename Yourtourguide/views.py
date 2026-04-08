@@ -1296,13 +1296,14 @@ def tour_payment_accept(request, booking_number):
      Total Amount: {booking.total_amount} USD
     """
 
-    send_mail(
-        'Tour Booking Confirmation',
-        message,
-        settings.DEFAULT_FROM_EMAIL,
-        [booking.customer.email],
-        fail_silently=False,
-    )
+    if booking.contact_email:
+        send_mail(
+            'Tour Booking Confirmation',
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [booking.contact_email],
+            fail_silently=False,
+        )
 
     # Send email to admin
     send_mail(
