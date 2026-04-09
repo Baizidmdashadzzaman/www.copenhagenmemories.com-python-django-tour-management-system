@@ -681,7 +681,8 @@ def validate_coupon(request):
     from django.utils import timezone
     from accounts.models import Coupon
     
-    code = request.GET.get('code', '').strip().upper()
+    code = request.GET.get('code', '').strip()
+    print(code)
     
     if not code:
         return JsonResponse({'valid': False, 'message': 'Coupon code is required.'})
