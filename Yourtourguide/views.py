@@ -682,7 +682,6 @@ def validate_coupon(request):
     from accounts.models import Coupon
     
     code = request.GET.get('code', '').strip()
-    print(code)
     
     if not code:
         return JsonResponse({'valid': False, 'message': 'Coupon code is required.'})
