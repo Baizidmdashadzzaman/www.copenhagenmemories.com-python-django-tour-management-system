@@ -171,6 +171,7 @@ AUTHENTICATION_BACKENDS = [
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_HOST = 'smtp.hostinger.com'
+#EMAIL_HOST = 'smtp.titan.email'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 

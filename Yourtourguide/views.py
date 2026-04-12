@@ -13,7 +13,8 @@ from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.utils.crypto import get_random_string
 
-
+import logging
+logger = logging.getLogger(__name__)
 
 def rent_bike(request):
     from django.contrib import messages
@@ -215,13 +216,17 @@ def rent_bike_payment_cancel(request, booking_number):
     return redirect('rent_bike')
 
 def send_test_email(request):
-    send_mail(
-        subject='Test Email from Django',
-        message='This is a test email.',
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=['ashad0167@gmail.com'],
+    try:
+        send_mail(
+            subject='Test Email from Django',
+            message='This is a test email.',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=['ashad0167@gmail.com'],
         fail_silently=False,
     )
+    except Exception as e:
+        return HttpResponse(f"Email sent {e}")
+
     return HttpResponse("Email sent")
 
 
@@ -444,13 +449,16 @@ def contactus(request):
                 {message}
                 """
                 
-                send_mail(
-                    email_subject,
-                    email_body,
-                    settings.DEFAULT_FROM_EMAIL,
-                    ['copenhagenmemories@gmail.com'],
-                    fail_silently=False,
-                )
+                try:
+                    send_mail(
+                        email_subject,
+                        email_body,
+                        settings.DEFAULT_FROM_EMAIL,
+                        ['copenhagenmemories@gmail.com'],
+                        fail_silently=False,
+                    )
+                except Exception as e:
+                    print(e)
 
                 messages.success(request, 'Thank you for contacting us! We will get back to you soon.')
             except Exception as e:
@@ -795,15 +803,17 @@ def tour_detail(request, tour_id):
                         
                         You can log in at: {request.build_absolute_uri('/accounts/login/')}
                         """
-                        
-                        send_mail(
-                            subject,
-                            message,
-                            settings.DEFAULT_FROM_EMAIL,
-                            [contact_email],
-                            fail_silently=True,
-                        )
-                        
+                        try:
+                            send_mail(
+                                subject,
+                                message,
+                                settings.DEFAULT_FROM_EMAIL,
+                                [contact_email],
+                                fail_silently=True,
+                            )
+                        except Exception as e:
+                            print(e)
+                            
                     except Exception as e:
                         booking_error = f"Error creating account: {str(e)}"
                         user = None
@@ -1294,25 +1304,29 @@ def tour_payment_accept(request, booking_number):
      Time: {booking.tour_time_slot if booking.tour_time_slot else booking.tour_time}
      Participants: {booking.total_participants}
      Total Amount: {booking.total_amount} USD
-    """
+    """   
 
     if booking.contact_email:
+        try:
+            send_mail(
+                'Tour Booking Confirmation',
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                [booking.contact_email],
+                fail_silently=False,
+            )
+        except Exception as e:
+            logger.error(f"Customer email failed: {str(e)}")
+    try:
         send_mail(
-            'Tour Booking Confirmation',
-            message,
+            'New Tour Booking',
+            f'Booking Number: {booking.booking_number}',
             settings.DEFAULT_FROM_EMAIL,
-            [booking.contact_email],
+            ['contact@copenhagenmemories.com'],
             fail_silently=False,
         )
-
-    # Send email to admin
-    send_mail(
-        'New Tour Booking',
-        f'A new tour booking has been made. Booking Number: {booking.booking_number}',
-        settings.DEFAULT_FROM_EMAIL,
-        ['info@copenhagenmemories.com'],
-        fail_silently=False,
-    )    
+    except Exception as e:
+        logger.error(f"Admin email failed: {str(e)}")
         
     messages.success(request, f'Payment successful! Your tour booking confirmed. Booking Number: {booking.booking_number}')
     return redirect('booking_confirmation', booking_number=booking.booking_number)
