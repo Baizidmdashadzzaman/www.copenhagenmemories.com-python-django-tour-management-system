@@ -296,6 +296,10 @@ class Page(models.Model):
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
+    @property
+    def slug_id(self):
+        return f"{self.slug}-{self.id}"
+
 class City(models.Model):
     region = models.ForeignKey(DestinationRegion, on_delete=models.SET_NULL, null=True, related_name='cities')
     country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='cities')
@@ -323,6 +327,10 @@ class City(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+
+    @property
+    def slug_id(self):
+        return f"{self.slug}-{self.id}"
 
 class Tour(models.Model):
     supplier = models.ForeignKey(TourSupplier, on_delete=models.CASCADE, related_name='tours')
@@ -423,6 +431,11 @@ class Tour(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
+
+    @property
+    def slug_id(self):
+        return f"{self.slug}-{self.id}"
+        
 
 class TourImage(models.Model):
     tour = models.ForeignKey(Tour, on_delete=models.CASCADE, related_name='images')
@@ -837,6 +850,10 @@ class BlogPost(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def slug_id(self):
+        return f"{self.slug}-{self.id}"
+
 class TeamMember(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
@@ -1056,6 +1073,11 @@ class Souvenir(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def slug_id(self):
+        return f"{slugify(self.title)}-{self.id}"
+
 
 class SouvenirOrder(models.Model):
     ORDER_STATUS_CHOICES = (
