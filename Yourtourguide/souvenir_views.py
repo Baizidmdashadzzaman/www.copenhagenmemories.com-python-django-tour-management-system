@@ -9,6 +9,9 @@ from django.db.models import Q
 from django.contrib import messages
 from accounts.models import Souvenir, SouvenirOrder, SouvenirOrderItem, Customer
 from .forms import SouvenirOrderForm
+from django.core.mail import send_mail
+import logging
+logger = logging.getLogger(__name__)
 
 def souvenirs_list(request):
     search_query = request.GET.get('search', '')
@@ -237,6 +240,18 @@ def cart_payment_accept(request, order_number):
                 souvenir.save()
 
     request.session['cart'] = {}
+
+    try:
+        send_mail(
+            'New Souvenir Order',
+            f'Booking Number: {souvenir.order_number}',
+            settings.DEFAULT_FROM_EMAIL,
+            ['contact@copenhagenmemories.com'],
+            fail_silently=False,
+        )
+    except Exception as e:
+        logger.error(f"Admin email failed: {str(e)}")
+
     messages.success(request, "Order placed successfully!")
     return render(request, 'frontend/pages/cart/order_confirmation.html', {'order': order})
 

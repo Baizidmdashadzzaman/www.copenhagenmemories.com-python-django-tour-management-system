@@ -199,6 +199,17 @@ def rent_bike_payment_accept(request, booking_number):
     if booking.status != 'confirmed':
         booking.status = 'confirmed'
         booking.save()
+
+    try:
+        send_mail(
+            'New Bike Rent Booking',
+            f'Booking Number: {booking.booking_number}',
+            settings.DEFAULT_FROM_EMAIL,
+            ['contact@copenhagenmemories.com'],
+            fail_silently=False,
+        )
+    except Exception as e:
+        logger.error(f"Admin email failed: {str(e)}")
         
     messages.success(request, f'Payment successful! Your bike booking confirmed. Booking Number: {booking.booking_number}')
     return redirect('rent_bike_confirmation', booking_number=booking.booking_number)
