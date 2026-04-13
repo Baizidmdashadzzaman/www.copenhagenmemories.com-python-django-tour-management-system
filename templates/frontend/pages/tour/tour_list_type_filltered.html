@@ -68,7 +68,7 @@
                                     <div class="img-slider image-slide owl-carousel nav-center">
                                         {% if tour.main_image %}
                                         <div class="slide-images">
-                                            <a href="{% url 'tour_detail' tour.id %}">
+                                            <a href="{% url 'tour_detail' tour.slug_id %}">
                                                 <img src="{{ tour.main_image.url }}" class="img-fluid" alt="{{ tour.title }}">
                                             </a>
                                         </div>
@@ -76,7 +76,7 @@
                                         
                                         {% for image in tour.images.all|slice:":3" %}
                                         <div class="slide-images">
-                                            <a href="{% url 'tour_detail' tour.id %}">
+                                            <a href="{% url 'tour_detail' tour.slug_id %}">
                                                 <img src="{{ image.image.url }}" class="img-fluid" alt="{{ image.caption|default:tour.title }}">
                                             </a>
                                         </div>
@@ -84,7 +84,7 @@
 
                                         {% if not tour.main_image and not tour.images.all %}
                                         <div class="slide-images">
-                                            <a href="{% url 'tour_detail' tour.id %}">
+                                            <a href="{% url 'tour_detail' tour.slug_id %}">
                                                 <img src="{% static 'frontend/assets/img/tours/default-tour.jpg' %}" class="img-fluid" alt="{{ tour.title }}">
                                             </a>
                                         </div>
@@ -104,7 +104,7 @@
                                 <div class="place-content">
                                     <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-2 mb-3">
                                         <div>
-                                            <h5 class="mb-1 text-truncate"><a href="{% url 'tour_detail' tour.id %}">{{ tour.title }}</a></h5>
+                                            <h5 class="mb-1 text-truncate"><a href="{% url 'tour_detail' tour.slug_id %}">{{ tour.title }}</a></h5>
                                             <p class="fs-14 d-flex align-items-center">
                                                 <i class="isax isax-location5 me-2"></i>
                                                 {% if tour.city %}{{ tour.city.name }}{% elif tour.destination_region %}{{ tour.destination_region.name }}{% else %}{% translate "Location TBA" %}{% endif %}
@@ -148,7 +148,7 @@
                                                 {% endif %}
                                             </h6>
                                             {% if tour.supplier.logo %}
-                                            <a href="{% url 'tour_detail' tour.id %}" class="avatar avatar-sm flex-shrink-0">
+                                            <a href="{% url 'tour_detail' tour.slug_id %}" class="avatar avatar-sm flex-shrink-0">
                                                 <img src="{{ tour.supplier.logo.url }}" class="rounded-circle" alt="{{ tour.supplier.company_name }}">
                                             </a>
                                             {% endif %}

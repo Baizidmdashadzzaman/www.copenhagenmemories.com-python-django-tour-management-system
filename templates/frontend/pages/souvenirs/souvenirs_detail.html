@@ -6,7 +6,7 @@
       <meta property="og:site_name" content=Copenhagenmemories />
       <meta property="og:description" content="{{ souvenir.description|striptags|truncatewords:20 }}" />
       <meta property="og:type" content="article" />
-      <meta property="og:url" content="https://www.copenhagenmemories.com/souvenir-detail/{{ souvenir.id }}" />
+      <meta property="og:url" content="https://www.copenhagenmemories.com/souvenir-detail/{{ souvenir.slug_id }}" />
 	  <meta property="og:image" content="https://www.copenhagenmemories.com{{ souvenir.image.url }}" />
       <meta property="og:image:width" content={600} />
       <meta property="og:image:height" content={315} />
@@ -139,7 +139,7 @@
             <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
                 <div class="tour-item">
                     <div class="tour-img">
-                        <a href="{% url 'souvenir_detail_frontend' related.id %}">
+                        <a href="{% url 'souvenir_detail_frontend' related.slug_id %}">
                             {% if related.image %}
                                 <img src="{{ related.image.url }}" alt="{% if current_lang == 'dk' and related.title_dk %}{{ related.title_dk }}{% else %}{{ related.title }}{% endif %}" class="img-fluid" style="height: 200px; width: 100%; object-fit: cover;">
                             {% else %}
@@ -149,7 +149,7 @@
                     </div>
                     <div class="tour-content p-3 border rounded-bottom">
                         <h6 class="mb-2">
-                            <a href="{% url 'souvenir_detail_frontend' related.id %}">
+                            <a href="{% url 'souvenir_detail_frontend' related.slug_id %}">
                                 {% if current_lang == 'dk' and related.title_dk %}
                                     {{ related.title_dk }}
                                 {% else %}

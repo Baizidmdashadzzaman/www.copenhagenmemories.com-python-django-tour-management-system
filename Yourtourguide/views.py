@@ -310,6 +310,11 @@ def blog_list(request):
     return render(request, 'frontend/pages/blog/blog_list.html', context)
 
 def blog_detail(request, blog_id):
+    if isinstance(blog_id, str):
+        blog_id = int(blog_id.split('-')[-1])
+    else:
+        blog_id = int(blog_id)
+
     blog = get_object_or_404(BlogPost, pk=blog_id)
     context = {
         'blog': blog,
@@ -727,6 +732,12 @@ def tour_detail(request, tour_id):
     from django.db.models import Avg, Count, Value
     from django.db.models.functions import Coalesce
     from django.utils import timezone
+
+
+    if isinstance(tour_id, str):
+        tour_id = int(tour_id.split('-')[-1])
+    else:
+        tour_id = int(tour_id)
 
     # Get tour with all related data
     tour = get_object_or_404(

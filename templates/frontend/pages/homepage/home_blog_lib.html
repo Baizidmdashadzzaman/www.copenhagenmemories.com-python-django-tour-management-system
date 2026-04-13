@@ -20,7 +20,7 @@
             {% for blog in featured_blogs %}
             <div class="card blog-grid wow fadeInUp" data-wow-delay="0.2s">
                 <div class="card-img rounded-top">
-                    <a href="{% url 'blog_detail_fronted' blog.id %}" class="blog-img">
+                    <a href="{% url 'blog_detail_fronted' blog.slug_id %}" class="blog-img">
                         {% if blog.featured_image %}
                             <img src="{{ blog.featured_image.url }}" class="rounded-top" alt="{{ blog.title }}">
                         {% else %}
@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <h5 class="mb-3"><a href="{% url 'blog_detail_fronted' blog.id %}" class="two-line-ellipsis">{{ blog.title }}</a></h5>
+                    <h5 class="mb-3"><a href="{% url 'blog_detail_fronted' blog.slug_id %}" class="two-line-ellipsis">{{ blog.title }}</a></h5>
                     <div class="d-flex align-items-center justify-content-between">
                         <a href="#" class="d-flex align-items-center overflow-hidden">
                             <!-- <span class="avatar avatar-md flex-shrink-0 me-2">
@@ -40,7 +40,7 @@
                             </span>
                             <p class="fs-14 text-truncate">{{ blog.author.get_full_name|default:blog.author.username }}</p> -->
                         </a>
-                        <a href="{% url 'blog_detail_fronted' blog.id %}" class="rounded-arrow-next"><i
+                        <a href="{% url 'blog_detail_fronted' blog.slug_id %}" class="rounded-arrow-next"><i
                                 class="isax isax-arrow-right-3"></i></a>
                     </div>
                 </div>

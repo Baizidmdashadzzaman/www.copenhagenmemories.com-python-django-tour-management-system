@@ -691,7 +691,7 @@
                     {% endif %}
 
                     <div class="banner-form">
-                        <form id="bookingForm" action="{% url 'tour_detail' tour.id %}" method="POST">
+                        <form id="bookingForm" action="{% url 'tour_detail' tour.slug_id %}" method="POST">
                             {% csrf_token %}
                             <input type="hidden" name="action" value="book_tour">
                             <input type="hidden" name="participants_data" id="participantsData" value="">
@@ -874,7 +874,7 @@
                         <i class="ti ti-x fs-16"></i>
                     </a>
                 </div>
-                <form action="{% url 'tour_detail' tour.id %}" method="POST">
+                <form action="{% url 'tour_detail' tour.slug_id %}" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="action" value="submit_review">
                     <div class="modal-body pb-0">

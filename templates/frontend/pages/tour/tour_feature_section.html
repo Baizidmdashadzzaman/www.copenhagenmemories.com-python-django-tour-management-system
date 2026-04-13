@@ -67,7 +67,7 @@
                         <div class="img-slider image-slide owl-carousel nav-center">
                             {% if tour.main_image %}
                             <div class="slide-images">
-                                <a href="{% url 'tour_detail' tour.id %}">
+                                <a href="{% url 'tour_detail' tour.slug_id %}">
                                     <img src="{{ tour.main_image.url }}" class="img-fluid" alt="{{ tour.title }}" style="height: 250px; object-fit: cover;">
                                 </a>
                             </div>
@@ -75,7 +75,7 @@
                             
                             {% for image in tour.images.all|slice:":3" %}
                             <div class="slide-images">
-                                <a href="{% url 'tour_detail' tour.id %}">
+                                <a href="{% url 'tour_detail' tour.slug_id %}">
                                     <img src="{{ image.image.url }}" class="img-fluid" alt="{{ image.caption|default:tour.title }}" style="height: 250px; object-fit: cover;">
                                 </a>
                             </div>
@@ -83,7 +83,7 @@
 
                             {% if not tour.main_image and not tour.images.all %}
                             <div class="slide-images">
-                                <a href="{% url 'tour_detail' tour.id %}">
+                                <a href="{% url 'tour_detail' tour.slug_id %}">
                                     <img src="{% static 'frontend/assets/img/tours/default-tour.jpg' %}" class="img-fluid" alt="{{ tour.title }}">
                                 </a>
                             </div>
@@ -104,7 +104,7 @@
                         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-2 mb-3">
                             <div>
                                 <h5 class="mb-1 text-truncate">
-                                    <a href="{% url 'tour_detail' tour.id %}">
+                                    <a href="{% url 'tour_detail' tour.slug_id %}">
                                         {% if LANGUAGE_CODE == 'dk' and tour.title_dk %}
                                             {{ tour.title_dk }}
                                         {% else %}

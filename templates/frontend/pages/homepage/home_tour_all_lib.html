@@ -24,7 +24,7 @@
                                     <div class="img-slider image-slide owl-carousel nav-center">
                                         {% for tour_image in tour_images|slice:":5" %}
                                         <div class="slide-images">
-                                            <a href="{% url 'tour_detail' tour.id %}">
+                                            <a href="{% url 'tour_detail' tour.slug_id %}">
                                                 <img src="{{ tour_image.image.url }}" class="img-fluid" alt="{% if current_lang == 'dk' and tour_image.caption_dk %}{{ tour_image.caption_dk }}{% else %}{{ tour_image.caption|default:tour.title }}{% endif %}"
                                                 style="height: 250px; object-fit: cover;">
                                             </a>
@@ -34,7 +34,7 @@
                                 {% elif tour.main_image %}
                                     <div class="img-slider image-slide owl-carousel nav-center">
                                         <div class="slide-images">
-                                            <a href="{% url 'tour_detail' tour.id %}">
+                                            <a href="{% url 'tour_detail' tour.slug_id %}">
                                                 <img src="{{ tour.main_image.url }}" class="img-fluid" alt="{% if current_lang == 'dk' and tour.title_dk %}{{ tour.title_dk }}{% else %}{{ tour.title }}{% endif %}"
                                                 style="height: 250px; object-fit: cover;">
                                             </a>
@@ -43,7 +43,7 @@
                                 {% else %}
                                     <div class="img-slider image-slide owl-carousel nav-center">
                                         <div class="slide-images">
-                                            <a href="{% url 'tour_detail' tour.id %}">
+                                            <a href="{% url 'tour_detail' tour.slug_id %}">
                                                 <img src="{% static 'frontend/assets/img/hotels/hotel-01.jpg' %}" class="img-fluid" alt="{{ tour.title }}" style="height: 250px; object-fit: cover;">
                                             </a>
                                         </div>
@@ -78,7 +78,7 @@
                             </div>
 
                             <h5 class="mb-1 text-truncate">
-                                <a href="{% url 'tour_detail' tour.id %}">
+                                <a href="{% url 'tour_detail' tour.slug_id %}">
                                     {% if current_lang == 'dk' and tour.title_dk %}
                                         {{ tour.title_dk }}
                                     {% else %}
@@ -128,7 +128,7 @@
                                         </p>
                                     {% endif %} -->
                                 </div>
-                                <a href="{% url 'tour_detail' tour.id %}" class="link-primary fw-medium">{% translate "Book Now" %}<i class="isax isax-arrow-right-3 ms-1"></i></a>
+                                <a href="{% url 'tour_detail' tour.slug_id %}" class="link-primary fw-medium">{% translate "Book Now" %}<i class="isax isax-arrow-right-3 ms-1"></i></a>
                             </div>
                         </div>
                     </div>

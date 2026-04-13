@@ -117,7 +117,7 @@
                 <ul class="list-unstyled">
                     {% for blog in blogs %}
                     <li class="mb-2">
-                        <a href="{% url 'blog_detail_fronted' blog.id %}" class="text-secondary text-decoration-none hover-primary">
+                        <a href="{% url 'blog_detail_fronted' blog.slug_id %}" class="text-secondary text-decoration-none hover-primary">
                             <i class="fas fa-newspaper me-2"></i>{{ blog.title }}
                         </a>
                     </li>
@@ -133,7 +133,7 @@
                 <ul class="list-unstyled" style="max-height: 1000px; overflow-y: auto;">
                     {% for tour in tours %}
                     <li class="mb-2">
-                        <a href="{% url 'tour_detail' tour.id %}" class="text-secondary text-decoration-none hover-primary">
+                        <a href="{% url 'tour_detail' tour.slug_id %}" class="text-secondary text-decoration-none hover-primary">
                             <i class="fas fa-route me-2"></i>{{ tour.title }}
                         </a>
                     </li>

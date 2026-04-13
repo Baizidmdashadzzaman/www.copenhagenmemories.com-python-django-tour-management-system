@@ -74,7 +74,7 @@
                         {% for tour in page_obj %}
                         <div class="col-lg-4 col-md-6">
                             <div class="blog-item mb-4">
-                                <a href="{% url 'tour_detail' tour.id %}" class="blog-img">
+                                <a href="{% url 'tour_detail' tour.slug_id %}" class="blog-img">
                                     {% if tour.main_image %}
                                     <img src="{{ tour.main_image.url }}" alt="{{ tour.title }}" class="img-fluid">
                                     {% elif tour.images.all %}
@@ -94,7 +94,7 @@
                                         </span>
                                         {% endif %}
                                     </div>
-                                    <h5 class="mb-1"><a href="{% url 'tour_detail' tour.id %}">{{ tour.title }}</a></h5>
+                                    <h5 class="mb-1"><a href="{% url 'tour_detail' tour.slug_id %}">{{ tour.title }}</a></h5>
                                     <p class="fs-14 mb-2 d-flex align-items-center">
                                         <i class="isax isax-location5 me-2"></i>
                                         {% if tour.city %}{{ tour.city.name }}{% elif tour.destination_region %}{{ tour.destination_region.name }}{% else %}{% translate "Location TBA" %}{% endif %}

@@ -34,6 +34,11 @@ def souvenirs_list(request):
     return render(request, 'frontend/pages/souvenirs/souvenirs_list.html', context)
 
 def souvenir_detail(request, souvenir_id):
+    if isinstance(souvenir_id, str):
+        souvenir_id = int(souvenir_id.split('-')[-1])
+    else:
+        souvenir_id = int(souvenir_id)
+        
     souvenir = get_object_or_404(Souvenir, pk=souvenir_id, status='active')
     
     # Get related souvenirs (same status, excluding current)

@@ -49,14 +49,14 @@ urlpatterns = [
     path('find-tour/', views.find_tour_page, name='find_tour'),
     path('tour-list/', views.tour_list, name='tour_list_fronted'),
     path('tours/filter/', views.tour_list_type_filtered, name='tour_list_type_filtered'),
-    path('tour-detail/<int:tour_id>/', views.tour_detail, name='tour_detail'),
+    path('tour-detail/<str:tour_id>/', views.tour_detail, name='tour_detail'),
     path('validate-coupon/', views.validate_coupon, name='validate_coupon'),
     path('tour-detail/payment/accept/<str:booking_number>/', views.tour_payment_accept, name='tour_payment_accept'),
     path('tour-detail/payment/cancel/<str:booking_number>/', views.tour_payment_cancel, name='tour_payment_cancel'),
     path('tour-providers/', views.tour_providers, name='tour_providers_fronted'),
     path('booking-confirmation/<str:booking_number>/', views.booking_confirmation, name='booking_confirmation'),
     path('blog-list/', views.blog_list, name='blog_list_fronted'),
-    path('blog-detail/<int:blog_id>/', views.blog_detail, name='blog_detail_fronted'),
+    path('blog-detail/<str:blog_id>/', views.blog_detail, name='blog_detail_fronted'),
     path('tour-countries/', views.tour_countries, name='tour_countries_fronted'),
     path('tour-cities/', views.tour_cities, name='tour_cities_fronted'),
     path('tour-destination-regions/', views.tour_destination_regions, name='tour_destination_regions_fronted'),
@@ -78,7 +78,7 @@ urlpatterns = [
     
     # Souvenirs Frontend
     path('souvenirs/', souvenir_views.souvenirs_list, name='souvenirs_list_frontend'),
-    path('souvenir-detail/<int:souvenir_id>/', souvenir_views.souvenir_detail, name='souvenir_detail_frontend'),
+    path('souvenir-detail/<str:souvenir_id>/', souvenir_views.souvenir_detail, name='souvenir_detail_frontend'),
     
     # Cart
     path('cart/', souvenir_views.cart_view, name='cart_view'),
