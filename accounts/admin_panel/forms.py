@@ -76,6 +76,9 @@ class BikeForm(forms.ModelForm):
             'is_electric': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'top_speed_info': forms.TextInput(attrs={'class': 'form-control'}),
             'rank': forms.NumberInput(attrs={'class': 'form-control'}),
+            'pickup_location': forms.TextInput(attrs={'class': 'form-control'}),
+            'pickup_location_latitude': forms.NumberInput(attrs={'class': 'form-control'}),
+            'pickup_location_longitude': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
 

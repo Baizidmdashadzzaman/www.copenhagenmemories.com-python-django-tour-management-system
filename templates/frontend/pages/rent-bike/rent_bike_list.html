@@ -127,6 +127,22 @@
                             </div>
                         </div>
                         {% endif %}
+                        {% if bike.pickup_location %}
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <h6 class="h5 text-primary" style="font-size: medium;"><i class="isax isax-setting me-2"></i>{% translate "Pickup Location" %}</h6>
+                                <p>{{ bike.pickup_location }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if bike.pickup_location_latitude and bike.pickup_location_longitude and bike.pickup_location%}
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <h6 class="h5 text-primary" style="font-size: medium;"><i class="isax isax-setting me-2"></i>{% translate "Location Coordinates" %}</h6>
+                                <p>{{ bike.pickup_location_latitude }}, {{ bike.pickup_location_longitude }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
 
                     </div>
                     <div class="d-flex align-items-center flex-wrap gap-3">

@@ -846,9 +846,7 @@ def tour_detail(request, tour_id):
                     post_data = request.POST.copy()
                     post_data['tour'] = str(tour.id)
                     
-                    # We need to initialize form with the correct user (which might be the guest user we just found/created)
-                    # But FrontendBookingForm expects 'user' kwarg which usually is request.user.
-                    # The form might use self.user for initial data.
+                    
                     booking_form = FrontendBookingForm(post_data, tour=tour, user=user)
                     participants_data = request.POST.get('participants_data')
 
@@ -856,8 +854,6 @@ def tour_detail(request, tour_id):
                     if not booking_form.is_valid():
                         print(f"Form errors: {booking_form.errors}")
                         print(f"Participants data: {participants_data}")
-                        # Don't set booking_error here, let the form display its own errors
-                        # Don't return here, let the form render with errors
 
                     participants_data = request.POST.get('participants_data')
 

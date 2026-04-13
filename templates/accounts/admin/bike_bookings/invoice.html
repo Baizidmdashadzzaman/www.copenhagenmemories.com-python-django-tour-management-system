@@ -104,7 +104,11 @@
                           <!-- The Bike itself -->
                           <tr>
                             <td class="text-nowrap text-heading"><strong>Bike Rental</strong></td>
-                            <td class="text-nowrap">{{ booking.bike.title }}</td>
+                            <td class="text-nowrap">
+                               {{ booking.bike.title }}
+                               <br>
+                               <small class="text-muted">Location: {{ booking.bike.pickup_location }}<br>({{booking.bike.pickup_location_latitude }}, {{booking.bike.pickup_location_longitude }})</small>
+                            </td>
                             <td>{{ booking.bike_quantity }}</td>
                             <td>{{ booking.bike.price }} USD / day</td>
                             <td>{{ booking.bike_total_price }} USD / day</td>

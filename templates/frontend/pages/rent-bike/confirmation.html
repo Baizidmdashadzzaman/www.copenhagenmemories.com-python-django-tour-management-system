@@ -53,6 +53,13 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
+                                    <h6 class="text-muted mb-1">{% translate "Pickup Location" %}</h6>
+                                    <p class="mb-0 fw-medium">{{ booking.bike.pickup_location }}</p>
+                                    <small class="text-muted">{% translate "Location Coordinates" %}: {{ booking.bike.pickup_location_latitude }}, {{ booking.bike.pickup_location_longitude }}</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
                                     <h6 class="text-muted mb-1">{% translate "Booking Date" %}</h6>
                                     <p class="mb-0">{{ booking.created_at|date:"M d, Y" }}</p>
                                 </div>

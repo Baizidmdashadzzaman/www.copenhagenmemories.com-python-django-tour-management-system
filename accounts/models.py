@@ -1160,6 +1160,10 @@ class Bike(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     rank = models.IntegerField(default=0)
 
+    pickup_location = models.TextField(blank=True)
+    pickup_location_latitude = models.DecimalField(max_digits=10, decimal_places=8, blank=True, null=True)
+    pickup_location_longitude = models.DecimalField(max_digits=11, decimal_places=8, blank=True, null=True)
+
     class Meta:
         verbose_name = "Bike"
         verbose_name_plural = "Bikes"
