@@ -1296,7 +1296,7 @@ def tour_payment_accept(request, booking_number):
                 messages.error(request, "Payment was not authorized.")
                 return redirect('tour_detail', tour_id=booking.tour.id)
         except Exception as e:
-            pass
+            logger.exception("Payment API failed")
             
     if booking.payment_status != 'paid':
         booking.payment_status = 'paid'
