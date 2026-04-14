@@ -333,6 +333,8 @@ def blog_detail(request, blog_id):
     return render(request, 'frontend/pages/blog/blog_detail.html', context)
 
 def home(request):
+    
+    # logger.exception(f"Home log check")
 
     reviews = CustomerReviewStatic.objects.filter(is_active=True).order_by('display_order', '-created_at')
     featured_blogs = BlogPost.objects.filter(status='published', is_featured=True).order_by('-created_at')
