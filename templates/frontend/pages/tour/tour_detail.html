@@ -1570,7 +1570,8 @@ function updatePricing() {
 
     // Calculate tax (25% for Denmark) on the discounted subtotal
     const taxRate = 0.25;
-    const tax = discountedSubtotal * taxRate;
+    // const tax = discountedSubtotal * taxRate;
+    const tax = 0;
     const total = discountedSubtotal + tax;
 
     showPriceSummary(breakdown, subtotal, discountAmount, tax, total);
@@ -1601,16 +1602,19 @@ function showPriceSummary(breakdown, subtotal, discountAmount, tax, total) {
         </div>`;
     }
 
-    html += `<div class="d-flex justify-content-between mb-2">
-            <span>{% translate 'Tax' %} (25%)</span>
-            <span>${currency} ${tax.toFixed(2)}</span>
-        </div>
-        <hr class="my-2">
-        <div class="d-flex justify-content-between">
-            <strong>{% translate 'Total' %}</strong>
-            <strong class="text-primary">${currency} ${total.toFixed(2)}</strong>
-        </div>
-    </div>`;
+    if (tax > 0) {
+        html += `<div class="d-flex justify-content-between mb-2">
+                <span>{% translate 'Tax' %} (25%)</span>
+                <span>${currency} ${tax.toFixed(2)}</span>
+            </div>
+            <hr class="my-2">
+            <div class="d-flex justify-content-between">
+                <strong>{% translate 'Total' %}</strong>
+                <strong class="text-primary">${currency} ${total.toFixed(2)}</strong>
+        </div>`;
+    }
+
+    html += `</div>`;
 
     breakdownContainer.innerHTML = html;
     container.style.display = 'block';

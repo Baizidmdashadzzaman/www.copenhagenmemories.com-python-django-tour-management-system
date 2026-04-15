@@ -61,7 +61,17 @@
             <!-- Bike div start -->
             {% for bike in bikes %}
             <div class="row align-items-center {% if not forloop.last %}mb-5{% endif %}" style="padding-bottom: 50px;">
-                <div class="col-lg-5 wow fadeInDown" data-wow-delay="0.2s">
+                
+                <div class="col-lg-6 d-flex ps-lg-0 wow zoomIn" data-wow-delay="0.2s">
+                    <div class=" d-lg-flex align-items-center flex-fill">
+                        {% if bike.image %}
+                            <img src="{{ bike.image.url }}" alt="{{ bike.title }}" class="img-fluid rounded-4" style="width: 100%;">
+                        {% else %}
+                            <img src="{% static 'frontend/assets/img/flight/bike-1.png' %}" alt="placeholder" style="width: 100%;">
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-lg-6 wow fadeInDown" data-wow-delay="0.2s">
                     <div class="section-header section-header-four mb-4">
                         <h2 class="mb-2">
                             {% if request.session.lang == 'dk' and bike.title_dk %}
@@ -155,15 +165,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-lg-7 d-flex ps-lg-0 wow zoomIn" data-wow-delay="0.2s">
-                    <div class=" d-lg-flex align-items-center flex-fill">
-                        {% if bike.image %}
-                            <img src="{{ bike.image.url }}" alt="{{ bike.title }}" class="img-fluid rounded-4" style="width: 100%;">
-                        {% else %}
-                            <img src="{% static 'frontend/assets/img/flight/bike-1.png' %}" alt="placeholder" style="width: 100%;">
-                        {% endif %}
-                    </div>
-                </div>
+                
             </div>
 
             <!-- Bike Booking Modal -->

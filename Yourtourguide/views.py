@@ -942,7 +942,8 @@ def tour_detail(request, tour_id):
                                 pass
 
                         # Calculate tax (assuming 25% VAT for Denmark)
-                        tax_rate = Decimal('0.25')
+                        # tax_rate = Decimal('0.25')
+                        tax_rate = Decimal('0.00')
                         tax_amount = (subtotal - discount_amount) * tax_rate
                         total_amount = subtotal - discount_amount + tax_amount
 

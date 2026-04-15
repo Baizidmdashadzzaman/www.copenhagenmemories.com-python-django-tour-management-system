@@ -144,10 +144,12 @@
                                     <span>-{{ booking.currency }} {{ booking.discount_amount }}</span>
                                 </div>
                                 {% endif %}
+                                {% if booking.tax_amount > 0 %}
                                 <div class="d-flex justify-content-between mb-2">
-                                    <span>{% translate "Tax" %} ({{ booking.tour.supplier.country|default:"DK" }}):</span>
+                                    <span>{% translate "Tax" %} ({{ booking.tour.supplier.country|default:"USD" }}):</span>
                                     <span>{{ booking.currency }} {{ booking.tax_amount }}</span>
                                 </div>
+                                {% endif %}
                                 <hr>
                                 <div class="d-flex justify-content-between fw-bold">
                                     <span>{% translate "Total" %}:</span>
