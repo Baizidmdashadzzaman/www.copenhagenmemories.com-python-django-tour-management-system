@@ -241,16 +241,17 @@ def cart_payment_accept(request, order_number):
 
     request.session['cart'] = {}
 
-    try:
-        send_mail(
-            'New Souvenir Order',
-            f'Booking Number: {souvenir.order_number}',
-            settings.DEFAULT_FROM_EMAIL,
-            ['contact@copenhagenmemories.com'],
-            fail_silently=False,
-        )
-    except Exception as e:
-        logger.error(f"Admin email failed: {str(e)}")
+    if getattr(settings, 'USE_MAIL', False):
+        try:
+            send_mail(
+                'New Souvenir Order',
+                f'Booking Number: {souvenir.order_number}',
+                settings.DEFAULT_FROM_EMAIL,
+                ['contact@copenhagenmemories.com'],
+                fail_silently=False,
+            )
+        except Exception as e:
+            logger.error(f"Admin email failed: {str(e)}")
 
     messages.success(request, "Order placed successfully!")
     return render(request, 'frontend/pages/cart/order_confirmation.html', {'order': order})

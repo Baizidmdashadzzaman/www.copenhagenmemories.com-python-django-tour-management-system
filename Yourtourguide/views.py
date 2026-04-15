@@ -200,17 +200,18 @@ def rent_bike_payment_accept(request, booking_number):
         booking.status = 'confirmed'
         booking.save()
 
-    try:
-        send_mail(
-            'New Bike Rent Booking',
-            f'Booking Number: {booking.booking_number}',
-            settings.DEFAULT_FROM_EMAIL,
-            ['contact@copenhagenmemories.com'],
-            fail_silently=False,
-        )
-    except Exception as e:
-        logger.error(f"Admin email failed: {str(e)}")
-        
+    if getattr(settings, 'USE_MAIL', False):
+        try:
+            send_mail(
+                'New Bike Rent Booking',
+                f'Booking Number: {booking.booking_number}',
+                settings.DEFAULT_FROM_EMAIL,
+                ['contact@copenhagenmemories.com'],
+                fail_silently=False,
+            )
+        except Exception as e:
+            logger.error(f"Admin email failed: {str(e)}")
+            
     messages.success(request, f'Payment successful! Your bike booking confirmed. Booking Number: {booking.booking_number}')
     return redirect('rent_bike_confirmation', booking_number=booking.booking_number)
 
@@ -229,12 +230,12 @@ def rent_bike_payment_cancel(request, booking_number):
 def send_test_email(request):
     try:
         send_mail(
-            subject='Test Email from Django',
-            message='This is a test email.',
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=['ashad0167@gmail.com'],
-        fail_silently=False,
-    )
+                subject='Test Email from Django',
+                message='This is a test email.',
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=['ashad0167@gmail.com'],
+            fail_silently=False,
+        )
     except Exception as e:
         return HttpResponse(f"Email sent {e}")
 
@@ -466,17 +467,18 @@ def contactus(request):
                 Message:
                 {message}
                 """
-                
-                try:
-                    send_mail(
-                        email_subject,
-                        email_body,
-                        settings.DEFAULT_FROM_EMAIL,
-                        ['copenhagenmemories@gmail.com'],
-                        fail_silently=False,
-                    )
-                except Exception as e:
-                    print(e)
+
+                if getattr(settings, 'USE_MAIL', False):
+                    try:
+                        send_mail(
+                            email_subject,
+                            email_body,
+                            settings.DEFAULT_FROM_EMAIL,
+                            ['copenhagenmemories@gmail.com'],
+                            fail_silently=False,
+                        )
+                    except Exception as e:
+                        print(e)
 
                 messages.success(request, 'Thank you for contacting us! We will get back to you soon.')
             except Exception as e:
@@ -827,16 +829,18 @@ def tour_detail(request, tour_id):
                         
                         You can log in at: {request.build_absolute_uri('/accounts/login/')}
                         """
-                        try:
-                            send_mail(
-                                subject,
-                                message,
-                                settings.DEFAULT_FROM_EMAIL,
-                                [contact_email],
-                                fail_silently=True,
-                            )
-                        except Exception as e:
-                            print(e)
+                        
+                        if getattr(settings, 'USE_MAIL', False):
+                            try:
+                                send_mail(
+                                    subject,
+                                    message,
+                                    settings.DEFAULT_FROM_EMAIL,
+                                    [contact_email],
+                                    fail_silently=True,
+                                )
+                            except Exception as e:
+                                print(e)
                             
                     except Exception as e:
                         booking_error = f"Error creating account: {str(e)}"
@@ -1327,27 +1331,28 @@ def tour_payment_accept(request, booking_number):
      Total Amount: {booking.total_amount} USD
     """   
 
-    if booking.contact_email:
+    if getattr(settings, 'USE_MAIL', False):
+        if booking.contact_email:
+            try:
+                send_mail(
+                    'Tour Booking Confirmation',
+                    message,
+                    settings.DEFAULT_FROM_EMAIL,
+                    [booking.contact_email],
+                    fail_silently=False,
+                )
+            except Exception as e:
+                logger.error(f"Customer email failed: {str(e)}")
         try:
             send_mail(
-                'Tour Booking Confirmation',
-                message,
+                'New Tour Booking',
+                f'Booking Number: {booking.booking_number}',
                 settings.DEFAULT_FROM_EMAIL,
-                [booking.contact_email],
+                ['contact@copenhagenmemories.com'],
                 fail_silently=False,
             )
         except Exception as e:
-            logger.error(f"Customer email failed: {str(e)}")
-    try:
-        send_mail(
-            'New Tour Booking',
-            f'Booking Number: {booking.booking_number}',
-            settings.DEFAULT_FROM_EMAIL,
-            ['contact@copenhagenmemories.com'],
-            fail_silently=False,
-        )
-    except Exception as e:
-        logger.error(f"Admin email failed: {str(e)}")
+            logger.error(f"Admin email failed: {str(e)}")
         
     messages.success(request, f'Payment successful! Your tour booking confirmed. Booking Number: {booking.booking_number}')
     return redirect('booking_confirmation', booking_number=booking.booking_number)

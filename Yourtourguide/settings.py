@@ -32,6 +32,7 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 FLATPAY_KEY = os.getenv('FLATPAY_KEY', '')
 USE_PAYMENT_GATEWAY = os.getenv('USE_PAYMENT_GATEWAY', 'False').lower() in ('true', '1', 't')
+USE_MAIL = os.getenv('USE_MAIL', 'False').lower() in ('true', '1', 't')
 
 ALLOWED_HOSTS = [
     '88.222.221.225',
