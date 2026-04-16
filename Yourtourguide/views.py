@@ -13,6 +13,8 @@ from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.utils.crypto import get_random_string
 import smtplib
+from django.core.mail import EmailMessage
+
 
 import logging
 logger = logging.getLogger(__name__)
@@ -230,26 +232,18 @@ def rent_bike_payment_cancel(request, booking_number):
 
 def send_test_email(request):
     try:
-        # send_mail(
-        #     subject='Test Email from Django',
-        #     message='This is a test email.',
-        #     from_email='contact@copenhagenmemories.com',
-        #     recipient_list=['ashad0167@gmail.com'],
-        #     fail_silently=False,
-        # )
-        send_mail(
+        email = EmailMessage(
             subject='Test Email',
-            message='Test',
+            body='Test message',
             from_email='contact@copenhagenmemories.com',
-            recipient_list=['ashad0167@gmail.com'],
-            fail_silently=False,
-            auth_user='contact@copenhagenmemories.com',
-            auth_password='CPHMemories@CPH2026.'
+            to=['ashad0167@gmail.com'],
         )
-        return HttpResponse("✅ Email sent successfully")
+        email.send(fail_silently=False)
+
+        return HttpResponse("✅ Email sent")
 
     except Exception as e:
-        return HttpResponse(f"❌ Email error: {str(e)}")
+        return HttpResponse(f"❌ ERROR: {e}")
 
 
 def send_test_email_smtp(request):

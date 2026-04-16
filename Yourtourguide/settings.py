@@ -170,6 +170,7 @@ AUTHENTICATION_BACKENDS = [
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 EMAIL_HOST = 'smtp.hostinger.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
@@ -179,6 +180,8 @@ EMAIL_HOST_USER = 'contact@copenhagenmemories.com'
 EMAIL_HOST_PASSWORD = 'CPHMemories@CPH2026.'
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+EMAIL_TIMEOUT = 30
 
 
 LOG_DIR = os.path.join(BASE_DIR, 'logs')
