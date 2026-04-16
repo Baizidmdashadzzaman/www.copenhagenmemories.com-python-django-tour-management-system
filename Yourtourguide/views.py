@@ -12,6 +12,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.utils.crypto import get_random_string
+import smtplib
 
 import logging
 logger = logging.getLogger(__name__)
@@ -230,16 +231,31 @@ def rent_bike_payment_cancel(request, booking_number):
 def send_test_email(request):
     try:
         send_mail(
-                subject='Test Email from Django',
-                message='This is a test email.',
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=['ashad0167@gmail.com'],
+            subject='Test Email from Django',
+            message='This is a test email.',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=['ashad0167@gmail.com'],
             fail_silently=False,
         )
-    except Exception as e:
-        return HttpResponse(f"Email sent {e}")
+        return HttpResponse("✅ Email sent successfully")
 
-    return HttpResponse("Email sent")
+    except Exception as e:
+        return HttpResponse(f"❌ Email error: {str(e)}")
+
+
+def send_test_email_smtp(request):
+    try:
+        server = smtplib.SMTP('smtp.hostinger.com', 587, timeout=10)
+        server.starttls()
+        server.login(
+            'contact@copenhagenmemories.com',
+            'CPHMemories@CPH2026.'
+        )
+        server.quit()
+        return HttpResponse("✅ SMTP login OK")
+
+    except Exception as e:
+        return HttpResponse(f"❌ SMTP error: {e}")
 
 
 def page_view(request, page_id, page_slug):

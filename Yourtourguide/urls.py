@@ -75,6 +75,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('system-developer/', views.system_developer, name='system_developer'),
     path('send-test-email/', views.send_test_email, name='send_test_email'),
+    path('send-test-email-smtp/', views.send_test_email_smtp, name='send_test_email_smtp'),
     
     # Souvenirs Frontend
     path('souvenirs/', souvenir_views.souvenirs_list, name='souvenirs_list_frontend'),
