@@ -1,4 +1,6 @@
 {% extends 'frontend/layout/base.html' %}
+{% load static %}
+
 {% block seo_tags %}
       <meta property="og:title" content="{{ tour.title }}" />
       <meta property="og:site_name" content=Copenhagenmemories />
@@ -28,7 +30,7 @@
 {% endblock %}
 
 {% block content %}
-{% load static %}
+
 {% load translate_tags %}
 
 <div class="breadcrumb-bar breadcrumb-bg-02 text-center">
