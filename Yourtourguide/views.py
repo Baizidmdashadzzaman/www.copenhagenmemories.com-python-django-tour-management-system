@@ -237,7 +237,7 @@ def send_test_email(request):
         from_email='contact@copenhagenmemories.com',
         to=['ashad0167@gmail.com'],
     )
-    email.send(fail_silently=False)
+    email.send(fail_silently=True)
 
 
 def send_test_email_smtp(request):
