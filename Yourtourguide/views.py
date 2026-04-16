@@ -230,12 +230,21 @@ def rent_bike_payment_cancel(request, booking_number):
 
 def send_test_email(request):
     try:
+        # send_mail(
+        #     subject='Test Email from Django',
+        #     message='This is a test email.',
+        #     from_email='contact@copenhagenmemories.com',
+        #     recipient_list=['ashad0167@gmail.com'],
+        #     fail_silently=False,
+        # )
         send_mail(
-            subject='Test Email from Django',
-            message='This is a test email.',
+            subject='Test Email',
+            message='Test',
             from_email='contact@copenhagenmemories.com',
             recipient_list=['ashad0167@gmail.com'],
             fail_silently=False,
+            auth_user='contact@copenhagenmemories.com',
+            auth_password='CPHMemories@CPH2026.'
         )
         return HttpResponse("✅ Email sent successfully")
 
