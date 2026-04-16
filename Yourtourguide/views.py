@@ -1353,23 +1353,37 @@ def tour_payment_accept(request, booking_number):
     if getattr(settings, 'USE_MAIL', False):
         if booking.contact_email:
             try:
-                send_mail(
-                    'Tour Booking Confirmation',
-                    message,
-                    'contact@copenhagenmemories.com',
-                    [booking.contact_email],
-                    fail_silently=False,
+                # send_mail(
+                #     'Tour Booking Confirmation',
+                #     message,
+                #     'contact@copenhagenmemories.com',
+                #     [booking.contact_email],
+                #     fail_silently=False,
+                # )
+                email = EmailMessage(
+                    subject='Tour Booking Confirmation',
+                    body=message,
+                    from_email='contact@copenhagenmemories.com',
+                    to=[booking.contact_email],
                 )
+                email.send(fail_silently=True)
             except Exception as e:
                 logger.error(f"Customer email failed: {str(e)}")
         try:
-            send_mail(
-                'New Tour Booking',
-                f'Booking Number: {booking.booking_number}',
-                'contact@copenhagenmemories.com',
-                ['contact@copenhagenmemories.com'],
-                fail_silently=False,
+            # send_mail(
+            #     'New Tour Booking',
+            #     f'Booking Number: {booking.booking_number}',
+            #     'contact@copenhagenmemories.com',
+            #     ['contact@copenhagenmemories.com'],
+            #     fail_silently=False,
+            # )
+            email = EmailMessage(
+                subject='New Tour Booking',
+                body=f'Booking Number: {booking.booking_number}',
+                from_email='contact@copenhagenmemories.com',
+                to=['contact@copenhagenmemories.com'],
             )
+            email.send(fail_silently=True)
         except Exception as e:
             logger.error(f"Admin email failed: {str(e)}")
         
