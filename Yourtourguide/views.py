@@ -231,13 +231,19 @@ def rent_bike_payment_cancel(request, booking_number):
     return redirect('rent_bike')
 
 def send_test_email(request):
-    email = EmailMessage(
-        subject='Test Email',
-        body='Test message',
-        from_email='contact@copenhagenmemories.com',
-        to=['ashad0167@gmail.com'],
-    )
-    email.send(fail_silently=True)
+    
+    try:
+        email = EmailMessage(
+            subject='Test Email',
+            body='Test message',
+            from_email='contact@copenhagenmemories.com',
+            to=['ashad0167@gmail.com'],
+        )
+        email.send(fail_silently=True)
+        return HttpResponse("✅ Email send successfully")
+
+    except Exception as e:
+        return HttpResponse(f"❌ Email send failed: {e}")
 
 
 def send_test_email_smtp(request):
