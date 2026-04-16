@@ -208,7 +208,7 @@ def rent_bike_payment_accept(request, booking_number):
             send_mail(
                 'New Bike Rent Booking',
                 f'Booking Number: {booking.booking_number}',
-                settings.DEFAULT_FROM_EMAIL,
+                'contact@copenhagenmemories.com',
                 ['contact@copenhagenmemories.com'],
                 fail_silently=False,
             )
@@ -492,8 +492,8 @@ def contactus(request):
                         send_mail(
                             email_subject,
                             email_body,
-                            settings.DEFAULT_FROM_EMAIL,
-                            ['copenhagenmemories@gmail.com'],
+                            'contact@copenhagenmemories.com',
+                            ['contact@copenhagenmemories.com'],
                             fail_silently=False,
                         )
                     except Exception as e:
@@ -854,7 +854,7 @@ def tour_detail(request, tour_id):
                                 send_mail(
                                     subject,
                                     message,
-                                    settings.DEFAULT_FROM_EMAIL,
+                                    'contact@copenhagenmemories.com',
                                     [contact_email],
                                     fail_silently=True,
                                 )
@@ -1356,7 +1356,7 @@ def tour_payment_accept(request, booking_number):
                 send_mail(
                     'Tour Booking Confirmation',
                     message,
-                    settings.DEFAULT_FROM_EMAIL,
+                    'contact@copenhagenmemories.com',
                     [booking.contact_email],
                     fail_silently=False,
                 )
@@ -1366,7 +1366,7 @@ def tour_payment_accept(request, booking_number):
             send_mail(
                 'New Tour Booking',
                 f'Booking Number: {booking.booking_number}',
-                settings.DEFAULT_FROM_EMAIL,
+                'contact@copenhagenmemories.com',
                 ['contact@copenhagenmemories.com'],
                 fail_silently=False,
             )
