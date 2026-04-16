@@ -14,7 +14,7 @@ from django.http import HttpResponse
 from django.utils.crypto import get_random_string
 import smtplib
 from django.core.mail import EmailMessage
-
+import threading
 
 import logging
 logger = logging.getLogger(__name__)
@@ -230,20 +230,24 @@ def rent_bike_payment_cancel(request, booking_number):
     messages.warning(request, "Payment was cancelled.")
     return redirect('rent_bike')
 
+def send_email_async(email_obj):
+    try:
+        email_obj.send(fail_silently=True)
+    except Exception:
+        pass
+
 def send_test_email(request):
     
-    try:
-        email = EmailMessage(
-            subject='Test Email',
-            body='Test message',
-            from_email='contact@copenhagenmemories.com',
-            to=['ashad0167@gmail.com'],
-        )
-        email.send(fail_silently=True)
-        return HttpResponse("✅ Email send successfully")
+    email = EmailMessage(
+        subject='Test Email',
+        body='Test message',
+        from_email='contact@copenhagenmemories.com',
+        to=['ashad0167@gmail.com'],
+    )
 
-    except Exception as e:
-        return HttpResponse(f"❌ Email send failed: {e}")
+    thread = threading.Thread(target=send_email_async, args=(email,))
+    thread.start()
+    return HttpResponse("✅ Email send successfully")
 
 
 def send_test_email_smtp(request):
