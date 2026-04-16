@@ -204,16 +204,13 @@ def rent_bike_payment_accept(request, booking_number):
         booking.save()
 
     if getattr(settings, 'USE_MAIL', False):
-        try:
-            send_mail(
-                'New Bike Rent Booking',
-                f'Booking Number: {booking.booking_number}',
-                'contact@copenhagenmemories.com',
-                ['contact@copenhagenmemories.com'],
-                fail_silently=False,
-            )
-        except Exception as e:
-            logger.error(f"Admin email failed: {str(e)}")
+        admin_email = EmailMessage(
+            subject='New Bike Rent Booking',
+            body=f'Booking Number: {booking.booking_number}',
+            from_email='contact@copenhagenmemories.com',
+            to=['contact@copenhagenmemories.com'],
+        )
+        trigger_email(admin_email)
             
     messages.success(request, f'Payment successful! Your bike booking confirmed. Booking Number: {booking.booking_number}')
     return redirect('rent_bike_confirmation', booking_number=booking.booking_number)
@@ -238,7 +235,7 @@ def send_email_async(email_obj):
 
 def trigger_email(email_obj):
     threading.Thread(target=send_email_async, args=(email_obj,)).start()
-    
+
 def send_test_email(request):
     
     email = EmailMessage(
@@ -259,7 +256,7 @@ def send_test_email_smtp(request):
         server.starttls()
         server.login(
             'contact@copenhagenmemories.com',
-            'CPHMemories@CPH2026.'
+            ''
         )
         server.quit()
         return HttpResponse("✅ SMTP login OK")
@@ -495,16 +492,13 @@ def contactus(request):
                 """
 
                 if getattr(settings, 'USE_MAIL', False):
-                    try:
-                        send_mail(
-                            email_subject,
-                            email_body,
-                            'contact@copenhagenmemories.com',
-                            ['contact@copenhagenmemories.com'],
-                            fail_silently=False,
-                        )
-                    except Exception as e:
-                        print(e)
+                    admin_email = EmailMessage(
+                        subject=email_subject,
+                        body=email_body,
+                        from_email='contact@copenhagenmemories.com',
+                        to=['contact@copenhagenmemories.com'],
+                    )
+                    trigger_email(admin_email)
 
                 messages.success(request, 'Thank you for contacting us! We will get back to you soon.')
             except Exception as e:

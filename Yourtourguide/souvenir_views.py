@@ -10,8 +10,23 @@ from django.contrib import messages
 from accounts.models import Souvenir, SouvenirOrder, SouvenirOrderItem, Customer
 from .forms import SouvenirOrderForm
 from django.core.mail import send_mail
+
+from django.core.mail import EmailMessage
+import threading
+
 import logging
 logger = logging.getLogger(__name__)
+
+
+def send_email_async(email_obj):
+    try:
+        email_obj.send(fail_silently=True)
+    except Exception:
+        pass
+
+def trigger_email(email_obj):
+    threading.Thread(target=send_email_async, args=(email_obj,)).start()
+
 
 def souvenirs_list(request):
     search_query = request.GET.get('search', '')
@@ -242,16 +257,13 @@ def cart_payment_accept(request, order_number):
     request.session['cart'] = {}
 
     if getattr(settings, 'USE_MAIL', False):
-        try:
-            send_mail(
-                'New Souvenir Order',
-                f'Booking Number: {souvenir.order_number}',
-                'contact@copenhagenmemories.com',
-                ['contact@copenhagenmemories.com'],
-                fail_silently=False,
-            )
-        except Exception as e:
-            logger.error(f"Admin email failed: {str(e)}")
+        admin_email = EmailMessage(
+            subject='Booking Souvenir Order',
+            body=f'Order Number: {souvenir.order_number}',
+            from_email='contact@copenhagenmemories.com',
+            to=['contact@copenhagenmemories.com'],
+        )
+        trigger_email(admin_email)
 
     messages.success(request, "Order placed successfully!")
     return render(request, 'frontend/pages/cart/order_confirmation.html', {'order': order})
