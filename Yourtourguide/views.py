@@ -233,7 +233,7 @@ def send_test_email(request):
         send_mail(
             subject='Test Email from Django',
             message='This is a test email.',
-            from_email=settings.DEFAULT_FROM_EMAIL,
+            from_email='contact@copenhagenmemories.com',
             recipient_list=['ashad0167@gmail.com'],
             fail_silently=False,
         )
