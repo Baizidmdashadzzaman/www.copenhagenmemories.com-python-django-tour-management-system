@@ -208,7 +208,13 @@ class SiteSettingForm(forms.ModelForm):
             'site_name', 'site_logo', 'site_favicon', 'site_email', 
             'site_address', 'site_description', 'site_metakey', 'site_metadescription','site_phone',
             'site_map','app_google','ios_app','fb_link','x_link','insta_link','linkdin_link','pintrest_link','site_logo_dark',
-            'meetoursuides_description'
+            'meetoursuides_description',
+            'home_page_title', 'home_page_meta_keywords', 'home_page_meta_description',
+            'contactus_page_title', 'contactus_page_meta_keywords', 'contactus_page_meta_description',
+            'rentbike_page_title', 'rentbike_page_meta_keywords', 'rentbike_page_meta_description',
+            'souvenirs_page_title', 'souvenirs_page_meta_keywords', 'souvenirs_page_meta_description',
+            'tours_page_title', 'tours_page_meta_keywords', 'tours_page_meta_description',
+            'blog_page_title', 'blog_page_meta_keywords', 'blog_page_meta_description',
         ]
         widgets = {
             'site_name': forms.TextInput(attrs={'placeholder': 'Enter site name'}),
@@ -227,6 +233,24 @@ class SiteSettingForm(forms.ModelForm):
             'linkdin_link': forms.TextInput(attrs={'placeholder': 'Enter linkdin link'}),
             'pintrest_link': forms.TextInput(attrs={'placeholder': 'Enter pintrest link'}),
             'meetoursuides_description': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter meet our guides description'}),
+            'home_page_title': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Enter home page title'}),
+            'home_page_meta_keywords': forms.Textarea(attrs={'class': 'form-control','rows': 3, 'placeholder': 'Enter home page meta keywords'}),
+            'home_page_meta_description': forms.Textarea(attrs={'class': 'form-control','rows': 3, 'placeholder': 'Enter home page meta description'}),
+            'contactus_page_title': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Enter contact us page title'}),
+            'contactus_page_meta_keywords': forms.Textarea(attrs={'class': 'form-control','rows': 3, 'placeholder': 'Enter contact us page meta keywords'}),
+            'contactus_page_meta_description': forms.Textarea(attrs={'class': 'form-control','rows': 3, 'placeholder': 'Enter contact us page meta description'}),
+            'rentbike_page_title': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Enter rent bike page title'}),
+            'rentbike_page_meta_keywords': forms.Textarea(attrs={'class': 'form-control','rows': 3, 'placeholder': 'Enter rent bike page meta keywords'}),
+            'rentbike_page_meta_description': forms.Textarea(attrs={'class': 'form-control','rows': 3, 'placeholder': 'Enter rent bike page meta description'}),
+            'souvenirs_page_title': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Enter souvenirs page title'}),
+            'souvenirs_page_meta_keywords': forms.Textarea(attrs={'class': 'form-control','rows': 3, 'placeholder': 'Enter souvenirs page meta keywords'}),
+            'souvenirs_page_meta_description': forms.Textarea(attrs={'class': 'form-control','rows': 3, 'placeholder': 'Enter souvenirs page meta description'}),
+            'tours_page_title': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Enter tours page title'}),
+            'tours_page_meta_keywords': forms.Textarea(attrs={'class': 'form-control','rows': 3, 'placeholder': 'Enter tours page meta keywords'}),
+            'tours_page_meta_description': forms.Textarea(attrs={'class': 'form-control','rows': 3, 'placeholder': 'Enter tours page meta description'}),
+            'blog_page_title': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Enter blog page title'}),
+            'blog_page_meta_keywords': forms.Textarea(attrs={'class': 'form-control','rows': 3, 'placeholder': 'Enter blog page meta keywords'}),
+            'blog_page_meta_description': forms.Textarea(attrs={'class': 'form-control','rows': 3, 'placeholder': 'Enter blog page meta description'}),
         }
 
 class TourSupplierForm(forms.ModelForm):
@@ -403,7 +427,7 @@ class CustomerReviewStaticForm(forms.ModelForm):
 class PageForm(forms.ModelForm):
     class Meta:
         model = Page
-        fields = ['title', 'title_dk', 'image', 'content', 'content_dk', 'display_section', 'is_active']
+        fields = ['title', 'title_dk', 'image', 'content', 'content_dk', 'display_section', 'is_active','meta_title','meta_description','meta_keywords']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter page title'}),
             'title_dk': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Danish page title'}),
@@ -412,6 +436,9 @@ class PageForm(forms.ModelForm):
             'content_dk': forms.Textarea(attrs={'class': 'form-control', 'rows': 10, 'placeholder': 'Enter Danish page content'}),
             'display_section': forms.Select(attrs={'class': 'form-select'}),
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'meta_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter data here'}),
+            'meta_description': forms.Textarea(attrs={'class': 'form-control', 'rows': 10, 'placeholder': 'Enter data here'}),
+            'meta_keywords': forms.Textarea(attrs={'class': 'form-control', 'rows': 10, 'placeholder': 'Enter data here'}),
         }
 
 class CustomerMessageForm(forms.ModelForm):

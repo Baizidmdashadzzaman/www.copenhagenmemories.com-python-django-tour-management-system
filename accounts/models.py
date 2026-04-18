@@ -93,6 +93,30 @@ class SiteSetting(models.Model):
     site_logo_dark = models.ImageField(upload_to='settings/', blank=True, null=True)
     meetoursuides_description = models.TextField(blank=True)
 
+    home_page_title = models.CharField(max_length=100, blank=True, null=True)
+    home_page_meta_keywords = models.TextField(blank=True)
+    home_page_meta_description = models.TextField(blank=True)
+
+    contactus_page_title = models.CharField(max_length=100, blank=True, null=True)
+    contactus_page_meta_keywords = models.TextField(blank=True)
+    contactus_page_meta_description = models.TextField(blank=True)
+
+    rentbike_page_title = models.CharField(max_length=100, blank=True, null=True)
+    rentbike_page_meta_keywords = models.TextField(blank=True)
+    rentbike_page_meta_description = models.TextField(blank=True)
+
+    souvenirs_page_title = models.CharField(max_length=100, blank=True, null=True)
+    souvenirs_page_meta_keywords = models.TextField(blank=True)
+    souvenirs_page_meta_description = models.TextField(blank=True)
+
+    tours_page_title = models.CharField(max_length=100, blank=True, null=True)
+    tours_page_meta_keywords = models.TextField(blank=True)
+    tours_page_meta_description = models.TextField(blank=True)
+
+    blog_page_title = models.CharField(max_length=100, blank=True, null=True)
+    blog_page_meta_keywords = models.TextField(blank=True)
+    blog_page_meta_description = models.TextField(blank=True)
+
     class Meta:
         verbose_name = 'Site Setting'
         verbose_name_plural = 'Site Settings'
@@ -274,6 +298,7 @@ class Page(models.Model):
     content_dk = models.TextField(blank=True)
     meta_title = models.CharField(max_length=200, blank=True)
     meta_description = models.TextField(blank=True)
+    meta_keywords = models.TextField(blank=True)
     display_section = models.CharField(max_length=20, choices=[
         ('header', 'Header'),
         ('footer', 'Footer'),

@@ -148,6 +148,115 @@
                             </div>
                         </div>
                     </div>
+                    <br><br>
+                    <div class="row g-6">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label" for="{{ form.home_page_title.id_for_label }}">{{ form.home_page_title.label }}</label>
+                            {{ form.home_page_title }}
+                            {% for error in form.home_page_title.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.home_page_meta_description.id_for_label }}">{{ form.home_page_meta_description.label }}</label>
+                            {{ form.home_page_meta_description }}
+                            {% for error in form.home_page_meta_description.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.home_page_meta_keywords.id_for_label }}">{{ form.home_page_meta_keywords.label }}</label>
+                            {{ form.home_page_meta_keywords }}
+                            <div class="form-text">Comma-separated keywords for search engines.</div>
+                            {% for error in form.home_page_meta_keywords.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                    </div>
+                    <div class="row g-6">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label" for="{{ form.contactus_page_title.id_for_label }}">{{ form.contactus_page_title.label }}</label>
+                            {{ form.contactus_page_title }}
+                            {% for error in form.contactus_page_title.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.contactus_page_meta_description.id_for_label }}">{{ form.contactus_page_meta_description.label }}</label>
+                            {{ form.contactus_page_meta_description }}
+                            {% for error in form.contactus_page_meta_description.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.contactus_page_meta_keywords.id_for_label }}">{{ form.contactus_page_meta_keywords.label }}</label>
+                            {{ form.contactus_page_meta_keywords }}
+                            <div class="form-text">Comma-separated keywords for search engines.</div>
+                            {% for error in form.contactus_page_meta_keywords.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                    </div>
+                    <div class="row g-6">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label" for="{{ form.rentbike_page_title.id_for_label }}">{{ form.rentbike_page_title.label }}</label>
+                            {{ form.rentbike_page_title }}
+                            {% for error in form.rentbike_page_title.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.rentbike_page_meta_description.id_for_label }}">{{ form.rentbike_page_meta_description.label }}</label>
+                            {{ form.rentbike_page_meta_description }}
+                            {% for error in form.rentbike_page_meta_description.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.rentbike_page_meta_keywords.id_for_label }}">{{ form.rentbike_page_meta_keywords.label }}</label>
+                            {{ form.rentbike_page_meta_keywords }}
+                            <div class="form-text">Comma-separated keywords for search engines.</div>
+                            {% for error in form.rentbike_page_meta_keywords.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                    </div>
+                    <div class="row g-6">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label" for="{{ form.souvenirs_page_title.id_for_label }}">{{ form.souvenirs_page_title.label }}</label>
+                            {{ form.souvenirs_page_title }}
+                            {% for error in form.souvenirs_page_title.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.souvenirs_page_meta_description.id_for_label }}">{{ form.souvenirs_page_meta_description.label }}</label>
+                            {{ form.souvenirs_page_meta_description }}
+                            {% for error in form.souvenirs_page_meta_description.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.souvenirs_page_meta_keywords.id_for_label }}">{{ form.souvenirs_page_meta_keywords.label }}</label>
+                            {{ form.souvenirs_page_meta_keywords }}
+                            <div class="form-text">Comma-separated keywords for search engines.</div>
+                            {% for error in form.souvenirs_page_meta_keywords.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                    </div>
+                    <div class="row g-6">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label" for="{{ form.tours_page_title.id_for_label }}">{{ form.tours_page_title.label }}</label>
+                            {{ form.tours_page_title }}
+                            {% for error in form.tours_page_title.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.tours_page_meta_description.id_for_label }}">{{ form.tours_page_meta_description.label }}</label>
+                            {{ form.tours_page_meta_description }}
+                            {% for error in form.tours_page_meta_description.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.tours_page_meta_keywords.id_for_label }}">{{ form.tours_page_meta_keywords.label }}</label>
+                            {{ form.tours_page_meta_keywords }}
+                            <div class="form-text">Comma-separated keywords for search engines.</div>
+                            {% for error in form.tours_page_meta_keywords.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                    </div>
+                    <div class="row g-6">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label" for="{{ form.blog_page_title.id_for_label }}">{{ form.blog_page_title.label }}</label>
+                            {{ form.blog_page_title }}
+                            {% for error in form.blog_page_title.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.blog_page_meta_description.id_for_label }}">{{ form.blog_page_meta_description.label }}</label>
+                            {{ form.blog_page_meta_description }}
+                            {% for error in form.blog_page_meta_description.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.blog_page_meta_keywords.id_for_label }}">{{ form.blog_page_meta_keywords.label }}</label>
+                            {{ form.blog_page_meta_keywords }}
+                            <div class="form-text">Comma-separated keywords for search engines.</div>
+                            {% for error in form.blog_page_meta_keywords.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                    </div>
 
                     <hr class="my-6 mx-n6">
                     <h6>4. Usefull link</h6>
