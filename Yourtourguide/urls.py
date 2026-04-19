@@ -76,6 +76,7 @@ urlpatterns = [
     path('system-developer/', views.system_developer, name='system_developer'),
     path('send-test-email/', views.send_test_email, name='send_test_email'),
     path('send-test-email-smtp/', views.send_test_email_smtp, name='send_test_email_smtp'),
+    path('send-test-email-template/', views.send_test_email_template, name='send_test_email_template'),
     
     # Souvenirs Frontend
     path('souvenirs/', souvenir_views.souvenirs_list, name='souvenirs_list_frontend'),

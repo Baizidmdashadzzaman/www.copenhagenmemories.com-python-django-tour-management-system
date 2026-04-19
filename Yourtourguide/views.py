@@ -16,6 +16,10 @@ import smtplib
 from django.core.mail import EmailMessage
 import threading
 
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
 import logging
 logger = logging.getLogger(__name__)
 
@@ -249,6 +253,28 @@ def send_test_email(request):
     thread.start()
     return HttpResponse("✅ Email send successfully")
 
+def send_test_email_template(request):
+
+    subject = 'Test Email with Template'
+    context = {
+        'name': 'Asad',
+        'booking_number': 'BK-12345',
+        'tour_name': 'Copenhagen City Tour',
+    }
+    html_content = render_to_string('email/booking_email.html', context)
+    text_content = strip_tags(html_content)
+
+    email = EmailMultiAlternatives(
+        subject=subject,
+        body=text_content,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=['ashad0167@gmail.com'],
+    )
+    email.attach_alternative(html_content, "text/html")
+    thread = threading.Thread(target=send_email_async, args=(email,))
+    thread.start()
+
+    return HttpResponse("✅ Email sent successfully (async)")
 
 def send_test_email_smtp(request):
     try:
