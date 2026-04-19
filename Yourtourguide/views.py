@@ -4,7 +4,7 @@ from django.db.models import Q, Avg, Count, Value
 from django.db.models.functions import Coalesce
 from accounts.models import Tour, Category, DestinationRegion, City, TourReview
 
-from accounts.models import BlogPost, ContactUs, SiteSetting, CustomerReviewStatic, FAQ, TourSupplier, Country, FeatureSection, Slider,Page, Tour, TeamMember, Souvenir, Bike
+from accounts.models import Booking,BlogPost, ContactUs, SiteSetting, CustomerReviewStatic, FAQ, TourSupplier, Country, FeatureSection, Slider,Page, Tour, TeamMember, Souvenir, Bike
 from django.db.models import Prefetch
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import translation, timezone
@@ -22,6 +22,9 @@ from django.utils.html import strip_tags
 
 import logging
 logger = logging.getLogger(__name__)
+
+from django.contrib import messages
+import requests
 
 def rent_bike(request):
     from django.contrib import messages
@@ -255,11 +258,13 @@ def send_test_email(request):
 
 def send_test_email_template(request):
 
+    #return render(request, 'email/booking_email.html')
+    booking = get_object_or_404(Booking, booking_number='BK36063150')
+    return render(request, 'email/booking_email.html', {'booking': booking})
+
     subject = 'Test Email with Template'
     context = {
-        'name': 'Asad',
-        'booking_number': 'BK-12345',
-        'tour_name': 'Copenhagen City Tour',
+        'booking': booking,
     }
     html_content = render_to_string('email/booking_email.html', context)
     text_content = strip_tags(html_content)
@@ -1333,9 +1338,7 @@ def testimonial(request):
 
 
 def tour_payment_accept(request, booking_number):
-    from accounts.models import Booking
-    from django.contrib import messages
-    import requests
+    
     
     booking = get_object_or_404(Booking, booking_number=booking_number)
     
@@ -1383,13 +1386,30 @@ def tour_payment_accept(request, booking_number):
     if getattr(settings, 'USE_MAIL', False):
 
         if booking.contact_email:
-            customer_email = EmailMessage(
-                subject='Tour Booking Confirmation',
-                body=message,
-                from_email='contact@copenhagenmemories.com',
+            # customer_email = EmailMessage(
+            #     subject='Tour Booking Confirmation',
+            #     body=message,
+            #     from_email='contact@copenhagenmemories.com',
+            #     to=[booking.contact_email],
+            # )
+            # trigger_email(customer_email)
+            context = {
+                'booking': booking,
+            }
+            subject = 'Tour Booking Confirmation'
+            html_content = render_to_string('email/booking_email.html', context)
+            text_content = strip_tags(html_content)
+
+            email = EmailMultiAlternatives(
+                subject=subject,
+                body=text_content,
+                from_email=settings.DEFAULT_FROM_EMAIL,
                 to=[booking.contact_email],
             )
-            trigger_email(customer_email)
+            email.attach_alternative(html_content, "text/html")
+            thread = threading.Thread(target=send_email_async, args=(email,))
+            thread.start()
+
             
         admin_email = EmailMessage(
             subject='New Tour Booking',
