@@ -258,7 +258,10 @@ def send_test_email(request):
 
 def send_test_email_template(request):
 
-    booking = get_object_or_404(Booking, booking_number='BK36063150')
+    #booking = get_object_or_404(Booking, booking_number='BK36063150')
+    booking = Booking.objects.order_by('-id').first()
+    if not booking:
+        raise HttpResponse("No booking found")
     #return render(request, 'email/booking_email.html', {'booking': booking})
 
     subject = 'Test Email with Template'
