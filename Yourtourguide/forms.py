@@ -96,8 +96,9 @@ class FrontendBookingForm(forms.ModelForm):
     )
 
     pickup_location = forms.CharField(
-        widget=forms.TextInput(attrs={
+        widget=forms.Textarea(attrs={
             'class': 'form-control',
+            'rows': 3,
             'placeholder': 'Pickup location (if applicable)'
         }),
         required=False

@@ -1,7 +1,7 @@
 {% extends 'frontend/layout/base.html' %}
 {% load static %}
 
-{% block seo_tags %}
+{% block og_tags %}
       <meta property="og:title" content="{{ tour.title }}" />
       <meta property="og:site_name" content=Copenhagenmemories />
       <meta property="og:description" content="{{ tour.short_description }}" />
@@ -15,7 +15,9 @@
       <meta property="og:image:width" content={600} />
       <meta property="og:image:height" content={315} />
       <meta name="fb:app_id" property="fb:app_id" content />
+{% endblock %}
 
+{% block seo_tags %}
       <meta name="description" content="{{ tour.meta_description }}">
       <meta name="keywords" content="{{ tour.meta_keywords }}">
       <meta name="title" content="{{ tour.meta_title }}">
@@ -1363,7 +1365,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Initialize with one participant
-    addParticipantForm();
+    //addParticipantForm();
+    const minParticipants = window.tourMinParticipants || 1;
+    for (let i = 0; i < minParticipants; i++) {
+        addParticipantForm();
+    }
 });
 
 function generateParticipantTypeOptions(selectedType) {

@@ -1,6 +1,13 @@
 {% extends 'frontend/layout/base.html' %}
 
-{% block title %}Contact Us - {{ site_settings.site_name }}{% endblock %}
+{% block title %}{{ site_settings.contactus_page_title }}{% endblock %}
+
+{% block seo_tags %}
+      <meta name="description" content="{{ site_settings.contactus_page_meta_description }}">
+      <meta name="keywords" content="{{ site_settings.contactus_page_meta_keywords }}">
+      <meta name="title" content="{{ site_settings.contactus_page_title }}">
+{% endblock %}
+
 
 {% block content %}
 {% load static %}

@@ -1,6 +1,9 @@
 {% extends 'frontend/layout/base.html' %}
 {% load static %}
-{% block seo_tags %}
+
+{% block title %}{{page.title}}{% endblock %}
+
+{% block og_tags %}
       <meta property="og:title" content="{{ page.title }}" />
       <meta property="og:site_name" content=Copenhagenmemories />
       <meta property="og:description" content="{{ page.content|striptags|truncatewords:20 }}" />
@@ -12,7 +15,11 @@
       <meta name="fb:app_id" property="fb:app_id" content />
 {% endblock %}
 
-{% block title %}{{ page.title }}{% endblock %}
+{% block seo_tags %}
+      <meta name="description" content="{{ page.meta_description }}">
+      <meta name="keywords" content="{{ page.meta_keywords }}">
+      <meta name="title" content="{{ page.meta_title }}">
+{% endblock %}
 
 {% block content %}
 

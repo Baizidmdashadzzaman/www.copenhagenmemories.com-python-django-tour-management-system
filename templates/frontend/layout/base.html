@@ -8,10 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ site_settings.site_name }} - {% block title %}Guided tour company{% endblock %}</title>
 
-    <meta name="description"
-        content="{% if site_settings.site_metadescription %}{{ site_settings.site_metadescription }}{% else %}.{% endif %}">
-    <meta name="keywords"
-        content="{% if site_settings.site_metakey %}{{ site_settings.site_metakey }}{% else %}{% endif %}">
     <meta name="author" content="baizid.md.ashadzzaman@gmail.com">
     <meta name="robots" content="index, follow">
     
@@ -55,7 +51,7 @@
         gtag('config', 'G-PBD4H2G6S1');
     </script>
     
-    {% block seo_tags %}
+    {% block og_tags %}
       <meta property="og:title" content="Copenhagenmemories" />
       <meta property="og:site_name" content=Copenhagenmemories />
       <meta property="og:description" content="{{ site_settings.site_metadescription }}" />
@@ -65,6 +61,11 @@
       <meta property="og:image:width" content={600} />
       <meta property="og:image:height" content={315} />
       <meta name="fb:app_id" property="fb:app_id" content />
+    {% endblock %}
+
+    {% block seo_tags %}
+      <meta name="description" content="{% if site_settings.site_metadescription %}{{ site_settings.site_metadescription }}{% else %}.{% endif %}">
+      <meta name="keywords" content="{% if site_settings.site_metakey %}{{ site_settings.site_metakey }}{% else %}{% endif %}">
     {% endblock %}
 
 </head>

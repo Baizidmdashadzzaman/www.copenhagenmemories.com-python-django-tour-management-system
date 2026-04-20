@@ -2,7 +2,14 @@
 {% load static %}
 {% load translate_tags %}
 
-{% block title %}{% translate "Rent a Bike" %} - {{ site_settings.site_name }}{% endblock %}
+{% block title %}{{ site_settings.rentbike_page_title }}{% endblock %}
+
+{% block seo_tags %}
+      <meta name="description" content="{{ site_settings.rentbike_page_meta_description }}">
+      <meta name="keywords" content="{{ site_settings.rentbike_page_meta_keywords }}">
+      <meta name="title" content="{{ site_settings.rentbike_page_title }}">
+{% endblock %}
+
 
 {% block content %}
 <style>

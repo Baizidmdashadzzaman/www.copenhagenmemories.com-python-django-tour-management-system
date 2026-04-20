@@ -258,9 +258,8 @@ def send_test_email(request):
 
 def send_test_email_template(request):
 
-    #return render(request, 'email/booking_email.html')
     booking = get_object_or_404(Booking, booking_number='BK36063150')
-    return render(request, 'email/booking_email.html', {'booking': booking})
+    #return render(request, 'email/booking_email.html', {'booking': booking})
 
     subject = 'Test Email with Template'
     context = {
