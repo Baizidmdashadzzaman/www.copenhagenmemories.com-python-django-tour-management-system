@@ -70,7 +70,15 @@
             <div class="row align-items-center {% if not forloop.last %}mb-5{% endif %}" style="padding-bottom: 50px;">
                 
                 <div class="col-lg-6 d-flex ps-lg-0 wow zoomIn" data-wow-delay="0.2s">
+                    
                     <div class=" d-lg-flex align-items-center flex-fill">
+                        <h2 class="mb-2 mobile-only">
+                            {% if request.session.lang == 'dk' and bike.title_dk %}
+                                {{ bike.title_dk }}
+                            {% else %}
+                                {{ bike.title }}
+                            {% endif %}
+                        </h2>
                         {% if bike.image %}
                             <img src="{{ bike.image.url }}" alt="{{ bike.title }}" class="img-fluid rounded-4" style="width: 100%;">
                         {% else %}
@@ -80,7 +88,7 @@
                 </div>
                 <div class="col-lg-6 wow fadeInDown" data-wow-delay="0.2s">
                     <div class="section-header section-header-four mb-4">
-                        <h2 class="mb-2">
+                        <h2 class="mb-2 desktop-only">
                             {% if request.session.lang == 'dk' and bike.title_dk %}
                                 {{ bike.title_dk }}
                             {% else %}
