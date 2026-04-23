@@ -523,7 +523,7 @@ class FAQForm(forms.ModelForm):
 class TeamMemberForm(forms.ModelForm):
     class Meta:
         model = TeamMember
-        fields = ['name', 'email', 'phone', 'address', 'image', 'full_details']
+        fields = ['name', 'email', 'phone', 'address', 'image', 'full_details','facebook','twitter','instagram','linkedin','pinterest']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter name'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter email address'}),
@@ -531,4 +531,9 @@ class TeamMemberForm(forms.ModelForm):
             'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Enter address'}),
             'image': forms.FileInput(attrs={'class': 'form-control'}),
             'full_details': forms.Textarea(attrs={'class': 'form-control', 'id': 'full_details_quill', 'style': 'display:none;'}),
+            'facebook': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter facebook link'}),
+            'twitter': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter twitter link'}),
+            'instagram': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter instagram link'}),
+            'linkedin': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter linkedin link'}),
+            'pinterest': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter pinterest link'}),
         }

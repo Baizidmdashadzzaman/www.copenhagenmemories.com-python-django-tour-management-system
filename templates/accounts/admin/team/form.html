@@ -74,6 +74,31 @@
                             </div>
                             {% for error in form.full_details.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.facebook.id_for_label }}">{{ form.facebook.label }}</label>
+                            {{ form.facebook }}
+                            {% for error in form.facebook.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.twitter.id_for_label }}">{{ form.twitter.label }}</label>
+                            {{ form.twitter }}
+                            {% for error in form.twitter.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.instagram.id_for_label }}">{{ form.instagram.label }}</label>
+                            {{ form.instagram }}
+                            {% for error in form.instagram.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.linkedin.id_for_label }}">{{ form.linkedin.label }}</label>
+                            {{ form.linkedin }}
+                            {% for error in form.linkedin.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="{{ form.pinterest.id_for_label }}">{{ form.pinterest.label }}</label>
+                            {{ form.pinterest }}
+                            {% for error in form.pinterest.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
                     </div>
 
                     <div class="pt-6 mt-3">
