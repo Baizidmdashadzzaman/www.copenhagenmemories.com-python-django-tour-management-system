@@ -1175,6 +1175,7 @@ def tour_detail(request, tour_id):
                 review = review_form.save(commit=False)
                 review.tour = tour
                 review.customer = customer
+                review.status = 'approved'
                 
                 # Check for verified booking
                 verified_booking = Booking.objects.filter(
