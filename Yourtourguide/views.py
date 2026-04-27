@@ -26,6 +26,11 @@ logger = logging.getLogger(__name__)
 from django.contrib import messages
 import requests
 
+
+
+def page_not_found(request, exception):
+    return render(request, 'frontend/pages/page-not-found.html', status=404)
+
 def rent_bike(request):
     from django.contrib import messages
     from accounts.models import Customer, BikeBooking, BikeBookingAddon, Bike

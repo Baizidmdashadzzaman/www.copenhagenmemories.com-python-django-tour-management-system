@@ -20,6 +20,8 @@ from django.views.generic import TemplateView
 from . import views
 from . import ai_views
 from . import souvenir_views
+from django.conf.urls import handler404
+
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap as sitemap_xml
@@ -40,8 +42,12 @@ sitemaps = {
     'regions': DestinationRegionSitemap,
 }
 
+
+handler404 = views.page_not_found
+
 urlpatterns = [
     path('', views.home, name='home'),
+    path('page-not-found/', views.page_not_found, name='page_not_found'),
     path('set-language/<str:lang_code>/', views.set_language, name='set_language'),
     path('sitemap/', views.sitemap, name='sitemap'),
     path('sitemap.xml', sitemap_xml, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
@@ -89,9 +95,14 @@ urlpatterns = [
     path('add-to-cart/<int:souvenir_id>/', souvenir_views.add_to_cart, name='add_to_cart'),
     path('update-cart/<int:souvenir_id>/', souvenir_views.update_cart, name='update_cart'),
     path('remove-from-cart/<int:souvenir_id>/', souvenir_views.remove_from_cart, name='remove_from_cart'),
+
+
+    
 ]
 
 # Serve media and static files in development
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
+
+    

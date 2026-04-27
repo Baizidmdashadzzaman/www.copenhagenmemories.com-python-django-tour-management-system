@@ -1,0 +1,32 @@
+{% extends 'frontend/layout/base.html' %}
+
+{% block title %}Page not found{% endblock %}
+
+
+{% block content %}
+{% load static %}
+{% load translate_tags %}
+
+<div class="d-flex align-items-center justify-content-center vh-100 overflow-auto flex-wrap" style="background-color: #FEEDEB !important;color: #CF3425 !important;">
+    <div class="content" style="padding-top: 0px;">
+        <div class="container">
+            <div class="error-img text-center">
+                <img src="{% static 'frontend/assets/img/error-400.svg' %}" alt="Img">
+            </div>
+            <div class="maintenance-update">
+                <div class="text-center mb-3">
+                    <h5 class="mb-1">404 Oops! Page Not Found</h5>
+                    <p class="text-gray-6">This page doesn't exist or was removed! We suggest you back to home.</p>
+                </div>
+                <div class="d-flex align-items-center justify-content-center">
+                    <a href="javascript:void(0);" onclick="history.back()" class="btn btn-primary d-flex align-items-center justify-content-center">
+                        <i class="isax isax-arrow-left-2 me-2"></i>Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
