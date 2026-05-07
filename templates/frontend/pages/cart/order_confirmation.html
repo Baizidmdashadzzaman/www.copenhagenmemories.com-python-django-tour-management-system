@@ -44,11 +44,20 @@
                     
                     <div class="row text-start border rounded p-4 mb-5">
                         <div class="col-md-6 mb-4 mb-md-0">
-                            <h6 class="fw-bold text-uppercase mb-3">{% translate "Shipping Details" %}</h6>
-                            <p class="mb-1"><strong>{{ order.first_name }} {{ order.last_name }}</strong></p>
-                            <p class="mb-1">{{ order.address }}</p>
-                            <p class="mb-1">{{ order.city }}, {{ order.postal_code }}</p>
-                            <p class="mb-0">{{ order.phone }}</p>
+                            {% if order.delivery_method == 'pickup' %}
+                                <h6 class="fw-bold text-uppercase mb-3">{% translate "Pickup Details" %}</h6>
+                                <p class="mb-1"><strong>{{ order.first_name }} {{ order.last_name }}</strong></p>
+                                <p class="mb-1"><strong>{% translate "Location" %}:</strong> {{ order.pickup_location.name }}</p>
+                                <p class="mb-1"><strong>{% translate "Date" %}:</strong> {{ order.pickup_date }}</p>
+                                <p class="mb-1"><strong>{% translate "Time" %}:</strong> {{ order.pickup_time }}</p>
+                                <p class="mb-0"><strong>{% translate "Phone" %}:</strong> {{ order.phone }}</p>
+                            {% else %}
+                                <h6 class="fw-bold text-uppercase mb-3">{% translate "Shipping Details" %}</h6>
+                                <p class="mb-1"><strong>{{ order.first_name }} {{ order.last_name }}</strong></p>
+                                <p class="mb-1">{{ order.address }}</p>
+                                <p class="mb-1">{{ order.city }}, {{ order.postal_code }}</p>
+                                <p class="mb-0">{{ order.phone }}</p>
+                            {% endif %}
                         </div>
                         <div class="col-md-6">
                             <h6 class="fw-bold text-uppercase mb-3">{% translate "Order Summary" %}</h6>

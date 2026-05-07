@@ -36,17 +36,43 @@
                                 <label class="form-label">Phone</label>
                                 {{ form.phone }}
                             </div>
-                            <div class="col-12">
-                                <label class="form-label">Address</label>
-                                {{ form.address }}
+                            <div class="col-md-12">
+                                <label class="form-label">Delivery Method</label>
+                                {{ form.delivery_method }}
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label">City</label>
-                                {{ form.city }}
+
+                            <div id="shipping-details" class="col-12">
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label class="form-label">Address</label>
+                                        {{ form.address }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">City</label>
+                                        {{ form.city }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Postal Code</label>
+                                        {{ form.postal_code }}
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Postal Code</label>
-                                {{ form.postal_code }}
+
+                            <div id="pickup-details" class="col-12 d-none">
+                                <div class="row g-3">
+                                    <div class="col-md-12">
+                                        <label class="form-label">Pickup Location</label>
+                                        {{ form.pickup_location }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Pickup Date</label>
+                                        {{ form.pickup_date }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Pickup Time</label>
+                                        {{ form.pickup_time }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -161,7 +187,7 @@
 
 {% endblock %}
 
-{% block scripts %}
+{% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const tableBody = document.querySelector('#order-items-table tbody');
@@ -222,6 +248,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initial calculation
     calculateTotal();
+
+    // Delivery Method Toggle
+    const deliveryMethod = document.getElementById('id_delivery_method');
+    const shippingDetails = document.getElementById('shipping-details');
+    const pickupDetails = document.getElementById('pickup-details');
+
+    function toggleDeliveryMethod() {
+        if (deliveryMethod.value === 'pickup') {
+            shippingDetails.classList.add('d-none');
+            pickupDetails.classList.remove('d-none');
+        } else {
+            shippingDetails.classList.remove('d-none');
+            pickupDetails.classList.add('d-none');
+        }
+    }
+
+    deliveryMethod.addEventListener('change', toggleDeliveryMethod);
+    toggleDeliveryMethod(); // Run on load
 });
 </script>
 {% endblock %}

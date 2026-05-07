@@ -55,10 +55,26 @@
                         <div class="col-xl-6 col-md-12 col-sm-5 col-12 mb-xl-0 mb-md-6 mb-sm-0 mb-6">
                           <h6>Invoice To:</h6>
                           <p class="mb-1">{{ order.first_name }} {{ order.last_name }}</p>
-                          <p class="mb-1">{{ order.address }}</p>
+                          <!-- <p class="mb-1">{{ order.address }}</p>
                           <p class="mb-1">{{ order.city }}, {{ order.postal_code }}</p>
                           <p class="mb-1">{{ order.phone }}</p>
-                          <p class="mb-0">{{ order.email }}</p>
+                          <p class="mb-0">{{ order.email }}</p> -->
+                        
+                        {% if order.delivery_method == 'pickup' %}
+                            <div class="mb-4">
+                                <p class="mb-1"><strong>Delivery Method:</strong> Pickup</p>
+                                <p class="mb-1"><strong>Pickup Location:</strong> {{ order.pickup_location.name }}</p>
+                                <p class="mb-1"><strong>Pickup Date:</strong> {{ order.pickup_date|date:"F j, Y" }}</p>
+                                <p class="mb-1"><strong>Pickup Time:</strong> {{ order.pickup_time|date:"H:i A" }}</p>
+                            </div>
+                        {% else %}
+                            <div class="mb-4">
+                                <p class="mb-1"><strong>Delivery Method:</strong> Shipping</p>
+                                <p class="mb-1"><strong>Shipping Address:</strong> {{ order.address }}, {{ order.city }}, {{ order.postal_code }}</p>
+                                <p class="mb-1"><strong>Shipping Phone:</strong> {{ order.phone }}</p>
+                                <p class="mb-1"><strong>Shipping Email:</strong> {{ order.email }}</p>
+                            </div>
+                        {% endif %}
                         </div>
                         <div class="col-xl-6 col-md-12 col-sm-7 col-12">
                           <h6>Order Summary:</h6>

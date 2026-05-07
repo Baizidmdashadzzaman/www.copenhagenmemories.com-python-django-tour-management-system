@@ -390,18 +390,31 @@ class TourBlackoutDateForm(forms.ModelForm):
 class SouvenirOrderAdminForm(forms.ModelForm):
     class Meta:
         model = SouvenirOrder
-        fields = ['first_name', 'last_name', 'email', 'phone', 'address', 'city', 'postal_code', 'status', 'total_amount']
+        fields = [
+            'first_name', 'last_name', 'email', 'phone', 
+            'delivery_method', 'pickup_location', 'pickup_date', 'pickup_time',
+            'address', 'city', 'postal_code', 'status', 'total_amount'
+        ]
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'delivery_method': forms.Select(attrs={'class': 'form-select', 'id': 'id_delivery_method'}),
+            'pickup_location': forms.Select(attrs={'class': 'form-select'}),
+            'pickup_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'pickup_time': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
             'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'city': forms.TextInput(attrs={'class': 'form-control'}),
             'postal_code': forms.TextInput(attrs={'class': 'form-control'}),
             'status': forms.Select(attrs={'class': 'form-select'}),
             'total_amount': forms.NumberInput(attrs={'class': 'form-control total-amount-input', 'step': '0.01', 'readonly': 'readonly'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        from accounts.models import SouvenirPickuplocation
+        self.fields['pickup_location'].queryset = SouvenirPickuplocation.objects.filter(status='active')
 
 class SouvenirOrderItemForm(forms.ModelForm):
     class Meta:

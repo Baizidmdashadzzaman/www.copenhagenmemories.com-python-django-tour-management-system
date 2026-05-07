@@ -81,6 +81,9 @@
                                         <span class="dt-column-title" role="button">Total</span>
                                     </th>
                                     <th class="dt-orderable-asc dt-orderable-desc" rowspan="1" colspan="1">
+                                        <span class="dt-column-title" role="button">Method</span>
+                                    </th>
+                                    <th class="dt-orderable-asc dt-orderable-desc" rowspan="1" colspan="1">
                                         <span class="dt-column-title" role="button">Status</span>
                                     </th>
                                     <th class="dt-orderable-none" rowspan="1" colspan="1" aria-label="Actions">
@@ -106,6 +109,13 @@
                                     </td>
                                     <td>{{ order.created_at|date:"M d, Y H:i" }}</td>
                                     <td>USD {{ order.total_amount|floatformat:2 }}</td>
+                                    <td>
+                                        {% if order.delivery_method == 'pickup' %}
+                                        <span class="badge bg-label-info">Pickup</span>
+                                        {% else %}
+                                        <span class="badge bg-label-secondary">Shipping</span>
+                                        {% endif %}
+                                    </td>
                                     <td>
                                         {% if order.status == 'pending' %}
                                         <span class="badge bg-label-warning">Pending</span>

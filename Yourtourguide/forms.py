@@ -261,6 +261,7 @@ class SouvenirOrderForm(forms.ModelForm):
         model = SouvenirOrder
         fields = [
             'first_name', 'last_name', 'email', 'phone',
+            'delivery_method', 'pickup_location', 'pickup_date', 'pickup_time',
             'address', 'city', 'postal_code'
         ]
         widgets = {
@@ -268,9 +269,45 @@ class SouvenirOrderForm(forms.ModelForm):
             'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name', 'required': True}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address', 'required': True}),
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number', 'required': True}),
-            'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Shipping Address', 'required': True}),
-            'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'City', 'required': True}),
-            'postal_code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Postal Code', 'required': True}),
+            'delivery_method': forms.Select(attrs={'class': 'form-select', 'id': 'id_delivery_method'}),
+            'pickup_location': forms.Select(attrs={'class': 'form-select'}),
+            'pickup_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'pickup_time': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}),
+            'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Shipping Address'}),
+            'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'City'}),
+            'postal_code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Postal Code'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        from accounts.models import SouvenirPickuplocation
+        self.fields['pickup_location'].queryset = SouvenirPickuplocation.objects.filter(status='active')
+        self.fields['pickup_location'].required = False
+        self.fields['pickup_date'].required = False
+        self.fields['pickup_time'].required = False
+        self.fields['address'].required = False
+        self.fields['city'].required = False
+        self.fields['postal_code'].required = False
+
+    def clean(self):
+        cleaned_data = super().clean()
+        delivery_method = cleaned_data.get('delivery_method')
+
+        if delivery_method == 'pickup':
+            if not cleaned_data.get('pickup_location'):
+                self.add_error('pickup_location', 'Please select a pickup location.')
+            if not cleaned_data.get('pickup_date'):
+                self.add_error('pickup_date', 'Please select a pickup date.')
+            if not cleaned_data.get('pickup_time'):
+                self.add_error('pickup_time', 'Please select a pickup time.')
+        else:
+            if not cleaned_data.get('address'):
+                self.add_error('address', 'Please enter a shipping address.')
+            if not cleaned_data.get('city'):
+                self.add_error('city', 'Please enter a city.')
+            if not cleaned_data.get('postal_code'):
+                self.add_error('postal_code', 'Please enter a postal code.')
+
+        return cleaned_data
 
 

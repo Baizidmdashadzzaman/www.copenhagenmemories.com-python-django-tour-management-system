@@ -1119,6 +1119,10 @@ class SouvenirOrder(models.Model):
         ('delivered', 'Delivered'),
         ('cancelled', 'Cancelled'),
     )
+    DELIVERY_METHOD_CHOICES = (
+        ('shipping', 'Shipping'),
+        ('pickup', 'Pickup'),
+    )
     
     order_number = models.CharField(max_length=20, unique=True)
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
@@ -1126,9 +1130,15 @@ class SouvenirOrder(models.Model):
     last_name = models.CharField(max_length=100)
     email = models.EmailField()
     phone = models.CharField(max_length=20)
-    address = models.TextField()
-    city = models.CharField(max_length=100)
-    postal_code = models.CharField(max_length=20)
+    address = models.TextField(blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    postal_code = models.CharField(max_length=20, blank=True)
+    
+    delivery_method = models.CharField(max_length=20, choices=DELIVERY_METHOD_CHOICES, default='shipping')
+    pickup_location = models.ForeignKey('SouvenirPickuplocation', on_delete=models.SET_NULL, null=True, blank=True)
+    pickup_date = models.DateField(null=True, blank=True)
+    pickup_time = models.TimeField(null=True, blank=True)
+    
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=20, choices=ORDER_STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)

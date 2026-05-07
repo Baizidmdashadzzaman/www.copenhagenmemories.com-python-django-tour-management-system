@@ -114,20 +114,50 @@
                                     {{ order_form.phone }}
                                     {% if order_form.phone.errors %}<div class="text-danger small">{{ order_form.phone.errors.0 }}</div>{% endif %}
                                 </div>
-                                <div class="col-12">
-                                    <label class="form-label">{% translate "Shipping Address" %} *</label>
-                                    {{ order_form.address }}
-                                    {% if order_form.address.errors %}<div class="text-danger small">{{ order_form.address.errors.0 }}</div>{% endif %}
+                                <div class="col-md-12">
+                                    <label class="form-label">{% translate "Delivery Method" %} *</label>
+                                    {{ order_form.delivery_method }}
+                                    {% if order_form.delivery_method.errors %}<div class="text-danger small">{{ order_form.delivery_method.errors.0 }}</div>{% endif %}
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">{% translate "City" %} *</label>
-                                    {{ order_form.city }}
-                                    {% if order_form.city.errors %}<div class="text-danger small">{{ order_form.city.errors.0 }}</div>{% endif %}
+
+                                <div id="shipping-details" class="col-12">
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <label class="form-label">{% translate "Shipping Address" %} *</label>
+                                            {{ order_form.address }}
+                                            {% if order_form.address.errors %}<div class="text-danger small">{{ order_form.address.errors.0 }}</div>{% endif %}
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">{% translate "City" %} *</label>
+                                            {{ order_form.city }}
+                                            {% if order_form.city.errors %}<div class="text-danger small">{{ order_form.city.errors.0 }}</div>{% endif %}
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">{% translate "Postal Code" %} *</label>
+                                            {{ order_form.postal_code }}
+                                            {% if order_form.postal_code.errors %}<div class="text-danger small">{{ order_form.postal_code.errors.0 }}</div>{% endif %}
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">{% translate "Postal Code" %} *</label>
-                                    {{ order_form.postal_code }}
-                                    {% if order_form.postal_code.errors %}<div class="text-danger small">{{ order_form.postal_code.errors.0 }}</div>{% endif %}
+
+                                <div id="pickup-details" class="col-12" style="display: none;">
+                                    <div class="row g-3">
+                                        <div class="col-md-12">
+                                            <label class="form-label">{% translate "Pickup Location" %} *</label>
+                                            {{ order_form.pickup_location }}
+                                            {% if order_form.pickup_location.errors %}<div class="text-danger small">{{ order_form.pickup_location.errors.0 }}</div>{% endif %}
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">{% translate "Pickup Date" %} *</label>
+                                            {{ order_form.pickup_date }}
+                                            {% if order_form.pickup_date.errors %}<div class="text-danger small">{{ order_form.pickup_date.errors.0 }}</div>{% endif %}
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">{% translate "Pickup Time" %} *</label>
+                                            {{ order_form.pickup_time }}
+                                            {% if order_form.pickup_time.errors %}<div class="text-danger small">{{ order_form.pickup_time.errors.0 }}</div>{% endif %}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <input type="hidden" name="submit_order" value="1">
@@ -135,6 +165,26 @@
                         </form>
                     </div>
                 </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const deliveryMethod = document.getElementById('id_delivery_method');
+                        const shippingDetails = document.getElementById('shipping-details');
+                        const pickupDetails = document.getElementById('pickup-details');
+                
+                        function toggleDeliveryMethod() {
+                            if (deliveryMethod.value === 'pickup') {
+                                shippingDetails.style.display = 'none';
+                                pickupDetails.style.display = 'block';
+                            } else {
+                                shippingDetails.style.display = 'block';
+                                pickupDetails.style.display = 'none';
+                            }
+                        }
+                
+                        deliveryMethod.addEventListener('change', toggleDeliveryMethod);
+                        toggleDeliveryMethod(); // Run on load
+                    });
+                </script>
                 <div class="d-flex justify-content-between align-items-center">
                     <a href="{% url 'souvenirs_list_frontend' %}" class="btn btn-outline-primary">
                         <i class="isax isax-arrow-left-2 me-2"></i> {% translate "Continue Shopping" %}

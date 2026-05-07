@@ -124,9 +124,21 @@
                     <h5 class="card-title m-0">Shipping Address</h5>
                 </div>
                 <div class="card-body">
-                    <p class="mb-0">{{ order.address }}</p>
-                    <p class="mb-0">{{ order.city }}</p>
-                    <p class="mb-0">{{ order.postal_code }}</p>
+                        {% if order.delivery_method == 'pickup' %}
+                            <div class="mb-4">
+                                <p class="mb-1"><strong>Delivery Method:</strong> Pickup</p>
+                                <p class="mb-1"><strong>Pickup Location:</strong> {{ order.pickup_location.name }}</p>
+                                <p class="mb-1"><strong>Pickup Date:</strong> {{ order.pickup_date|date:"F j, Y" }}</p>
+                                <p class="mb-1"><strong>Pickup Time:</strong> {{ order.pickup_time|date:"H:i A" }}</p>
+                            </div>
+                        {% else %}
+                            <div class="mb-4">
+                                <p class="mb-1"><strong>Delivery Method:</strong> Shipping</p>
+                                <p class="mb-1"><strong>Shipping Address:</strong> {{ order.address }}, {{ order.city }}, {{ order.postal_code }}</p>
+                                <p class="mb-1"><strong>Shipping Phone:</strong> {{ order.phone }}</p>
+                                <p class="mb-1"><strong>Shipping Email:</strong> {{ order.email }}</p>
+                            </div>
+                        {% endif %}
                 </div>
             </div>
         </div>
