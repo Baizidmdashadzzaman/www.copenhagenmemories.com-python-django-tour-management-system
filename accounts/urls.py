@@ -24,6 +24,7 @@ from accounts.admin_panel import views_website_menu as website_menu_views
 from accounts.admin_panel import views_faq as faq_views
 from accounts.admin_panel import views_team as team_member_views
 from accounts.admin_panel import views_souvenirs as souvenir_views
+from accounts.admin_panel import views_souvenirspickuplocation as souvenirpickuplocation_views
 from accounts import views_frontend
 
 from accounts.supplier_panel import views as supplier_views
@@ -342,6 +343,14 @@ urlpatterns = [
     path('admin/souvenir-orders/<int:pk>/invoice/', souvenir_views.souvenir_order_invoice, name='souvenir_order_invoice'),
     path('admin/souvenir-orders/<int:pk>/status/', souvenir_views.souvenir_order_status_update, name='souvenir_order_status_update'),
     path('admin/souvenir-orders/<int:pk>/delete/', souvenir_views.souvenir_order_delete, name='souvenir_order_delete'),
+
+    # Souvenir Pickup Location CRUD
+    path('admin/souvenirpickuplocation/', souvenirpickuplocation_views.souvenirpickuplocation_list, name='souvenirpickuplocation_list'),
+    path('admin/souvenirpickuplocation/create/', souvenirpickuplocation_views.souvenirpickuplocation_create, name='souvenirpickuplocation_create'),
+    path('admin/souvenirpickuplocation/<int:pk>/edit/', souvenirpickuplocation_views.souvenirpickuplocation_edit, name='souvenirpickuplocation_edit'),
+    path('admin/souvenirpickuplocation/<int:pk>/delete/', souvenirpickuplocation_views.souvenirpickuplocation_delete, name='souvenirpickuplocation_delete'),
+
+
 ]
 
 

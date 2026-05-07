@@ -1,3 +1,4 @@
+from accounts.models import SouvenirPickuplocation
 from django import forms
 from accounts.models import DestinationRegion, SiteSetting, Country, Customer, TourSupplier, Category, Slider, Newsletter, ContactUs, CustomerReviewStatic, Page, BlogPost, CustomerMessage, FeatureSection, WebsiteMenu, WebsiteSubMenu, FAQ, TeamMember, BikeAddon, Bike, BikeBooking
 
@@ -537,4 +538,19 @@ class TeamMemberForm(forms.ModelForm):
             'instagram': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter instagram link'}),
             'linkedin': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter linkedin link'}),
             'pinterest': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter pinterest link'}),
+        }
+
+class SouvenirPickuplocationForm(forms.ModelForm):
+    class Meta:
+        model = SouvenirPickuplocation
+        fields = ['name', 'contact_person_name', 'email', 'phone', 'address', 'other_info', 'image', 'status']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter name'}),
+            'contact_person_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter contact person name'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter email address'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter phone number'}),
+            'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Enter address'}),
+            'other_info': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Enter other information'}),
+            'image': forms.FileInput(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'form-select'}),
         }

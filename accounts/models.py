@@ -1302,4 +1302,22 @@ class BikeBookingAddon(models.Model):
         return self.total_price * self.booking.number_of_days
 
 
+class SouvenirPickuplocation(models.Model):
+    name = models.CharField(max_length=255)
+    contact_person_name = models.CharField(max_length=255)
+    email = models.EmailField()
+    phone = models.CharField(max_length=20)
+    address = models.TextField(blank=True)
+    other_info = models.TextField(blank=True)
+    image = models.ImageField(upload_to='souvenir_pickup_locations/')
+    status = models.CharField(max_length=20, choices=[('active', 'Active'), ('inactive', 'Inactive')], default='active')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        verbose_name = "souvenir pickuplocation"
+        verbose_name_plural = "souvenir pickuplocations"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.name
