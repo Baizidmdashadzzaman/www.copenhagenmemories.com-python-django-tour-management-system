@@ -117,6 +117,8 @@ class SiteSetting(models.Model):
     blog_page_meta_keywords = models.TextField(blank=True)
     blog_page_meta_description = models.TextField(blank=True)
 
+    cvr_number = models.CharField(max_length=255, blank=True, null=True)
+
     class Meta:
         verbose_name = 'Site Setting'
         verbose_name_plural = 'Site Settings'

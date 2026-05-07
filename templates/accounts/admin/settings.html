@@ -63,11 +63,16 @@
                                 placeholder="8801862420119" value="{{ form.site_phone.value|default:'' }}">
                         </div>
 
-                        <div class="col-md-12">
+                        <div class="col-md-8">
                             <label class="form-label" for="id_site_address">Site Address</label>
                             <input type="text" id="id_site_address" name="site_address" class="form-control"
                                 placeholder="123 Main St, City, Country"
                                 value="{{ form.site_address.value|default:'' }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="id_cvr_number">CVR Number</label>
+                            <input type="text" id="id_cvr_number" name="cvr_number" class="form-control"
+                                placeholder="CVR Number" value="{{ form.cvr_number.value|default:'' }}">
                         </div>
 
                         <div class="col-md-6">

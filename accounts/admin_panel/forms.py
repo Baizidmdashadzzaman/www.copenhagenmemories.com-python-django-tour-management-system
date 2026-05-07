@@ -214,7 +214,7 @@ class SiteSettingForm(forms.ModelForm):
             'rentbike_page_title', 'rentbike_page_meta_keywords', 'rentbike_page_meta_description',
             'souvenirs_page_title', 'souvenirs_page_meta_keywords', 'souvenirs_page_meta_description',
             'tours_page_title', 'tours_page_meta_keywords', 'tours_page_meta_description',
-            'blog_page_title', 'blog_page_meta_keywords', 'blog_page_meta_description',
+            'blog_page_title', 'blog_page_meta_keywords', 'blog_page_meta_description','cvr_number',
         ]
         widgets = {
             'site_name': forms.TextInput(attrs={'placeholder': 'Enter site name'}),
@@ -251,6 +251,7 @@ class SiteSettingForm(forms.ModelForm):
             'blog_page_title': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Enter blog page title'}),
             'blog_page_meta_keywords': forms.Textarea(attrs={'class': 'form-control','rows': 3, 'placeholder': 'Enter blog page meta keywords'}),
             'blog_page_meta_description': forms.Textarea(attrs={'class': 'form-control','rows': 3, 'placeholder': 'Enter blog page meta description'}),
+            'cvr_number': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Enter CVR number'}),
         }
 
 class TourSupplierForm(forms.ModelForm):
