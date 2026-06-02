@@ -25,6 +25,8 @@ from accounts.admin_panel import views_faq as faq_views
 from accounts.admin_panel import views_team as team_member_views
 from accounts.admin_panel import views_souvenirs as souvenir_views
 from accounts.admin_panel import views_souvenirspickuplocation as souvenirpickuplocation_views
+from accounts.admin_panel import views_timeslot as timeslot_views
+
 from accounts import views_frontend
 
 from accounts.supplier_panel import views as supplier_views
@@ -349,6 +351,12 @@ urlpatterns = [
     path('admin/souvenirpickuplocation/create/', souvenirpickuplocation_views.souvenirpickuplocation_create, name='souvenirpickuplocation_create'),
     path('admin/souvenirpickuplocation/<int:pk>/edit/', souvenirpickuplocation_views.souvenirpickuplocation_edit, name='souvenirpickuplocation_edit'),
     path('admin/souvenirpickuplocation/<int:pk>/delete/', souvenirpickuplocation_views.souvenirpickuplocation_delete, name='souvenirpickuplocation_delete'),
+
+    # Time Slot CRUD
+    path('admin/timeslot/', timeslot_views.timeslot_list, name='timeslot_list'),
+    path('admin/timeslot/create/', timeslot_views.timeslot_create, name='timeslot_create'),
+    path('admin/timeslot/<int:pk>/edit/', timeslot_views.timeslot_edit, name='timeslot_edit'),
+    path('admin/timeslot/<int:pk>/delete/', timeslot_views.timeslot_delete, name='timeslot_delete'),
 
 
 ]

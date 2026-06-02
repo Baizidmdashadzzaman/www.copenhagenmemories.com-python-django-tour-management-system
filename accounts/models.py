@@ -1331,3 +1331,17 @@ class SouvenirPickuplocation(models.Model):
 
     def __str__(self):
         return self.name
+
+class TimeSlot(models.Model):
+    name = models.CharField(max_length=255)
+    status = models.CharField(max_length=20, choices=[('active', 'Active'), ('inactive', 'Inactive')], default='active')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "time slot"
+        verbose_name_plural = "time slots"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.name

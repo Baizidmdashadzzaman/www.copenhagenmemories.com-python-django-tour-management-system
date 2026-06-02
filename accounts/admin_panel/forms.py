@@ -1,9 +1,7 @@
-from accounts.models import SouvenirPickuplocation
 from django import forms
-from accounts.models import DestinationRegion, SiteSetting, Country, Customer, TourSupplier, Category, Slider, Newsletter, ContactUs, CustomerReviewStatic, Page, BlogPost, CustomerMessage, FeatureSection, WebsiteMenu, WebsiteSubMenu, FAQ, TeamMember, BikeAddon, Bike, BikeBooking
+from accounts.models import DestinationRegion, SiteSetting, Country, Customer, TourSupplier, Category, Slider, Newsletter, ContactUs, CustomerReviewStatic, Page, BlogPost, CustomerMessage, FeatureSection, WebsiteMenu, WebsiteSubMenu, FAQ, TeamMember, BikeAddon, Bike, BikeBooking, SouvenirPickuplocation, TimeSlot
 
-# ... (rest of the file remains same until end)
-
+    
 class BikeBookingForm(forms.ModelForm):
     class Meta:
         model = BikeBooking
@@ -552,5 +550,14 @@ class SouvenirPickuplocationForm(forms.ModelForm):
             'address': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Enter address'}),
             'other_info': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Enter other information'}),
             'image': forms.FileInput(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'form-select'}),
+        }
+
+class TimeSlotForm(forms.ModelForm):
+    class Meta:
+        model = TimeSlot
+        fields = ['name', 'status']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter name'}),
             'status': forms.Select(attrs={'class': 'form-select'}),
         }
