@@ -26,6 +26,7 @@ from accounts.admin_panel import views_team as team_member_views
 from accounts.admin_panel import views_souvenirs as souvenir_views
 from accounts.admin_panel import views_souvenirspickuplocation as souvenirpickuplocation_views
 from accounts.admin_panel import views_timeslot as timeslot_views
+from accounts.admin_panel import views_tour_timeslot as tour_timeslot_views
 
 from accounts import views_frontend
 
@@ -357,6 +358,10 @@ urlpatterns = [
     path('admin/timeslot/create/', timeslot_views.timeslot_create, name='timeslot_create'),
     path('admin/timeslot/<int:pk>/edit/', timeslot_views.timeslot_edit, name='timeslot_edit'),
     path('admin/timeslot/<int:pk>/delete/', timeslot_views.timeslot_delete, name='timeslot_delete'),
+
+    # Tour Time Slot Select
+    path('admin/tours/<int:tour_id>/timeslots/', tour_timeslot_views.tour_timeslot_select, name='tour_timeslot_select'),
+
 
 
 ]

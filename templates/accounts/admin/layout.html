@@ -405,7 +405,7 @@
                             </li>
 
                             <li
-                                class="menu-item {% if 'admin/tours' in request.path or 'admin/bookings' in request.path or 'admin/payments' in request.path or 'admin/tour-reviews' in request.path or 'admin/coupons' in request.path or 'admin/cities' in request.path or 'countries' in request.path or 'destination' in request.path or 'categories' in request.path %}active open{% endif %}">
+                                class="menu-item {% if 'admin/tours' in request.path or 'admin/bookings' in request.path or 'admin/payments' in request.path or 'admin/tour-reviews' in request.path or 'admin/coupons' in request.path or 'admin/cities' in request.path or 'countries' in request.path or 'destination' in request.path or 'categories' in request.path or 'admin/timeslot' in request.path %}active open{% endif %}">
                                 <a href="javascript:void(0)" class="menu-link menu-toggle">
                                     <i class="menu-icon icon-base ti tabler-map"></i>
                                     <div data-i18n="Tour Management">Tour Management</div>
@@ -433,6 +433,12 @@
                                         <a href="{% url 'category_list' %}" class="menu-link">
                                             <i class="menu-icon icon-base ti tabler-tags"></i>
                                             <div data-i18n="Categories">Categories</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item {% if 'admin/timeslot' in request.path %}active{% endif %}">
+                                        <a href="{% url 'timeslot_list' %}" class="menu-link">
+                                            <i class="menu-icon icon-base ti tabler-clock"></i>
+                                            <div data-i18n="Time Slots">Time Slots</div>
                                         </a>
                                     </li>
                                     <li class="menu-item {% if 'admin/tours' in request.path %}active{% endif %}">
@@ -499,13 +505,13 @@
 
 
                             <li
-                                class="menu-item {% if 'admin/ecommerce' in request.path or 'admin/souvenirs' or 'admin/souvenirpickuplocation' in request.path %}active open{% endif %}">
+                                class="menu-item {% if 'admin/souvenirs' in request.path or 'admin/souvenirpickuplocation' in request.path or 'admin/souvenir-orders' in request.path %} active open {% endif %}">
                                 <a href="javascript:void(0)" class="menu-link menu-toggle">
                                     <i class="menu-icon icon-base ti tabler-shopping-cart"></i>
                                     <div data-i18n="Ecommerce">Ecommerce</div>
                                 </a>
                                 <ul class="menu-sub">
-                                    <li class="menu-item {% if 'souvenirpickuplocation' in request.path %}active{% endif %}">
+                                    <li class="menu-item {% if 'admin/souvenirpickuplocation' in request.path %}active{% endif %}">
                                         <a href="{% url 'souvenirpickuplocation_list' %}" class="menu-link">
                                             <i class="menu-icon icon-base ti tabler-map-pin-2"></i>
                                             <div data-i18n="Pickup Locations">Pickup Locations</div>

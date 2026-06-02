@@ -1,0 +1,165 @@
+{% extends 'accounts/admin/layout.html' %}
+{% load static %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block admin_content %}
+<div class="">
+    <h4 class="py-3 mb-4">
+        <span class="text-muted fw-light">Tour Management / <a href="{% url 'tour_list' %}">Tours</a> /</span> Assign Time Slots
+    </h4>
+
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card mb-6 shadow-sm border-0">
+                <div class="card-header d-flex justify-content-between align-items-center border-bottom py-4">
+                    <div>
+                        <h5 class="m-0 text-primary"><i class="icon-base ti tabler-clock me-2"></i>{{ title }}</h5>
+                        <small class="text-muted">Select the time slots that apply to this tour</small>
+                    </div>
+                    {% if timeslots %}
+                    <button type="button" class="btn btn-outline-primary btn-sm waves-effect" id="select-all-btn">
+                        Select All
+                    </button>
+                    {% endif %}
+                </div>
+                
+                <form class="card-body py-4" method="post">
+                    {% csrf_token %}
+
+                    {% if not timeslots %}
+                    <div class="text-center py-5">
+                        <div class="avatar avatar-xl bg-label-warning mx-auto mb-3">
+                            <i class="icon-base ti tabler-alert-triangle fs-1"></i>
+                        </div>
+                        <h5 class="mb-2">No Time Slots Available</h5>
+                        <p class="text-muted mb-4">You need to create time slots first in the system before assigning them to tours.</p>
+                        <a href="{% url 'timeslot_create' %}" class="btn btn-primary">
+                            <i class="icon-base ti tabler-plus me-1"></i> Create Time Slot
+                        </a>
+                    </div>
+                    {% else %}
+                    <div class="row g-4" id="timeslots-container">
+                        {% for timeslot in timeslots %}
+                        <div class="col-md-4 col-sm-6">
+                            <div class="timeslot-card p-3 border rounded-3 h-100 d-flex align-items-center justify-content-between transition-all" style="cursor: pointer;">
+                                <div class="form-check m-0 w-100 d-flex align-items-center">
+                                    <input class="form-check-input me-3 timeslot-checkbox" type="checkbox" name="timeslot_ids" value="{{ timeslot.id }}" id="ts-{{ timeslot.id }}"
+                                        {% if timeslot.id in current_timeslot_ids %}checked{% endif %}>
+                                    <label class="form-check-label w-100 py-1" for="ts-{{ timeslot.id }}" style="cursor: pointer;">
+                                        <span class="fw-semibold text-heading d-block">{{ timeslot.name }}</span>
+                                        {% if timeslot.status == 'active' %}
+                                        <span class="badge bg-label-success btn-xs mt-1">Active</span>
+                                        {% else %}
+                                        <span class="badge bg-label-secondary btn-xs mt-1">Inactive</span>
+                                        {% endif %}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="pt-6 mt-4 border-top">
+                        <button type="submit" class="btn btn-primary me-4 waves-effect waves-light">
+                            <i class="icon-base ti tabler-device-floppy me-1"></i> Save Changes
+                        </button>
+                        <a href="{% url 'tour_list' %}" class="btn btn-label-secondary waves-effect">
+                            Cancel
+                        </a>
+                    </div>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const selectAllBtn = document.getElementById('select-all-btn');
+        const checkboxes = document.querySelectorAll('.timeslot-checkbox');
+        const timeslotCards = document.querySelectorAll('.timeslot-card');
+
+        // Select All toggle
+        if (selectAllBtn) {
+            selectAllBtn.addEventListener('click', function () {
+                const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                checkboxes.forEach(cb => {
+                    cb.checked = !allChecked;
+                    // Update visual classes
+                    const card = cb.closest('.timeslot-card');
+                    if (cb.checked) {
+                        card.classList.add('border-primary', 'bg-label-primary');
+                    } else {
+                        card.classList.remove('border-primary', 'bg-label-primary');
+                    }
+                });
+                selectAllBtn.textContent = allChecked ? 'Select All' : 'Deselect All';
+                selectAllBtn.classList.toggle('btn-outline-primary');
+                selectAllBtn.classList.toggle('btn-primary');
+            });
+        }
+
+        // Add visual highlighting when card is clicked or checkbox status changes
+        timeslotCards.forEach(card => {
+            const checkbox = card.querySelector('.timeslot-checkbox');
+            
+            // Initial style
+            if (checkbox.checked) {
+                card.classList.add('border-primary', 'bg-label-primary');
+            }
+
+            // Card click handler (excluding directly clicking checkbox/label to avoid double toggle)
+            card.addEventListener('click', function (e) {
+                if (e.target !== checkbox && e.target.tagName !== 'LABEL') {
+                    checkbox.checked = !checkbox.checked;
+                    // trigger change
+                    checkbox.dispatchEvent(new Event('change'));
+                }
+            });
+
+            // Checkbox change handler
+            checkbox.addEventListener('change', function () {
+                if (checkbox.checked) {
+                    card.classList.add('border-primary', 'bg-label-primary');
+                } else {
+                    card.classList.remove('border-primary', 'bg-label-primary');
+                }
+                
+                // Update select all button text if needed
+                if (selectAllBtn) {
+                    const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                    if (allChecked) {
+                        selectAllBtn.textContent = 'Deselect All';
+                        selectAllBtn.classList.remove('btn-outline-primary');
+                        selectAllBtn.classList.add('btn-primary');
+                    } else {
+                        selectAllBtn.textContent = 'Select All';
+                        selectAllBtn.classList.add('btn-outline-primary');
+                        selectAllBtn.classList.remove('btn-primary');
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+<style>
+    .timeslot-card {
+        transition: all 0.2s ease-in-out;
+        background-color: var(--bs-card-bg, #fff);
+    }
+    .timeslot-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        border-color: var(--bs-primary, #7367f0) !important;
+    }
+    .bg-label-primary {
+        background-color: rgba(115, 103, 240, 0.08) !important;
+    }
+    .transition-all {
+        transition: all 0.25s ease;
+    }
+</style>
+{% endblock %}

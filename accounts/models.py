@@ -1345,3 +1345,17 @@ class TimeSlot(models.Model):
 
     def __str__(self):
         return self.name
+
+class TourTimeSlot(models.Model):
+    tour = models.ForeignKey(Tour, on_delete=models.CASCADE, related_name='tour_timeslots')
+    time_slot = models.ForeignKey(TimeSlot, on_delete=models.CASCADE, related_name='tour_timeslots')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "tour time slot"
+        verbose_name_plural = "tour time slots"
+        unique_together = ('tour', 'time_slot')
+
+    def __str__(self):
+        return f"{self.tour.title} - {self.time_slot.name}"
+
