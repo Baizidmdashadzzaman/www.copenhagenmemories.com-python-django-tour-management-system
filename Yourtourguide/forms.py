@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from accounts.models import Booking, BookingParticipant, Tour, Customer, TourPricing, TourSchedule, TourReview, SouvenirOrder
+from accounts.models import Booking, BookingParticipant, Tour, Customer, TourPricing, TourSchedule, TourReview, SouvenirOrder, TourTimeSlot
 from decimal import Decimal
 import json
 
@@ -50,13 +50,14 @@ class FrontendBookingForm(forms.ModelForm):
         required=False
     )
 
-    tour_time_slot = forms.ChoiceField(
-        choices=Booking.TOUR_SLOT_CHOICES,
+    tour_time_slot = forms.ModelChoiceField(
+        queryset=TourTimeSlot.objects.none(),
+        required=True,
         widget=forms.Select(attrs={
             'class': 'form-select',
             'required': True
         }),
-        required=True
+        empty_label='Select Time Slot'
     )
 
     contact_name = forms.CharField(
@@ -152,9 +153,8 @@ class FrontendBookingForm(forms.ModelForm):
 
             # Load dynamic timeslots for the tour
             from accounts.models import TourTimeSlot
-            timeslots = TourTimeSlot.objects.filter(tour=self.tour).select_related('time_slot').order_by('time_slot__name')
-            choices = [('', 'Select Time Slot')] + [(ts.time_slot.name, ts.time_slot.name) for ts in timeslots]
-            self.fields['tour_time_slot'].choices = choices
+            self.fields['tour_time_slot'].queryset = TourTimeSlot.objects.filter(tour=self.tour).select_related('time_slot').order_by('time_slot__name')
+            self.fields['tour_time_slot'].label_from_instance = lambda obj: obj.time_slot.name
         else:
             self.fields['tour'].queryset = Tour.objects.filter(status='active')
 
