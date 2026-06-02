@@ -69,11 +69,13 @@
 
                         <div class="place-content">
                             <div class="d-flex align-items-center mb-1">
+                                {% if SHOW_REVIEW %}
                                 {% if tour.calculated_average_rating > 0 %}
                                     <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">{{ tour.calculated_average_rating|floatformat:1 }}</span>
                                     <p class="fs-14">({{ tour.calculated_total_reviews }} {% translate "Reviews" %})</p>
                                 {% else %}
                                     <p class="fs-14 text-muted">{% translate "No reviews yet" %}</p>
+                                {% endif %}
                                 {% endif %}
                             </div>
 

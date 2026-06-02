@@ -130,11 +130,13 @@
                                         <a href="#location" class="link-primary text-decoration-underline fw-medium ms-2">{% translate "View Location" %}</a>
                                     </p>
                                     {% endif %}
+                                    {% if SHOW_REVIEW %}
                                     {% if avg_rating > 0 %}
                                     <div class="d-flex align-items-center mb-2">
                                         <span class="badge badge-warning badge-xs text-gray-9 fs-13 fw-medium me-2">{{ avg_rating|floatformat:1 }}</span>
                                         <p class="fs-14"><a href="#reviews">({{ total_reviews }} {% translate "Reviews" %})</a></p>
                                     </div>
+                                    {% endif %}
                                     {% endif %}
                                 </div>
                             </div>
@@ -405,6 +407,7 @@
                     <!-- /FAQ -->
 
                     <!-- Reviews -->
+                     {% if SHOW_REVIEW %}
                     <div class="d-flex align-items-center justify-content-between flex-wrap mb-2" id="reviews">
                         <h6 class="mb-3">{% translate "Reviews" %} ({{ total_reviews }})</h6>
                         <a href="#" data-bs-toggle="modal" data-bs-target="#add_review" class="btn btn-primary btn-md mb-3"><i class="isax isax-edit-2 me-1"></i>{% translate "Write a Review" %}</a>
@@ -493,6 +496,7 @@
                         </div>
                         {% endfor %}
                     </div>
+                    {% endif %}
                 </div>
                 <!-- /Reviews -->
 
