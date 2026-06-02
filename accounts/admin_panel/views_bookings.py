@@ -194,3 +194,19 @@ def get_tour_pricing_api(request, tour_id):
         'base_price': float(tour.base_price),
         'pricing': pricing_data
     })
+
+@login_required
+@user_passes_test(lambda u: u.is_staff)
+def get_tour_timeslots_api(request, tour_id):
+    from accounts.models import TourTimeSlot
+    tour = get_object_or_404(Tour, id=tour_id)
+    tour_timeslots = TourTimeSlot.objects.filter(tour=tour).select_related('time_slot').order_by('time_slot__name')
+    timeslots_data = []
+    for ts in tour_timeslots:
+        timeslots_data.append({
+            'id': ts.id,
+            'name': ts.time_slot.name
+        })
+    return JsonResponse({
+        'timeslots': timeslots_data
+    })

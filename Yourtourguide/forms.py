@@ -149,6 +149,12 @@ class FrontendBookingForm(forms.ModelForm):
             # If no schedules, make it optional
             if not self.fields['schedule'].queryset.exists():
                 self.fields['schedule'].required = False
+
+            # Load dynamic timeslots for the tour
+            from accounts.models import TourTimeSlot
+            timeslots = TourTimeSlot.objects.filter(tour=self.tour).select_related('time_slot').order_by('time_slot__name')
+            choices = [('', 'Select Time Slot')] + [(ts.time_slot.name, ts.time_slot.name) for ts in timeslots]
+            self.fields['tour_time_slot'].choices = choices
         else:
             self.fields['tour'].queryset = Tour.objects.filter(status='active')
 

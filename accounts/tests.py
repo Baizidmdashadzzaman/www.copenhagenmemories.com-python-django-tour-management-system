@@ -93,3 +93,50 @@ class AuthTests(TestCase):
         self.assertTrue(form.errors)
         self.assertIn('username', form.errors)
         self.assertEqual(form.errors['username'], ['Username already exists.'])
+
+class BookingTimeslotTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.admin_user = User.objects.create_superuser('admin', 'admin@example.com', 'adminpass')
+        self.client.force_login(self.admin_user)
+        
+        from accounts.models import Tour, TourSupplier, Category, Country, DestinationRegion, City
+        self.country = Country.objects.create(name="Denmark")
+        self.supplier = TourSupplier.objects.create(company_name="Test Supplier", email="sup@ex.com", phone="123", address=" Copenhagen")
+        self.category = Category.objects.create(name="Adventure")
+        self.region = DestinationRegion.objects.create(country=self.country, name="Hovedstaden")
+        self.city = City.objects.create(region=self.region, country=self.country, name="Copenhagen")
+        
+        self.tour = Tour.objects.create(
+            supplier=self.supplier,
+            category=self.category,
+            destination_region=self.region,
+            city=self.city,
+            title="Copenhagen Tour",
+            base_price=100.0,
+            status="active"
+        )
+        
+        from accounts.models import TimeSlot, TourTimeSlot
+        self.timeslot = TimeSlot.objects.create(name="10:00 - 12:30", status="active")
+        self.tour_timeslot = TourTimeSlot.objects.create(tour=self.tour, time_slot=self.timeslot)
+
+    def test_get_tour_timeslots_api(self):
+        url = reverse('get_tour_timeslots_api', kwargs={'tour_id': self.tour.id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn('timeslots', data)
+        self.assertEqual(len(data['timeslots']), 1)
+        self.assertEqual(data['timeslots'][0]['name'], "10:00 - 12:30")
+
+    def test_booking_form_dynamic_choices(self):
+        from accounts.admin_panel.forms_additions import BookingForm
+        # Test without tour selection
+        form = BookingForm()
+        self.assertEqual(form.fields['tour_time_slot'].choices, [('', 'Select Tour First')])
+        
+        # Test with tour selection in data
+        form = BookingForm(data={'tour': self.tour.id})
+        choices = form.fields['tour_time_slot'].choices
+        self.assertEqual(choices, [('', 'Select Time Slot'), ("10:00 - 12:30", "10:00 - 12:30")])

@@ -505,12 +505,39 @@ tourSelect.addEventListener('change', function() {
     const tourId = this.value;
     if (tourId) {
         fetchTourPricing(tourId);
+        fetchTourTimeSlots(tourId);
     } else {
         currentTourPricing = [];
         basePrice = 0;
         updateAllParticipantPrices();
+        document.getElementById('{{ form.tour_time_slot.id_for_label }}').innerHTML = '<option value="">Select Tour First</option>';
     }
 });
+
+function fetchTourTimeSlots(tourId, selectedValue = null) {
+    const timeSlotSelect = document.getElementById('{{ form.tour_time_slot.id_for_label }}');
+    if (!timeSlotSelect) return;
+    
+    timeSlotSelect.innerHTML = '<option value="">Loading slots...</option>';
+    
+    fetch(`/accounts/admin/api/tour-timeslots/${tourId}/`)
+        .then(response => response.json())
+        .then(data => {
+            let optionsHtml = '<option value="">Select Time Slot</option>';
+            if (data.timeslots && data.timeslots.length > 0) {
+                data.timeslots.forEach(ts => {
+                    optionsHtml += `<option value="${ts.id}" ${ts.id == selectedValue ? 'selected' : ''}>${ts.name}</option>`;
+                });
+            } else {
+                optionsHtml = '<option value="">No timeslots available</option>';
+            }
+            timeSlotSelect.innerHTML = optionsHtml;
+        })
+        .catch(error => {
+            console.error('Error fetching tour timeslots:', error);
+            timeSlotSelect.innerHTML = '<option value="">Error loading slots</option>';
+        });
+}
 
 function fetchTourPricing(tourId) {
     fetch(`/accounts/admin/api/tour-pricing/${tourId}/`)
@@ -721,8 +748,10 @@ document.getElementById('{{ form.tax_amount.id_for_label }}').addEventListener('
 
 // Initialize
 const initialTourId = tourSelect.value;
+const initialTimeSlot = document.getElementById('{{ form.tour_time_slot.id_for_label }}').value;
 if (initialTourId) {
     fetchTourPricing(initialTourId);
+    fetchTourTimeSlots(initialTourId, initialTimeSlot);
 }
 addParticipantForm();
 </script>

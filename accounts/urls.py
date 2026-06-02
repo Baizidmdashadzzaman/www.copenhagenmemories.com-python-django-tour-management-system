@@ -104,6 +104,7 @@ urlpatterns = [
     path('admin/api/bike-addons/<int:bike_id>/', bike_booking_views.get_bike_addons_api, name='get_bike_addons_api'),
     path('admin/api/customer-info/<int:customer_id>/', bike_booking_views.get_customer_info_api, name='get_customer_info_api'),
     path('admin/api/tour-pricing/<int:tour_id>/', booking_views.get_tour_pricing_api, name='get_tour_pricing_api'),
+    path('admin/api/tour-timeslots/<int:tour_id>/', booking_views.get_tour_timeslots_api, name='get_tour_timeslots_api'),
 
 
     

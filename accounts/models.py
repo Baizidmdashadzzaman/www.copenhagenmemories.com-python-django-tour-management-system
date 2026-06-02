@@ -607,7 +607,7 @@ class Booking(models.Model):
         ('13.00-15.30', '13.00-15.30'),
         ('19.30-22.00', '19.30-22.00'),
     ]
-    tour_time_slot = models.CharField(max_length=50, blank=True, null=True, choices=TOUR_SLOT_CHOICES)
+    tour_time_slot = models.ForeignKey('TourTimeSlot', on_delete=models.SET_NULL, null=True, blank=True)
     
     total_participants = models.IntegerField()
     participant_details = models.JSONField(default=dict, blank=True)
@@ -1357,5 +1357,4 @@ class TourTimeSlot(models.Model):
         unique_together = ('tour', 'time_slot')
 
     def __str__(self):
-        return f"{self.tour.title} - {self.time_slot.name}"
-
+        return self.time_slot.name

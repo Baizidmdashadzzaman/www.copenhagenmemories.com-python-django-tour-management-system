@@ -191,6 +191,20 @@ class BookingForm(forms.ModelForm):
                 tour=self.instance.tour,
                 status='available'
             )
+            
+        # Dynamically set choices for tour_time_slot based on selected tour
+        tour_id = None
+        if self.instance and self.instance.pk and self.instance.tour_id:
+            tour_id = self.instance.tour_id
+        elif self.data and self.data.get('tour'):
+            tour_id = self.data.get('tour')
+
+        if tour_id:
+            from accounts.models import TourTimeSlot
+            self.fields['tour_time_slot'].queryset = TourTimeSlot.objects.filter(tour_id=tour_id).select_related('time_slot').order_by('time_slot__name')
+            self.fields['tour_time_slot'].label_from_instance = lambda obj: obj.time_slot.name
+        else:
+            self.fields['tour_time_slot'].choices = [('', 'Select Tour First')]
 
     def save(self, commit=True):
         import json
