@@ -79,6 +79,7 @@ threadpoolctl==3.6.0
 torch==2.8.0
 torchaudio==2.8.0
 torchvision==0.23.0
+transformers==5.11.0
 tqdm==4.67.1
 traitlets==5.14.3
 typer-slim==0.20.0
