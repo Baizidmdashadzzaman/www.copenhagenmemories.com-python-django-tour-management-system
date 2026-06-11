@@ -248,6 +248,8 @@
 </div>
 
 <script>
+    let chatHistory = [];
+
     function toggleChat() {
         const popup = document.getElementById('aiChatPopup');
         if (popup.style.display === 'flex') {
@@ -306,6 +308,15 @@
         if (!message) return;
 
         appendMessage(message, 'user');
+        
+        // Prepare payload with a maximum of 10 messages (5 turns) of context
+        const payload = {
+            message: message,
+            history: chatHistory.slice(-10)
+        };
+        
+        chatHistory.push({ sender: 'user', text: message });
+        
         input.value = '';
         input.disabled = true; 
         
@@ -320,7 +331,7 @@
                 'Content-Type': 'application/json',
                 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
             },
-            body: JSON.stringify({ message: message })
+            body: JSON.stringify(payload)
         })
         .then(response => response.json())
         .then(data => {
@@ -330,6 +341,7 @@
 
             if (data.status === 'success') {
                 appendMessage(data.response, 'bot');
+                chatHistory.push({ sender: 'bot', text: data.response });
             } else {
                 appendMessage('Sorry, I encountered an error. Please try again.', 'bot');
                 console.error(data.message);

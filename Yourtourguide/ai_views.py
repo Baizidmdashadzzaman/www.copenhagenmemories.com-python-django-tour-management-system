@@ -58,20 +58,30 @@ def ai_chat_proxy(request):
     if request.method == 'POST':
         try:
             # Handle both JSON body and form-urlencoded
+            history = []
             if request.content_type == 'application/json':
                 data = json.loads(request.body)
                 user_message = data.get('message')
+                history = data.get('history', [])
             else:
                 user_message = request.POST.get('message')
             
             if not user_message:
                 return JsonResponse({'status': 'error', 'message': 'No message provided'}, status=400)
 
-            # Normalize the input message to correct common typos
+            # Format prompt with conversation history matching training patterns
+            prompt_parts = []
+            for msg in history:
+                sender = "User" if msg.get("sender") == "user" else "CopenhagenMemories"
+                text = normalize_question(msg.get("text", ""))
+                prompt_parts.append(f"{sender}: {text}")
+
+            # Normalize the current input message and append
             normalized_message = normalize_question(user_message)
+            prompt_parts.append(f"User: {normalized_message}")
+            prompt_parts.append("CopenhagenMemories:")
             
-            # Format prompt matching the dataset's combine_text format
-            prompt = f"User: {normalized_message}\nCopenhagenMemories:"
+            prompt = "\n".join(prompt_parts)
             
             chatbot = get_chatbot_pipeline()
             response = chatbot(
@@ -85,8 +95,10 @@ def ai_chat_proxy(request):
             
             generated_text = response[0]['generated_text']
             
-            # Extract response text
-            if "CopenhagenMemories:" in generated_text:
+            # Extract response text generated after the prompt
+            if generated_text.startswith(prompt):
+                result = generated_text[len(prompt):].strip()
+            elif "CopenhagenMemories:" in generated_text:
                 result = generated_text.split("CopenhagenMemories:")[-1].strip()
             else:
                 result = generated_text.replace(prompt, "").strip()
