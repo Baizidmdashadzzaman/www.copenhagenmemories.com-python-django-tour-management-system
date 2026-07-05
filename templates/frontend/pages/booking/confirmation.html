@@ -36,6 +36,12 @@
                         <h3 class="text-success mb-3">{% translate "Booking Confirmed!" %}</h3>
                         <p class="text-muted mb-2">{% translate "Your booking has been successfully created." %}</p>
                         <p class="fw-medium">{% translate "Booking Number:" %} <span class="text-primary">{{ booking.booking_number }}</span></p>
+                        <p>
+                            Thank you for your booking with <b>Copenhagen Memories</b>. Here is your booking receipt.<br>
+                            Please arrive 10–15 minutes before your tour starts so we can begin on time. As our tours are carefully scheduled, late arrival may affect your experience.<br>
+                            For walking and bike tours, we recommend wearing comfortable shoes and weather-appropriate clothing. Copenhagen weather can change quickly, so bringing an extra layer or rain jacket is always a good idea. Please also inform the rest of your group.<br>
+                            If you need help finding us, please contact us before the tour starts at <b>+4566772790</b>.
+                        </p>
                     </div>
                 </div>
 
@@ -84,6 +90,12 @@
                                 <div class="mb-3">
                                     <h6 class="text-muted mb-1">{% translate "Status" %}</h6>
                                     <span class="badge bg-warning">{{ booking.get_status_display }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <h6 class="text-muted mb-1">{% translate "Meeting information" %}</h6>
+                                    <p class="mb-0">{{ booking.tour.meeting_point }}</p>
                                 </div>
                             </div>
                         </div>
