@@ -1507,13 +1507,13 @@ function calculateParticipantPrice(type, age) {
     // Find appropriate pricing from Django context
     if (pricingData && Array.isArray(pricingData) && pricingData.length > 0) {
         // Try age-based pricing first
-        // if (age !== null && age !== undefined && !isNaN(age)) {
-        //     const agePricing = pricingData.find(p =>
-        //         p.min_age !== null && p.max_age !== null &&
-        //         age >= p.min_age && age <= p.max_age
-        //     );
-        //     if (agePricing) return parseFloat(agePricing.price);
-        // }
+        if (age !== null && age !== undefined && !isNaN(age)) {
+            const agePricing = pricingData.find(p =>
+                p.min_age !== null && p.max_age !== null &&
+                age >= p.min_age && age <= p.max_age
+            );
+            if (agePricing) return parseFloat(agePricing.price);
+        }
 
         // Fallback to type-based pricing
         const typePricing = pricingData.find(p => p.participant_type === type);
