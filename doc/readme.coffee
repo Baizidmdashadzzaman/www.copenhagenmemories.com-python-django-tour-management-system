@@ -1,3 +1,4 @@
+
 1.⁠ ⁠When we share a link from the site, the site name is mispelled and there is text 'demo, demo' in the preview (DONE)
 1.1. Name spelling mistake is also in the footer of the site(DONE)
  2.⁠ ⁠AI Chat box is not working, when I am writing a message it is showing an error message. Also, please enable the message chatbox without login.(DONE)
