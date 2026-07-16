@@ -96,6 +96,8 @@ urlpatterns = [
     path('update-cart/<int:souvenir_id>/', souvenir_views.update_cart, name='update_cart'),
     path('remove-from-cart/<int:souvenir_id>/', souvenir_views.remove_from_cart, name='remove_from_cart'),
 
+    path('test/', souvenir_views.test, name='test'),
+
 
     
 ]

@@ -66,6 +66,14 @@
                                 <span>{{ order.items.count }}</span>
                             </div>
                             <div class="d-flex justify-content-between">
+                                <span class="fw-bold ">{% translate "Sub Total" %}</span>
+                                <span class="fw-bold text-primary">USD {{ subtotalFull }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span class="fw-bold ">{% translate "Shipping" %}</span>
+                                <span class="fw-bold text-primary">USD {{ order.shipping_charge }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
                                 <span class="fw-bold ">{% translate "Grand Total" %}</span>
                                 <span class="fw-bold text-primary">USD {{ order.total_amount }}</span>
                             </div>

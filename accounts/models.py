@@ -119,6 +119,8 @@ class SiteSetting(models.Model):
 
     cvr_number = models.CharField(max_length=255, blank=True, null=True)
 
+    shipping_charge = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+
     class Meta:
         verbose_name = 'Site Setting'
         verbose_name_plural = 'Site Settings'
@@ -1143,6 +1145,7 @@ class SouvenirOrder(models.Model):
     status = models.CharField(max_length=20, choices=ORDER_STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    shipping_charge = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
 
     def __str__(self):
         return f"Order {self.order_number}"

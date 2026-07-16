@@ -1,3 +1,4 @@
+from accounts.models import SiteSetting
 import random
 import string
 import requests
@@ -17,6 +18,10 @@ import threading
 import logging
 logger = logging.getLogger(__name__)
 
+def test(request):
+    pk =11
+    order = get_object_or_404(SouvenirOrder, pk=pk)
+    return render(request, 'email/souvenir_email.html',{'order':order})
 
 def send_email_async(email_obj):
     try:
@@ -93,13 +98,16 @@ def add_to_cart(request, souvenir_id):
     return redirect(request.META.get('HTTP_REFERER', 'souvenirs_list_frontend'))
 
 def cart_view(request):
+    site_settings = SiteSetting.get_settings()
+    shipping_charge = float(site_settings.shipping_charge)
     cart = request.session.get('cart', {})
     cart_items = []
-    total_price = 0
-    
+    total_price = 0 + shipping_charge
+    subtotalFull = 0
     for item_id, item_data in cart.items():
         subtotal = item_data['price'] * item_data['quantity']
         total_price += subtotal
+        subtotalFull += subtotal
         cart_items.append({
             'id': item_id,
             'title': item_data['title'],
@@ -134,6 +142,7 @@ def cart_view(request):
             # Generate order number
             order.order_number = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
             order.total_amount = total_price
+            order.shipping_charge = shipping_charge
             
             if request.user.is_authenticated and hasattr(request.user, 'customer_profile'):
                 order.customer = request.user.customer_profile
@@ -193,12 +202,14 @@ def cart_view(request):
                     
                 request.session['cart'] = {}
                 messages.success(request, "Order placed successfully!")
-                return render(request, 'frontend/pages/cart/order_confirmation.html', {'order': order})
+                return render(request, 'frontend/pages/cart/order_confirmation.html', {'order': order,'subtotalFull':subtotalFull})
 
     context = {
         'cart_items': cart_items,
         'total_price': total_price,
-        'order_form': order_form
+        'order_form': order_form,
+        'subtotalFull':subtotalFull,
+        'shipping_charge':shipping_charge,
     }
     return render(request, 'frontend/pages/cart/cart.html', context)
 

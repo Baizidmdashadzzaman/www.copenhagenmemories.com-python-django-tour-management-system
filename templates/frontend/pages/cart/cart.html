@@ -198,7 +198,11 @@
                         <h5 class="fw-bold mb-4">{% translate "Order Summary" %}</h5>
                         <div class="d-flex justify-content-between mb-3 pb-3 border-bottom">
                             <span>{% translate "Subtotal" %}</span>
-                            <span class="fw-bold">USD {{ total_price }}</span>
+                            <span class="fw-bold">USD {{ subtotalFull }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3 pb-3 border-bottom">
+                            <span>{% translate "Shipping" %}</span>
+                            <span class="fw-bold">USD {{ shipping_charge }}</span>
                         </div>
                         <div class="d-flex justify-content-between mb-4">
                             <span class="fw-bold">{% translate "Total" %}</span>

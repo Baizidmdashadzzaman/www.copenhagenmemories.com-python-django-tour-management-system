@@ -1,6 +1,6 @@
 {% extends 'accounts/admin/layout.html' %}
 {% load static %}
-
+{% load custom_filters %}
 {% block page_title %}Invoice - #{{ order.order_number }}{% endblock %}
 
 {% block admin_content %}
@@ -123,13 +123,35 @@
                       <table class="table m-0 table-borderless">
                         <tbody>
                           <tr>
-                            <td class="align-top pe-6 ps-0 py-6 text-body">
+                            <td class="align-top pe-6 ps-0  text-body">
+                              <span></span>
+                            </td>
+                            <td class="px-0  w-px-100">
+                              <p class="mb-2">Subtotal:</p>
+                            </td>
+                            <td class="text-end px-0  w-px-100 fw-medium text-heading">
+                              <p class="fw-medium mb-0">USD {{ order.total_amount|minus:order.shipping_charge|floatformat:2 }}</p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="align-top pe-6 ps-0  text-body">
+                              <span></span>
+                            </td>
+                            <td class="px-0  w-px-100">
+                              <p class="mb-2">Shipping:</p>
+                            </td>
+                            <td class="text-end px-0  w-px-100 fw-medium text-heading">
+                              <p class="fw-medium mb-0">USD {{ order.shipping_charge }}</p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="align-top pe-6 ps-0  text-body">
                               <span>Thank you for your purchase!</span>
                             </td>
-                            <td class="px-0 py-6 w-px-100">
+                            <td class="px-0  w-px-100">
                               <p class="mb-2">Total:</p>
                             </td>
-                            <td class="text-end px-0 py-6 w-px-100 fw-medium text-heading">
+                            <td class="text-end px-0  w-px-100 fw-medium text-heading">
                               <p class="fw-medium mb-0">USD {{ order.total_amount|floatformat:2 }}</p>
                             </td>
                           </tr>

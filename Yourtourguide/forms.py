@@ -268,7 +268,7 @@ class SouvenirOrderForm(forms.ModelForm):
         fields = [
             'first_name', 'last_name', 'email', 'phone',
             'delivery_method', 'pickup_location', 'pickup_date', 'pickup_time',
-            'address', 'city', 'postal_code'
+            'address', 'city', 'postal_code',
         ]
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name', 'required': True}),

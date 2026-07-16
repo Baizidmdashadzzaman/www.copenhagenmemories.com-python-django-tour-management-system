@@ -407,7 +407,7 @@ class SouvenirOrderAdminForm(forms.ModelForm):
         fields = [
             'first_name', 'last_name', 'email', 'phone', 
             'delivery_method', 'pickup_location', 'pickup_date', 'pickup_time',
-            'address', 'city', 'postal_code', 'status', 'total_amount'
+            'address', 'city', 'postal_code', 'status', 'total_amount', 'shipping_charge'
         ]
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -423,6 +423,7 @@ class SouvenirOrderAdminForm(forms.ModelForm):
             'postal_code': forms.TextInput(attrs={'class': 'form-control'}),
             'status': forms.Select(attrs={'class': 'form-select'}),
             'total_amount': forms.NumberInput(attrs={'class': 'form-control total-amount-input', 'step': '0.01', 'readonly': 'readonly'}),
+            'shipping_charge': forms.NumberInput(attrs={'class': 'form-control shipping-charge-input', 'step': '0.01'}),
         }
 
     def __init__(self, *args, **kwargs):
