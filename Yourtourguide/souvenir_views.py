@@ -12,8 +12,19 @@ from accounts.models import Souvenir, SouvenirOrder, SouvenirOrderItem, Customer
 from .forms import SouvenirOrderForm
 from django.core.mail import send_mail
 
+from django.utils import translation, timezone
+from django.conf import settings
+from django.core.mail import send_mail
+from django.http import HttpResponse
+from django.utils.crypto import get_random_string
+import smtplib
 from django.core.mail import EmailMessage
 import threading
+
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
 
 import logging
 logger = logging.getLogger(__name__)
@@ -99,8 +110,12 @@ def add_to_cart(request, souvenir_id):
 
 def cart_view(request):
     site_settings = SiteSetting.get_settings()
-    shipping_charge = float(site_settings.shipping_charge)
     cart = request.session.get('cart', {})
+    delivery_method = request.POST.get('delivery_method')  # অথবা form.cleaned_data
+    if delivery_method == 'pickup':
+        shipping_charge = 0
+    else:
+        shipping_charge = float(site_settings.shipping_charge)
     cart_items = []
     total_price = 0 + shipping_charge
     subtotalFull = 0
@@ -199,10 +214,38 @@ def cart_view(request):
                     souvenir = Souvenir.objects.get(id=item_id)
                     souvenir.stock -= item_data['quantity']
                     souvenir.save()
+
+                # Send email to customer
+                if getattr(settings, 'USE_MAIL', False):
+                    if order.email:
+                        context = {
+                            'order': order,
+                        }
+                        subject = 'Souvenir Booking Confirmation'
+                        html_content = render_to_string('email/souvenir_email.html', context)
+                        text_content = strip_tags(html_content)
+                        email = EmailMultiAlternatives(
+                            subject=subject,
+                            body=text_content,
+                            from_email=settings.DEFAULT_FROM_EMAIL,
+                            to=[order.email],
+                        )
+                        email.attach_alternative(html_content, "text/html")
+                        thread = threading.Thread(target=send_email_async, args=(email,))
+                        thread.start()   
+                    admin_email = EmailMessage(
+                        subject='New Souvenir Booked',
+                        body=f'Order Number: {order.order_number}',
+                        from_email='contact@copenhagenmemories.com',
+                        to=['ashad0167@gmail.com'],
+                    )
+                    trigger_email(admin_email)
                     
                 request.session['cart'] = {}
                 messages.success(request, "Order placed successfully!")
                 return render(request, 'frontend/pages/cart/order_confirmation.html', {'order': order,'subtotalFull':subtotalFull})
+            
+
 
     context = {
         'cart_items': cart_items,
@@ -267,10 +310,27 @@ def cart_payment_accept(request, order_number):
 
     request.session['cart'] = {}
 
+    # Send email to customer
     if getattr(settings, 'USE_MAIL', False):
+        if order.email:
+            context = {
+                'order': order,
+            }
+            subject = 'Souvenir Booking Confirmation'
+            html_content = render_to_string('email/souvenir_email.html', context)
+            text_content = strip_tags(html_content)
+            email = EmailMultiAlternatives(
+                subject=subject,
+                body=text_content,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[order.email],
+            )
+            email.attach_alternative(html_content, "text/html")
+            thread = threading.Thread(target=send_email_async, args=(email,))
+            thread.start()   
         admin_email = EmailMessage(
-            subject='Booking Souvenir Order',
-            body=f'Order Number: {souvenir.order_number}',
+            subject='New Souvenir Booked',
+            body=f'Order Number: {order.order_number}',
             from_email='contact@copenhagenmemories.com',
             to=['contact@copenhagenmemories.com'],
         )

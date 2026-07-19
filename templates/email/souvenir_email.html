@@ -324,9 +324,9 @@ The Copenhagen Memories Team
                             <tr>
                               <td class="mini-block">
                                 <span class="header-sm">Contact Information</span><br />
-                                {{ booking.contact_name }} <br />
-                                {{ booking.contact_email }} <br />
-                                {{ booking.contact_phone }}
+                                {{ order.first_name }} {{ order.last_name }} <br />
+                                {{ order.email }} <br />
+                                {{ order.phone }}
                               </td>
                             </tr>
                           </table>
@@ -334,19 +334,17 @@ The Copenhagen Memories Team
                       </tr>
                     </table>
                   </td>
-                  <td class="mini-container-right">
+                  <td class="mini-container-right" >
                     <table cellpadding="0" cellspacing="0" width="100%">
                       <tr>
-                        <td class="mini-block-padding">
+                        <td class="mini-block-padding" >
                           <table cellspacing="0" cellpadding="0" width="100%" style="border-collapse:separate !important;min-height: 180px;">
                             <tr>
                               <td class="mini-block">
-                                <span class="header-sm">Booking Status</span><br />
-                                <b>Date:</b> {{ booking.booking_date|date:"M d, Y" }} <br />
-                                <b>Status:</b> {{ booking.get_status_display }} <br />
-                                <br />
-                                <span class="header-sm">Order</span> <br />
-                                #{{ booking.booking_number }}
+                                <span class="header-sm">Order Status</span><br />
+                                <b>Date:</b> {{ order.created_at|date:"M d, Y" }} <br />
+                                <b>Status:</b> {{ order.get_status_display }} <br />
+                                <b>Order number:</b> {{ order.order_number }} <br />
                               </td>
                             </tr>
                           </table>
@@ -355,22 +353,31 @@ The Copenhagen Memories Team
                     </table>
                   </td>
                 </tr>
+                
+  
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td class="mini-block-padding" style="padding-left: 15px;padding-right: 15px;">
+              <table cellspacing="0" cellpadding="0" width="100%" style="border-collapse:separate !important;min-height: 180px;">
                 <tr>
-                  <td colspan="2" style="padding: 15px;">
-                    <table cellspacing="0" cellpadding="0" width="100%" style="border-collapse:separate !important;">
-                      <tr>
-                        <td class="mini-block" style="width: 100%; max-width: 100%;">
-                          <span class="header-sm">Tour Information</span><br />
-                          <b>Tour:</b> {{ booking.tour.title }} {% if booking.tour.category %}({{ booking.tour.category.name }}){% endif %}<br />
-                          <b>Date:</b> {{ booking.tour_date|date:"M d, Y" }}
-                          {% if booking.tour_time_slot %} | Time Slot: {{ booking.tour_time_slot }}{% elif booking.tour_time %} at {{ booking.tour_time|time:"H:i" }}{% endif %}<br />
-                          <b>Participants:</b> {{ booking.total_participants }} person{{ booking.total_participants|pluralize }}
-                          {% if booking.special_requirements %}
-                          <br /><b>Special Requirements:</b> {{ booking.special_requirements }}
-                          {% endif %}
-                        </td>
-                      </tr>
-                    </table>
+                  <td class="mini-block"  >
+                    {% if order.delivery_method == 'pickup' %}
+                            <div class="mb-4">
+                                <p class="mb-1"><strong>Delivery Method:</strong> Pickup</p>
+                                <p class="mb-1"><strong>Pickup Location:</strong> {{ order.pickup_location.name }}</p>
+                                <p class="mb-1"><strong>Pickup Date:</strong> {{ order.pickup_date|date:"F j, Y" }}</p>
+                                <p class="mb-1"><strong>Pickup Time:</strong> {{ order.pickup_time|date:"H:i A" }}</p>
+                            </div>
+                        {% else %}
+                            <div class="mb-4">
+                                <p class="mb-1"><strong>Delivery Method:</strong> Shipping</p>
+                                <p class="mb-1"><strong>Shipping Address:</strong> {{ order.address }}, {{ order.city }}, {{ order.postal_code }}</p>
+                                <p class="mb-1"><strong>Shipping Phone:</strong> {{ order.phone }}</p>
+                                <p class="mb-1"><strong>Shipping Email:</strong> {{ order.email }}</p>
+                            </div>
+                        {% endif %}
                   </td>
                 </tr>
               </table>
@@ -432,12 +439,12 @@ The Copenhagen Memories Team
                     </td>
                     <td class="item-col quantity" style="text-align:right; padding-right: 10px; border-top: 1px solid #cccccc;">
                       <span class="total-space">Subtotal</span> <br />
-                      <span class="total-space">Subtotal</span> <br />
+                      <span class="total-space">Shipping</span> <br />
                       <span class="total-space" style="font-weight: bold; color: #4d4d4d">Total</span>
                     </td>
                     <td class="item-col price" style="text-align: left; border-top: 1px solid #cccccc;">
-                      <span class="total-space">USD {{ order.subtotal }}</span> <br />
-                      <span class="total-space">USD {{ order.subtotal }}</span> <br />
+                      <span class="total-space">USD {{ order.total_amount|minus:order.shipping_charge }}</span> <br />
+                      <span class="total-space">USD {{ order.shipping_charge }}</span> <br />
                       <span class="total-space" style="font-weight:bold; color: #4d4d4d">USD {{ order.total_amount }}</span>
                     </td>
                   </tr>  

@@ -166,23 +166,32 @@
                     </div>
                 </div>
                 <script>
-                    document.addEventListener('DOMContentLoaded', function() {
+                    document.addEventListener('DOMContentLoaded', function () {
                         const deliveryMethod = document.getElementById('id_delivery_method');
                         const shippingDetails = document.getElementById('shipping-details');
                         const pickupDetails = document.getElementById('pickup-details');
-                
+                    
+                        const shippingCharge = {{ shipping_charge }};
+                        const subtotal = {{ subtotalFull }};
+                    
                         function toggleDeliveryMethod() {
                             if (deliveryMethod.value === 'pickup') {
                                 shippingDetails.style.display = 'none';
                                 pickupDetails.style.display = 'block';
+                    
+                                document.getElementById('shipping-charge').innerText = 'USD 0';
+                                document.getElementById('total-price').innerText = `USD ${subtotal}`;
                             } else {
                                 shippingDetails.style.display = 'block';
                                 pickupDetails.style.display = 'none';
+                    
+                                document.getElementById('shipping-charge').innerText = `USD ${shippingCharge}`;
+                                document.getElementById('total-price').innerText = `USD ${subtotal + shippingCharge}`;
                             }
                         }
-                
+                    
                         deliveryMethod.addEventListener('change', toggleDeliveryMethod);
-                        toggleDeliveryMethod(); // Run on load
+                        toggleDeliveryMethod();
                     });
                 </script>
                 <div class="d-flex justify-content-between align-items-center">
@@ -191,6 +200,7 @@
                     </a>
                 </div>
             </div>
+
 
             <div class="col-lg-4">
                 <div class="card shadow-sm border-0 sticky-top">
@@ -202,11 +212,11 @@
                         </div>
                         <div class="d-flex justify-content-between mb-3 pb-3 border-bottom">
                             <span>{% translate "Shipping" %}</span>
-                            <span class="fw-bold">USD {{ shipping_charge }}</span>
+                            <span class="fw-bold" id="shipping-charge">USD {{ shipping_charge }}</span>
                         </div>
                         <div class="d-flex justify-content-between mb-4">
                             <span class="fw-bold">{% translate "Total" %}</span>
-                            <span class="fw-bold text-primary">USD {{ total_price }}</span>
+                            <span class="fw-bold text-primary" id="total-price">USD {{ total_price }}</span>
                         </div>
                         <button class="btn btn-primary btn-lg w-100 mb-3" onclick="document.getElementById('hidden_order_submit').click()">
                             {% translate "Place Order" %}

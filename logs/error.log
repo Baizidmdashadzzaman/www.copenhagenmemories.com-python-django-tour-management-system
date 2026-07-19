@@ -981,3 +981,33 @@ Traceback (most recent call last):
         "context must be a dict rather than %s." % context.__class__.__name__
     )
 TypeError: context must be a dict rather than WSGIRequest.
+Internal Server Error: /cart/
+Traceback (most recent call last):
+  File "C:\Users\My Pc\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\My Pc\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "M:\PROJECT\www.copenhagenmemories.com\www.copenhagenmemories.com\Yourtourguide\souvenir_views.py", line 224, in cart_view
+    if order.email:
+       ^^^^^
+UnboundLocalError: cannot access local variable 'order' where it is not associated with a value
+Internal Server Error: /cart/
+Traceback (most recent call last):
+  File "C:\Users\My Pc\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\My Pc\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "M:\PROJECT\www.copenhagenmemories.com\www.copenhagenmemories.com\Yourtourguide\souvenir_views.py", line 224, in cart_view
+    if souvenir.email:
+       ^^^^^^^^
+UnboundLocalError: cannot access local variable 'souvenir' where it is not associated with a value
+Internal Server Error: /cart/
+Traceback (most recent call last):
+  File "C:\Users\My Pc\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\My Pc\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "M:\PROJECT\www.copenhagenmemories.com\www.copenhagenmemories.com\Yourtourguide\souvenir_views.py", line 224, in cart_view
+    if order.email:
+       ^^^^^
+UnboundLocalError: cannot access local variable 'order' where it is not associated with a value

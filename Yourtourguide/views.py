@@ -1344,7 +1344,6 @@ def testimonial(request):
 
 
 
-
 def tour_payment_accept(request, booking_number):
     
     
