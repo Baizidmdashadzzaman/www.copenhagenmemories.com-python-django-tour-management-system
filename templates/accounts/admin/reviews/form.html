@@ -35,14 +35,21 @@
                 </div>
 
                 <div class="row mb-3">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
+                        <label class="form-label" for="id_address">Provider</label>
+                        {{ form.provider }}
+                        {% if form.provider.errors %}
+                        <div class="text-danger">{{ form.provider.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4">
                         <label class="form-label" for="id_rating">Rating</label>
                         {{ form.rating }}
                         {% if form.rating.errors %}
                         <div class="text-danger">{{ form.rating.errors }}</div>
                         {% endif %}
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="form-label" for="id_image">Image (Optional)</label>
                         {{ form.image }}
                         {% if form.image.errors %}

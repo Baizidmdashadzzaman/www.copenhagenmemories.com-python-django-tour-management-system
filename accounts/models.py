@@ -284,6 +284,7 @@ class CustomerReviewStatic(models.Model):
     display_order = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    provider = models.CharField(blank=True,max_length=100)
 
     class Meta:
         verbose_name = "Customer Review"

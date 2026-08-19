@@ -414,7 +414,7 @@ class AdminProfileForm(forms.ModelForm):
 class CustomerReviewStaticForm(forms.ModelForm):
     class Meta:
         model = CustomerReviewStatic
-        fields = ['name', 'address', 'image', 'review', 'review_dk', 'rating', 'is_active']
+        fields = ['name', 'address', 'image', 'review', 'review_dk', 'rating', 'is_active','provider']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter reviewer name'}),
             'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter reviewer address'}),
@@ -423,6 +423,7 @@ class CustomerReviewStaticForm(forms.ModelForm):
             'review_dk': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Enter review in Danish'}),
             'rating': forms.Select(attrs={'class': 'form-select'}),
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'provider': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter provider name'}),
         }
 
 class PageForm(forms.ModelForm):
