@@ -43,6 +43,19 @@
                         {% endif %}
                     </div>
                     <div class="col-md-4">
+                        <label class="form-label" for="id_providerimage">Provider Image (Optional)</label>
+                        {{ form.providerimage }}
+                        {% if form.providerimage.errors %}
+                        <div class="text-danger">{{ form.providerimage.errors }}</div>
+                        {% endif %}
+                        {% if review.providerimage %}
+                        <div class="mt-2">
+                            <img src="{{ review.providerimage.url }}" alt="Current Provider Image" style="max-height: 100px;"
+                                class="rounded">
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4">
                         <label class="form-label" for="id_rating">Rating</label>
                         {{ form.rating }}
                         {% if form.rating.errors %}
@@ -60,6 +73,13 @@
                             <img src="{{ review.image.url }}" alt="Current Image" style="max-height: 100px;"
                                 class="rounded">
                         </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="id_otherinfo">Other Info</label>
+                        {{ form.otherinfo }}
+                        {% if form.otherinfo.errors %}
+                        <div class="text-danger">{{ form.otherinfo.errors }}</div>
                         {% endif %}
                     </div>
                 </div>

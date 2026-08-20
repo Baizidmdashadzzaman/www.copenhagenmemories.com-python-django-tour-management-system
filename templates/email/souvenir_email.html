@@ -363,7 +363,7 @@ The Copenhagen Memories Team
               <table cellspacing="0" cellpadding="0" width="100%" style="border-collapse:separate !important;min-height: 180px;">
                 <tr>
                   <td class="mini-block"  >
-                    {% if order.delivery_method == 'pickup' %}
+                        {% if order.delivery_method == 'pickup' %}
                             <div class="mb-4">
                                 <p class="mb-1"><strong>Delivery Method:</strong> Pickup</p>
                                 <p class="mb-1"><strong>Pickup Location:</strong> {{ order.pickup_location.name }}</p>

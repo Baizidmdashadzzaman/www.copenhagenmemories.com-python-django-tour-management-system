@@ -285,6 +285,8 @@ class CustomerReviewStatic(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     provider = models.CharField(blank=True,max_length=100)
+    otherinfo = models.CharField(blank=True,max_length=100)
+    providerimage = models.ImageField(upload_to='provider_images/', blank=True, max_length=200, null=True)
 
     class Meta:
         verbose_name = "Customer Review"
