@@ -76,6 +76,9 @@ urlpatterns = [
     path('rent-bike/payment/cancel/<str:booking_number>/', views.rent_bike_payment_cancel, name='rent_bike_payment_cancel'),
     path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type='text/plain')),
 
+    # API for Next.js frontend
+    path('api/', include('api.urls')),
+
     path('todo/', include('todo.urls')),
     path('accounts/', include('accounts.urls')),
     path('admin/', admin.site.urls),
